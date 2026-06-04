@@ -9,6 +9,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Starts empty so the user can fill their own categories, accounts, and values.
 - Shows a finance projection for up to 12 months.
 - Lets the user choose how many months appear in the summary, from 1 to 12.
+- Shows a read-only charts tab for monthly trends and current-month category totals.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, and editable monthly values.
 - Keeps category and account lists consistently ordered across planning and summary views.
