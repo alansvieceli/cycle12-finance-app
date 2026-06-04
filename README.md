@@ -16,6 +16,8 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
+The app uses `@react-native-async-storage/async-storage` for local device storage.
+
 ## Run
 
 ```bash
