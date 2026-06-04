@@ -1,0 +1,73 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+export type TabItem<T extends string> = {
+  id: T;
+  label: string;
+};
+
+type TabBarProps<T extends string> = {
+  activeTab: T;
+  onChangeTab: (tab: T) => void;
+  tabs: TabItem<T>[];
+};
+
+export function TabBar<T extends string>({
+  activeTab,
+  onChangeTab,
+  tabs,
+}: TabBarProps<T>) {
+  return (
+    <View style={styles.tabBar}>
+      {tabs.map((tab) => (
+        <Pressable
+          key={tab.id}
+          onPress={() => onChangeTab(tab.id)}
+          style={[
+            styles.tabButton,
+            activeTab === tab.id ? styles.tabButtonActive : null,
+          ]}
+        >
+          <Text
+            style={[
+              styles.tabButtonText,
+              activeTab === tab.id ? styles.tabButtonTextActive : null,
+            ]}
+          >
+            {tab.label}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: '#ffffff',
+    borderBottomColor: '#dfe7e4',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  tabButton: {
+    alignItems: 'center',
+    borderRadius: 8,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 40,
+  },
+  tabButtonActive: {
+    backgroundColor: '#176a4d',
+  },
+  tabButtonText: {
+    color: '#60716d',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  tabButtonTextActive: {
+    color: '#ffffff',
+  },
+});

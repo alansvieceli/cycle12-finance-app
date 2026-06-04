@@ -8,6 +8,9 @@ import {
   View,
 } from 'react-native';
 
+import { ActionButton } from './src/components/common/ActionButton';
+import { CurrencyInput } from './src/components/common/CurrencyInput';
+import { TabBar, TabItem } from './src/components/common/TabBar';
 import {
   calculateCategoryTotals,
   calculateMonthlyTotalExpenses,
@@ -29,7 +32,7 @@ import { useFinanceState } from './src/hooks/useFinanceState';
 
 type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
 
-const tabs: { id: AppTab; label: string }[] = [
+const tabs: TabItem<AppTab>[] = [
   { id: 'summary', label: 'Resumo' },
   { id: 'planning', label: 'Planejamento' },
   { id: 'categories', label: 'Categorias' },
@@ -61,27 +64,7 @@ export default function App() {
         </Text>
       </View>
 
-      <View style={styles.tabBar}>
-        {tabs.map((tab) => (
-          <Pressable
-            key={tab.id}
-            onPress={() => setActiveTab(tab.id)}
-            style={[
-              styles.tabButton,
-              activeTab === tab.id ? styles.tabButtonActive : null,
-            ]}
-          >
-            <Text
-              style={[
-                styles.tabButtonText,
-                activeTab === tab.id ? styles.tabButtonTextActive : null,
-              ]}
-            >
-              {tab.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      <TabBar activeTab={activeTab} onChangeTab={setActiveTab} tabs={tabs} />
 
       <ScrollView contentContainerStyle={styles.monthList}>
         {activeTab === 'summary'
@@ -182,7 +165,7 @@ export default function App() {
                   style={[styles.input, styles.dueDayInput]}
                   value={formState.newAccountDueDay}
                 />
-                <PrimaryButton label="Adicionar" onPress={actions.createAccountItem} />
+                <ActionButton label="Adicionar" onPress={actions.createAccountItem} />
               </View>
 
               {financeState.accountItems
@@ -220,9 +203,10 @@ export default function App() {
                         style={[styles.input, styles.dueDayInput]}
                         value={String(accountItem.dueDay)}
                       />
-                      <DangerButton
+                      <ActionButton
                         label="Excluir"
                         onPress={() => actions.deleteAccountItem(accountItem.id)}
+                        variant="danger"
                       />
                     </View>
                   </View>
@@ -332,7 +316,7 @@ export default function App() {
                 style={[styles.input, styles.createInput]}
                 value={formState.newCategoryName}
               />
-              <PrimaryButton label="Adicionar" onPress={actions.createCategory} />
+              <ActionButton label="Adicionar" onPress={actions.createCategory} />
             </View>
 
             {financeState.categories
@@ -348,9 +332,10 @@ export default function App() {
                     style={[styles.input, styles.rowInput]}
                     value={category.name}
                   />
-                  <DangerButton
+                  <ActionButton
                     label="Excluir"
                     onPress={() => actions.deleteCategory(category.id)}
+                    variant="danger"
                   />
                 </View>
               ))}
@@ -382,57 +367,6 @@ export default function App() {
           </View>
         ) : null}
       </ScrollView>
-    </View>
-  );
-}
-
-function PrimaryButton({
-  label,
-  onPress,
-}: {
-  label: string;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable onPress={onPress} style={styles.primaryButton}>
-      <Text style={styles.primaryButtonText}>{label}</Text>
-    </Pressable>
-  );
-}
-
-function DangerButton({
-  label,
-  onPress,
-}: {
-  label: string;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable onPress={onPress} style={styles.dangerButton}>
-      <Text style={styles.dangerButtonText}>{label}</Text>
-    </Pressable>
-  );
-}
-
-function CurrencyInput({
-  label,
-  onChangeValue,
-  value,
-}: {
-  label: string;
-  onChangeValue: (value: string) => void;
-  value: number;
-}) {
-  return (
-    <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <TextInput
-        keyboardType="decimal-pad"
-        onChangeText={onChangeValue}
-        placeholder="0,00"
-        style={styles.input}
-        value={formatEditableAmount(value)}
-      />
     </View>
   );
 }
@@ -527,34 +461,6 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 28,
   },
-  tabBar: {
-    backgroundColor: '#ffffff',
-    borderBottomColor: '#dfe7e4',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  tabButton: {
-    alignItems: 'center',
-    borderRadius: 8,
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: 40,
-  },
-  tabButtonActive: {
-    backgroundColor: '#176a4d',
-  },
-  tabButtonText: {
-    color: '#60716d',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 0,
-  },
-  tabButtonTextActive: {
-    color: '#ffffff',
-  },
   settingsPanel: {
     backgroundColor: '#ffffff',
     borderColor: '#dfe7e4',
@@ -577,16 +483,6 @@ const styles = StyleSheet.create({
   inputGrid: {
     gap: 12,
     marginTop: 14,
-  },
-  inputGroup: {
-    gap: 6,
-  },
-  inputLabel: {
-    color: '#60716d',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0,
-    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: '#f7faf9',
@@ -673,36 +569,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0,
     textAlign: 'center',
-  },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: '#176a4d',
-    borderRadius: 8,
-    justifyContent: 'center',
-    minHeight: 46,
-    paddingHorizontal: 14,
-  },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '800',
-    letterSpacing: 0,
-  },
-  dangerButton: {
-    alignItems: 'center',
-    backgroundColor: '#f9e8e5',
-    borderColor: '#e3b8b1',
-    borderRadius: 8,
-    borderWidth: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 12,
-  },
-  dangerButtonText: {
-    color: '#94372d',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 0,
   },
   accountSelector: {
     marginTop: 14,
