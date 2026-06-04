@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FinanceState, emptyFinanceState } from '../types/finance';
 
-const FINANCE_STATE_STORAGE_KEY = '@cycle12-finance-app/finance-state/v1';
+const FINANCE_STATE_STORAGE_KEY = '@cycle12-finance-app/finance-state/v2';
 
 export async function loadFinanceState(): Promise<FinanceState> {
   const storedValue = await AsyncStorage.getItem(FINANCE_STATE_STORAGE_KEY);

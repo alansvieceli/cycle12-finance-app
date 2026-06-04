@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 
-import { createInitialFinanceState } from './src/data/initialFinanceState';
 import {
   calculateCategoryTotals,
   calculateMonthlyTotalExpenses,
@@ -24,6 +23,7 @@ import {
   loadFinanceState,
   saveFinanceState,
 } from './src/storage/financeStorage';
+import { emptyFinanceState } from './src/types/finance';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
@@ -43,19 +43,13 @@ const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
 
 export default function App() {
   const projectionMonths = useMemo(() => createProjectionMonths(), []);
-  const initialFinanceState = useMemo(
-    () => createInitialFinanceState(projectionMonths),
-    [projectionMonths],
-  );
-  const [financeState, setFinanceState] = useState(initialFinanceState);
+  const [financeState, setFinanceState] = useState(emptyFinanceState);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
   const [storageMessage, setStorageMessage] = useState('');
-  const [selectedAccountItemId, setSelectedAccountItemId] = useState(
-    initialFinanceState.accountItems[0]?.id ?? '',
-  );
+  const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
   const selectedAccountItem =
     financeState.accountItems.find(
       (accountItem) => accountItem.id === selectedAccountItemId,
@@ -67,20 +61,17 @@ export default function App() {
     async function loadStoredState() {
       try {
         const storedState = await loadFinanceState();
-        const nextState = isEmptyFinanceState(storedState)
-          ? initialFinanceState
-          : storedState;
 
         if (!isMounted) {
           return;
         }
 
-        setFinanceState(nextState);
-        setSelectedAccountItemId(nextState.accountItems[0]?.id ?? '');
+        setFinanceState(storedState);
+        setSelectedAccountItemId(storedState.accountItems[0]?.id ?? '');
       } catch {
         if (isMounted) {
           setStorageMessage(
-            'Não foi possível carregar os dados locais. Usando dados iniciais.',
+            'Não foi possível carregar os dados locais. Começando vazio.',
           );
         }
       } finally {
@@ -95,7 +86,7 @@ export default function App() {
     return () => {
       isMounted = false;
     };
-  }, [initialFinanceState]);
+  }, []);
 
   useEffect(() => {
     if (!hasLoadedStoredState) {
@@ -760,21 +751,6 @@ function getMonthlyValueAmount(
         monthlyValue.month === projectionMonth.month &&
         monthlyValue.year === projectionMonth.year,
     )?.amount ?? 0
-  );
-}
-
-function isEmptyFinanceState(financeState: {
-  accountItems: unknown[];
-  categories: unknown[];
-  monthlyValues: unknown[];
-  settings: { currentMonthExtraBalance: number; monthlySalary: number };
-}) {
-  return (
-    financeState.categories.length === 0 &&
-    financeState.accountItems.length === 0 &&
-    financeState.monthlyValues.length === 0 &&
-    financeState.settings.monthlySalary === 0 &&
-    financeState.settings.currentMonthExtraBalance === 0
   );
 }
 
