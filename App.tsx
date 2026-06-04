@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ScrollView,
   Pressable,
@@ -20,6 +20,10 @@ import {
   CategoryMonthTotal,
   ProjectionMonth,
 } from './src/lib/financeCalculations';
+import {
+  loadFinanceState,
+  saveFinanceState,
+} from './src/storage/financeStorage';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
@@ -47,6 +51,8 @@ export default function App() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
+  const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
+  const [storageMessage, setStorageMessage] = useState('');
   const [selectedAccountItemId, setSelectedAccountItemId] = useState(
     initialFinanceState.accountItems[0]?.id ?? '',
   );
@@ -54,6 +60,52 @@ export default function App() {
     financeState.accountItems.find(
       (accountItem) => accountItem.id === selectedAccountItemId,
     ) ?? financeState.accountItems[0];
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadStoredState() {
+      try {
+        const storedState = await loadFinanceState();
+        const nextState = isEmptyFinanceState(storedState)
+          ? initialFinanceState
+          : storedState;
+
+        if (!isMounted) {
+          return;
+        }
+
+        setFinanceState(nextState);
+        setSelectedAccountItemId(nextState.accountItems[0]?.id ?? '');
+      } catch {
+        if (isMounted) {
+          setStorageMessage(
+            'Não foi possível carregar os dados locais. Usando dados iniciais.',
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setHasLoadedStoredState(true);
+        }
+      }
+    }
+
+    loadStoredState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialFinanceState]);
+
+  useEffect(() => {
+    if (!hasLoadedStoredState) {
+      return;
+    }
+
+    saveFinanceState(financeState).catch(() => {
+      setStorageMessage('Não foi possível salvar os dados locais agora.');
+    });
+  }, [financeState, hasLoadedStoredState]);
 
   function updateMonthlySalary(value: string) {
     setFinanceState((currentState) => ({
@@ -277,6 +329,13 @@ export default function App() {
       <ScrollView contentContainerStyle={styles.monthList}>
         <View style={styles.settingsPanel}>
           <Text style={styles.sectionTitle}>Configurações</Text>
+          {storageMessage ? (
+            <Text style={styles.storageMessage}>{storageMessage}</Text>
+          ) : (
+            <Text style={styles.storageMessage}>
+              Dados salvos localmente neste dispositivo.
+            </Text>
+          )}
           <View style={styles.inputGrid}>
             <CurrencyInput
               label="Salário mensal"
@@ -704,6 +763,21 @@ function getMonthlyValueAmount(
   );
 }
 
+function isEmptyFinanceState(financeState: {
+  accountItems: unknown[];
+  categories: unknown[];
+  monthlyValues: unknown[];
+  settings: { currentMonthExtraBalance: number; monthlySalary: number };
+}) {
+  return (
+    financeState.categories.length === 0 &&
+    financeState.accountItems.length === 0 &&
+    financeState.monthlyValues.length === 0 &&
+    financeState.settings.monthlySalary === 0 &&
+    financeState.settings.currentMonthExtraBalance === 0
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -752,6 +826,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
+  },
+  storageMessage: {
+    color: '#60716d',
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: 8,
   },
   inputGrid: {
     gap: 12,

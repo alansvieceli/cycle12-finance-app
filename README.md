@@ -18,6 +18,8 @@ npm install
 
 The app uses `@react-native-async-storage/async-storage` for local device storage.
 
+Finance data is stored only on the device. There is no backend, account, or cloud sync.
+
 ## Run
 
 ```bash
