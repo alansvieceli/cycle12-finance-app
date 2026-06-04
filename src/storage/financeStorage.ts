@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { clampVisibleMonthCount } from '../lib/inputParsers';
 import { FinanceState, emptyFinanceState } from '../types/finance';
 
 const FINANCE_STATE_STORAGE_KEY = '@cycle12-finance-app/finance-state/v2';
@@ -39,12 +40,4 @@ function normalizeFinanceState(financeState: FinanceState): FinanceState {
       ),
     },
   };
-}
-
-function clampVisibleMonthCount(value: number | undefined) {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    return 12;
-  }
-
-  return Math.max(1, Math.min(12, Math.round(value)));
 }

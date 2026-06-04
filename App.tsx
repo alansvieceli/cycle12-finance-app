@@ -20,26 +20,18 @@ import {
   ProjectionMonth,
 } from './src/lib/financeCalculations';
 import {
+  currencyFormatter,
+  formatEditableAmount,
+  formatMonthLabel,
+  percentageFormatter,
+} from './src/lib/formatters';
+import { createId } from './src/lib/ids';
+import { parseCurrencyInput, parseDueDay } from './src/lib/inputParsers';
+import {
   loadFinanceState,
   saveFinanceState,
 } from './src/storage/financeStorage';
 import { emptyFinanceState } from './src/types/finance';
-
-const currencyFormatter = new Intl.NumberFormat('pt-BR', {
-  currency: 'BRL',
-  style: 'currency',
-});
-
-const percentageFormatter = new Intl.NumberFormat('pt-BR', {
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 1,
-  style: 'percent',
-});
-
-const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
-  month: 'long',
-  year: 'numeric',
-});
 
 type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
 
@@ -737,44 +729,6 @@ function CategoryTotals({
       ))}
     </View>
   );
-}
-
-function formatMonthLabel(year: number, month: number) {
-  const label = monthFormatter.format(new Date(year, month - 1, 1));
-
-  return label.charAt(0).toUpperCase() + label.slice(1);
-}
-
-function parseCurrencyInput(value: string) {
-  const normalizedValue = value
-    .replace(/[^\d,.-]/g, '')
-    .replace(/\./g, '')
-    .replace(',', '.');
-  const parsedValue = Number(normalizedValue);
-
-  return Number.isFinite(parsedValue) ? parsedValue : 0;
-}
-
-function formatEditableAmount(value: number) {
-  if (!Number.isFinite(value) || value === 0) {
-    return '';
-  }
-
-  return String(value).replace('.', ',');
-}
-
-function parseDueDay(value: string) {
-  const parsedValue = Number(value.replace(/\D/g, ''));
-
-  if (!Number.isFinite(parsedValue)) {
-    return 1;
-  }
-
-  return Math.max(1, Math.min(31, parsedValue));
-}
-
-function createId(prefix: string) {
-  return `${prefix}-${Date.now()}-${Math.round(Math.random() * 100000)}`;
 }
 
 function getCategoryName(
