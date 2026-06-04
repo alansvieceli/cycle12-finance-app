@@ -87,22 +87,3 @@ Follow:
 * `docs/standards/testing-policy.md`
 * `docs/standards/ai-workflow.md`
 
-````
-
----
-
-# Passo 6 — Primeiro prompt para usar no Codex ou Claude Code
-
-Depois de criar esses arquivos, abra o Codex ou Claude Code dentro do repo e mande:
-
-```text
-Read AGENTS.md, CLAUDE.md, docs/standards/ai-workflow.md, docs/standards/readme-policy.md, docs/standards/testing-policy.md, and docs/specs/001-bootstrap-expo-project.md.
-
-Do not implement yet.
-
-Create an implementation plan in docs/plans/001-bootstrap-expo-project-plan.md.
-
-Also create task files under docs/tasks/ for this spec.
-
-The plan must be small, sequential, and focused only on bootstrapping the Expo project.
-````
