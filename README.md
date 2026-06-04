@@ -8,8 +8,10 @@ The app is designed for single-user, local-first control of monthly expenses ove
 
 - Starts empty so the user can fill their own categories, accounts, and values.
 - Shows a finance projection for up to 12 months.
+- Lets the user choose how many months appear in the summary, from 1 to 12.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, and editable monthly values.
+- Tracks current-month paid/unpaid status manually for each account item.
 - Calculates monthly expenses, salary commitment, and surplus or shortfall.
 - Treats credit card bills as manually editable monthly totals.
 - Stores finance data only on the device.
@@ -131,6 +133,7 @@ This means:
 
 - there is no login
 - there is no remote sync
+- payment status is saved only on this device
 - uninstalling the app can remove local data
 - backup and restore will be a future feature
 
@@ -138,6 +141,4 @@ This means:
 
 Planned or future work is tracked through specs and tasks. Current near-term direction:
 
-- improve the app with a tabbed workflow
-- make visible projection months configurable
 - keep backup and restore for a later spec

@@ -21,6 +21,17 @@ npm run test:coverage
 - Functions: 89.47% (17/19)
 - Lines: 78.04% (32/41)
 
+## Current Result
+
+Updated after adding formatter tests and payment summary logic:
+
+- Test files: 3 passed
+- Tests: 14 passed
+- Statements: 98.07% (51/52)
+- Branches: 90.9% (30/33)
+- Functions: 100% (25/25)
+- Lines: 98.03% (50/51)
+
 ## Included Scope
 
 The current baseline measures unit-test coverage for pure TypeScript logic under:
@@ -47,13 +58,12 @@ This is intentional for the first baseline. The app has UI and persistence behav
 ## File Summary
 
 - `src/lib/financeCalculations.ts`: fully covered.
+- `src/lib/formatters.ts`: fully covered.
 - `src/lib/ids.ts`: fully covered for executable lines.
 - `src/lib/inputParsers.ts`: mostly covered, with uncovered branch behavior remaining.
-- `src/lib/formatters.ts`: not covered yet.
 
 ## Recommended Next Improvements
 
-- Add unit tests for `src/lib/formatters.ts`.
 - Add branch-focused tests for remaining parser cases.
 - Define a separate strategy before adding hook, storage, or UI coverage.
 - Keep coverage reports local under `coverage/`; they are generated artifacts and should not be committed.
