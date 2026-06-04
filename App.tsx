@@ -1,5 +1,11 @@
-import { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { createInitialFinanceState } from './src/data/initialFinanceState';
 import {
@@ -29,10 +35,31 @@ const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
 
 export default function App() {
   const projectionMonths = useMemo(() => createProjectionMonths(), []);
-  const financeState = useMemo(
+  const initialFinanceState = useMemo(
     () => createInitialFinanceState(projectionMonths),
     [projectionMonths],
   );
+  const [financeState, setFinanceState] = useState(initialFinanceState);
+
+  function updateMonthlySalary(value: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: {
+        ...currentState.settings,
+        monthlySalary: parseCurrencyInput(value),
+      },
+    }));
+  }
+
+  function updateCurrentMonthExtraBalance(value: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: {
+        ...currentState.settings,
+        currentMonthExtraBalance: parseCurrencyInput(value),
+      },
+    }));
+  }
 
   return (
     <View style={styles.container}>
@@ -45,6 +72,22 @@ export default function App() {
       </View>
 
       <ScrollView contentContainerStyle={styles.monthList}>
+        <View style={styles.settingsPanel}>
+          <Text style={styles.sectionTitle}>Configurações</Text>
+          <View style={styles.inputGrid}>
+            <CurrencyInput
+              label="Salário mensal"
+              value={financeState.settings.monthlySalary}
+              onChangeValue={updateMonthlySalary}
+            />
+            <CurrencyInput
+              label="Extra do mês atual"
+              value={financeState.settings.currentMonthExtraBalance}
+              onChangeValue={updateCurrentMonthExtraBalance}
+            />
+          </View>
+        </View>
+
         {projectionMonths.map((projectionMonth) => {
           const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
             financeState.categories,
@@ -124,6 +167,29 @@ export default function App() {
   );
 }
 
+function CurrencyInput({
+  label,
+  onChangeValue,
+  value,
+}: {
+  label: string;
+  onChangeValue: (value: string) => void;
+  value: number;
+}) {
+  return (
+    <View style={styles.inputGroup}>
+      <Text style={styles.inputLabel}>{label}</Text>
+      <TextInput
+        keyboardType="decimal-pad"
+        onChangeText={onChangeValue}
+        placeholder="0,00"
+        style={styles.input}
+        value={formatEditableAmount(value)}
+      />
+    </View>
+  );
+}
+
 function SummaryValue({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.summaryValue}>
@@ -162,6 +228,24 @@ function formatMonthLabel(year: number, month: number) {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
+function parseCurrencyInput(value: string) {
+  const normalizedValue = value
+    .replace(/[^\d,.-]/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.');
+  const parsedValue = Number(normalizedValue);
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+}
+
+function formatEditableAmount(value: number) {
+  if (!Number.isFinite(value) || value === 0) {
+    return '';
+  }
+
+  return String(value).replace('.', ',');
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -197,6 +281,45 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 16,
     paddingBottom: 28,
+  },
+  settingsPanel: {
+    backgroundColor: '#ffffff',
+    borderColor: '#dfe7e4',
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 16,
+  },
+  sectionTitle: {
+    color: '#17211f',
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  inputGrid: {
+    gap: 12,
+    marginTop: 14,
+  },
+  inputGroup: {
+    gap: 6,
+  },
+  inputLabel: {
+    color: '#60716d',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0,
+    textTransform: 'uppercase',
+  },
+  input: {
+    backgroundColor: '#f7faf9',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    color: '#17211f',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0,
+    minHeight: 48,
+    paddingHorizontal: 12,
   },
   monthCard: {
     backgroundColor: '#ffffff',
