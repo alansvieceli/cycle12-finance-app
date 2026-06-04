@@ -99,6 +99,18 @@ npm run android
 npm test
 ```
 
+## Coverage
+
+```bash
+npm run test:coverage
+```
+
+The current coverage metric focuses on pure TypeScript logic under `src/lib/**/*.ts`.
+It does not measure screens, React Native components, hooks, or local storage behavior yet.
+
+The first recorded baseline is available in `docs/quality/coverage-baseline.md`.
+Generated coverage reports are written to `coverage/` and ignored by git.
+
 ## TypeScript Check
 
 ```bash
