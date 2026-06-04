@@ -5,14 +5,16 @@ import { TabBar, TabItem } from './components/common/TabBar';
 import { createProjectionMonths } from './lib/financeCalculations';
 import { useFinanceState } from './hooks/useFinanceState';
 import { CategoriesScreen } from './screens/CategoriesScreen';
+import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { SummaryScreen } from './screens/SummaryScreen';
 
-type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
+type AppTab = 'summary' | 'charts' | 'planning' | 'categories' | 'settings';
 
 const tabs: TabItem<AppTab>[] = [
   { id: 'summary', label: 'Resumo' },
+  { id: 'charts', label: 'Gráficos' },
   { id: 'planning', label: 'Planejamento' },
   { id: 'categories', label: 'Categorias' },
   { id: 'settings', label: 'Ajustes' },
@@ -44,6 +46,13 @@ export function FinanceApp() {
           <SummaryScreen
             financeState={finance.financeState}
             onTogglePaymentStatus={finance.actions.toggleMonthlyPaymentStatus}
+            projectionMonths={visibleProjectionMonths}
+          />
+        ) : null}
+
+        {activeTab === 'charts' ? (
+          <ChartsScreen
+            financeState={finance.financeState}
             projectionMonths={visibleProjectionMonths}
           />
         ) : null}

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export type TabItem<T extends string> = {
   id: T;
@@ -17,35 +17,43 @@ export function TabBar<T extends string>({
   tabs,
 }: TabBarProps<T>) {
   return (
-    <View style={styles.tabBar}>
-      {tabs.map((tab) => (
-        <Pressable
-          key={tab.id}
-          onPress={() => onChangeTab(tab.id)}
-          style={[
-            styles.tabButton,
-            activeTab === tab.id ? styles.tabButtonActive : null,
-          ]}
-        >
-          <Text
+    <View style={styles.tabBarContainer}>
+      <ScrollView
+        contentContainerStyle={styles.tabBar}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        {tabs.map((tab) => (
+          <Pressable
+            key={tab.id}
+            onPress={() => onChangeTab(tab.id)}
             style={[
-              styles.tabButtonText,
-              activeTab === tab.id ? styles.tabButtonTextActive : null,
+              styles.tabButton,
+              activeTab === tab.id ? styles.tabButtonActive : null,
             ]}
           >
-            {tab.label}
-          </Text>
-        </Pressable>
-      ))}
+            <Text
+              style={[
+                styles.tabButtonText,
+                activeTab === tab.id ? styles.tabButtonTextActive : null,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
+  tabBarContainer: {
     backgroundColor: '#ffffff',
     borderBottomColor: '#dfe7e4',
     borderBottomWidth: 1,
+  },
+  tabBar: {
     flexDirection: 'row',
     gap: 6,
     paddingHorizontal: 10,
@@ -54,9 +62,10 @@ const styles = StyleSheet.create({
   tabButton: {
     alignItems: 'center',
     borderRadius: 8,
-    flex: 1,
     justifyContent: 'center',
     minHeight: 40,
+    minWidth: 86,
+    paddingHorizontal: 10,
   },
   tabButtonActive: {
     backgroundColor: '#176a4d',
