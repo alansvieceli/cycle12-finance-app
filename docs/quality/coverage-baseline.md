@@ -23,14 +23,14 @@ npm run test:coverage
 
 ## Current Result
 
-Updated after adding formatter tests and payment summary logic:
+Updated after adding formatter tests, payment summary logic, and sorting helpers:
 
-- Test files: 3 passed
-- Tests: 14 passed
-- Statements: 98.07% (51/52)
-- Branches: 90.9% (30/33)
-- Functions: 100% (25/25)
-- Lines: 98.03% (50/51)
+- Test files: 4 passed
+- Tests: 20 passed
+- Statements: 98.66% (74/75)
+- Branches: 87.27% (48/55)
+- Functions: 100% (38/38)
+- Lines: 98.63% (72/73)
 
 ## Included Scope
 
@@ -61,6 +61,7 @@ This is intentional for the first baseline. The app has UI and persistence behav
 - `src/lib/formatters.ts`: fully covered.
 - `src/lib/ids.ts`: fully covered for executable lines.
 - `src/lib/inputParsers.ts`: mostly covered, with uncovered branch behavior remaining.
+- `src/lib/sorting.ts`: fully covered for executable lines.
 
 ## Recommended Next Improvements
 

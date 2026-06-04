@@ -11,8 +11,12 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Lets the user choose how many months appear in the summary, from 1 to 12.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, and editable monthly values.
+- Keeps category and account lists consistently ordered across planning and summary views.
+- Keeps planning focused on monthly values, with account management opened from a separate panel.
+- Lets the user select a category while creating an account.
 - Tracks current-month paid/unpaid status manually for each account item.
-- Calculates monthly expenses, salary commitment, and surplus or shortfall.
+- Shows compact monthly summaries with category details available on demand.
+- Calculates monthly expenses, income commitment, and surplus or shortfall.
 - Treats credit card bills as manually editable monthly totals.
 - Stores finance data only on the device.
 
