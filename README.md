@@ -24,6 +24,12 @@ The app uses `@react-native-async-storage/async-storage` for local device storag
 npx expo start
 ```
 
+## Test
+
+```bash
+npm test
+```
+
 ## Open on Android
 
 Start an Android emulator from Android Studio, then press `a` in the Expo CLI terminal.
