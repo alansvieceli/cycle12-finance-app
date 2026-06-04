@@ -61,5 +61,8 @@ yarn-error.*
 # TypeScript
 *.tsbuildinfo
 
+# Coverage reports
+coverage/
+
 # Android Profiling
 *.hprof
