@@ -52,11 +52,14 @@ Account order fields are not available yet, so account lists should use due day 
 This should apply to:
 
 - summary month/category details
-- current-month payment checklist
 - planning account selector
 - account management panel
 - category lists
 - monthly value editing context
+
+Exception:
+
+- The current-month payment checklist should ignore category ordering and use only due day, then account name, because payment checking is a sequential due-date workflow.
 
 Recommended implementation:
 
@@ -188,6 +191,7 @@ If account creation needs a new transient selected category field, keep it in lo
 - Categories and accounts are displayed with consistent ordering across all relevant screens.
 - Missing or invalid `sortOrder` behaves as `0`.
 - Accounts without explicit ordering use due day from lowest to highest.
+- Current-month payment checklist ignores category ordering and sorts only by due day, then account name.
 - Category management allows editing category order.
 - Account management does not need an account order field yet.
 - `Planejamento` default view focuses on monthly value editing.

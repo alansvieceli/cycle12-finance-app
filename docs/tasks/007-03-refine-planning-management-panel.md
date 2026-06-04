@@ -18,7 +18,8 @@ Make `Planejamento` focus on monthly values and move account management into an 
 2. Show account management only when the panel is open.
 3. Add a close/back action for the panel.
 4. Add category selection during account creation using a compact combo/dropdown-style control.
-5. Use consistent sorting in the account selector and management panel.
+5. Show the category/group on account selector buttons in monthly value editing.
+6. Use consistent sorting in the account selector and management panel.
 
 ## Acceptance Criteria
 
@@ -27,6 +28,7 @@ Make `Planejamento` focus on monthly values and move account management into an 
 - New account creation includes category selection.
 - Category selection uses a compact combo/dropdown-style control instead of category chips.
 - New accounts use the selected category.
+- Monthly value account selector buttons show the account category/group.
 - Account lists are consistently ordered.
 
 ## Validation
