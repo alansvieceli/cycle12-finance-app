@@ -95,6 +95,8 @@ describe('finance calculations', () => {
       monthlySalary: 3000,
       currentMonthExtraBalance: 1000,
       visibleMonthCount: 12,
+      commitmentWarningThreshold: 80,
+      commitmentDangerThreshold: 90,
     };
 
     expect(
@@ -123,6 +125,8 @@ describe('finance calculations', () => {
       monthlySalary: 3000,
       currentMonthExtraBalance: 500,
       visibleMonthCount: 12,
+      commitmentWarningThreshold: 80,
+      commitmentDangerThreshold: 90,
     };
 
     expect(

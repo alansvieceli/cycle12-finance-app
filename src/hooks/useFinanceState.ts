@@ -116,6 +116,26 @@ export function useFinanceState() {
     }));
   }
 
+  function updateCommitmentWarningThreshold(value: string) {
+    const parsed = parseInt(value.replace(/\D/g, ''), 10);
+    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: { ...currentState.settings, commitmentWarningThreshold: clamped },
+    }));
+  }
+
+  function updateCommitmentDangerThreshold(value: string) {
+    const parsed = parseInt(value.replace(/\D/g, ''), 10);
+    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: { ...currentState.settings, commitmentDangerThreshold: clamped },
+    }));
+  }
+
   function createCategory() {
     const categoryName = newCategoryName.trim();
 
@@ -383,6 +403,8 @@ export function useFinanceState() {
       toggleMonthlyPaymentStatus,
       updateAccountDueDay,
       updateAccountName,
+      updateCommitmentDangerThreshold,
+      updateCommitmentWarningThreshold,
       updateCurrentMonthExtraBalance,
       updateCategoryName,
       updateCategorySortOrder,

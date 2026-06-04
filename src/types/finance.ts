@@ -4,6 +4,8 @@ export type FinanceSettings = {
   monthlySalary: number;
   currentMonthExtraBalance: number;
   visibleMonthCount: number;
+  commitmentWarningThreshold: number;
+  commitmentDangerThreshold: number;
 };
 
 export type Category = {
@@ -47,6 +49,8 @@ export const emptyFinanceState: FinanceState = {
     monthlySalary: 0,
     currentMonthExtraBalance: 0,
     visibleMonthCount: 12,
+    commitmentWarningThreshold: 80,
+    commitmentDangerThreshold: 90,
   },
   categories: [],
   accountItems: [],

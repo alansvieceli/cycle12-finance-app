@@ -40,8 +40,68 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
           />
           <Text style={styles.inputHint}>Escolha de 1 a 12 meses.</Text>
         </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Alerta de comprometimento</Text>
+          <ThresholdInput
+            onChangeValue={actions.updateCommitmentWarningThreshold}
+            placeholder="80"
+            value={financeState.settings.commitmentWarningThreshold}
+          />
+          <Text style={styles.inputHint}>0 a 100. Deixe 0 para desativar.</Text>
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Perigo de comprometimento</Text>
+          <ThresholdInput
+            onChangeValue={actions.updateCommitmentDangerThreshold}
+            placeholder="90"
+            value={financeState.settings.commitmentDangerThreshold}
+          />
+          <Text style={styles.inputHint}>0 a 100. Deixe 0 para desativar.</Text>
+        </View>
       </View>
     </View>
+  );
+}
+
+function ThresholdInput({
+  onChangeValue,
+  placeholder,
+  value,
+}: {
+  onChangeValue: (value: string) => void;
+  placeholder: string;
+  value: number;
+}) {
+  const [draftValue, setDraftValue] = useState(String(value));
+  const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setDraftValue(String(value));
+    }
+  }, [isFocused, value]);
+
+  function handleChangeText(nextValue: string) {
+    const numericValue = nextValue.replace(/\D/g, '');
+    setDraftValue(numericValue);
+    onChangeValue(numericValue || '0');
+  }
+
+  function handleBlur() {
+    setIsFocused(false);
+    setDraftValue(String(value));
+  }
+
+  return (
+    <TextInput
+      keyboardType="number-pad"
+      onBlur={handleBlur}
+      onChangeText={handleChangeText}
+      onFocus={() => setIsFocused(true)}
+      placeholder={placeholder}
+      style={styles.input}
+      value={draftValue}
+    />
   );
 }
 

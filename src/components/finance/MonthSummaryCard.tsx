@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { resolveCommitmentColor } from '../../lib/commitmentColor';
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   currencyFormatter,
@@ -8,6 +9,8 @@ import {
 } from '../../lib/formatters';
 
 type MonthSummaryCardProps = {
+  commitmentDangerThreshold: number;
+  commitmentWarningThreshold: number;
   monthlyTotalExpenses: number;
   onOpenDetails: () => void;
   projectionMonth: ProjectionMonth;
@@ -16,12 +19,19 @@ type MonthSummaryCardProps = {
 };
 
 export function MonthSummaryCard({
+  commitmentDangerThreshold,
+  commitmentWarningThreshold,
   monthlyTotalExpenses,
   onOpenDetails,
   projectionMonth,
   salaryCommitmentPercentage,
   surplusOrShortfall,
 }: MonthSummaryCardProps) {
+  const commitmentColor = resolveCommitmentColor(
+    salaryCommitmentPercentage,
+    commitmentWarningThreshold,
+    commitmentDangerThreshold,
+  );
   return (
     <View style={styles.monthCard}>
       <View style={styles.monthHeader}>
@@ -49,6 +59,7 @@ export function MonthSummaryCard({
           value={currencyFormatter.format(monthlyTotalExpenses)}
         />
         <SummaryValue
+          color={commitmentColor}
           label="Comprometido"
           value={
             salaryCommitmentPercentage === null
@@ -65,11 +76,19 @@ export function MonthSummaryCard({
   );
 }
 
-function SummaryValue({ label, value }: { label: string; value: string }) {
+function SummaryValue({
+  color,
+  label,
+  value,
+}: {
+  color?: string | null;
+  label: string;
+  value: string;
+}) {
   return (
     <View style={styles.summaryValue}>
       <Text style={styles.summaryLabel}>{label}</Text>
-      <Text style={styles.summaryAmount}>{value}</Text>
+      <Text style={[styles.summaryAmount, color ? { color } : null]}>{value}</Text>
     </View>
   );
 }

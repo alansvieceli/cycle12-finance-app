@@ -87,6 +87,8 @@ export function SummaryScreen({
         return (
           <Fragment key={projectionMonth.key}>
             <MonthSummaryCard
+              commitmentDangerThreshold={financeState.settings.commitmentDangerThreshold}
+              commitmentWarningThreshold={financeState.settings.commitmentWarningThreshold}
               monthlyTotalExpenses={monthlyTotalExpenses}
               onOpenDetails={() => setSelectedDetailsMonthKey(projectionMonth.key)}
               projectionMonth={projectionMonth}

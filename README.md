@@ -18,6 +18,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Tracks current-month paid/unpaid status manually for each account item.
 - Shows compact monthly summaries with category details available on demand.
 - Calculates monthly expenses, income commitment, and surplus or shortfall.
+- Shows the commitment percentage in a configurable warning or danger color when it exceeds user-defined thresholds set in the Settings tab.
 - Treats credit card bills as manually editable monthly totals.
 - Stores finance data only on the device.
 

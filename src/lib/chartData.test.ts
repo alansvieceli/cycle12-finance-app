@@ -45,6 +45,8 @@ const financeState: FinanceState = {
     currentMonthExtraBalance: 500,
     monthlySalary: 3000,
     visibleMonthCount: 2,
+    commitmentWarningThreshold: 80,
+    commitmentDangerThreshold: 90,
   },
 };
 
