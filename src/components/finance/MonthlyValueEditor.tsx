@@ -1,8 +1,9 @@
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ProjectionMonth } from '../../lib/financeCalculations';
-import { formatEditableAmount, formatMonthLabel } from '../../lib/formatters';
+import { formatMonthLabel } from '../../lib/formatters';
 import { AccountItem, Category, MonthlyValue } from '../../types/finance';
+import { EditableAmountInput } from '../common/EditableAmountInput';
 
 type MonthlyValueEditorProps = {
   accountItems: AccountItem[];
@@ -83,23 +84,19 @@ export function MonthlyValueEditor({
                     {getCategoryName(categories, selectedAccountItem.categoryId)}
                   </Text>
                 </View>
-                <TextInput
-                  keyboardType="decimal-pad"
-                  onChangeText={(amount) =>
+                <EditableAmountInput
+                  onChangeValue={(amount) =>
                     onChangeMonthlyValue(
                       selectedAccountItem.id,
                       projectionMonth,
                       amount,
                     )
                   }
-                  placeholder="0,00"
                   style={[styles.input, styles.monthValueInput]}
-                  value={formatEditableAmount(
-                    getMonthlyValueAmount(
-                      monthlyValues,
-                      selectedAccountItem.id,
-                      projectionMonth,
-                    ),
+                  value={getMonthlyValueAmount(
+                    monthlyValues,
+                    selectedAccountItem.id,
+                    projectionMonth,
                   )}
                 />
               </View>

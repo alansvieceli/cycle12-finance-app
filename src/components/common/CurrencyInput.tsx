@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { formatEditableAmount } from '../../lib/formatters';
+import { EditableAmountInput } from './EditableAmountInput';
 
 type CurrencyInputProps = {
   label: string;
@@ -16,12 +16,10 @@ export function CurrencyInput({
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.inputLabel}>{label}</Text>
-      <TextInput
-        keyboardType="decimal-pad"
-        onChangeText={onChangeValue}
-        placeholder="0,00"
+      <EditableAmountInput
+        onChangeValue={onChangeValue}
         style={styles.input}
-        value={formatEditableAmount(value)}
+        value={value}
       />
     </View>
   );

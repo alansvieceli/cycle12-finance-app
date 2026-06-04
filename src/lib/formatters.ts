@@ -19,7 +19,7 @@ export function formatEditableAmount(value: number) {
     return '';
   }
 
-  return String(value).replace('.', ',');
+  return value.toFixed(2).replace('.', ',');
 }
 
 export function formatMonthLabel(year: number, month: number) {
