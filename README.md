@@ -119,6 +119,35 @@ It does not measure screens, React Native components, hooks, or local storage be
 The first recorded baseline is available in `docs/quality/coverage-baseline.md`.
 Generated coverage reports are written to `coverage/` and ignored by git.
 
+## Generate APK for Android
+
+There are two ways to generate an APK to install directly on a device.
+
+### Option 1: EAS Build (recommended, cloud-based)
+
+```bash
+npm install -g eas-cli
+eas login
+eas build:configure
+eas build -p android --profile preview
+```
+
+A download link for the `.apk` is provided when the build finishes. Requires a free account at [expo.dev](https://expo.dev).
+
+### Option 2: Local build (requires Android Studio)
+
+```bash
+npx expo run:android --variant release
+```
+
+The APK is written to:
+
+```
+android/app/build/outputs/apk/release/app-release.apk
+```
+
+Transfer it to the device via cable or cloud storage and install it. You may need to enable **Install from unknown sources** in Android settings.
+
 ## TypeScript Check
 
 ```bash
