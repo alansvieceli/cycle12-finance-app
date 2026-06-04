@@ -1,0 +1,163 @@
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+
+import { ActionButton } from '../common/ActionButton';
+import { AccountItem, Category } from '../../types/finance';
+
+type AccountEditorProps = {
+  accountItems: AccountItem[];
+  categories: Category[];
+  newAccountDueDay: string;
+  newAccountName: string;
+  onChangeAccountDueDay: (accountItemId: string, dueDay: string) => void;
+  onChangeAccountName: (accountItemId: string, name: string) => void;
+  onChangeNewAccountDueDay: (dueDay: string) => void;
+  onChangeNewAccountName: (name: string) => void;
+  onCreateAccountItem: () => void;
+  onCycleAccountCategory: (accountItemId: string) => void;
+  onDeleteAccountItem: (accountItemId: string) => void;
+};
+
+export function AccountEditor({
+  accountItems,
+  categories,
+  newAccountDueDay,
+  newAccountName,
+  onChangeAccountDueDay,
+  onChangeAccountName,
+  onChangeNewAccountDueDay,
+  onChangeNewAccountName,
+  onCreateAccountItem,
+  onCycleAccountCategory,
+  onDeleteAccountItem,
+}: AccountEditorProps) {
+  return (
+    <View style={styles.panel}>
+      <Text style={styles.sectionTitle}>Contas</Text>
+      <View style={styles.createAccountRow}>
+        <TextInput
+          onChangeText={onChangeNewAccountName}
+          placeholder="Nova conta"
+          style={styles.input}
+          value={newAccountName}
+        />
+        <TextInput
+          keyboardType="number-pad"
+          onChangeText={onChangeNewAccountDueDay}
+          placeholder="Dia"
+          style={[styles.input, styles.dueDayInput]}
+          value={newAccountDueDay}
+        />
+        <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
+      </View>
+
+      {accountItems
+        .slice()
+        .sort(
+          (firstAccountItem, secondAccountItem) =>
+            firstAccountItem.sortOrder - secondAccountItem.sortOrder,
+        )
+        .map((accountItem) => (
+          <View key={accountItem.id} style={styles.accountEditorRow}>
+            <TextInput
+              onChangeText={(name) => onChangeAccountName(accountItem.id, name)}
+              style={styles.input}
+              value={accountItem.name}
+            />
+            <View style={styles.accountMetaRow}>
+              <Pressable
+                onPress={() => onCycleAccountCategory(accountItem.id)}
+                style={styles.categoryButton}
+              >
+                <Text style={styles.categoryButtonText}>
+                  {getCategoryName(categories, accountItem.categoryId)}
+                </Text>
+              </Pressable>
+              <TextInput
+                keyboardType="number-pad"
+                onChangeText={(dueDay) =>
+                  onChangeAccountDueDay(accountItem.id, dueDay)
+                }
+                style={[styles.input, styles.dueDayInput]}
+                value={String(accountItem.dueDay)}
+              />
+              <ActionButton
+                label="Excluir"
+                onPress={() => onDeleteAccountItem(accountItem.id)}
+                variant="danger"
+              />
+            </View>
+          </View>
+        ))}
+    </View>
+  );
+}
+
+function getCategoryName(categories: Category[], categoryId: string) {
+  return categories.find((category) => category.id === categoryId)?.name ?? '-';
+}
+
+const styles = StyleSheet.create({
+  panel: {
+    backgroundColor: '#ffffff',
+    borderColor: '#dfe7e4',
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 16,
+  },
+  sectionTitle: {
+    color: '#17211f',
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  input: {
+    backgroundColor: '#f7faf9',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    color: '#17211f',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0,
+    minHeight: 48,
+    paddingHorizontal: 12,
+  },
+  createAccountRow: {
+    gap: 10,
+    marginTop: 10,
+  },
+  accountEditorRow: {
+    borderTopColor: '#e7eeeb',
+    borderTopWidth: 1,
+    gap: 8,
+    marginTop: 10,
+    paddingTop: 10,
+  },
+  accountMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  dueDayInput: {
+    maxWidth: 78,
+    textAlign: 'center',
+  },
+  categoryButton: {
+    alignItems: 'center',
+    backgroundColor: '#eef4f2',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 10,
+  },
+  categoryButtonText: {
+    color: '#17211f',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
+});

@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
 import {
   ScrollView,
-  Pressable,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 
-import { ActionButton } from './src/components/common/ActionButton';
 import { CurrencyInput } from './src/components/common/CurrencyInput';
 import { TabBar, TabItem } from './src/components/common/TabBar';
+import { AccountEditor } from './src/components/finance/AccountEditor';
+import { CategoryEditor } from './src/components/finance/CategoryEditor';
+import { MonthSummaryCard } from './src/components/finance/MonthSummaryCard';
+import { MonthlyValueEditor } from './src/components/finance/MonthlyValueEditor';
 import {
   calculateCategoryTotals,
   calculateMonthlyTotalExpenses,
@@ -18,16 +19,6 @@ import {
   calculateSurplusOrShortfall,
   createProjectionMonths,
 } from './src/lib/financeCalculations';
-import {
-  CategoryMonthTotal,
-  ProjectionMonth,
-} from './src/lib/financeCalculations';
-import {
-  currencyFormatter,
-  formatEditableAmount,
-  formatMonthLabel,
-  percentageFormatter,
-} from './src/lib/formatters';
 import { useFinanceState } from './src/hooks/useFinanceState';
 
 type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
@@ -93,253 +84,61 @@ export default function App() {
               );
 
               return (
-                <View key={projectionMonth.key} style={styles.monthCard}>
-                  <View style={styles.monthHeader}>
-                    <View>
-                      <Text style={styles.monthName}>
-                        {formatMonthLabel(
-                          projectionMonth.year,
-                          projectionMonth.month,
-                        )}
-                      </Text>
-                      {projectionMonth.isCurrentMonth ? (
-                        <Text style={styles.currentMonthLabel}>Mês atual</Text>
-                      ) : null}
-                    </View>
-                    <Text
-                      style={[
-                        styles.balance,
-                        surplusOrShortfall < 0
-                          ? styles.negativeBalance
-                          : styles.positiveBalance,
-                      ]}
-                    >
-                      {currencyFormatter.format(surplusOrShortfall)}
-                    </Text>
-                  </View>
-
-                  <View style={styles.summaryGrid}>
-                    <SummaryValue
-                      label="Despesas"
-                      value={currencyFormatter.format(monthlyTotalExpenses)}
-                    />
-                    <SummaryValue
-                      label="Comprometido"
-                      value={
-                        salaryCommitmentPercentage === null
-                          ? '-'
-                          : percentageFormatter.format(salaryCommitmentPercentage)
-                      }
-                    />
-                  </View>
-
-                  <CategoryTotals
-                    categoryTotals={categoryTotals}
-                    categoryNamesById={Object.fromEntries(
-                      financeState.categories.map((category) => [
-                        category.id,
-                        category.name,
-                      ]),
-                    )}
-                  />
-                </View>
+                <MonthSummaryCard
+                  key={projectionMonth.key}
+                  categoryNamesById={Object.fromEntries(
+                    financeState.categories.map((category) => [
+                      category.id,
+                      category.name,
+                    ]),
+                  )}
+                  categoryTotals={categoryTotals}
+                  monthlyTotalExpenses={monthlyTotalExpenses}
+                  projectionMonth={projectionMonth}
+                  salaryCommitmentPercentage={salaryCommitmentPercentage}
+                  surplusOrShortfall={surplusOrShortfall}
+                />
               );
             })
           : null}
 
         {activeTab === 'planning' ? (
           <>
-            <View style={styles.settingsPanel}>
-              <Text style={styles.sectionTitle}>Contas</Text>
-              <View style={styles.createAccountRow}>
-                <TextInput
-                  onChangeText={actions.setNewAccountName}
-                  placeholder="Nova conta"
-                  style={styles.input}
-                  value={formState.newAccountName}
-                />
-                <TextInput
-                  keyboardType="number-pad"
-                  onChangeText={actions.setNewAccountDueDay}
-                  placeholder="Dia"
-                  style={[styles.input, styles.dueDayInput]}
-                  value={formState.newAccountDueDay}
-                />
-                <ActionButton label="Adicionar" onPress={actions.createAccountItem} />
-              </View>
+            <AccountEditor
+              accountItems={financeState.accountItems}
+              categories={financeState.categories}
+              newAccountDueDay={formState.newAccountDueDay}
+              newAccountName={formState.newAccountName}
+              onChangeAccountDueDay={actions.updateAccountDueDay}
+              onChangeAccountName={actions.updateAccountName}
+              onChangeNewAccountDueDay={actions.setNewAccountDueDay}
+              onChangeNewAccountName={actions.setNewAccountName}
+              onCreateAccountItem={actions.createAccountItem}
+              onCycleAccountCategory={actions.cycleAccountCategory}
+              onDeleteAccountItem={actions.deleteAccountItem}
+            />
 
-              {financeState.accountItems
-                .slice()
-                .sort(
-                  (firstAccountItem, secondAccountItem) =>
-                    firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-                )
-                .map((accountItem) => (
-                  <View key={accountItem.id} style={styles.accountEditorRow}>
-                    <TextInput
-                      onChangeText={(name) =>
-                        actions.updateAccountName(accountItem.id, name)
-                      }
-                      style={styles.input}
-                      value={accountItem.name}
-                    />
-                    <View style={styles.accountMetaRow}>
-                      <Pressable
-                        onPress={() => actions.cycleAccountCategory(accountItem.id)}
-                        style={styles.categoryButton}
-                      >
-                        <Text style={styles.categoryButtonText}>
-                          {getCategoryName(
-                            financeState.categories,
-                            accountItem.categoryId,
-                          )}
-                        </Text>
-                      </Pressable>
-                      <TextInput
-                        keyboardType="number-pad"
-                        onChangeText={(dueDay) =>
-                          actions.updateAccountDueDay(accountItem.id, dueDay)
-                        }
-                        style={[styles.input, styles.dueDayInput]}
-                        value={String(accountItem.dueDay)}
-                      />
-                      <ActionButton
-                        label="Excluir"
-                        onPress={() => actions.deleteAccountItem(accountItem.id)}
-                        variant="danger"
-                      />
-                    </View>
-                  </View>
-                ))}
-            </View>
-
-            <View style={styles.settingsPanel}>
-              <Text style={styles.sectionTitle}>Valores mensais</Text>
-              {selectedAccountItem ? (
-                <>
-                  <Text style={styles.editorHint}>
-                    Selecione uma conta e edite os valores previstos para cada mês.
-                  </Text>
-
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.accountSelector}
-                  >
-                    {financeState.accountItems
-                      .slice()
-                      .sort(
-                        (firstAccountItem, secondAccountItem) =>
-                          firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-                      )
-                      .map((accountItem) => (
-                        <Pressable
-                          key={accountItem.id}
-                          onPress={() => actions.setSelectedAccountItemId(accountItem.id)}
-                          style={[
-                            styles.accountSelectorButton,
-                            selectedAccountItem.id === accountItem.id
-                              ? styles.accountSelectorButtonActive
-                              : null,
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              styles.accountSelectorButtonText,
-                              selectedAccountItem.id === accountItem.id
-                                ? styles.accountSelectorButtonTextActive
-                                : null,
-                            ]}
-                          >
-                            {accountItem.name}
-                          </Text>
-                        </Pressable>
-                      ))}
-                  </ScrollView>
-
-                  <View style={styles.monthValueList}>
-                    {projectionMonths.map((projectionMonth) => (
-                      <View key={projectionMonth.key} style={styles.monthValueRow}>
-                        <View style={styles.monthValueLabel}>
-                          <Text style={styles.monthValueName}>
-                            {formatMonthLabel(
-                              projectionMonth.year,
-                              projectionMonth.month,
-                            )}
-                          </Text>
-                          <Text style={styles.monthValueCategory}>
-                            {getCategoryName(
-                              financeState.categories,
-                              selectedAccountItem.categoryId,
-                            )}
-                          </Text>
-                        </View>
-                        <TextInput
-                          keyboardType="decimal-pad"
-                          onChangeText={(amount) =>
-                            actions.updateMonthlyValue(
-                              selectedAccountItem.id,
-                              projectionMonth,
-                              amount,
-                            )
-                          }
-                          placeholder="0,00"
-                          style={[styles.input, styles.monthValueInput]}
-                          value={formatEditableAmount(
-                            getMonthlyValueAmount(
-                              financeState.monthlyValues,
-                              selectedAccountItem.id,
-                              projectionMonth,
-                            ),
-                          )}
-                        />
-                      </View>
-                    ))}
-                  </View>
-                </>
-              ) : (
-                <Text style={styles.emptyText}>
-                  Crie uma categoria e uma conta para editar valores mensais.
-                </Text>
-              )}
-            </View>
+            <MonthlyValueEditor
+              accountItems={financeState.accountItems}
+              categories={financeState.categories}
+              monthlyValues={financeState.monthlyValues}
+              onChangeMonthlyValue={actions.updateMonthlyValue}
+              onSelectAccountItem={actions.setSelectedAccountItemId}
+              projectionMonths={projectionMonths}
+              selectedAccountItem={selectedAccountItem}
+            />
           </>
         ) : null}
 
         {activeTab === 'categories' ? (
-          <View style={styles.settingsPanel}>
-            <Text style={styles.sectionTitle}>Categorias</Text>
-            <View style={styles.createRow}>
-              <TextInput
-                onChangeText={actions.setNewCategoryName}
-                placeholder="Nova categoria"
-                style={[styles.input, styles.createInput]}
-                value={formState.newCategoryName}
-              />
-              <ActionButton label="Adicionar" onPress={actions.createCategory} />
-            </View>
-
-            {financeState.categories
-              .slice()
-              .sort(
-                (firstCategory, secondCategory) =>
-                  firstCategory.sortOrder - secondCategory.sortOrder,
-              )
-              .map((category) => (
-                <View key={category.id} style={styles.editorRow}>
-                  <TextInput
-                    onChangeText={(name) => actions.updateCategoryName(category.id, name)}
-                    style={[styles.input, styles.rowInput]}
-                    value={category.name}
-                  />
-                  <ActionButton
-                    label="Excluir"
-                    onPress={() => actions.deleteCategory(category.id)}
-                    variant="danger"
-                  />
-                </View>
-              ))}
-          </View>
+          <CategoryEditor
+            categories={financeState.categories}
+            newCategoryName={formState.newCategoryName}
+            onChangeCategoryName={actions.updateCategoryName}
+            onChangeNewCategoryName={actions.setNewCategoryName}
+            onCreateCategory={actions.createCategory}
+            onDeleteCategory={actions.deleteCategory}
+          />
         ) : null}
 
         {activeTab === 'settings' ? (
@@ -368,60 +167,6 @@ export default function App() {
         ) : null}
       </ScrollView>
     </View>
-  );
-}
-
-function SummaryValue({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.summaryValue}>
-      <Text style={styles.summaryLabel}>{label}</Text>
-      <Text style={styles.summaryAmount}>{value}</Text>
-    </View>
-  );
-}
-
-function CategoryTotals({
-  categoryNamesById,
-  categoryTotals,
-}: {
-  categoryNamesById: Record<string, string>;
-  categoryTotals: CategoryMonthTotal[];
-}) {
-  return (
-    <View style={styles.categoryList}>
-      {categoryTotals.map((categoryTotal) => (
-        <View key={categoryTotal.categoryId} style={styles.categoryRow}>
-          <Text style={styles.categoryName}>
-            {categoryNamesById[categoryTotal.categoryId]}
-          </Text>
-          <Text style={styles.categoryAmount}>
-            {currencyFormatter.format(categoryTotal.total)}
-          </Text>
-        </View>
-      ))}
-    </View>
-  );
-}
-
-function getCategoryName(
-  categories: { id: string; name: string }[],
-  categoryId: string,
-) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
-}
-
-function getMonthlyValueAmount(
-  monthlyValues: { accountItemId: string; month: number; year: number; amount: number }[],
-  accountItemId: string,
-  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-) {
-  return (
-    monthlyValues.find(
-      (monthlyValue) =>
-        monthlyValue.accountItemId === accountItemId &&
-        monthlyValue.month === projectionMonth.month &&
-        monthlyValue.year === projectionMonth.year,
-    )?.amount ?? 0
   );
 }
 
@@ -495,234 +240,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
-  },
-  editorSection: {
-    marginTop: 18,
-  },
-  editorTitle: {
-    color: '#32403d',
-    fontSize: 15,
-    fontWeight: '800',
-    letterSpacing: 0,
-  },
-  editorHint: {
-    color: '#60716d',
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 8,
-  },
-  createRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 10,
-  },
-  createInput: {
-    flex: 1,
-  },
-  editorRow: {
-    alignItems: 'center',
-    borderTopColor: '#e7eeeb',
-    borderTopWidth: 1,
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 10,
-    paddingTop: 10,
-  },
-  rowInput: {
-    flex: 1,
-  },
-  createAccountRow: {
-    gap: 10,
-    marginTop: 10,
-  },
-  accountEditorRow: {
-    borderTopColor: '#e7eeeb',
-    borderTopWidth: 1,
-    gap: 8,
-    marginTop: 10,
-    paddingTop: 10,
-  },
-  accountMetaRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  dueDayInput: {
-    maxWidth: 78,
-    textAlign: 'center',
-  },
-  categoryButton: {
-    alignItems: 'center',
-    backgroundColor: '#eef4f2',
-    borderColor: '#c9d6d2',
-    borderRadius: 8,
-    borderWidth: 1,
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 10,
-  },
-  categoryButtonText: {
-    color: '#17211f',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 0,
-    textAlign: 'center',
-  },
-  accountSelector: {
-    marginTop: 14,
-  },
-  accountSelectorButton: {
-    alignItems: 'center',
-    backgroundColor: '#eef4f2',
-    borderColor: '#c9d6d2',
-    borderRadius: 8,
-    borderWidth: 1,
-    justifyContent: 'center',
-    marginRight: 8,
-    minHeight: 42,
-    paddingHorizontal: 12,
-  },
-  accountSelectorButtonActive: {
-    backgroundColor: '#176a4d',
-    borderColor: '#176a4d',
-  },
-  accountSelectorButtonText: {
-    color: '#17211f',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 0,
-  },
-  accountSelectorButtonTextActive: {
-    color: '#ffffff',
-  },
-  monthValueList: {
-    gap: 10,
-    marginTop: 14,
-  },
-  monthValueRow: {
-    alignItems: 'center',
-    borderTopColor: '#e7eeeb',
-    borderTopWidth: 1,
-    flexDirection: 'row',
-    gap: 10,
-    paddingTop: 10,
-  },
-  monthValueLabel: {
-    flex: 1,
-  },
-  monthValueName: {
-    color: '#17211f',
-    fontSize: 14,
-    fontWeight: '800',
-    letterSpacing: 0,
-  },
-  monthValueCategory: {
-    color: '#60716d',
-    fontSize: 12,
-    letterSpacing: 0,
-    marginTop: 3,
-  },
-  monthValueInput: {
-    maxWidth: 130,
-    textAlign: 'right',
-  },
-  emptyText: {
-    color: '#60716d',
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 10,
-  },
-  monthCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
-    borderRadius: 8,
-    borderWidth: 1,
-    padding: 16,
-  },
-  monthHeader: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    gap: 12,
-    justifyContent: 'space-between',
-  },
-  monthName: {
-    color: '#17211f',
-    fontSize: 18,
-    fontWeight: '800',
-    letterSpacing: 0,
-  },
-  currentMonthLabel: {
-    color: '#3d6f66',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0,
-    marginTop: 4,
-    textTransform: 'uppercase',
-  },
-  balance: {
-    flexShrink: 1,
-    fontSize: 17,
-    fontWeight: '800',
-    letterSpacing: 0,
-    textAlign: 'right',
-  },
-  positiveBalance: {
-    color: '#176a4d',
-  },
-  negativeBalance: {
-    color: '#a33b2f',
-  },
-  summaryGrid: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 16,
-  },
-  summaryValue: {
-    backgroundColor: '#eef4f2',
-    borderRadius: 8,
-    flex: 1,
-    minHeight: 68,
-    padding: 12,
-  },
-  summaryLabel: {
-    color: '#60716d',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0,
-    textTransform: 'uppercase',
-  },
-  summaryAmount: {
-    color: '#17211f',
-    fontSize: 17,
-    fontWeight: '800',
-    letterSpacing: 0,
-    marginTop: 8,
-  },
-  categoryList: {
-    borderTopColor: '#e7eeeb',
-    borderTopWidth: 1,
-    marginTop: 14,
-    paddingTop: 6,
-  },
-  categoryRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    minHeight: 32,
-  },
-  categoryName: {
-    color: '#32403d',
-    flex: 1,
-    fontSize: 14,
-    letterSpacing: 0,
-  },
-  categoryAmount: {
-    color: '#17211f',
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 0,
-    marginLeft: 12,
   },
 });
