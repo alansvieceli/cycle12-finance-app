@@ -42,6 +42,22 @@ Important project rules live in:
 - AsyncStorage for local device persistence
 - Vitest for unit tests
 
+## Source Structure
+
+```text
+src/
+  components/
+    common/   reusable UI pieces
+    finance/  finance-specific UI pieces
+  hooks/      app state and persistence hooks
+  lib/        calculations, formatters, parsers, and utilities
+  screens/    tab-level screens
+  storage/    local persistence adapter
+  types/      shared TypeScript types
+```
+
+`App.tsx` is intentionally small and only renders the root finance app.
+
 ## Requirements
 
 - Node.js
