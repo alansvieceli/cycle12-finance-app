@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
   ScrollView,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -40,6 +41,9 @@ export default function App() {
     [projectionMonths],
   );
   const [financeState, setFinanceState] = useState(initialFinanceState);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newAccountName, setNewAccountName] = useState('');
+  const [newAccountDueDay, setNewAccountDueDay] = useState('');
 
   function updateMonthlySalary(value: string) {
     setFinanceState((currentState) => ({
@@ -58,6 +62,148 @@ export default function App() {
         ...currentState.settings,
         currentMonthExtraBalance: parseCurrencyInput(value),
       },
+    }));
+  }
+
+  function createCategory() {
+    const categoryName = newCategoryName.trim();
+
+    if (!categoryName) {
+      return;
+    }
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: [
+        ...currentState.categories,
+        {
+          id: createId('category'),
+          name: categoryName,
+          sortOrder: currentState.categories.length + 1,
+        },
+      ],
+    }));
+    setNewCategoryName('');
+  }
+
+  function updateCategoryName(categoryId: string, name: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: currentState.categories.map((category) =>
+        category.id === categoryId ? { ...category, name } : category,
+      ),
+    }));
+  }
+
+  function deleteCategory(categoryId: string) {
+    setFinanceState((currentState) => {
+      const removedAccountIds = new Set(
+        currentState.accountItems
+          .filter((accountItem) => accountItem.categoryId === categoryId)
+          .map((accountItem) => accountItem.id),
+      );
+
+      return {
+        ...currentState,
+        accountItems: currentState.accountItems.filter(
+          (accountItem) => accountItem.categoryId !== categoryId,
+        ),
+        categories: currentState.categories.filter(
+          (category) => category.id !== categoryId,
+        ),
+        monthlyValues: currentState.monthlyValues.filter(
+          (monthlyValue) => !removedAccountIds.has(monthlyValue.accountItemId),
+        ),
+      };
+    });
+  }
+
+  function createAccountItem() {
+    const accountName = newAccountName.trim();
+    const firstCategory = financeState.categories[0];
+
+    if (!accountName || !firstCategory) {
+      return;
+    }
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      accountItems: [
+        ...currentState.accountItems,
+        {
+          id: createId('account'),
+          categoryId: firstCategory.id,
+          dueDay: parseDueDay(newAccountDueDay),
+          name: accountName,
+          sortOrder: currentState.accountItems.length + 1,
+        },
+      ],
+    }));
+    setNewAccountDueDay('');
+    setNewAccountName('');
+  }
+
+  function updateAccountName(accountItemId: string, name: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      accountItems: currentState.accountItems.map((accountItem) =>
+        accountItem.id === accountItemId ? { ...accountItem, name } : accountItem,
+      ),
+    }));
+  }
+
+  function updateAccountDueDay(accountItemId: string, dueDay: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      accountItems: currentState.accountItems.map((accountItem) =>
+        accountItem.id === accountItemId
+          ? { ...accountItem, dueDay: parseDueDay(dueDay) }
+          : accountItem,
+      ),
+    }));
+  }
+
+  function cycleAccountCategory(accountItemId: string) {
+    setFinanceState((currentState) => {
+      const categories = [...currentState.categories].sort(
+        (firstCategory, secondCategory) =>
+          firstCategory.sortOrder - secondCategory.sortOrder,
+      );
+
+      if (categories.length === 0) {
+        return currentState;
+      }
+
+      return {
+        ...currentState,
+        accountItems: currentState.accountItems.map((accountItem) => {
+          if (accountItem.id !== accountItemId) {
+            return accountItem;
+          }
+
+          const categoryIndex = categories.findIndex(
+            (category) => category.id === accountItem.categoryId,
+          );
+          const nextCategory = categories[(categoryIndex + 1) % categories.length];
+
+          return {
+            ...accountItem,
+            categoryId: nextCategory.id,
+          };
+        }),
+      };
+    });
+  }
+
+  function deleteAccountItem(accountItemId: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      accountItems: currentState.accountItems.filter(
+        (accountItem) => accountItem.id !== accountItemId,
+      ),
+      monthlyValues: currentState.monthlyValues.filter(
+        (monthlyValue) => monthlyValue.accountItemId !== accountItemId,
+      ),
     }));
   }
 
@@ -85,6 +231,106 @@ export default function App() {
               value={financeState.settings.currentMonthExtraBalance}
               onChangeValue={updateCurrentMonthExtraBalance}
             />
+          </View>
+        </View>
+
+        <View style={styles.settingsPanel}>
+          <Text style={styles.sectionTitle}>Cadastros</Text>
+
+          <View style={styles.editorSection}>
+            <Text style={styles.editorTitle}>Categorias</Text>
+            <View style={styles.createRow}>
+              <TextInput
+                onChangeText={setNewCategoryName}
+                placeholder="Nova categoria"
+                style={[styles.input, styles.createInput]}
+                value={newCategoryName}
+              />
+              <PrimaryButton label="Adicionar" onPress={createCategory} />
+            </View>
+
+            {financeState.categories
+              .slice()
+              .sort(
+                (firstCategory, secondCategory) =>
+                  firstCategory.sortOrder - secondCategory.sortOrder,
+              )
+              .map((category) => (
+                <View key={category.id} style={styles.editorRow}>
+                  <TextInput
+                    onChangeText={(name) => updateCategoryName(category.id, name)}
+                    style={[styles.input, styles.rowInput]}
+                    value={category.name}
+                  />
+                  <DangerButton
+                    label="Excluir"
+                    onPress={() => deleteCategory(category.id)}
+                  />
+                </View>
+              ))}
+          </View>
+
+          <View style={styles.editorSection}>
+            <Text style={styles.editorTitle}>Contas</Text>
+            <View style={styles.createAccountRow}>
+              <TextInput
+                onChangeText={setNewAccountName}
+                placeholder="Nova conta"
+                style={styles.input}
+                value={newAccountName}
+              />
+              <TextInput
+                keyboardType="number-pad"
+                onChangeText={setNewAccountDueDay}
+                placeholder="Dia"
+                style={[styles.input, styles.dueDayInput]}
+                value={newAccountDueDay}
+              />
+              <PrimaryButton label="Adicionar" onPress={createAccountItem} />
+            </View>
+
+            {financeState.accountItems
+              .slice()
+              .sort(
+                (firstAccountItem, secondAccountItem) =>
+                  firstAccountItem.sortOrder - secondAccountItem.sortOrder,
+              )
+              .map((accountItem) => (
+                <View key={accountItem.id} style={styles.accountEditorRow}>
+                  <TextInput
+                    onChangeText={(name) =>
+                      updateAccountName(accountItem.id, name)
+                    }
+                    style={styles.input}
+                    value={accountItem.name}
+                  />
+                  <View style={styles.accountMetaRow}>
+                    <Pressable
+                      onPress={() => cycleAccountCategory(accountItem.id)}
+                      style={styles.categoryButton}
+                    >
+                      <Text style={styles.categoryButtonText}>
+                        {getCategoryName(
+                          financeState.categories,
+                          accountItem.categoryId,
+                        )}
+                      </Text>
+                    </Pressable>
+                    <TextInput
+                      keyboardType="number-pad"
+                      onChangeText={(dueDay) =>
+                        updateAccountDueDay(accountItem.id, dueDay)
+                      }
+                      style={[styles.input, styles.dueDayInput]}
+                      value={String(accountItem.dueDay)}
+                    />
+                    <DangerButton
+                      label="Excluir"
+                      onPress={() => deleteAccountItem(accountItem.id)}
+                    />
+                  </View>
+                </View>
+              ))}
           </View>
         </View>
 
@@ -167,6 +413,34 @@ export default function App() {
   );
 }
 
+function PrimaryButton({
+  label,
+  onPress,
+}: {
+  label: string;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={styles.primaryButton}>
+      <Text style={styles.primaryButtonText}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function DangerButton({
+  label,
+  onPress,
+}: {
+  label: string;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={styles.dangerButton}>
+      <Text style={styles.dangerButtonText}>{label}</Text>
+    </Pressable>
+  );
+}
+
 function CurrencyInput({
   label,
   onChangeValue,
@@ -246,6 +520,27 @@ function formatEditableAmount(value: number) {
   return String(value).replace('.', ',');
 }
 
+function parseDueDay(value: string) {
+  const parsedValue = Number(value.replace(/\D/g, ''));
+
+  if (!Number.isFinite(parsedValue)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.min(31, parsedValue));
+}
+
+function createId(prefix: string) {
+  return `${prefix}-${Date.now()}-${Math.round(Math.random() * 100000)}`;
+}
+
+function getCategoryName(
+  categories: { id: string; name: string }[],
+  categoryId: string,
+) {
+  return categories.find((category) => category.id === categoryId)?.name ?? '-';
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -320,6 +615,104 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
+  },
+  editorSection: {
+    marginTop: 18,
+  },
+  editorTitle: {
+    color: '#32403d',
+    fontSize: 15,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  createRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+  },
+  createInput: {
+    flex: 1,
+  },
+  editorRow: {
+    alignItems: 'center',
+    borderTopColor: '#e7eeeb',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+    paddingTop: 10,
+  },
+  rowInput: {
+    flex: 1,
+  },
+  createAccountRow: {
+    gap: 10,
+    marginTop: 10,
+  },
+  accountEditorRow: {
+    borderTopColor: '#e7eeeb',
+    borderTopWidth: 1,
+    gap: 8,
+    marginTop: 10,
+    paddingTop: 10,
+  },
+  accountMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  dueDayInput: {
+    maxWidth: 78,
+    textAlign: 'center',
+  },
+  categoryButton: {
+    alignItems: 'center',
+    backgroundColor: '#eef4f2',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 10,
+  },
+  categoryButtonText: {
+    color: '#17211f',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
+  primaryButton: {
+    alignItems: 'center',
+    backgroundColor: '#176a4d',
+    borderRadius: 8,
+    justifyContent: 'center',
+    minHeight: 46,
+    paddingHorizontal: 14,
+  },
+  primaryButtonText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  dangerButton: {
+    alignItems: 'center',
+    backgroundColor: '#f9e8e5',
+    borderColor: '#e3b8b1',
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
+  },
+  dangerButtonText: {
+    color: '#94372d',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0,
   },
   monthCard: {
     backgroundColor: '#ffffff',
