@@ -1,13 +1,18 @@
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
 import { Category } from '../../types/finance';
+import { sortCategories } from '../../lib/sorting';
 
 type CategoryEditorProps = {
   categories: Category[];
   newCategoryName: string;
+  newCategorySortOrder: string;
   onChangeCategoryName: (categoryId: string, name: string) => void;
+  onChangeCategorySortOrder: (categoryId: string, sortOrder: string) => void;
   onChangeNewCategoryName: (name: string) => void;
+  onChangeNewCategorySortOrder: (sortOrder: string) => void;
   onCreateCategory: () => void;
   onDeleteCategory: (categoryId: string) => void;
 };
@@ -15,8 +20,11 @@ type CategoryEditorProps = {
 export function CategoryEditor({
   categories,
   newCategoryName,
+  newCategorySortOrder,
   onChangeCategoryName,
+  onChangeCategorySortOrder,
   onChangeNewCategoryName,
+  onChangeNewCategorySortOrder,
   onCreateCategory,
   onDeleteCategory,
 }: CategoryEditorProps) {
@@ -30,21 +38,28 @@ export function CategoryEditor({
           style={[styles.input, styles.createInput]}
           value={newCategoryName}
         />
+        <TextInput
+          keyboardType="number-pad"
+          onChangeText={onChangeNewCategorySortOrder}
+          placeholder="Ordem"
+          style={[styles.input, styles.sortOrderInput]}
+          value={newCategorySortOrder}
+        />
         <ActionButton label="Adicionar" onPress={onCreateCategory} />
       </View>
 
-      {categories
-        .slice()
-        .sort(
-          (firstCategory, secondCategory) =>
-            firstCategory.sortOrder - secondCategory.sortOrder,
-        )
-        .map((category) => (
+      {sortCategories(categories).map((category) => (
           <View key={category.id} style={styles.editorRow}>
             <TextInput
               onChangeText={(name) => onChangeCategoryName(category.id, name)}
               style={[styles.input, styles.rowInput]}
               value={category.name}
+            />
+            <SortOrderInput
+              onChangeValue={(sortOrder) =>
+                onChangeCategorySortOrder(category.id, sortOrder)
+              }
+              value={category.sortOrder}
             />
             <ActionButton
               label="Excluir"
@@ -52,8 +67,49 @@ export function CategoryEditor({
               variant="danger"
             />
           </View>
-        ))}
+      ))}
     </View>
+  );
+}
+
+function SortOrderInput({
+  onChangeValue,
+  value,
+}: {
+  onChangeValue: (value: string) => void;
+  value: number;
+}) {
+  const [draftValue, setDraftValue] = useState(String(value));
+  const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setDraftValue(String(value));
+    }
+  }, [isFocused, value]);
+
+  function handleChangeText(nextValue: string) {
+    const numericValue = nextValue.replace(/\D/g, '');
+
+    setDraftValue(numericValue);
+    onChangeValue(numericValue);
+  }
+
+  function handleBlur() {
+    setIsFocused(false);
+    setDraftValue(String(value));
+  }
+
+  return (
+    <TextInput
+      keyboardType="number-pad"
+      onBlur={handleBlur}
+      onChangeText={handleChangeText}
+      onFocus={() => setIsFocused(true)}
+      placeholder="0"
+      style={[styles.input, styles.sortOrderInput]}
+      value={draftValue}
+    />
   );
 }
 
@@ -74,6 +130,7 @@ const styles = StyleSheet.create({
   createRow: {
     alignItems: 'center',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
     marginTop: 10,
   },
@@ -91,6 +148,11 @@ const styles = StyleSheet.create({
   },
   createInput: {
     flex: 1,
+    minWidth: 160,
+  },
+  sortOrderInput: {
+    maxWidth: 92,
+    textAlign: 'center',
   },
   editorRow: {
     alignItems: 'center',

@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { ActionButton } from '../common/ActionButton';
 import {
   calculatePaymentSummary,
   getMonthlyValueAmount,
@@ -13,6 +14,7 @@ import {
   MonthlyPaymentStatus,
   MonthlyValue,
 } from '../../types/finance';
+import { sortAccountItems } from '../../lib/sorting';
 
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
@@ -22,6 +24,7 @@ type CurrentMonthPaymentChecklistProps = {
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
   ) => void;
+  onClose?: () => void;
   paymentStatuses: MonthlyPaymentStatus[];
   projectionMonth: ProjectionMonth;
 };
@@ -30,6 +33,7 @@ export function CurrentMonthPaymentChecklist({
   accountItems,
   categories,
   monthlyValues,
+  onClose,
   onTogglePaymentStatus,
   paymentStatuses,
   projectionMonth,
@@ -40,21 +44,16 @@ export function CurrentMonthPaymentChecklist({
     paymentStatuses,
     projectionMonth,
   );
-  const sortedAccountItems = accountItems
-    .slice()
-    .sort(
-      (firstAccountItem, secondAccountItem) =>
-        firstAccountItem.dueDay - secondAccountItem.dueDay ||
-        firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-    );
+  const sortedAccountItems = sortAccountItems(accountItems, categories);
 
   return (
     <View style={styles.panel}>
       <View style={styles.header}>
-        <View>
+        <View style={styles.headerText}>
           <Text style={styles.sectionTitle}>Pagamentos do mês</Text>
           <Text style={styles.sectionHint}>Marque manualmente o que já foi pago.</Text>
         </View>
+        {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
 
       <View style={styles.summaryGrid}>
@@ -134,9 +133,13 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flexDirection: 'row',
+    gap: 10,
     justifyContent: 'space-between',
+  },
+  headerText: {
+    flex: 1,
   },
   sectionTitle: {
     color: '#17211f',

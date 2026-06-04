@@ -2,6 +2,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import { formatMonthLabel } from '../../lib/formatters';
+import { sortAccountItems } from '../../lib/sorting';
 import { AccountItem, Category, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
 
@@ -42,12 +43,7 @@ export function MonthlyValueEditor({
             showsHorizontalScrollIndicator={false}
             style={styles.accountSelector}
           >
-            {accountItems
-              .slice()
-              .sort(
-                (firstAccountItem, secondAccountItem) =>
-                  firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-              )
+            {sortAccountItems(accountItems, categories)
               .map((accountItem) => (
                 <Pressable
                   key={accountItem.id}

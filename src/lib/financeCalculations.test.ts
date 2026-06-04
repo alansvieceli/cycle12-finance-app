@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   calculateCategoryTotal,
   calculateCategoryTotals,
+  calculateIncomeCommitmentPercentage,
   calculateMonthlyTotalExpenses,
   calculatePaymentSummary,
   calculateSalaryCommitmentPercentage,
@@ -87,6 +88,34 @@ describe('finance calculations', () => {
   it('calculates salary commitment percentage', () => {
     expect(calculateSalaryCommitmentPercentage(2200, 4400)).toBe(0.5);
     expect(calculateSalaryCommitmentPercentage(2200, 0)).toBeNull();
+  });
+
+  it('calculates commitment from available income for the projection month', () => {
+    const settings = {
+      monthlySalary: 3000,
+      currentMonthExtraBalance: 1000,
+      visibleMonthCount: 12,
+    };
+
+    expect(
+      calculateIncomeCommitmentPercentage(2000, settings, {
+        isCurrentMonth: true,
+      }),
+    ).toBe(0.5);
+
+    expect(
+      calculateIncomeCommitmentPercentage(2100, settings, {
+        isCurrentMonth: false,
+      }),
+    ).toBe(0.7);
+
+    expect(
+      calculateIncomeCommitmentPercentage(
+        2000,
+        { ...settings, monthlySalary: 0, currentMonthExtraBalance: 0 },
+        { isCurrentMonth: true },
+      ),
+    ).toBeNull();
   });
 
   it('includes extra balance only for the current month surplus calculation', () => {

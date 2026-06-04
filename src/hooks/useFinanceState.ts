@@ -5,7 +5,9 @@ import {
   clampVisibleMonthCount,
   parseCurrencyInput,
   parseDueDay,
+  parseSortOrder,
 } from '../lib/inputParsers';
+import { sortAccountItems, sortCategories } from '../lib/sorting';
 import { loadFinanceState, saveFinanceState } from '../storage/financeStorage';
 import { emptyFinanceState } from '../types/finance';
 import { ProjectionMonth } from '../lib/financeCalculations';
@@ -13,15 +15,21 @@ import { ProjectionMonth } from '../lib/financeCalculations';
 export function useFinanceState() {
   const [financeState, setFinanceState] = useState(emptyFinanceState);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategorySortOrder, setNewCategorySortOrder] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
+  const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
   const [storageMessage, setStorageMessage] = useState('');
   const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
+  const sortedAccountItems = sortAccountItems(
+    financeState.accountItems,
+    financeState.categories,
+  );
   const selectedAccountItem =
     financeState.accountItems.find(
       (accountItem) => accountItem.id === selectedAccountItemId,
-    ) ?? financeState.accountItems[0];
+    ) ?? sortedAccountItems[0];
 
   useEffect(() => {
     let isMounted = true;
@@ -35,7 +43,11 @@ export function useFinanceState() {
         }
 
         setFinanceState(storedState);
-        setSelectedAccountItemId(storedState.accountItems[0]?.id ?? '');
+        setSelectedAccountItemId(
+          sortAccountItems(storedState.accountItems, storedState.categories)[0]?.id ??
+            '',
+        );
+        setNewAccountCategoryId(sortCategories(storedState.categories)[0]?.id ?? '');
       } catch {
         if (isMounted) {
           setStorageMessage(
@@ -110,19 +122,22 @@ export function useFinanceState() {
     if (!categoryName) {
       return;
     }
+    const categoryId = createId('category');
 
     setFinanceState((currentState) => ({
       ...currentState,
       categories: [
         ...currentState.categories,
         {
-          id: createId('category'),
+          id: categoryId,
           name: categoryName,
-          sortOrder: currentState.categories.length + 1,
+          sortOrder: parseSortOrder(newCategorySortOrder),
         },
       ],
     }));
+    setNewAccountCategoryId((currentCategoryId) => currentCategoryId || categoryId);
     setNewCategoryName('');
+    setNewCategorySortOrder('');
   }
 
   function updateCategoryName(categoryId: string, name: string) {
@@ -130,6 +145,17 @@ export function useFinanceState() {
       ...currentState,
       categories: currentState.categories.map((category) =>
         category.id === categoryId ? { ...category, name } : category,
+      ),
+    }));
+  }
+
+  function updateCategorySortOrder(categoryId: string, sortOrder: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: currentState.categories.map((category) =>
+        category.id === categoryId
+          ? { ...category, sortOrder: parseSortOrder(sortOrder) }
+          : category,
       ),
     }));
   }
@@ -158,13 +184,20 @@ export function useFinanceState() {
         ),
       };
     });
+
+    if (newAccountCategoryId === categoryId) {
+      setNewAccountCategoryId('');
+    }
   }
 
   function createAccountItem() {
     const accountName = newAccountName.trim();
-    const firstCategory = financeState.categories[0];
+    const selectedCategory =
+      financeState.categories.find(
+        (category) => category.id === newAccountCategoryId,
+      ) ?? sortCategories(financeState.categories)[0];
 
-    if (!accountName || !firstCategory) {
+    if (!accountName || !selectedCategory) {
       return;
     }
 
@@ -176,10 +209,10 @@ export function useFinanceState() {
         ...currentState.accountItems,
         {
           id: accountItemId,
-          categoryId: firstCategory.id,
+          categoryId: selectedCategory.id,
           dueDay: parseDueDay(newAccountDueDay),
           name: accountName,
-          sortOrder: currentState.accountItems.length + 1,
+          sortOrder: 0,
         },
       ],
     }));
@@ -210,10 +243,7 @@ export function useFinanceState() {
 
   function cycleAccountCategory(accountItemId: string) {
     setFinanceState((currentState) => {
-      const categories = [...currentState.categories].sort(
-        (firstCategory, secondCategory) =>
-          firstCategory.sortOrder - secondCategory.sortOrder,
-      );
+      const categories = sortCategories(currentState.categories);
 
       if (categories.length === 0) {
         return currentState;
@@ -344,24 +374,29 @@ export function useFinanceState() {
       cycleAccountCategory,
       deleteAccountItem,
       deleteCategory,
+      setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,
       setNewCategoryName,
+      setNewCategorySortOrder,
       setSelectedAccountItemId,
       toggleMonthlyPaymentStatus,
       updateAccountDueDay,
       updateAccountName,
       updateCurrentMonthExtraBalance,
       updateCategoryName,
+      updateCategorySortOrder,
       updateMonthlySalary,
       updateMonthlyValue,
       updateVisibleMonthCount,
     },
     financeState,
     formState: {
+      newAccountCategoryId,
       newAccountDueDay,
       newAccountName,
       newCategoryName,
+      newCategorySortOrder,
     },
     selectedAccountItem,
     selectedAccountItemId,

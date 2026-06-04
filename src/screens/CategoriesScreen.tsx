@@ -12,8 +12,11 @@ export function CategoriesScreen({ finance }: CategoriesScreenProps) {
     <CategoryEditor
       categories={financeState.categories}
       newCategoryName={formState.newCategoryName}
+      newCategorySortOrder={formState.newCategorySortOrder}
       onChangeCategoryName={actions.updateCategoryName}
+      onChangeCategorySortOrder={actions.updateCategorySortOrder}
       onChangeNewCategoryName={actions.setNewCategoryName}
+      onChangeNewCategorySortOrder={actions.setNewCategorySortOrder}
       onCreateCategory={actions.createCategory}
       onDeleteCategory={actions.deleteCategory}
     />

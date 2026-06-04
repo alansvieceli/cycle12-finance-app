@@ -1,17 +1,22 @@
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
 import { AccountItem, Category } from '../../types/finance';
+import { sortAccountItems, sortCategories } from '../../lib/sorting';
 
 type AccountEditorProps = {
   accountItems: AccountItem[];
   categories: Category[];
+  newAccountCategoryId: string;
   newAccountDueDay: string;
   newAccountName: string;
   onChangeAccountDueDay: (accountItemId: string, dueDay: string) => void;
   onChangeAccountName: (accountItemId: string, name: string) => void;
+  onChangeNewAccountCategoryId: (categoryId: string) => void;
   onChangeNewAccountDueDay: (dueDay: string) => void;
   onChangeNewAccountName: (name: string) => void;
+  onClose?: () => void;
   onCreateAccountItem: () => void;
   onCycleAccountCategory: (accountItemId: string) => void;
   onDeleteAccountItem: (accountItemId: string) => void;
@@ -20,43 +25,104 @@ type AccountEditorProps = {
 export function AccountEditor({
   accountItems,
   categories,
+  newAccountCategoryId,
   newAccountDueDay,
   newAccountName,
   onChangeAccountDueDay,
   onChangeAccountName,
+  onChangeNewAccountCategoryId,
   onChangeNewAccountDueDay,
   onChangeNewAccountName,
+  onClose,
   onCreateAccountItem,
   onCycleAccountCategory,
   onDeleteAccountItem,
 }: AccountEditorProps) {
+  const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false);
+  const sortedCategories = sortCategories(categories);
+  const selectedNewAccountCategoryId =
+    newAccountCategoryId || sortedCategories[0]?.id || '';
+  const selectedNewAccountCategoryName =
+    sortedCategories.find((category) => category.id === selectedNewAccountCategoryId)
+      ?.name ?? 'Categoria';
+
   return (
     <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>Contas</Text>
-      <View style={styles.createAccountRow}>
-        <TextInput
-          onChangeText={onChangeNewAccountName}
-          placeholder="Nova conta"
-          style={styles.input}
-          value={newAccountName}
-        />
-        <TextInput
-          keyboardType="number-pad"
-          onChangeText={onChangeNewAccountDueDay}
-          placeholder="Dia"
-          style={[styles.input, styles.dueDayInput]}
-          value={newAccountDueDay}
-        />
-        <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
+      <View style={styles.panelHeader}>
+        <Text style={styles.sectionTitle}>Gerenciar contas</Text>
+        {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
 
-      {accountItems
-        .slice()
-        .sort(
-          (firstAccountItem, secondAccountItem) =>
-            firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-        )
-        .map((accountItem) => (
+      {sortedCategories.length > 0 ? (
+        <View style={styles.createAccountRow}>
+          <TextInput
+            onChangeText={onChangeNewAccountName}
+            placeholder="Nova conta"
+            style={styles.input}
+            value={newAccountName}
+          />
+          <View style={styles.categoryPicker}>
+            <Pressable
+              onPress={() =>
+                setIsCategoryPickerOpen((currentValue) => !currentValue)
+              }
+              style={styles.categoryPickerButton}
+            >
+              <Text style={styles.categoryPickerText}>
+                {selectedNewAccountCategoryName}
+              </Text>
+              <Text style={styles.categoryPickerIcon}>
+                {isCategoryPickerOpen ? '^' : 'v'}
+              </Text>
+            </Pressable>
+
+            {isCategoryPickerOpen ? (
+              <View style={styles.categoryPickerOptions}>
+                {sortedCategories.map((category) => (
+                  <Pressable
+                    key={category.id}
+                    onPress={() => {
+                      onChangeNewAccountCategoryId(category.id);
+                      setIsCategoryPickerOpen(false);
+                    }}
+                    style={[
+                      styles.categoryPickerOption,
+                      selectedNewAccountCategoryId === category.id
+                        ? styles.categoryPickerOptionActive
+                        : null,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.categoryPickerOptionText,
+                        selectedNewAccountCategoryId === category.id
+                          ? styles.categoryPickerOptionTextActive
+                          : null,
+                      ]}
+                    >
+                      {category.name}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            ) : null}
+          </View>
+          <TextInput
+            keyboardType="number-pad"
+            onChangeText={onChangeNewAccountDueDay}
+            placeholder="Dia"
+            style={[styles.input, styles.dueDayInput]}
+            value={newAccountDueDay}
+          />
+          <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
+        </View>
+      ) : (
+        <Text style={styles.emptyText}>
+          Crie uma categoria antes de cadastrar contas.
+        </Text>
+      )}
+
+      {sortAccountItems(accountItems, categories).map((accountItem) => (
           <View key={accountItem.id} style={styles.accountEditorRow}>
             <TextInput
               onChangeText={(name) => onChangeAccountName(accountItem.id, name)}
@@ -87,7 +153,7 @@ export function AccountEditor({
               />
             </View>
           </View>
-        ))}
+      ))}
     </View>
   );
 }
@@ -103,6 +169,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
+  },
+  panelHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'space-between',
   },
   sectionTitle: {
     color: '#17211f',
@@ -125,6 +197,60 @@ const styles = StyleSheet.create({
   createAccountRow: {
     gap: 10,
     marginTop: 10,
+  },
+  categoryPicker: {
+    gap: 6,
+  },
+  categoryPickerButton: {
+    alignItems: 'center',
+    backgroundColor: '#f7faf9',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'center',
+    minHeight: 48,
+    paddingHorizontal: 12,
+  },
+  categoryPickerText: {
+    color: '#17211f',
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  categoryPickerIcon: {
+    color: '#60716d',
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 0,
+  },
+  categoryPickerOptions: {
+    backgroundColor: '#ffffff',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  categoryPickerOption: {
+    borderTopColor: '#e7eeeb',
+    borderTopWidth: 1,
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  categoryPickerOptionActive: {
+    backgroundColor: '#176a4d',
+  },
+  categoryPickerOptionText: {
+    color: '#17211f',
+    fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0,
+  },
+  categoryPickerOptionTextActive: {
+    color: '#ffffff',
   },
   accountEditorRow: {
     borderTopColor: '#e7eeeb',
@@ -159,5 +285,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0,
     textAlign: 'center',
+  },
+  emptyText: {
+    color: '#60716d',
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 10,
   },
 });

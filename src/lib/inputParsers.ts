@@ -18,6 +18,12 @@ export function parseDueDay(value: string) {
   return Math.max(1, Math.min(31, parsedValue));
 }
 
+export function parseSortOrder(value: string) {
+  const parsedValue = Number(value.replace(/\D/g, ''));
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+}
+
 export function clampVisibleMonthCount(value: number | undefined) {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     return 12;

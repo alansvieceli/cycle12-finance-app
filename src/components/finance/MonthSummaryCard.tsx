@@ -1,26 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { CategoryMonthTotal, ProjectionMonth } from '../../lib/financeCalculations';
+import { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   currencyFormatter,
   formatMonthLabel,
   percentageFormatter,
 } from '../../lib/formatters';
-import { CategoryTotalsList } from './CategoryTotalsList';
 
 type MonthSummaryCardProps = {
-  categoryNamesById: Record<string, string>;
-  categoryTotals: CategoryMonthTotal[];
   monthlyTotalExpenses: number;
+  onOpenDetails: () => void;
   projectionMonth: ProjectionMonth;
   salaryCommitmentPercentage: number | null;
   surplusOrShortfall: number;
 };
 
 export function MonthSummaryCard({
-  categoryNamesById,
-  categoryTotals,
   monthlyTotalExpenses,
+  onOpenDetails,
   projectionMonth,
   salaryCommitmentPercentage,
   surplusOrShortfall,
@@ -61,10 +58,9 @@ export function MonthSummaryCard({
         />
       </View>
 
-      <CategoryTotalsList
-        categoryNamesById={categoryNamesById}
-        categoryTotals={categoryTotals}
-      />
+      <Pressable onPress={onOpenDetails} style={styles.detailsButton}>
+        <Text style={styles.detailsButtonText}>Ver detalhes</Text>
+      </Pressable>
     </View>
   );
 }
@@ -144,5 +140,22 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 0,
     marginTop: 8,
+  },
+  detailsButton: {
+    alignItems: 'center',
+    backgroundColor: '#f7faf9',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    marginTop: 12,
+    minHeight: 42,
+    paddingHorizontal: 12,
+  },
+  detailsButtonText: {
+    color: '#176a4d',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0,
   },
 });

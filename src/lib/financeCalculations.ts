@@ -110,14 +110,35 @@ export function calculateSalaryCommitmentPercentage(
   return monthlyTotalExpenses / monthlySalary;
 }
 
+export function calculateAvailableIncome(
+  settings: FinanceSettings,
+  projectionMonth: Pick<ProjectionMonth, 'isCurrentMonth'>,
+): number {
+  return projectionMonth.isCurrentMonth
+    ? settings.monthlySalary + settings.currentMonthExtraBalance
+    : settings.monthlySalary;
+}
+
+export function calculateIncomeCommitmentPercentage(
+  monthlyTotalExpenses: number,
+  settings: FinanceSettings,
+  projectionMonth: Pick<ProjectionMonth, 'isCurrentMonth'>,
+): number | null {
+  const availableIncome = calculateAvailableIncome(settings, projectionMonth);
+
+  if (availableIncome <= 0) {
+    return null;
+  }
+
+  return monthlyTotalExpenses / availableIncome;
+}
+
 export function calculateSurplusOrShortfall(
   settings: FinanceSettings,
   monthlyTotalExpenses: number,
   projectionMonth: Pick<ProjectionMonth, 'isCurrentMonth'>,
 ): number {
-  const availableIncome = projectionMonth.isCurrentMonth
-    ? settings.monthlySalary + settings.currentMonthExtraBalance
-    : settings.monthlySalary;
+  const availableIncome = calculateAvailableIncome(settings, projectionMonth);
 
   return availableIncome - monthlyTotalExpenses;
 }
