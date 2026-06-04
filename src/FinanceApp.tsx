@@ -43,6 +43,7 @@ export function FinanceApp() {
         {activeTab === 'summary' ? (
           <SummaryScreen
             financeState={finance.financeState}
+            onTogglePaymentStatus={finance.actions.toggleMonthlyPaymentStatus}
             projectionMonths={visibleProjectionMonths}
           />
         ) : null}

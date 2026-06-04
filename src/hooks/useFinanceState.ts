@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { createId } from '../lib/ids';
-import { parseCurrencyInput, parseDueDay } from '../lib/inputParsers';
+import {
+  clampVisibleMonthCount,
+  parseCurrencyInput,
+  parseDueDay,
+} from '../lib/inputParsers';
 import { loadFinanceState, saveFinanceState } from '../storage/financeStorage';
 import { emptyFinanceState } from '../types/finance';
 import { ProjectionMonth } from '../lib/financeCalculations';
@@ -82,6 +86,24 @@ export function useFinanceState() {
     }));
   }
 
+  function updateVisibleMonthCount(value: string) {
+    const numericValue = value.replace(/\D/g, '');
+
+    if (!numericValue) {
+      return;
+    }
+
+    const parsedValue = Number(numericValue);
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: {
+        ...currentState.settings,
+        visibleMonthCount: clampVisibleMonthCount(parsedValue),
+      },
+    }));
+  }
+
   function createCategory() {
     const categoryName = newCategoryName.trim();
 
@@ -130,6 +152,9 @@ export function useFinanceState() {
         ),
         monthlyValues: currentState.monthlyValues.filter(
           (monthlyValue) => !removedAccountIds.has(monthlyValue.accountItemId),
+        ),
+        paymentStatuses: currentState.paymentStatuses.filter(
+          (paymentStatus) => !removedAccountIds.has(paymentStatus.accountItemId),
         ),
       };
     });
@@ -224,6 +249,9 @@ export function useFinanceState() {
       monthlyValues: currentState.monthlyValues.filter(
         (monthlyValue) => monthlyValue.accountItemId !== accountItemId,
       ),
+      paymentStatuses: currentState.paymentStatuses.filter(
+        (paymentStatus) => paymentStatus.accountItemId !== accountItemId,
+      ),
     }));
 
     if (selectedAccountItemId === accountItemId) {
@@ -271,6 +299,44 @@ export function useFinanceState() {
     });
   }
 
+  function toggleMonthlyPaymentStatus(
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  ) {
+    setFinanceState((currentState) => {
+      const existingStatus = currentState.paymentStatuses.find(
+        (paymentStatus) =>
+          paymentStatus.accountItemId === accountItemId &&
+          paymentStatus.month === projectionMonth.month &&
+          paymentStatus.year === projectionMonth.year,
+      );
+
+      if (!existingStatus) {
+        return {
+          ...currentState,
+          paymentStatuses: [
+            ...currentState.paymentStatuses,
+            {
+              accountItemId,
+              isPaid: true,
+              month: projectionMonth.month,
+              year: projectionMonth.year,
+            },
+          ],
+        };
+      }
+
+      return {
+        ...currentState,
+        paymentStatuses: currentState.paymentStatuses.map((paymentStatus) =>
+          paymentStatus === existingStatus
+            ? { ...paymentStatus, isPaid: !paymentStatus.isPaid }
+            : paymentStatus,
+        ),
+      };
+    });
+  }
+
   return {
     actions: {
       createAccountItem,
@@ -282,12 +348,14 @@ export function useFinanceState() {
       setNewAccountName,
       setNewCategoryName,
       setSelectedAccountItemId,
+      toggleMonthlyPaymentStatus,
       updateAccountDueDay,
       updateAccountName,
       updateCurrentMonthExtraBalance,
       updateCategoryName,
       updateMonthlySalary,
       updateMonthlyValue,
+      updateVisibleMonthCount,
     },
     financeState,
     formState: {

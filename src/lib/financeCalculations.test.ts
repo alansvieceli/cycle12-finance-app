@@ -4,6 +4,7 @@ import {
   calculateCategoryTotal,
   calculateCategoryTotals,
   calculateMonthlyTotalExpenses,
+  calculatePaymentSummary,
   calculateSalaryCommitmentPercentage,
   calculateSurplusOrShortfall,
   createProjectionMonths,
@@ -102,5 +103,26 @@ describe('finance calculations', () => {
     expect(
       calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: false }),
     ).toBe(-200);
+  });
+
+  it('calculates paid and pending totals for a month', () => {
+    expect(
+      calculatePaymentSummary(
+        accountItems,
+        monthlyValues,
+        [
+          {
+            accountItemId: 'nubank',
+            isPaid: true,
+            month: 6,
+            year: 2026,
+          },
+        ],
+        { month: 6, year: 2026 },
+      ),
+    ).toEqual({
+      totalPaid: 1200,
+      totalPending: 1000,
+    });
   });
 });

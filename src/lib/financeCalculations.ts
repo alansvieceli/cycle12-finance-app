@@ -3,6 +3,7 @@ import {
   Category,
   FinanceSettings,
   MonthNumber,
+  MonthlyPaymentStatus,
   MonthlyValue,
 } from '../types/finance';
 
@@ -16,6 +17,11 @@ export type ProjectionMonth = {
 export type CategoryMonthTotal = {
   categoryId: string;
   total: number;
+};
+
+export type PaymentSummary = {
+  totalPaid: number;
+  totalPending: number;
 };
 
 export function createProjectionMonths(
@@ -114,4 +120,69 @@ export function calculateSurplusOrShortfall(
     : settings.monthlySalary;
 
   return availableIncome - monthlyTotalExpenses;
+}
+
+export function calculatePaymentSummary(
+  accountItems: AccountItem[],
+  monthlyValues: MonthlyValue[],
+  paymentStatuses: MonthlyPaymentStatus[],
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): PaymentSummary {
+  return accountItems.reduce<PaymentSummary>(
+    (summary, accountItem) => {
+      const amount = getMonthlyValueAmount(
+        monthlyValues,
+        accountItem.id,
+        projectionMonth,
+      );
+      const isPaid = isAccountItemPaid(
+        paymentStatuses,
+        accountItem.id,
+        projectionMonth,
+      );
+
+      if (isPaid) {
+        return {
+          ...summary,
+          totalPaid: summary.totalPaid + amount,
+        };
+      }
+
+      return {
+        ...summary,
+        totalPending: summary.totalPending + amount,
+      };
+    },
+    { totalPaid: 0, totalPending: 0 },
+  );
+}
+
+export function getMonthlyValueAmount(
+  monthlyValues: MonthlyValue[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): number {
+  return (
+    monthlyValues.find(
+      (monthlyValue) =>
+        monthlyValue.accountItemId === accountItemId &&
+        monthlyValue.month === projectionMonth.month &&
+        monthlyValue.year === projectionMonth.year,
+    )?.amount ?? 0
+  );
+}
+
+export function isAccountItemPaid(
+  paymentStatuses: MonthlyPaymentStatus[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): boolean {
+  return (
+    paymentStatuses.find(
+      (paymentStatus) =>
+        paymentStatus.accountItemId === accountItemId &&
+        paymentStatus.month === projectionMonth.month &&
+        paymentStatus.year === projectionMonth.year,
+    )?.isPaid ?? false
+  );
 }

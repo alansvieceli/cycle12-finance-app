@@ -32,6 +32,7 @@ export async function clearFinanceState(): Promise<void> {
 function normalizeFinanceState(financeState: FinanceState): FinanceState {
   return {
     ...financeState,
+    paymentStatuses: financeState.paymentStatuses ?? [],
     settings: {
       ...emptyFinanceState.settings,
       ...financeState.settings,

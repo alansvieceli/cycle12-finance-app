@@ -6,23 +6,43 @@ import {
   ProjectionMonth,
 } from '../lib/financeCalculations';
 import { FinanceState } from '../types/finance';
+import { CurrentMonthPaymentChecklist } from '../components/finance/CurrentMonthPaymentChecklist';
 import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 
 type SummaryScreenProps = {
   financeState: FinanceState;
+  onTogglePaymentStatus: (
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  ) => void;
   projectionMonths: ProjectionMonth[];
 };
 
 export function SummaryScreen({
   financeState,
+  onTogglePaymentStatus,
   projectionMonths,
 }: SummaryScreenProps) {
   const categoryNamesById = Object.fromEntries(
     financeState.categories.map((category) => [category.id, category.name]),
   );
+  const currentProjectionMonth = projectionMonths.find(
+    (projectionMonth) => projectionMonth.isCurrentMonth,
+  );
 
   return (
     <>
+      {currentProjectionMonth ? (
+        <CurrentMonthPaymentChecklist
+          accountItems={financeState.accountItems}
+          categories={financeState.categories}
+          monthlyValues={financeState.monthlyValues}
+          onTogglePaymentStatus={onTogglePaymentStatus}
+          paymentStatuses={financeState.paymentStatuses}
+          projectionMonth={currentProjectionMonth}
+        />
+      ) : null}
+
       {projectionMonths.map((projectionMonth) => {
         const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
           financeState.categories,

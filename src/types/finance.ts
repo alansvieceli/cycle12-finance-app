@@ -27,11 +27,19 @@ export type MonthlyValue = {
   amount: number;
 };
 
+export type MonthlyPaymentStatus = {
+  accountItemId: string;
+  month: MonthNumber;
+  year: number;
+  isPaid: boolean;
+};
+
 export type FinanceState = {
   settings: FinanceSettings;
   categories: Category[];
   accountItems: AccountItem[];
   monthlyValues: MonthlyValue[];
+  paymentStatuses: MonthlyPaymentStatus[];
 };
 
 export const emptyFinanceState: FinanceState = {
@@ -43,4 +51,5 @@ export const emptyFinanceState: FinanceState = {
   categories: [],
   accountItems: [],
   monthlyValues: [],
+  paymentStatuses: [],
 };
