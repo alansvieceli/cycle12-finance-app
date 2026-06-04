@@ -16,7 +16,10 @@ import {
   calculateSurplusOrShortfall,
   createProjectionMonths,
 } from './src/lib/financeCalculations';
-import { CategoryMonthTotal } from './src/lib/financeCalculations';
+import {
+  CategoryMonthTotal,
+  ProjectionMonth,
+} from './src/lib/financeCalculations';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
@@ -44,6 +47,13 @@ export default function App() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
+  const [selectedAccountItemId, setSelectedAccountItemId] = useState(
+    initialFinanceState.accountItems[0]?.id ?? '',
+  );
+  const selectedAccountItem =
+    financeState.accountItems.find(
+      (accountItem) => accountItem.id === selectedAccountItemId,
+    ) ?? financeState.accountItems[0];
 
   function updateMonthlySalary(value: string) {
     setFinanceState((currentState) => ({
@@ -126,12 +136,14 @@ export default function App() {
       return;
     }
 
+    const accountItemId = createId('account');
+
     setFinanceState((currentState) => ({
       ...currentState,
       accountItems: [
         ...currentState.accountItems,
         {
-          id: createId('account'),
+          id: accountItemId,
           categoryId: firstCategory.id,
           dueDay: parseDueDay(newAccountDueDay),
           name: accountName,
@@ -141,6 +153,7 @@ export default function App() {
     }));
     setNewAccountDueDay('');
     setNewAccountName('');
+    setSelectedAccountItemId(accountItemId);
   }
 
   function updateAccountName(accountItemId: string, name: string) {
@@ -205,6 +218,50 @@ export default function App() {
         (monthlyValue) => monthlyValue.accountItemId !== accountItemId,
       ),
     }));
+
+    if (selectedAccountItemId === accountItemId) {
+      setSelectedAccountItemId('');
+    }
+  }
+
+  function updateMonthlyValue(
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    amount: string,
+  ) {
+    setFinanceState((currentState) => {
+      const parsedAmount = parseCurrencyInput(amount);
+      const existingValue = currentState.monthlyValues.find(
+        (monthlyValue) =>
+          monthlyValue.accountItemId === accountItemId &&
+          monthlyValue.month === projectionMonth.month &&
+          monthlyValue.year === projectionMonth.year,
+      );
+
+      if (!existingValue) {
+        return {
+          ...currentState,
+          monthlyValues: [
+            ...currentState.monthlyValues,
+            {
+              accountItemId,
+              amount: parsedAmount,
+              month: projectionMonth.month,
+              year: projectionMonth.year,
+            },
+          ],
+        };
+      }
+
+      return {
+        ...currentState,
+        monthlyValues: currentState.monthlyValues.map((monthlyValue) =>
+          monthlyValue === existingValue
+            ? { ...monthlyValue, amount: parsedAmount }
+            : monthlyValue,
+        ),
+      };
+    });
   }
 
   return (
@@ -332,6 +389,97 @@ export default function App() {
                 </View>
               ))}
           </View>
+        </View>
+
+        <View style={styles.settingsPanel}>
+          <Text style={styles.sectionTitle}>Valores mensais</Text>
+          {selectedAccountItem ? (
+            <>
+              <Text style={styles.editorHint}>
+                Selecione uma conta e edite os valores previstos para cada mês.
+              </Text>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.accountSelector}
+              >
+                {financeState.accountItems
+                  .slice()
+                  .sort(
+                    (firstAccountItem, secondAccountItem) =>
+                      firstAccountItem.sortOrder - secondAccountItem.sortOrder,
+                  )
+                  .map((accountItem) => (
+                    <Pressable
+                      key={accountItem.id}
+                      onPress={() => setSelectedAccountItemId(accountItem.id)}
+                      style={[
+                        styles.accountSelectorButton,
+                        selectedAccountItem.id === accountItem.id
+                          ? styles.accountSelectorButtonActive
+                          : null,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.accountSelectorButtonText,
+                          selectedAccountItem.id === accountItem.id
+                            ? styles.accountSelectorButtonTextActive
+                            : null,
+                        ]}
+                      >
+                        {accountItem.name}
+                      </Text>
+                    </Pressable>
+                  ))}
+              </ScrollView>
+
+              <View style={styles.monthValueList}>
+                {projectionMonths.map((projectionMonth) => (
+                  <View key={projectionMonth.key} style={styles.monthValueRow}>
+                    <View style={styles.monthValueLabel}>
+                      <Text style={styles.monthValueName}>
+                        {formatMonthLabel(
+                          projectionMonth.year,
+                          projectionMonth.month,
+                        )}
+                      </Text>
+                      <Text style={styles.monthValueCategory}>
+                        {getCategoryName(
+                          financeState.categories,
+                          selectedAccountItem.categoryId,
+                        )}
+                      </Text>
+                    </View>
+                    <TextInput
+                      keyboardType="decimal-pad"
+                      onChangeText={(amount) =>
+                        updateMonthlyValue(
+                          selectedAccountItem.id,
+                          projectionMonth,
+                          amount,
+                        )
+                      }
+                      placeholder="0,00"
+                      style={[styles.input, styles.monthValueInput]}
+                      value={formatEditableAmount(
+                        getMonthlyValueAmount(
+                          financeState.monthlyValues,
+                          selectedAccountItem.id,
+                          projectionMonth,
+                        ),
+                      )}
+                    />
+                  </View>
+                ))}
+              </View>
+            </>
+          ) : (
+            <Text style={styles.emptyText}>
+              Crie uma conta para editar valores mensais.
+            </Text>
+          )}
         </View>
 
         {projectionMonths.map((projectionMonth) => {
@@ -541,6 +689,21 @@ function getCategoryName(
   return categories.find((category) => category.id === categoryId)?.name ?? '-';
 }
 
+function getMonthlyValueAmount(
+  monthlyValues: { accountItemId: string; month: number; year: number; amount: number }[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+) {
+  return (
+    monthlyValues.find(
+      (monthlyValue) =>
+        monthlyValue.accountItemId === accountItemId &&
+        monthlyValue.month === projectionMonth.month &&
+        monthlyValue.year === projectionMonth.year,
+    )?.amount ?? 0
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -624,6 +787,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '800',
     letterSpacing: 0,
+  },
+  editorHint: {
+    color: '#60716d',
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 8,
   },
   createRow: {
     alignItems: 'center',
@@ -713,6 +882,70 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0,
+  },
+  accountSelector: {
+    marginTop: 14,
+  },
+  accountSelectorButton: {
+    alignItems: 'center',
+    backgroundColor: '#eef4f2',
+    borderColor: '#c9d6d2',
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    marginRight: 8,
+    minHeight: 42,
+    paddingHorizontal: 12,
+  },
+  accountSelectorButtonActive: {
+    backgroundColor: '#176a4d',
+    borderColor: '#176a4d',
+  },
+  accountSelectorButtonText: {
+    color: '#17211f',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0,
+  },
+  accountSelectorButtonTextActive: {
+    color: '#ffffff',
+  },
+  monthValueList: {
+    gap: 10,
+    marginTop: 14,
+  },
+  monthValueRow: {
+    alignItems: 'center',
+    borderTopColor: '#e7eeeb',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    gap: 10,
+    paddingTop: 10,
+  },
+  monthValueLabel: {
+    flex: 1,
+  },
+  monthValueName: {
+    color: '#17211f',
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  monthValueCategory: {
+    color: '#60716d',
+    fontSize: 12,
+    letterSpacing: 0,
+    marginTop: 3,
+  },
+  monthValueInput: {
+    maxWidth: 130,
+    textAlign: 'right',
+  },
+  emptyText: {
+    color: '#60716d',
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 10,
   },
   monthCard: {
     backgroundColor: '#ffffff',
