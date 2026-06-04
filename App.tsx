@@ -41,6 +41,15 @@ const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
   year: 'numeric',
 });
 
+type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
+
+const tabs: { id: AppTab; label: string }[] = [
+  { id: 'summary', label: 'Resumo' },
+  { id: 'planning', label: 'Planejamento' },
+  { id: 'categories', label: 'Categorias' },
+  { id: 'settings', label: 'Ajustes' },
+];
+
 export default function App() {
   const projectionMonths = useMemo(() => createProjectionMonths(), []);
   const [financeState, setFinanceState] = useState(emptyFinanceState);
@@ -51,6 +60,7 @@ export default function App() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
+  const [activeTab, setActiveTab] = useState<AppTab>('summary');
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
   const [storageMessage, setStorageMessage] = useState('');
   const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
@@ -315,41 +325,276 @@ export default function App() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.eyebrow}>Cycle12 Finance</Text>
-        <Text style={styles.title}>Projeção de 12 meses</Text>
+        <Text style={styles.title}>Projeção financeira</Text>
         <Text style={styles.subtitle}>
           Acompanhe despesas, comprometimento do salário e sobra ou falta mensal.
         </Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.monthList}>
-        <View style={styles.settingsPanel}>
-          <Text style={styles.sectionTitle}>Configurações</Text>
-          {storageMessage ? (
-            <Text style={styles.storageMessage}>{storageMessage}</Text>
-          ) : (
-            <Text style={styles.storageMessage}>
-              Dados salvos localmente neste dispositivo.
+      <View style={styles.tabBar}>
+        {tabs.map((tab) => (
+          <Pressable
+            key={tab.id}
+            onPress={() => setActiveTab(tab.id)}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id ? styles.tabButtonActive : null,
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabButtonText,
+                activeTab === tab.id ? styles.tabButtonTextActive : null,
+              ]}
+            >
+              {tab.label}
             </Text>
-          )}
-          <View style={styles.inputGrid}>
-            <CurrencyInput
-              label="Salário mensal"
-              value={financeState.settings.monthlySalary}
-              onChangeValue={updateMonthlySalary}
-            />
-            <CurrencyInput
-              label="Extra do mês atual"
-              value={financeState.settings.currentMonthExtraBalance}
-              onChangeValue={updateCurrentMonthExtraBalance}
-            />
-          </View>
-        </View>
+          </Pressable>
+        ))}
+      </View>
 
-        <View style={styles.settingsPanel}>
-          <Text style={styles.sectionTitle}>Cadastros</Text>
+      <ScrollView contentContainerStyle={styles.monthList}>
+        {activeTab === 'summary'
+          ? visibleProjectionMonths.map((projectionMonth) => {
+              const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
+                financeState.categories,
+                financeState.accountItems,
+                financeState.monthlyValues,
+                projectionMonth,
+              );
+              const salaryCommitmentPercentage =
+                calculateSalaryCommitmentPercentage(
+                  monthlyTotalExpenses,
+                  financeState.settings.monthlySalary,
+                );
+              const surplusOrShortfall = calculateSurplusOrShortfall(
+                financeState.settings,
+                monthlyTotalExpenses,
+                projectionMonth,
+              );
+              const categoryTotals = calculateCategoryTotals(
+                financeState.categories,
+                financeState.accountItems,
+                financeState.monthlyValues,
+                projectionMonth,
+              );
 
-          <View style={styles.editorSection}>
-            <Text style={styles.editorTitle}>Categorias</Text>
+              return (
+                <View key={projectionMonth.key} style={styles.monthCard}>
+                  <View style={styles.monthHeader}>
+                    <View>
+                      <Text style={styles.monthName}>
+                        {formatMonthLabel(
+                          projectionMonth.year,
+                          projectionMonth.month,
+                        )}
+                      </Text>
+                      {projectionMonth.isCurrentMonth ? (
+                        <Text style={styles.currentMonthLabel}>Mês atual</Text>
+                      ) : null}
+                    </View>
+                    <Text
+                      style={[
+                        styles.balance,
+                        surplusOrShortfall < 0
+                          ? styles.negativeBalance
+                          : styles.positiveBalance,
+                      ]}
+                    >
+                      {currencyFormatter.format(surplusOrShortfall)}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryGrid}>
+                    <SummaryValue
+                      label="Despesas"
+                      value={currencyFormatter.format(monthlyTotalExpenses)}
+                    />
+                    <SummaryValue
+                      label="Comprometido"
+                      value={
+                        salaryCommitmentPercentage === null
+                          ? '-'
+                          : percentageFormatter.format(salaryCommitmentPercentage)
+                      }
+                    />
+                  </View>
+
+                  <CategoryTotals
+                    categoryTotals={categoryTotals}
+                    categoryNamesById={Object.fromEntries(
+                      financeState.categories.map((category) => [
+                        category.id,
+                        category.name,
+                      ]),
+                    )}
+                  />
+                </View>
+              );
+            })
+          : null}
+
+        {activeTab === 'planning' ? (
+          <>
+            <View style={styles.settingsPanel}>
+              <Text style={styles.sectionTitle}>Contas</Text>
+              <View style={styles.createAccountRow}>
+                <TextInput
+                  onChangeText={setNewAccountName}
+                  placeholder="Nova conta"
+                  style={styles.input}
+                  value={newAccountName}
+                />
+                <TextInput
+                  keyboardType="number-pad"
+                  onChangeText={setNewAccountDueDay}
+                  placeholder="Dia"
+                  style={[styles.input, styles.dueDayInput]}
+                  value={newAccountDueDay}
+                />
+                <PrimaryButton label="Adicionar" onPress={createAccountItem} />
+              </View>
+
+              {financeState.accountItems
+                .slice()
+                .sort(
+                  (firstAccountItem, secondAccountItem) =>
+                    firstAccountItem.sortOrder - secondAccountItem.sortOrder,
+                )
+                .map((accountItem) => (
+                  <View key={accountItem.id} style={styles.accountEditorRow}>
+                    <TextInput
+                      onChangeText={(name) =>
+                        updateAccountName(accountItem.id, name)
+                      }
+                      style={styles.input}
+                      value={accountItem.name}
+                    />
+                    <View style={styles.accountMetaRow}>
+                      <Pressable
+                        onPress={() => cycleAccountCategory(accountItem.id)}
+                        style={styles.categoryButton}
+                      >
+                        <Text style={styles.categoryButtonText}>
+                          {getCategoryName(
+                            financeState.categories,
+                            accountItem.categoryId,
+                          )}
+                        </Text>
+                      </Pressable>
+                      <TextInput
+                        keyboardType="number-pad"
+                        onChangeText={(dueDay) =>
+                          updateAccountDueDay(accountItem.id, dueDay)
+                        }
+                        style={[styles.input, styles.dueDayInput]}
+                        value={String(accountItem.dueDay)}
+                      />
+                      <DangerButton
+                        label="Excluir"
+                        onPress={() => deleteAccountItem(accountItem.id)}
+                      />
+                    </View>
+                  </View>
+                ))}
+            </View>
+
+            <View style={styles.settingsPanel}>
+              <Text style={styles.sectionTitle}>Valores mensais</Text>
+              {selectedAccountItem ? (
+                <>
+                  <Text style={styles.editorHint}>
+                    Selecione uma conta e edite os valores previstos para cada mês.
+                  </Text>
+
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.accountSelector}
+                  >
+                    {financeState.accountItems
+                      .slice()
+                      .sort(
+                        (firstAccountItem, secondAccountItem) =>
+                          firstAccountItem.sortOrder - secondAccountItem.sortOrder,
+                      )
+                      .map((accountItem) => (
+                        <Pressable
+                          key={accountItem.id}
+                          onPress={() => setSelectedAccountItemId(accountItem.id)}
+                          style={[
+                            styles.accountSelectorButton,
+                            selectedAccountItem.id === accountItem.id
+                              ? styles.accountSelectorButtonActive
+                              : null,
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              styles.accountSelectorButtonText,
+                              selectedAccountItem.id === accountItem.id
+                                ? styles.accountSelectorButtonTextActive
+                                : null,
+                            ]}
+                          >
+                            {accountItem.name}
+                          </Text>
+                        </Pressable>
+                      ))}
+                  </ScrollView>
+
+                  <View style={styles.monthValueList}>
+                    {projectionMonths.map((projectionMonth) => (
+                      <View key={projectionMonth.key} style={styles.monthValueRow}>
+                        <View style={styles.monthValueLabel}>
+                          <Text style={styles.monthValueName}>
+                            {formatMonthLabel(
+                              projectionMonth.year,
+                              projectionMonth.month,
+                            )}
+                          </Text>
+                          <Text style={styles.monthValueCategory}>
+                            {getCategoryName(
+                              financeState.categories,
+                              selectedAccountItem.categoryId,
+                            )}
+                          </Text>
+                        </View>
+                        <TextInput
+                          keyboardType="decimal-pad"
+                          onChangeText={(amount) =>
+                            updateMonthlyValue(
+                              selectedAccountItem.id,
+                              projectionMonth,
+                              amount,
+                            )
+                          }
+                          placeholder="0,00"
+                          style={[styles.input, styles.monthValueInput]}
+                          value={formatEditableAmount(
+                            getMonthlyValueAmount(
+                              financeState.monthlyValues,
+                              selectedAccountItem.id,
+                              projectionMonth,
+                            ),
+                          )}
+                        />
+                      </View>
+                    ))}
+                  </View>
+                </>
+              ) : (
+                <Text style={styles.emptyText}>
+                  Crie uma categoria e uma conta para editar valores mensais.
+                </Text>
+              )}
+            </View>
+          </>
+        ) : null}
+
+        {activeTab === 'categories' ? (
+          <View style={styles.settingsPanel}>
+            <Text style={styles.sectionTitle}>Categorias</Text>
             <View style={styles.createRow}>
               <TextInput
                 onChangeText={setNewCategoryName}
@@ -380,236 +625,32 @@ export default function App() {
                 </View>
               ))}
           </View>
+        ) : null}
 
-          <View style={styles.editorSection}>
-            <Text style={styles.editorTitle}>Contas</Text>
-            <View style={styles.createAccountRow}>
-              <TextInput
-                onChangeText={setNewAccountName}
-                placeholder="Nova conta"
-                style={styles.input}
-                value={newAccountName}
-              />
-              <TextInput
-                keyboardType="number-pad"
-                onChangeText={setNewAccountDueDay}
-                placeholder="Dia"
-                style={[styles.input, styles.dueDayInput]}
-                value={newAccountDueDay}
-              />
-              <PrimaryButton label="Adicionar" onPress={createAccountItem} />
-            </View>
-
-            {financeState.accountItems
-              .slice()
-              .sort(
-                (firstAccountItem, secondAccountItem) =>
-                  firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-              )
-              .map((accountItem) => (
-                <View key={accountItem.id} style={styles.accountEditorRow}>
-                  <TextInput
-                    onChangeText={(name) =>
-                      updateAccountName(accountItem.id, name)
-                    }
-                    style={styles.input}
-                    value={accountItem.name}
-                  />
-                  <View style={styles.accountMetaRow}>
-                    <Pressable
-                      onPress={() => cycleAccountCategory(accountItem.id)}
-                      style={styles.categoryButton}
-                    >
-                      <Text style={styles.categoryButtonText}>
-                        {getCategoryName(
-                          financeState.categories,
-                          accountItem.categoryId,
-                        )}
-                      </Text>
-                    </Pressable>
-                    <TextInput
-                      keyboardType="number-pad"
-                      onChangeText={(dueDay) =>
-                        updateAccountDueDay(accountItem.id, dueDay)
-                      }
-                      style={[styles.input, styles.dueDayInput]}
-                      value={String(accountItem.dueDay)}
-                    />
-                    <DangerButton
-                      label="Excluir"
-                      onPress={() => deleteAccountItem(accountItem.id)}
-                    />
-                  </View>
-                </View>
-              ))}
-          </View>
-        </View>
-
-        <View style={styles.settingsPanel}>
-          <Text style={styles.sectionTitle}>Valores mensais</Text>
-          {selectedAccountItem ? (
-            <>
-              <Text style={styles.editorHint}>
-                Selecione uma conta e edite os valores previstos para cada mês.
+        {activeTab === 'settings' ? (
+          <View style={styles.settingsPanel}>
+            <Text style={styles.sectionTitle}>Ajustes</Text>
+            {storageMessage ? (
+              <Text style={styles.storageMessage}>{storageMessage}</Text>
+            ) : (
+              <Text style={styles.storageMessage}>
+                Dados salvos localmente neste dispositivo.
               </Text>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.accountSelector}
-              >
-                {financeState.accountItems
-                  .slice()
-                  .sort(
-                    (firstAccountItem, secondAccountItem) =>
-                      firstAccountItem.sortOrder - secondAccountItem.sortOrder,
-                  )
-                  .map((accountItem) => (
-                    <Pressable
-                      key={accountItem.id}
-                      onPress={() => setSelectedAccountItemId(accountItem.id)}
-                      style={[
-                        styles.accountSelectorButton,
-                        selectedAccountItem.id === accountItem.id
-                          ? styles.accountSelectorButtonActive
-                          : null,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.accountSelectorButtonText,
-                          selectedAccountItem.id === accountItem.id
-                            ? styles.accountSelectorButtonTextActive
-                            : null,
-                        ]}
-                      >
-                        {accountItem.name}
-                      </Text>
-                    </Pressable>
-                  ))}
-              </ScrollView>
-
-              <View style={styles.monthValueList}>
-                {projectionMonths.map((projectionMonth) => (
-                  <View key={projectionMonth.key} style={styles.monthValueRow}>
-                    <View style={styles.monthValueLabel}>
-                      <Text style={styles.monthValueName}>
-                        {formatMonthLabel(
-                          projectionMonth.year,
-                          projectionMonth.month,
-                        )}
-                      </Text>
-                      <Text style={styles.monthValueCategory}>
-                        {getCategoryName(
-                          financeState.categories,
-                          selectedAccountItem.categoryId,
-                        )}
-                      </Text>
-                    </View>
-                    <TextInput
-                      keyboardType="decimal-pad"
-                      onChangeText={(amount) =>
-                        updateMonthlyValue(
-                          selectedAccountItem.id,
-                          projectionMonth,
-                          amount,
-                        )
-                      }
-                      placeholder="0,00"
-                      style={[styles.input, styles.monthValueInput]}
-                      value={formatEditableAmount(
-                        getMonthlyValueAmount(
-                          financeState.monthlyValues,
-                          selectedAccountItem.id,
-                          projectionMonth,
-                        ),
-                      )}
-                    />
-                  </View>
-                ))}
-              </View>
-            </>
-          ) : (
-            <Text style={styles.emptyText}>
-              Crie uma conta para editar valores mensais.
-            </Text>
-          )}
-        </View>
-
-        {visibleProjectionMonths.map((projectionMonth) => {
-          const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
-            financeState.categories,
-            financeState.accountItems,
-            financeState.monthlyValues,
-            projectionMonth,
-          );
-          const salaryCommitmentPercentage =
-            calculateSalaryCommitmentPercentage(
-              monthlyTotalExpenses,
-              financeState.settings.monthlySalary,
-            );
-          const surplusOrShortfall = calculateSurplusOrShortfall(
-            financeState.settings,
-            monthlyTotalExpenses,
-            projectionMonth,
-          );
-          const categoryTotals = calculateCategoryTotals(
-            financeState.categories,
-            financeState.accountItems,
-            financeState.monthlyValues,
-            projectionMonth,
-          );
-
-          return (
-            <View key={projectionMonth.key} style={styles.monthCard}>
-              <View style={styles.monthHeader}>
-                <View>
-                  <Text style={styles.monthName}>
-                    {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
-                  </Text>
-                  {projectionMonth.isCurrentMonth ? (
-                    <Text style={styles.currentMonthLabel}>Mês atual</Text>
-                  ) : null}
-                </View>
-                <Text
-                  style={[
-                    styles.balance,
-                    surplusOrShortfall < 0
-                      ? styles.negativeBalance
-                      : styles.positiveBalance,
-                  ]}
-                >
-                  {currencyFormatter.format(surplusOrShortfall)}
-                </Text>
-              </View>
-
-              <View style={styles.summaryGrid}>
-                <SummaryValue
-                  label="Despesas"
-                  value={currencyFormatter.format(monthlyTotalExpenses)}
-                />
-                <SummaryValue
-                  label="Comprometido"
-                  value={
-                    salaryCommitmentPercentage === null
-                      ? '-'
-                      : percentageFormatter.format(salaryCommitmentPercentage)
-                  }
-                />
-              </View>
-
-              <CategoryTotals
-                categoryTotals={categoryTotals}
-                categoryNamesById={Object.fromEntries(
-                  financeState.categories.map((category) => [
-                    category.id,
-                    category.name,
-                  ]),
-                )}
+            )}
+            <View style={styles.inputGrid}>
+              <CurrencyInput
+                label="Salário mensal"
+                value={financeState.settings.monthlySalary}
+                onChangeValue={updateMonthlySalary}
+              />
+              <CurrencyInput
+                label="Extra do mês atual"
+                value={financeState.settings.currentMonthExtraBalance}
+                onChangeValue={updateCurrentMonthExtraBalance}
               />
             </View>
-          );
-        })}
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );
@@ -793,6 +834,34 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 16,
     paddingBottom: 28,
+  },
+  tabBar: {
+    backgroundColor: '#ffffff',
+    borderBottomColor: '#dfe7e4',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  tabButton: {
+    alignItems: 'center',
+    borderRadius: 8,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 40,
+  },
+  tabButtonActive: {
+    backgroundColor: '#176a4d',
+  },
+  tabButtonText: {
+    color: '#60716d',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  tabButtonTextActive: {
+    color: '#ffffff',
   },
   settingsPanel: {
     backgroundColor: '#ffffff',
