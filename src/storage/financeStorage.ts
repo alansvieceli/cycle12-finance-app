@@ -11,10 +11,10 @@ export async function loadFinanceState(): Promise<FinanceState> {
     return emptyFinanceState;
   }
 
-  return {
+  return normalizeFinanceState({
     ...emptyFinanceState,
     ...JSON.parse(storedValue),
-  };
+  });
 }
 
 export async function saveFinanceState(financeState: FinanceState): Promise<void> {
@@ -26,4 +26,25 @@ export async function saveFinanceState(financeState: FinanceState): Promise<void
 
 export async function clearFinanceState(): Promise<void> {
   await AsyncStorage.removeItem(FINANCE_STATE_STORAGE_KEY);
+}
+
+function normalizeFinanceState(financeState: FinanceState): FinanceState {
+  return {
+    ...financeState,
+    settings: {
+      ...emptyFinanceState.settings,
+      ...financeState.settings,
+      visibleMonthCount: clampVisibleMonthCount(
+        financeState.settings.visibleMonthCount,
+      ),
+    },
+  };
+}
+
+function clampVisibleMonthCount(value: number | undefined) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return 12;
+  }
+
+  return Math.max(1, Math.min(12, Math.round(value)));
 }

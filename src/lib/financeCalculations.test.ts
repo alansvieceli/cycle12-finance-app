@@ -92,6 +92,7 @@ describe('finance calculations', () => {
     const settings = {
       monthlySalary: 3000,
       currentMonthExtraBalance: 500,
+      visibleMonthCount: 12,
     };
 
     expect(

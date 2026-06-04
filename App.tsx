@@ -44,6 +44,10 @@ const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
 export default function App() {
   const projectionMonths = useMemo(() => createProjectionMonths(), []);
   const [financeState, setFinanceState] = useState(emptyFinanceState);
+  const visibleProjectionMonths = projectionMonths.slice(
+    0,
+    financeState.settings.visibleMonthCount,
+  );
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
@@ -532,7 +536,7 @@ export default function App() {
           )}
         </View>
 
-        {projectionMonths.map((projectionMonth) => {
+        {visibleProjectionMonths.map((projectionMonth) => {
           const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
             financeState.categories,
             financeState.accountItems,
