@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ScrollView,
   Pressable,
@@ -25,13 +25,7 @@ import {
   formatMonthLabel,
   percentageFormatter,
 } from './src/lib/formatters';
-import { createId } from './src/lib/ids';
-import { parseCurrencyInput, parseDueDay } from './src/lib/inputParsers';
-import {
-  loadFinanceState,
-  saveFinanceState,
-} from './src/storage/financeStorage';
-import { emptyFinanceState } from './src/types/finance';
+import { useFinanceState } from './src/hooks/useFinanceState';
 
 type AppTab = 'summary' | 'planning' | 'categories' | 'settings';
 
@@ -44,274 +38,18 @@ const tabs: { id: AppTab; label: string }[] = [
 
 export default function App() {
   const projectionMonths = useMemo(() => createProjectionMonths(), []);
-  const [financeState, setFinanceState] = useState(emptyFinanceState);
+  const {
+    actions,
+    financeState,
+    formState,
+    selectedAccountItem,
+    storageMessage,
+  } = useFinanceState();
   const visibleProjectionMonths = projectionMonths.slice(
     0,
     financeState.settings.visibleMonthCount,
   );
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [newAccountName, setNewAccountName] = useState('');
-  const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [activeTab, setActiveTab] = useState<AppTab>('summary');
-  const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
-  const [storageMessage, setStorageMessage] = useState('');
-  const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
-  const selectedAccountItem =
-    financeState.accountItems.find(
-      (accountItem) => accountItem.id === selectedAccountItemId,
-    ) ?? financeState.accountItems[0];
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadStoredState() {
-      try {
-        const storedState = await loadFinanceState();
-
-        if (!isMounted) {
-          return;
-        }
-
-        setFinanceState(storedState);
-        setSelectedAccountItemId(storedState.accountItems[0]?.id ?? '');
-      } catch {
-        if (isMounted) {
-          setStorageMessage(
-            'Não foi possível carregar os dados locais. Começando vazio.',
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setHasLoadedStoredState(true);
-        }
-      }
-    }
-
-    loadStoredState();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!hasLoadedStoredState) {
-      return;
-    }
-
-    saveFinanceState(financeState).catch(() => {
-      setStorageMessage('Não foi possível salvar os dados locais agora.');
-    });
-  }, [financeState, hasLoadedStoredState]);
-
-  function updateMonthlySalary(value: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      settings: {
-        ...currentState.settings,
-        monthlySalary: parseCurrencyInput(value),
-      },
-    }));
-  }
-
-  function updateCurrentMonthExtraBalance(value: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      settings: {
-        ...currentState.settings,
-        currentMonthExtraBalance: parseCurrencyInput(value),
-      },
-    }));
-  }
-
-  function createCategory() {
-    const categoryName = newCategoryName.trim();
-
-    if (!categoryName) {
-      return;
-    }
-
-    setFinanceState((currentState) => ({
-      ...currentState,
-      categories: [
-        ...currentState.categories,
-        {
-          id: createId('category'),
-          name: categoryName,
-          sortOrder: currentState.categories.length + 1,
-        },
-      ],
-    }));
-    setNewCategoryName('');
-  }
-
-  function updateCategoryName(categoryId: string, name: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      categories: currentState.categories.map((category) =>
-        category.id === categoryId ? { ...category, name } : category,
-      ),
-    }));
-  }
-
-  function deleteCategory(categoryId: string) {
-    setFinanceState((currentState) => {
-      const removedAccountIds = new Set(
-        currentState.accountItems
-          .filter((accountItem) => accountItem.categoryId === categoryId)
-          .map((accountItem) => accountItem.id),
-      );
-
-      return {
-        ...currentState,
-        accountItems: currentState.accountItems.filter(
-          (accountItem) => accountItem.categoryId !== categoryId,
-        ),
-        categories: currentState.categories.filter(
-          (category) => category.id !== categoryId,
-        ),
-        monthlyValues: currentState.monthlyValues.filter(
-          (monthlyValue) => !removedAccountIds.has(monthlyValue.accountItemId),
-        ),
-      };
-    });
-  }
-
-  function createAccountItem() {
-    const accountName = newAccountName.trim();
-    const firstCategory = financeState.categories[0];
-
-    if (!accountName || !firstCategory) {
-      return;
-    }
-
-    const accountItemId = createId('account');
-
-    setFinanceState((currentState) => ({
-      ...currentState,
-      accountItems: [
-        ...currentState.accountItems,
-        {
-          id: accountItemId,
-          categoryId: firstCategory.id,
-          dueDay: parseDueDay(newAccountDueDay),
-          name: accountName,
-          sortOrder: currentState.accountItems.length + 1,
-        },
-      ],
-    }));
-    setNewAccountDueDay('');
-    setNewAccountName('');
-    setSelectedAccountItemId(accountItemId);
-  }
-
-  function updateAccountName(accountItemId: string, name: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      accountItems: currentState.accountItems.map((accountItem) =>
-        accountItem.id === accountItemId ? { ...accountItem, name } : accountItem,
-      ),
-    }));
-  }
-
-  function updateAccountDueDay(accountItemId: string, dueDay: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      accountItems: currentState.accountItems.map((accountItem) =>
-        accountItem.id === accountItemId
-          ? { ...accountItem, dueDay: parseDueDay(dueDay) }
-          : accountItem,
-      ),
-    }));
-  }
-
-  function cycleAccountCategory(accountItemId: string) {
-    setFinanceState((currentState) => {
-      const categories = [...currentState.categories].sort(
-        (firstCategory, secondCategory) =>
-          firstCategory.sortOrder - secondCategory.sortOrder,
-      );
-
-      if (categories.length === 0) {
-        return currentState;
-      }
-
-      return {
-        ...currentState,
-        accountItems: currentState.accountItems.map((accountItem) => {
-          if (accountItem.id !== accountItemId) {
-            return accountItem;
-          }
-
-          const categoryIndex = categories.findIndex(
-            (category) => category.id === accountItem.categoryId,
-          );
-          const nextCategory = categories[(categoryIndex + 1) % categories.length];
-
-          return {
-            ...accountItem,
-            categoryId: nextCategory.id,
-          };
-        }),
-      };
-    });
-  }
-
-  function deleteAccountItem(accountItemId: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      accountItems: currentState.accountItems.filter(
-        (accountItem) => accountItem.id !== accountItemId,
-      ),
-      monthlyValues: currentState.monthlyValues.filter(
-        (monthlyValue) => monthlyValue.accountItemId !== accountItemId,
-      ),
-    }));
-
-    if (selectedAccountItemId === accountItemId) {
-      setSelectedAccountItemId('');
-    }
-  }
-
-  function updateMonthlyValue(
-    accountItemId: string,
-    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    amount: string,
-  ) {
-    setFinanceState((currentState) => {
-      const parsedAmount = parseCurrencyInput(amount);
-      const existingValue = currentState.monthlyValues.find(
-        (monthlyValue) =>
-          monthlyValue.accountItemId === accountItemId &&
-          monthlyValue.month === projectionMonth.month &&
-          monthlyValue.year === projectionMonth.year,
-      );
-
-      if (!existingValue) {
-        return {
-          ...currentState,
-          monthlyValues: [
-            ...currentState.monthlyValues,
-            {
-              accountItemId,
-              amount: parsedAmount,
-              month: projectionMonth.month,
-              year: projectionMonth.year,
-            },
-          ],
-        };
-      }
-
-      return {
-        ...currentState,
-        monthlyValues: currentState.monthlyValues.map((monthlyValue) =>
-          monthlyValue === existingValue
-            ? { ...monthlyValue, amount: parsedAmount }
-            : monthlyValue,
-        ),
-      };
-    });
-  }
 
   return (
     <View style={styles.container}>
@@ -432,19 +170,19 @@ export default function App() {
               <Text style={styles.sectionTitle}>Contas</Text>
               <View style={styles.createAccountRow}>
                 <TextInput
-                  onChangeText={setNewAccountName}
+                  onChangeText={actions.setNewAccountName}
                   placeholder="Nova conta"
                   style={styles.input}
-                  value={newAccountName}
+                  value={formState.newAccountName}
                 />
                 <TextInput
                   keyboardType="number-pad"
-                  onChangeText={setNewAccountDueDay}
+                  onChangeText={actions.setNewAccountDueDay}
                   placeholder="Dia"
                   style={[styles.input, styles.dueDayInput]}
-                  value={newAccountDueDay}
+                  value={formState.newAccountDueDay}
                 />
-                <PrimaryButton label="Adicionar" onPress={createAccountItem} />
+                <PrimaryButton label="Adicionar" onPress={actions.createAccountItem} />
               </View>
 
               {financeState.accountItems
@@ -457,14 +195,14 @@ export default function App() {
                   <View key={accountItem.id} style={styles.accountEditorRow}>
                     <TextInput
                       onChangeText={(name) =>
-                        updateAccountName(accountItem.id, name)
+                        actions.updateAccountName(accountItem.id, name)
                       }
                       style={styles.input}
                       value={accountItem.name}
                     />
                     <View style={styles.accountMetaRow}>
                       <Pressable
-                        onPress={() => cycleAccountCategory(accountItem.id)}
+                        onPress={() => actions.cycleAccountCategory(accountItem.id)}
                         style={styles.categoryButton}
                       >
                         <Text style={styles.categoryButtonText}>
@@ -477,14 +215,14 @@ export default function App() {
                       <TextInput
                         keyboardType="number-pad"
                         onChangeText={(dueDay) =>
-                          updateAccountDueDay(accountItem.id, dueDay)
+                          actions.updateAccountDueDay(accountItem.id, dueDay)
                         }
                         style={[styles.input, styles.dueDayInput]}
                         value={String(accountItem.dueDay)}
                       />
                       <DangerButton
                         label="Excluir"
-                        onPress={() => deleteAccountItem(accountItem.id)}
+                        onPress={() => actions.deleteAccountItem(accountItem.id)}
                       />
                     </View>
                   </View>
@@ -513,7 +251,7 @@ export default function App() {
                       .map((accountItem) => (
                         <Pressable
                           key={accountItem.id}
-                          onPress={() => setSelectedAccountItemId(accountItem.id)}
+                          onPress={() => actions.setSelectedAccountItemId(accountItem.id)}
                           style={[
                             styles.accountSelectorButton,
                             selectedAccountItem.id === accountItem.id
@@ -555,7 +293,7 @@ export default function App() {
                         <TextInput
                           keyboardType="decimal-pad"
                           onChangeText={(amount) =>
-                            updateMonthlyValue(
+                            actions.updateMonthlyValue(
                               selectedAccountItem.id,
                               projectionMonth,
                               amount,
@@ -589,12 +327,12 @@ export default function App() {
             <Text style={styles.sectionTitle}>Categorias</Text>
             <View style={styles.createRow}>
               <TextInput
-                onChangeText={setNewCategoryName}
+                onChangeText={actions.setNewCategoryName}
                 placeholder="Nova categoria"
                 style={[styles.input, styles.createInput]}
-                value={newCategoryName}
+                value={formState.newCategoryName}
               />
-              <PrimaryButton label="Adicionar" onPress={createCategory} />
+              <PrimaryButton label="Adicionar" onPress={actions.createCategory} />
             </View>
 
             {financeState.categories
@@ -606,13 +344,13 @@ export default function App() {
               .map((category) => (
                 <View key={category.id} style={styles.editorRow}>
                   <TextInput
-                    onChangeText={(name) => updateCategoryName(category.id, name)}
+                    onChangeText={(name) => actions.updateCategoryName(category.id, name)}
                     style={[styles.input, styles.rowInput]}
                     value={category.name}
                   />
                   <DangerButton
                     label="Excluir"
-                    onPress={() => deleteCategory(category.id)}
+                    onPress={() => actions.deleteCategory(category.id)}
                   />
                 </View>
               ))}
@@ -633,12 +371,12 @@ export default function App() {
               <CurrencyInput
                 label="Salário mensal"
                 value={financeState.settings.monthlySalary}
-                onChangeValue={updateMonthlySalary}
+                onChangeValue={actions.updateMonthlySalary}
               />
               <CurrencyInput
                 label="Extra do mês atual"
                 value={financeState.settings.currentMonthExtraBalance}
-                onChangeValue={updateCurrentMonthExtraBalance}
+                onChangeValue={actions.updateCurrentMonthExtraBalance}
               />
             </View>
           </View>
