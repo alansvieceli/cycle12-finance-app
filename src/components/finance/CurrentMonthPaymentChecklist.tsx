@@ -14,7 +14,7 @@ import {
   MonthlyPaymentStatus,
   MonthlyValue,
 } from '../../types/finance';
-import { sortAccountItems } from '../../lib/sorting';
+import { sortAccountItemsByDueDay } from '../../lib/sorting';
 
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
@@ -44,7 +44,7 @@ export function CurrentMonthPaymentChecklist({
     paymentStatuses,
     projectionMonth,
   );
-  const sortedAccountItems = sortAccountItems(accountItems, categories);
+  const sortedAccountItems = sortAccountItemsByDueDay(accountItems);
 
   return (
     <View style={styles.panel}>

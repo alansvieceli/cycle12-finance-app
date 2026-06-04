@@ -57,13 +57,23 @@ export function MonthlyValueEditor({
                 >
                   <Text
                     style={[
-                      styles.accountSelectorButtonText,
+                      styles.accountSelectorAccountText,
                       selectedAccountItem.id === accountItem.id
                         ? styles.accountSelectorButtonTextActive
                         : null,
                     ]}
                   >
                     {accountItem.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.accountSelectorCategoryText,
+                      selectedAccountItem.id === accountItem.id
+                        ? styles.accountSelectorButtonTextActive
+                        : null,
+                    ]}
+                  >
+                    {getCategoryName(categories, accountItem.categoryId)}
                   </Text>
                 </Pressable>
               ))}
@@ -158,21 +168,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     marginRight: 8,
-    minHeight: 42,
+    minHeight: 52,
     paddingHorizontal: 12,
+    paddingVertical: 7,
   },
   accountSelectorButtonActive: {
     backgroundColor: '#176a4d',
     borderColor: '#176a4d',
   },
-  accountSelectorButtonText: {
-    color: '#17211f',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 0,
-  },
   accountSelectorButtonTextActive: {
     color: '#ffffff',
+  },
+  accountSelectorAccountText: {
+    color: '#17211f',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
+  accountSelectorCategoryText: {
+    color: '#60716d',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0,
+    marginTop: 2,
+    textAlign: 'center',
   },
   monthValueList: {
     gap: 10,

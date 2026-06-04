@@ -26,6 +26,14 @@ export function sortAccountItems(
   });
 }
 
+export function sortAccountItemsByDueDay(accountItems: AccountItem[]): AccountItem[] {
+  return accountItems.slice().sort(
+    (firstAccountItem, secondAccountItem) =>
+      compareDueDay(firstAccountItem.dueDay, secondAccountItem.dueDay) ||
+      firstAccountItem.name.localeCompare(secondAccountItem.name, 'pt-BR'),
+  );
+}
+
 export function compareCategories(
   firstCategory: Category,
   secondCategory: Category,

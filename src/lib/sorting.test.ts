@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { sortAccountItems, sortCategories } from './sorting';
+import {
+  sortAccountItems,
+  sortAccountItemsByDueDay,
+  sortCategories,
+} from './sorting';
 import { AccountItem, Category } from '../types/finance';
 
 describe('sorting helpers', () => {
@@ -83,6 +87,35 @@ describe('sorting helpers', () => {
     expect(
       sortAccountItems(accountItems, categories).map((accountItem) => accountItem.id),
     ).toEqual(['same-day-name', 'early', 'late']);
+  });
+
+  it('sorts payment checklist accounts only by due day and account name', () => {
+    const accountItems: AccountItem[] = [
+      {
+        id: 'home',
+        categoryId: 'home',
+        dueDay: 20,
+        name: 'Aluguel',
+        sortOrder: 1,
+      },
+      {
+        id: 'card',
+        categoryId: 'cards',
+        dueDay: 5,
+        name: 'Cartão',
+        sortOrder: 99,
+      },
+      {
+        id: 'market',
+        categoryId: 'food',
+        dueDay: 5,
+        name: 'Mercado',
+        sortOrder: 1,
+      },
+    ];
+
+    expect(sortAccountItemsByDueDay(accountItems).map((accountItem) => accountItem.id))
+      .toEqual(['card', 'market', 'home']);
   });
 
   it('treats missing or invalid category sort order as zero', () => {

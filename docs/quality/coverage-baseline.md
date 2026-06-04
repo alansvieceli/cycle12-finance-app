@@ -26,11 +26,11 @@ npm run test:coverage
 Updated after adding formatter tests, payment summary logic, and sorting helpers:
 
 - Test files: 4 passed
-- Tests: 20 passed
-- Statements: 98.66% (74/75)
-- Branches: 87.27% (48/55)
-- Functions: 100% (38/38)
-- Lines: 98.63% (72/73)
+- Tests: 21 passed
+- Statements: 98.7% (76/77)
+- Branches: 87.71% (50/57)
+- Functions: 100% (40/40)
+- Lines: 98.66% (74/75)
 
 ## Included Scope
 
