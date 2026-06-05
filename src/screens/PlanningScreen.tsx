@@ -47,6 +47,7 @@ export function PlanningScreen({
             accountItems={financeState.accountItems}
             categories={financeState.categories}
             monthlyValues={financeState.monthlyValues}
+            onAdjustMonthlyValue={actions.adjustMonthlyValue}
             onChangeMonthlyValue={actions.updateMonthlyValue}
             onSelectAccountItem={actions.setSelectedAccountItemId}
             projectionMonths={projectionMonths}

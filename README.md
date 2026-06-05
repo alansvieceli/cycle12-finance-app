@@ -12,6 +12,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Shows a read-only charts tab with positive/negative columns, expense area line chart, current-month category donut chart, and expandable monthly values.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, and editable monthly values.
+- Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Keeps planning focused on monthly values, with account management opened from a separate panel.
 - Lets the user select a category while creating an account.
@@ -175,6 +176,7 @@ This means:
 - there is no login
 - there is no remote sync
 - payment status is saved only on this device
+- monthly adjustments update only the final saved monthly account value
 - uninstalling the app can remove local data
 - backup creates a portable `.c12f` file with the current local finance state
 - restore validates the `.c12f` file before replacing local data
