@@ -14,12 +14,13 @@ import {
   normalizeFinanceState,
   saveFinanceState,
 } from '../storage/financeStorage';
-import { FinanceState, emptyFinanceState } from '../types/finance';
+import { FinanceState, MonthlyValue, emptyFinanceState } from '../types/finance';
 import { ProjectionMonth } from '../lib/financeCalculations';
 import {
   MonthlyValueAdjustmentOperation,
   calculateAdjustedMonthlyValue,
 } from '../lib/monthlyValueAdjustments';
+import { buildInstallmentMonths } from '../lib/installmentMonths';
 
 export function useFinanceState() {
   const [financeState, setFinanceState] = useState(emptyFinanceState);
@@ -404,41 +405,36 @@ export function useFinanceState() {
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
     adjustmentInput: string,
     operation: MonthlyValueAdjustmentOperation,
+    installments = 1,
   ) {
     setFinanceState((currentState) => {
-      const existingValue = currentState.monthlyValues.find(
-        (monthlyValue) =>
-          monthlyValue.accountItemId === accountItemId &&
-          monthlyValue.month === projectionMonth.month &&
-          monthlyValue.year === projectionMonth.year,
-      );
-      const nextAmount = calculateAdjustedMonthlyValue(
-        existingValue?.amount ?? 0,
-        adjustmentInput,
-        operation,
-      );
+      const targetMonths =
+        operation === 'add'
+          ? buildInstallmentMonths(
+              projectionMonth.year,
+              projectionMonth.month,
+              installments,
+              currentState.settings.windowStartYear,
+              currentState.settings.windowStartMonth,
+            )
+          : [projectionMonth];
 
-      if (!existingValue) {
-        return {
-          ...currentState,
-          monthlyValues: [
-            ...currentState.monthlyValues,
-            {
-              accountItemId,
-              amount: nextAmount,
-              month: projectionMonth.month,
-              year: projectionMonth.year,
-            },
-          ],
-        };
+      if (targetMonths.length === 0) {
+        return currentState;
       }
 
       return {
         ...currentState,
-        monthlyValues: currentState.monthlyValues.map((monthlyValue) =>
-          monthlyValue === existingValue
-            ? { ...monthlyValue, amount: nextAmount }
-            : monthlyValue,
+        monthlyValues: targetMonths.reduce(
+          (monthlyValues, targetMonth) =>
+            adjustMonthlyValueAmount(
+              monthlyValues,
+              accountItemId,
+              targetMonth,
+              adjustmentInput,
+              operation,
+            ),
+          currentState.monthlyValues,
         ),
       };
     });
@@ -573,4 +569,42 @@ export function useFinanceState() {
     selectedAccountItemId,
     storageMessage,
   };
+}
+
+function adjustMonthlyValueAmount(
+  monthlyValues: MonthlyValue[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  adjustmentInput: string,
+  operation: MonthlyValueAdjustmentOperation,
+) {
+  const existingValue = monthlyValues.find(
+    (monthlyValue) =>
+      monthlyValue.accountItemId === accountItemId &&
+      monthlyValue.month === projectionMonth.month &&
+      monthlyValue.year === projectionMonth.year,
+  );
+  const nextAmount = calculateAdjustedMonthlyValue(
+    existingValue?.amount ?? 0,
+    adjustmentInput,
+    operation,
+  );
+
+  if (!existingValue) {
+    return [
+      ...monthlyValues,
+      {
+        accountItemId,
+        amount: nextAmount,
+        month: projectionMonth.month,
+        year: projectionMonth.year,
+      },
+    ];
+  }
+
+  return monthlyValues.map((monthlyValue) =>
+    monthlyValue === existingValue
+      ? { ...monthlyValue, amount: nextAmount }
+      : monthlyValue,
+  );
 }

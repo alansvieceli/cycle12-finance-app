@@ -14,6 +14,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
+- Supports adding the same adjustment amount across multiple consecutive months from the `+` adjustment modal.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Keeps planning focused on monthly values, with account management opened from a separate panel.
 - Lets the user select a category while creating an account.
@@ -224,6 +225,7 @@ This means:
 - there is no remote sync
 - payment status is saved only on this device
 - monthly adjustments update only the final saved monthly account value
+- addition adjustments can apply the same entered amount to multiple consecutive months inside the current 12-month planning window
 - the rolling 12-month window start is saved locally and can advance automatically or manually
 - the summary/chart visible month count is saved locally and does not change the 12-month planning window
 - category propagation rules define how new months are filled when the window advances

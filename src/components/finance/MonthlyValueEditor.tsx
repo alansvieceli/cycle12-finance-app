@@ -10,12 +10,18 @@ import {
 } from 'react-native';
 
 import { ProjectionMonth } from '../../lib/financeCalculations';
-import { formatMonthLabel } from '../../lib/formatters';
+import { currencyFormatter, formatMonthLabel } from '../../lib/formatters';
+import { buildInstallmentMonths } from '../../lib/installmentMonths';
+import { parseCurrencyInput } from '../../lib/inputParsers';
 import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
-import { AccountItem, Category, MonthlyValue } from '../../types/finance';
+import { AccountItem, Category, MonthNumber, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
+
+const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', {
+  month: 'short',
+});
 
 type MonthlyValueEditorProps = {
   accountItems: AccountItem[];
@@ -31,6 +37,7 @@ type MonthlyValueEditorProps = {
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
     adjustmentInput: string,
     operation: MonthlyValueAdjustmentOperation,
+    installments?: number,
   ) => void;
   onSelectAccountItem: (accountItemId: string) => void;
   projectionMonths: ProjectionMonth[];
@@ -52,6 +59,7 @@ export function MonthlyValueEditor({
     projectionMonth: ProjectionMonth;
   }>();
   const [adjustmentInput, setAdjustmentInput] = useState('');
+  const [installmentsInput, setInstallmentsInput] = useState('1');
 
   function openAdjustment(
     projectionMonth: ProjectionMonth,
@@ -59,11 +67,13 @@ export function MonthlyValueEditor({
   ) {
     setActiveAdjustment({ operation, projectionMonth });
     setAdjustmentInput('');
+    setInstallmentsInput('1');
   }
 
   function closeAdjustment() {
     setActiveAdjustment(undefined);
     setAdjustmentInput('');
+    setInstallmentsInput('1');
   }
 
   function confirmAdjustment() {
@@ -76,9 +86,27 @@ export function MonthlyValueEditor({
       activeAdjustment.projectionMonth,
       adjustmentInput,
       activeAdjustment.operation,
+      activeAdjustment.operation === 'add'
+        ? parseInstallmentsInput(installmentsInput)
+        : undefined,
     );
     closeAdjustment();
   }
+
+  const affectedInstallmentMonths =
+    activeAdjustment?.operation === 'add' && projectionMonths[0]
+      ? buildInstallmentMonths(
+          activeAdjustment.projectionMonth.year,
+          activeAdjustment.projectionMonth.month,
+          parseInstallmentsInput(installmentsInput),
+          projectionMonths[0].year,
+          projectionMonths[0].month,
+        )
+      : [];
+  const shouldShowInstallmentSummary =
+    activeAdjustment?.operation === 'add' &&
+    parseInstallmentsInput(installmentsInput) > 1 &&
+    affectedInstallmentMonths.length > 0;
 
   return (
     <View style={styles.panel}>
@@ -203,6 +231,32 @@ export function MonthlyValueEditor({
                   style={[styles.input, styles.adjustmentInput]}
                   value={adjustmentInput}
                 />
+                {activeAdjustment?.operation === 'add' ? (
+                  <>
+                    <View style={styles.installmentsRow}>
+                      <Text style={styles.installmentsLabel}>Parcelas</Text>
+                      <TextInput
+                        keyboardType="number-pad"
+                        onChangeText={(value) =>
+                          setInstallmentsInput(sanitizeInstallmentsInput(value))
+                        }
+                        placeholder="1"
+                        placeholderTextColor={colors.textSecondary}
+                        style={[styles.input, styles.installmentsInput]}
+                        value={installmentsInput}
+                      />
+                    </View>
+                    {shouldShowInstallmentSummary ? (
+                      <Text style={styles.installmentSummary}>
+                        {formatInstallmentSummary(
+                          adjustmentInput,
+                          parseInstallmentsInput(installmentsInput),
+                          affectedInstallmentMonths,
+                        )}
+                      </Text>
+                    ) : null}
+                  </>
+                ) : null}
                 <View style={styles.modalActions}>
                   <Pressable
                     accessibilityLabel="Cancelar ajuste"
@@ -262,6 +316,38 @@ function getMonthlyValueAmount(
         monthlyValue.year === projectionMonth.year,
     )?.amount ?? 0
   );
+}
+
+function sanitizeInstallmentsInput(value: string) {
+  return value.replace(/\D/g, '');
+}
+
+function parseInstallmentsInput(value: string) {
+  const parsedValue = parseInt(sanitizeInstallmentsInput(value), 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 1) {
+    return 1;
+  }
+
+  return parsedValue;
+}
+
+function formatInstallmentSummary(
+  adjustmentInput: string,
+  installments: number,
+  affectedMonths: { year: number; month: MonthNumber }[],
+) {
+  const formattedAmount = currencyFormatter.format(parseCurrencyInput(adjustmentInput));
+  const monthLabels = affectedMonths
+    .map(({ month, year }) =>
+      shortMonthFormatter
+        .format(new Date(year, month - 1, 1))
+        .replace('.', '')
+        .replace(/^\w/, (firstLetter) => firstLetter.toUpperCase()),
+    )
+    .join(', ');
+
+  return `+ ${formattedAmount} × ${installments} meses → ${monthLabels}`;
 }
 
 const styles = StyleSheet.create({
@@ -423,6 +509,30 @@ const styles = StyleSheet.create({
   },
   adjustmentInput: {
     textAlign: 'right',
+  },
+  installmentsRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'space-between',
+  },
+  installmentsLabel: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  installmentsInput: {
+    minHeight: 44,
+    textAlign: 'center',
+    width: 78,
+  },
+  installmentSummary: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0,
+    lineHeight: 17,
   },
   modalActions: {
     flexDirection: 'row',
