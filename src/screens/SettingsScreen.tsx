@@ -11,9 +11,13 @@ import { colors } from '../theme/colors';
 
 type SettingsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
+  title?: string;
 };
 
-export function SettingsScreen({ finance }: SettingsScreenProps) {
+export function SettingsScreen({
+  finance,
+  title = 'Configurações',
+}: SettingsScreenProps) {
   const { actions, financeState, storageMessage } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const projectionMonths = createProjectionMonths(
@@ -45,7 +49,7 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
 
   return (
     <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>Configurações</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
       {storageMessage ? (
         <Text style={styles.storageMessage}>{storageMessage}</Text>
       ) : (
@@ -126,7 +130,7 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
         </View>
         <View style={styles.dataActions}>
           <ActionButton
-            label="Gerenciar Dados"
+            label="Gerenciar dados"
             onPress={() => setIsDataManagementOpen(true)}
           />
         </View>
@@ -227,7 +231,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -260,7 +264,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 18,
@@ -277,7 +281,7 @@ const styles = StyleSheet.create({
   windowRange: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 16,

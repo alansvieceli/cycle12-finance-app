@@ -286,7 +286,7 @@ function MonthYearSelector({
     >
       <Text style={styles.selectorText}>
         <Text style={styles.selectorLabel}>Fim: </Text>
-        {formatInstallmentEndDate(value) || 'Mês/Ano'} ▾
+        {formatInstallmentEndDate(value) || 'Mês/ano'} ▾
       </Text>
     </Pressable>
   );
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 18,
@@ -516,7 +516,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     justifyContent: 'center',
     minHeight: 46,
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
   modalCard: {
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     gap: 10,
     maxWidth: 380,
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
   modalOption: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
     padding: 12,
   },
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     height: 42,
     justifyContent: 'center',
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     flexBasis: '23%',
     flexGrow: 1,

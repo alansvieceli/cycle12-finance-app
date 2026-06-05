@@ -4,15 +4,15 @@
     "slug": "cycle12-finance-app",
     "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-finance.png",
+    "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#121212",
-        "foregroundImage": "./assets/adaptive-icon-finance.png"
+        "backgroundColor": "#0B0D12",
+        "foregroundImage": "./assets/app-icon.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.cycle12financeapp"
@@ -24,8 +24,8 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/splash-logo-finance.png",
-          "backgroundColor": "#121212",
+          "image": "./assets/splash-logo.png",
+          "backgroundColor": "#0B0D12",
           "resizeMode": "contain",
           "imageWidth": 280
         }

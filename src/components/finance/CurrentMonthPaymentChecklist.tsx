@@ -51,7 +51,7 @@ export function CurrentMonthPaymentChecklist({
     <View style={styles.panel}>
       <View style={styles.header}>
         <View style={styles.headerText}>
-          <Text style={styles.sectionTitle}>Pagamentos do Mês</Text>
+          <Text style={styles.sectionTitle}>Pagamentos do mês</Text>
           <Text style={styles.sectionHint}>Marque manualmente o que já foi pago.</Text>
         </View>
         {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 8,
+    borderRadius: 14,
     flex: 1,
     minHeight: 64,
     padding: 12,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 10,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: 6,
+    borderRadius: 8,
     borderWidth: 1,
     height: 28,
     justifyContent: 'center',

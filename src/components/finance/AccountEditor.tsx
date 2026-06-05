@@ -50,7 +50,7 @@ export function AccountEditor({
   return (
     <View style={styles.panel}>
       <View style={styles.panelHeader}>
-        <Text style={styles.sectionTitle}>Gerenciar Contas</Text>
+        <Text style={styles.sectionTitle}>Gerenciar contas</Text>
         {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
 
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 18,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 8,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   categoryPickerOptions: {
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     overflow: 'hidden',
   },
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     flex: 1,
     justifyContent: 'center',

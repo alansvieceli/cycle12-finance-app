@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   totalBox: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 8,
+    borderRadius: 14,
     marginTop: 14,
     minHeight: 64,
     padding: 12,

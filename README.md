@@ -16,13 +16,16 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
 - Supports adding the same adjustment amount across multiple consecutive months from the `+` adjustment modal.
 - Keeps category and account lists consistently ordered across planning and summary views.
-- Keeps planning focused on monthly values, with account management opened from a separate panel.
+- Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Contas, and Ajustes.
+- Keeps planning focused on monthly values, with account management available from the dedicated Contas tab.
+- Combines category management, finance settings, and local data actions in Ajustes.
 - Lets the user select a category while creating an account.
 - Tracks current-month paid/unpaid status manually for each account item.
+- Opens current-month payment tracking from the Resumo payment shortcut.
 - Shows compact monthly summaries with category details available on demand.
 - Calculates monthly expenses, income commitment, and surplus or shortfall.
 - Shows the commitment percentage in a configurable warning or danger color when it exceeds user-defined thresholds set in the Configurações tab.
-- Uses a dark finance theme with orange navigation and action accents.
+- Uses a dark premium finance theme with orange navigation and action accents.
 - Treats credit card bills as manually editable monthly totals.
 - Uses a custom Cycle12 Finance splash screen while the app loads.
 - Stores finance data only on the device.

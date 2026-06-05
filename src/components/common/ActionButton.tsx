@@ -35,7 +35,7 @@ export function ActionButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: 12,

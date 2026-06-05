@@ -25,6 +25,7 @@ Always follow:
 - `docs/standards/ai-workflow.md`
 - `docs/standards/readme-policy.md`
 - `docs/standards/testing-policy.md`
+- `docs/standards/ui-copy-policy.md`
 
 ## Project Constraints
 

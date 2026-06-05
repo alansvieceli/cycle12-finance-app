@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
     justifyContent: 'center',
     marginRight: 8,
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 18,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   },
   adjustmentButton: {
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 42,
     justifyContent: 'center',
     width: 38,
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
   modalCard: {
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     gap: 12,
     maxWidth: 360,
@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     minHeight: 42,
     justifyContent: 'center',
     minWidth: 96,

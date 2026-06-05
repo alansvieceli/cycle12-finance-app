@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   monthCard: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 16,
     borderWidth: 1,
     padding: 16,
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 8,
+    borderRadius: 14,
     flex: 1,
     minHeight: 68,
     padding: 12,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     justifyContent: 'center',
     marginTop: 12,

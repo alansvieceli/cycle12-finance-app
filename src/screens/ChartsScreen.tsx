@@ -24,15 +24,15 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         data={buildSurplusShortfallChartData(financeState, projectionMonths)}
         emptyText="Configure meses e valores para visualizar sobra ou falta."
         mode="balance"
-        title="Sobra ou Falta por Mês"
-        totalLabel="Total no Período"
+        title="Sobra ou falta por mês"
+        totalLabel="Total no período"
       />
 
       <MonthlyBarChart
         data={buildMonthlyExpenseChartData(financeState, projectionMonths)}
         emptyText="Configure valores mensais para visualizar despesas."
-        title="Despesas por Mês"
-        totalLabel="Total no Período"
+        title="Despesas por mês"
+        totalLabel="Total no período"
       />
 
       {currentProjectionMonth ? (
@@ -42,8 +42,8 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
             currentProjectionMonth,
           )}
           emptyText="Preencha valores do mês atual para visualizar categorias."
-          title="Categorias no Mês Atual"
-          totalLabel="Total do Mês Atual"
+          title="Categorias no mês atual"
+          totalLabel="Total do mês atual"
         />
       ) : null}
     </>

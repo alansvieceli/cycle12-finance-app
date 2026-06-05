@@ -138,7 +138,7 @@ export function DataManagementPanel({
             setMessage('Dados limpos e valores padrão recriados.');
           },
           style: 'destructive',
-          text: 'Limpar Tudo',
+          text: 'Limpar tudo',
         },
       ],
     );
@@ -148,7 +148,7 @@ export function DataManagementPanel({
     <View style={styles.panel}>
       <View style={styles.header}>
         <View style={styles.titleGroup}>
-          <Text style={styles.sectionTitle}>Gerenciar Dados</Text>
+          <Text style={styles.sectionTitle}>Gerenciar dados</Text>
           <Text style={styles.description}>
             Backup, restauração e reset usam apenas os dados locais deste app.
           </Text>
@@ -158,14 +158,14 @@ export function DataManagementPanel({
 
       <View style={styles.actions}>
         <ActionButton
-          label={activeAction === 'backup' ? 'Processando...' : 'Fazer Backup'}
+          label={activeAction === 'backup' ? 'Processando...' : 'Fazer backup'}
           onPress={handleBackup}
         />
         <ActionButton
-          label={activeAction === 'restore' ? 'Processando...' : 'Restaurar Backup'}
+          label={activeAction === 'restore' ? 'Processando...' : 'Restaurar backup'}
           onPress={handleRestore}
         />
-        <ActionButton label="Limpar Tudo" onPress={handleReset} variant="danger" />
+        <ActionButton label="Limpar tudo" onPress={handleReset} variant="danger" />
       </View>
 
       {message ? <Text style={styles.message}>{message}</Text> : null}
