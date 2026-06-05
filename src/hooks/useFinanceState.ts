@@ -8,8 +8,12 @@ import {
   parseSortOrder,
 } from '../lib/inputParsers';
 import { sortAccountItems, sortCategories } from '../lib/sorting';
-import { loadFinanceState, saveFinanceState } from '../storage/financeStorage';
-import { emptyFinanceState } from '../types/finance';
+import {
+  loadFinanceState,
+  normalizeFinanceState,
+  saveFinanceState,
+} from '../storage/financeStorage';
+import { FinanceState, emptyFinanceState } from '../types/finance';
 import { ProjectionMonth } from '../lib/financeCalculations';
 
 export function useFinanceState() {
@@ -134,6 +138,23 @@ export function useFinanceState() {
       ...currentState,
       settings: { ...currentState.settings, commitmentDangerThreshold: clamped },
     }));
+  }
+
+  function replaceFinanceState(nextState: FinanceState) {
+    const normalizedState = normalizeFinanceState(nextState);
+    const sortedCategories = sortCategories(normalizedState.categories);
+    const sortedAccounts = sortAccountItems(
+      normalizedState.accountItems,
+      normalizedState.categories,
+    );
+
+    setFinanceState(normalizedState);
+    setSelectedAccountItemId(sortedAccounts[0]?.id ?? '');
+    setNewAccountCategoryId(sortedCategories[0]?.id ?? '');
+    setNewCategoryName('');
+    setNewCategorySortOrder('');
+    setNewAccountName('');
+    setNewAccountDueDay('');
   }
 
   function createCategory() {
@@ -400,6 +421,7 @@ export function useFinanceState() {
       setNewCategoryName,
       setNewCategorySortOrder,
       setSelectedAccountItemId,
+      replaceFinanceState,
       toggleMonthlyPaymentStatus,
       updateAccountDueDay,
       updateAccountName,

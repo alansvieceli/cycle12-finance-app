@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
-import { CurrencyInput } from '../components/common/CurrencyInput';
-import { useFinanceState } from '../hooks/useFinanceState';
-import { colors } from '../theme/colors';
+import { ActionButton } from "../components/common/ActionButton";
+import { CurrencyInput } from "../components/common/CurrencyInput";
+import { DataManagementPanel } from "../components/finance/DataManagementPanel";
+import { useFinanceState } from "../hooks/useFinanceState";
+import { colors } from "../theme/colors";
 
 type SettingsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
@@ -11,6 +13,17 @@ type SettingsScreenProps = {
 
 export function SettingsScreen({ finance }: SettingsScreenProps) {
   const { actions, financeState, storageMessage } = finance;
+  const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
+
+  if (isDataManagementOpen) {
+    return (
+      <DataManagementPanel
+        financeState={financeState}
+        onClose={() => setIsDataManagementOpen(false)}
+        onReplaceFinanceState={actions.replaceFinanceState}
+      />
+    );
+  }
 
   return (
     <View style={styles.panel}>
@@ -59,6 +72,12 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
           />
           <Text style={styles.inputHint}>0 a 100. Deixe 0 para desativar.</Text>
         </View>
+        <View style={styles.dataActions}>
+          <ActionButton
+            label="Gerenciar Dados"
+            onPress={() => setIsDataManagementOpen(true)}
+          />
+        </View>
       </View>
     </View>
   );
@@ -83,9 +102,9 @@ function ThresholdInput({
   }, [isFocused, value]);
 
   function handleChangeText(nextValue: string) {
-    const numericValue = nextValue.replace(/\D/g, '');
+    const numericValue = nextValue.replace(/\D/g, "");
     setDraftValue(numericValue);
-    onChangeValue(numericValue || '0');
+    onChangeValue(numericValue || "0");
   }
 
   function handleBlur() {
@@ -124,7 +143,7 @@ function VisibleMonthCountInput({
   }, [isFocused, value]);
 
   function handleChangeText(nextValue: string) {
-    const numericValue = nextValue.replace(/\D/g, '');
+    const numericValue = nextValue.replace(/\D/g, "");
 
     setDraftValue(numericValue);
 
@@ -163,7 +182,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   storageMessage: {
@@ -182,9 +201,9 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -193,7 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
@@ -202,5 +221,8 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
+  },
+  dataActions: {
+    marginTop: 4,
   },
 });

@@ -29,7 +29,7 @@ export async function clearFinanceState(): Promise<void> {
   await AsyncStorage.removeItem(FINANCE_STATE_STORAGE_KEY);
 }
 
-function normalizeFinanceState(financeState: FinanceState): FinanceState {
+export function normalizeFinanceState(financeState: FinanceState): FinanceState {
   return {
     ...financeState,
     paymentStatuses: financeState.paymentStatuses ?? [],

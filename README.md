@@ -23,8 +23,9 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Treats credit card bills as manually editable monthly totals.
 - Uses a custom Cycle12 Finance splash screen while the app loads.
 - Stores finance data only on the device.
-
-Backup and restore are not implemented yet.
+- Exports local data to a JSON-based `.c12f` backup file.
+- Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
+- Can reset local data to the default state: category `Outros`, 12 summary months, 60% warning threshold, and 80% danger threshold.
 
 ## Current Workflow
 
@@ -50,6 +51,7 @@ Important project rules live in:
 - React Native
 - TypeScript
 - AsyncStorage for local device persistence
+- Expo File System, Document Picker, Sharing, and Crypto for local `.c12f` backup and restore
 - Expo Splash Screen for native loading screen branding
 - React Native Gifted Charts for finance visualizations
 - Vitest for unit tests
@@ -84,7 +86,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and `vitest` for unit tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and `vitest` for unit tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
@@ -174,10 +176,13 @@ This means:
 - there is no remote sync
 - payment status is saved only on this device
 - uninstalling the app can remove local data
-- backup and restore will be a future feature
+- backup creates a portable `.c12f` file with the current local finance state
+- restore validates the `.c12f` file before replacing local data
+- changed or corrupted backup content is rejected by the SHA-256 integrity check
+- reset clears local data and recreates only the default category and settings
 
 ## Roadmap
 
 Planned or future work is tracked through specs and tasks. Current near-term direction:
 
-- keep backup and restore for a later spec
+- continue improving local-first finance workflows through specs
