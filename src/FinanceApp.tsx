@@ -17,7 +17,7 @@ const tabs: TabItem<AppTab>[] = [
   { id: 'charts', label: 'Gráficos' },
   { id: 'planning', label: 'Planejamento' },
   { id: 'categories', label: 'Categorias' },
-  { id: 'settings', label: 'Ajustes' },
+  { id: 'settings', label: 'Configurações' },
 ];
 
 export function FinanceApp() {

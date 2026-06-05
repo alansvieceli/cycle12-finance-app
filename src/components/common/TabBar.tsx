@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     minHeight: 40,
-    minWidth: 86,
-    paddingHorizontal: 10,
+    minWidth: 104,
+    paddingHorizontal: 12,
   },
   tabButtonActive: {
     backgroundColor: '#176a4d',
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0,
+    textAlign: 'center',
   },
   tabButtonTextActive: {
     color: '#ffffff',

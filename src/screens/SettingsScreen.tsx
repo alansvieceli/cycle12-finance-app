@@ -13,7 +13,7 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
 
   return (
     <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>Ajustes</Text>
+      <Text style={styles.sectionTitle}>Configurações</Text>
       {storageMessage ? (
         <Text style={styles.storageMessage}>{storageMessage}</Text>
       ) : (
