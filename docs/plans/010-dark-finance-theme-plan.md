@@ -10,8 +10,8 @@ Replace the current light green visual style with a dark finance-focused theme u
 
 ## Tasks
 
-| Task | File | Purpose |
-|---|---|---|
+| Task   | File                                            | Purpose                                                                 |
+| ------ | ----------------------------------------------- | ----------------------------------------------------------------------- |
 | 010-01 | `docs/tasks/010-01-apply-dark-finance-theme.md` | Add theme tokens, update components/screens, update docs, and validate. |
 
 ## Notes

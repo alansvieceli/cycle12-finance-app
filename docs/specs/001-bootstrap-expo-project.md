@@ -67,7 +67,7 @@ Use these commands when available:
 
 ```bash
 npm install
-````
+```
 
 ```bash
 npx expo start
@@ -83,7 +83,6 @@ npx tsc --noEmit
 
 Follow:
 
-* `docs/standards/readme-policy.md`
-* `docs/standards/testing-policy.md`
-* `docs/standards/ai-workflow.md`
-
+- `docs/standards/readme-policy.md`
+- `docs/standards/testing-policy.md`
+- `docs/standards/ai-workflow.md`

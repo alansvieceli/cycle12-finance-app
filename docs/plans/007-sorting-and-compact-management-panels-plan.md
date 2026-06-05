@@ -18,14 +18,14 @@ Improve planning and summary scanability with consistent ordering, compact panel
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/007-01-add-plan-and-tasks.md` | Create plan and task breakdown |
-| 2 | `docs/tasks/007-02-add-sorting-helpers.md` | Add reusable sorting helpers and tests |
-| 3 | `docs/tasks/007-03-refine-planning-management-panel.md` | Move account management into a planning panel and add category selection on account creation |
-| 4 | `docs/tasks/007-04-refine-summary-details-panel.md` | Make summary month cards compact and add a month details panel |
-| 5 | `docs/tasks/007-05-update-current-month-commitment.md` | Calculate current-month commitment using salary plus current-month extra balance |
-| 6 | `docs/tasks/007-06-update-docs-and-validate.md` | Update docs and run final validation |
+| #   | File                                                    | Description                                                                                  |
+| --- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 1   | `docs/tasks/007-01-add-plan-and-tasks.md`               | Create plan and task breakdown                                                               |
+| 2   | `docs/tasks/007-02-add-sorting-helpers.md`              | Add reusable sorting helpers and tests                                                       |
+| 3   | `docs/tasks/007-03-refine-planning-management-panel.md` | Move account management into a planning panel and add category selection on account creation |
+| 4   | `docs/tasks/007-04-refine-summary-details-panel.md`     | Make summary month cards compact and add a month details panel                               |
+| 5   | `docs/tasks/007-05-update-current-month-commitment.md`  | Calculate current-month commitment using salary plus current-month extra balance             |
+| 6   | `docs/tasks/007-06-update-docs-and-validate.md`         | Update docs and run final validation                                                         |
 
 ## Sequential Order
 

@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest';
-
 import { resolveCommitmentColor } from './commitmentColor';
 import { colors } from '../theme/colors';
 
@@ -17,7 +15,7 @@ describe('resolveCommitmentColor', () => {
   });
 
   it('returns null when commitment is below both thresholds', () => {
-    expect(resolveCommitmentColor(0.70, 80, 90)).toBeNull();
+    expect(resolveCommitmentColor(0.7, 80, 90)).toBeNull();
   });
 
   it('treats danger threshold of 0 as disabled', () => {

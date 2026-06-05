@@ -32,10 +32,10 @@ The commitment percentage is already calculated and available. This spec adds on
 
 Two new fields are added to the Settings tab, grouped visually near the existing salary inputs.
 
-| Field | Label | Type | Default |
-|---|---|---|---|
-| `commitmentWarningThreshold` | Alerta de comprometimento | integer percentage, 0–100 | 80 |
-| `commitmentDangerThreshold` | Perigo de comprometimento | integer percentage, 0–100 | 90 |
+| Field                        | Label                     | Type                      | Default |
+| ---------------------------- | ------------------------- | ------------------------- | ------- |
+| `commitmentWarningThreshold` | Alerta de comprometimento | integer percentage, 0–100 | 80      |
+| `commitmentDangerThreshold`  | Perigo de comprometimento | integer percentage, 0–100 | 90      |
 
 Both fields accept whole numbers from 0 to 100, representing percentages.
 
@@ -62,8 +62,8 @@ When commitment is `null` (no salary configured), no color rule applies.
 `FinanceSettings` gains two new optional fields with default values:
 
 ```ts
-commitmentWarningThreshold: number;  // default 80
-commitmentDangerThreshold: number;   // default 90
+commitmentWarningThreshold: number; // default 80
+commitmentDangerThreshold: number; // default 90
 ```
 
 The `emptyFinanceState` constant must be updated to include both fields.

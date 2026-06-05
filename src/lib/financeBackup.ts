@@ -136,9 +136,7 @@ function sortCanonicalValue(value: unknown): unknown {
     return Object.keys(value)
       .sort()
       .reduce<Record<string, unknown>>((sortedObject, key) => {
-        sortedObject[key] = sortCanonicalValue(
-          (value as Record<string, unknown>)[key],
-        );
+        sortedObject[key] = sortCanonicalValue((value as Record<string, unknown>)[key]);
         return sortedObject;
       }, {});
   }
@@ -254,10 +252,7 @@ function validateCategories(value: unknown): Category[] {
   });
 }
 
-function validateAccountItems(
-  value: unknown,
-  categoryIds: Set<string>,
-): AccountItem[] {
+function validateAccountItems(value: unknown, categoryIds: Set<string>): AccountItem[] {
   if (!Array.isArray(value)) {
     throw new BackupValidationError('Contas do backup inválidas.');
   }

@@ -18,11 +18,11 @@ Enable Vitest coverage reporting, establish an initial quality baseline, and doc
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/005-01-configure-vitest-coverage.md` | Install coverage tooling, add config, and add `npm run test:coverage` |
-| 2 | `docs/tasks/005-02-record-coverage-baseline.md` | Run coverage and record the initial baseline under `docs/quality/` |
-| 3 | `docs/tasks/005-03-update-docs-and-validate.md` | Update README and run final validation commands |
+| #   | File                                             | Description                                                           |
+| --- | ------------------------------------------------ | --------------------------------------------------------------------- |
+| 1   | `docs/tasks/005-01-configure-vitest-coverage.md` | Install coverage tooling, add config, and add `npm run test:coverage` |
+| 2   | `docs/tasks/005-02-record-coverage-baseline.md`  | Run coverage and record the initial baseline under `docs/quality/`    |
+| 3   | `docs/tasks/005-03-update-docs-and-validate.md`  | Update README and run final validation commands                       |
 
 ## Sequential Order
 

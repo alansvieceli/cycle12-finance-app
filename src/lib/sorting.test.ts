@@ -1,10 +1,4 @@
-import { describe, expect, it } from 'vitest';
-
-import {
-  sortAccountItems,
-  sortAccountItemsByDueDay,
-  sortCategories,
-} from './sorting';
+import { sortAccountItems, sortAccountItemsByDueDay, sortCategories } from './sorting';
 import { AccountItem, Category } from '../types/finance';
 
 describe('sorting helpers', () => {
@@ -57,9 +51,7 @@ describe('sorting helpers', () => {
   });
 
   it('sorts accounts by due day before name even when account sort order exists', () => {
-    const categories: Category[] = [
-      { id: 'cards', name: 'Cartões', sortOrder: 1 },
-    ];
+    const categories: Category[] = [{ id: 'cards', name: 'Cartões', sortOrder: 1 }];
     const accountItems = [
       {
         id: 'late',
@@ -114,8 +106,9 @@ describe('sorting helpers', () => {
       },
     ];
 
-    expect(sortAccountItemsByDueDay(accountItems).map((accountItem) => accountItem.id))
-      .toEqual(['card', 'market', 'home']);
+    expect(
+      sortAccountItemsByDueDay(accountItems).map((accountItem) => accountItem.id),
+    ).toEqual(['card', 'market', 'home']);
   });
 
   it('treats missing or invalid category sort order as zero', () => {

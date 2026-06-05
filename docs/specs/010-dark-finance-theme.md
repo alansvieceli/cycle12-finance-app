@@ -8,15 +8,15 @@ Update the app visual theme to a dark finance-focused palette that improves perc
 
 The app currently uses a light palette with green as the primary color. The user proposed moving to a dark theme with orange navigation and clear commitment status colors:
 
-| Type | Color |
-|---|---|
-| Background | `#121212` |
-| Card | `#1E1E1E` |
-| Text | `#FFFFFF` |
-| Navigation | `#F97316` |
-| Low commitment | `#FFFFFF` |
+| Type              | Color     |
+| ----------------- | --------- |
+| Background        | `#121212` |
+| Card              | `#1E1E1E` |
+| Text              | `#FFFFFF` |
+| Navigation        | `#F97316` |
+| Low commitment    | `#FFFFFF` |
 | Medium commitment | `#FACC15` |
-| High commitment | `#EF4444` |
+| High commitment   | `#EF4444` |
 
 This direction makes sense for a personal finance control app because dark backgrounds reduce visual noise, orange works well as a navigation/accent color, and yellow/red are familiar warning and danger signals. The implementation should add the missing supporting colors needed for a complete interface: secondary text, borders, muted surfaces, positive values, and negative values.
 
@@ -47,21 +47,21 @@ Create or update a shared theme source so colors are not duplicated across every
 
 Recommended tokens:
 
-| Token | Color | Usage |
-|---|---:|---|
-| `background` | `#121212` | App screen background |
-| `surface` | `#1E1E1E` | Cards, panels, grouped sections |
-| `surfaceMuted` | `#242424` | Inputs, inactive chips, subtle grouped areas |
-| `border` | `#333333` | Card borders, dividers, input borders |
-| `textPrimary` | `#FFFFFF` | Main values and headings |
-| `textSecondary` | `#A3A3A3` | Labels, hints, secondary metadata |
-| `accent` | `#F97316` | Active tab, primary buttons, selected states |
-| `accentText` | `#121212` | Text/icons placed on orange backgrounds |
-| `commitmentLow` | `#FFFFFF` | Low/default commitment percentage |
-| `commitmentMedium` | `#FACC15` | Warning commitment percentage |
-| `commitmentHigh` | `#EF4444` | Danger commitment percentage |
-| `positive` | `#22C55E` | Positive balances and favorable values |
-| `negative` | `#EF4444` | Shortfalls, destructive or unfavorable values |
+| Token              |     Color | Usage                                         |
+| ------------------ | --------: | --------------------------------------------- |
+| `background`       | `#121212` | App screen background                         |
+| `surface`          | `#1E1E1E` | Cards, panels, grouped sections               |
+| `surfaceMuted`     | `#242424` | Inputs, inactive chips, subtle grouped areas  |
+| `border`           | `#333333` | Card borders, dividers, input borders         |
+| `textPrimary`      | `#FFFFFF` | Main values and headings                      |
+| `textSecondary`    | `#A3A3A3` | Labels, hints, secondary metadata             |
+| `accent`           | `#F97316` | Active tab, primary buttons, selected states  |
+| `accentText`       | `#121212` | Text/icons placed on orange backgrounds       |
+| `commitmentLow`    | `#FFFFFF` | Low/default commitment percentage             |
+| `commitmentMedium` | `#FACC15` | Warning commitment percentage                 |
+| `commitmentHigh`   | `#EF4444` | Danger commitment percentage                  |
+| `positive`         | `#22C55E` | Positive balances and favorable values        |
+| `negative`         | `#EF4444` | Shortfalls, destructive or unfavorable values |
 
 If `#EF4444` is too low-contrast for small text in implementation, use `#F87171` for text while keeping `#EF4444` for larger badges, bars, or filled danger surfaces.
 

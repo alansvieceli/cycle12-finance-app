@@ -18,13 +18,13 @@ Make the summary month count configurable from the app and add manual paid/unpai
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/006-01-add-plan-and-tasks.md` | Create the implementation plan and task breakdown |
-| 2 | `docs/tasks/006-02-expose-visible-month-setting.md` | Add the visible month count control to Ajustes and keep Resumo limited |
-| 3 | `docs/tasks/006-03-add-payment-status-model.md` | Add payment status data model, persistence normalization, deletion cleanup, and payment total logic |
-| 4 | `docs/tasks/006-04-add-current-month-payment-checklist.md` | Add current-month paid/unpaid checklist to Resumo |
-| 5 | `docs/tasks/006-05-update-docs-and-validate.md` | Update README and run final validation |
+| #   | File                                                       | Description                                                                                         |
+| --- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 1   | `docs/tasks/006-01-add-plan-and-tasks.md`                  | Create the implementation plan and task breakdown                                                   |
+| 2   | `docs/tasks/006-02-expose-visible-month-setting.md`        | Add the visible month count control to Ajustes and keep Resumo limited                              |
+| 3   | `docs/tasks/006-03-add-payment-status-model.md`            | Add payment status data model, persistence normalization, deletion cleanup, and payment total logic |
+| 4   | `docs/tasks/006-04-add-current-month-payment-checklist.md` | Add current-month paid/unpaid checklist to Resumo                                                   |
+| 5   | `docs/tasks/006-05-update-docs-and-validate.md`            | Update README and run final validation                                                              |
 
 ## Sequential Order
 

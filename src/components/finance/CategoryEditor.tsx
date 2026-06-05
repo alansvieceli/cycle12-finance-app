@@ -52,24 +52,24 @@ export function CategoryEditor({
       </View>
 
       {sortCategories(categories).map((category) => (
-          <View key={category.id} style={styles.editorRow}>
-            <TextInput
-              onChangeText={(name) => onChangeCategoryName(category.id, name)}
-              style={[styles.input, styles.rowInput]}
-              value={category.name}
-            />
-            <SortOrderInput
-              onChangeValue={(sortOrder) =>
-                onChangeCategorySortOrder(category.id, sortOrder)
-              }
-              value={category.sortOrder}
-            />
-            <ActionButton
-              label="Excluir"
-              onPress={() => onDeleteCategory(category.id)}
-              variant="danger"
-            />
-          </View>
+        <View key={category.id} style={styles.editorRow}>
+          <TextInput
+            onChangeText={(name) => onChangeCategoryName(category.id, name)}
+            style={[styles.input, styles.rowInput]}
+            value={category.name}
+          />
+          <SortOrderInput
+            onChangeValue={(sortOrder) =>
+              onChangeCategorySortOrder(category.id, sortOrder)
+            }
+            value={category.sortOrder}
+          />
+          <ActionButton
+            label="Excluir"
+            onPress={() => onDeleteCategory(category.id)}
+            variant="danger"
+          />
+        </View>
       ))}
     </View>
   );

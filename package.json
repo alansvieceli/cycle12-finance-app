@@ -18,18 +18,46 @@
     "react-native-svg": "15.15.4"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.2.2",
-    "@vitest/coverage-v8": "^4.1.8",
-    "typescript": "~6.0.3",
-    "vitest": "^4.1.8"
+    "eslint": "^9.39.4",
+    "eslint-config-expo": "^56.0.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react-native": "^5.0.0",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "jest-expo": "^56.0.4",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.3",
+    "react-test-renderer": "^19.2.3",
+    "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --runInBand",
+    "check": "npm run lint && npm run format:check && npm run typecheck && npm test",
+    "prepare": "husky",
     "web": "expo start --web"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "private": true
 }

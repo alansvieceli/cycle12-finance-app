@@ -1,24 +1,24 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState } from 'react';
 
-import { ActionButton } from "../components/common/ActionButton";
-import { CurrentMonthPaymentChecklist } from "../components/finance/CurrentMonthPaymentChecklist";
-import { MonthDetailsPanel } from "../components/finance/MonthDetailsPanel";
-import { MonthSummaryCard } from "../components/finance/MonthSummaryCard";
+import { ActionButton } from '../components/common/ActionButton';
+import { CurrentMonthPaymentChecklist } from '../components/finance/CurrentMonthPaymentChecklist';
+import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
+import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 import {
-    calculateCategoryTotals,
-    calculateIncomeCommitmentPercentage,
-    calculateMonthlyTotalExpenses,
-    calculateSurplusOrShortfall,
-    ProjectionMonth,
-} from "../lib/financeCalculations";
-import { sortCategories } from "../lib/sorting";
-import { FinanceState } from "../types/finance";
+  calculateCategoryTotals,
+  calculateIncomeCommitmentPercentage,
+  calculateMonthlyTotalExpenses,
+  calculateSurplusOrShortfall,
+  ProjectionMonth,
+} from '../lib/financeCalculations';
+import { sortCategories } from '../lib/sorting';
+import { FinanceState } from '../types/finance';
 
 type SummaryScreenProps = {
   financeState: FinanceState;
   onTogglePaymentStatus: (
     accountItemId: string,
-    projectionMonth: Pick<ProjectionMonth, "month" | "year">,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
   ) => void;
   projectionMonths: ProjectionMonth[];
 };
@@ -28,9 +28,9 @@ export function SummaryScreen({
   onTogglePaymentStatus,
   projectionMonths,
 }: SummaryScreenProps) {
-  const [selectedDetailsMonthKey, setSelectedDetailsMonthKey] = useState<
-    string | null
-  >(null);
+  const [selectedDetailsMonthKey, setSelectedDetailsMonthKey] = useState<string | null>(
+    null,
+  );
   const [isManagingCurrentMonthPayments, setIsManagingCurrentMonthPayments] =
     useState(false);
   const sortedCategories = sortCategories(financeState.categories);
@@ -94,9 +94,7 @@ export function SummaryScreen({
                 financeState.settings.commitmentWarningThreshold
               }
               monthlyTotalExpenses={monthlyTotalExpenses}
-              onOpenDetails={() =>
-                setSelectedDetailsMonthKey(projectionMonth.key)
-              }
+              onOpenDetails={() => setSelectedDetailsMonthKey(projectionMonth.key)}
               projectionMonth={projectionMonth}
               salaryCommitmentPercentage={salaryCommitmentPercentage}
               surplusOrShortfall={surplusOrShortfall}

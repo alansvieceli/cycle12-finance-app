@@ -17,13 +17,13 @@ Add a read-only charts tab with simple React Native bar charts for monthly trend
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/008-01-add-plan-and-tasks.md` | Create plan and task breakdown |
-| 2 | `docs/tasks/008-02-add-chart-data-helpers.md` | Add pure chart data helpers and tests |
-| 3 | `docs/tasks/008-03-add-chart-components.md` | Add reusable chart UI components |
-| 4 | `docs/tasks/008-04-add-charts-screen-and-tab.md` | Add `Gráficos` screen and tab after `Resumo` |
-| 5 | `docs/tasks/008-05-update-docs-and-validate.md` | Update README and run final validation |
+| #   | File                                             | Description                                  |
+| --- | ------------------------------------------------ | -------------------------------------------- |
+| 1   | `docs/tasks/008-01-add-plan-and-tasks.md`        | Create plan and task breakdown               |
+| 2   | `docs/tasks/008-02-add-chart-data-helpers.md`    | Add pure chart data helpers and tests        |
+| 3   | `docs/tasks/008-03-add-chart-components.md`      | Add reusable chart UI components             |
+| 4   | `docs/tasks/008-04-add-charts-screen-and-tab.md` | Add `Gráficos` screen and tab after `Resumo` |
+| 5   | `docs/tasks/008-05-update-docs-and-validate.md`  | Update README and run final validation       |
 
 ## Sequential Order
 

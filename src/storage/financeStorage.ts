@@ -19,10 +19,7 @@ export async function loadFinanceState(): Promise<FinanceState> {
 }
 
 export async function saveFinanceState(financeState: FinanceState): Promise<void> {
-  await AsyncStorage.setItem(
-    FINANCE_STATE_STORAGE_KEY,
-    JSON.stringify(financeState),
-  );
+  await AsyncStorage.setItem(FINANCE_STATE_STORAGE_KEY, JSON.stringify(financeState));
 }
 
 export async function clearFinanceState(): Promise<void> {

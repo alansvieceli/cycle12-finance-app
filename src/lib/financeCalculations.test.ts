@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest';
-
 import {
   calculateCategoryTotal,
   calculateCategoryTotals,
@@ -129,13 +127,13 @@ describe('finance calculations', () => {
       commitmentDangerThreshold: 90,
     };
 
-    expect(
-      calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: true }),
-    ).toBe(300);
+    expect(calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: true })).toBe(
+      300,
+    );
 
-    expect(
-      calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: false }),
-    ).toBe(-200);
+    expect(calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: false })).toBe(
+      -200,
+    );
   });
 
   it('calculates paid and pending totals for a month', () => {

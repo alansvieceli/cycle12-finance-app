@@ -87,7 +87,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and `vitest` for unit tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and Jest/Expo with React Native Testing Library for tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
@@ -108,10 +108,58 @@ You can also run Android directly:
 npm run android
 ```
 
+## Code Quality
+
+The project uses Expo-compatible ESLint, Prettier, strict TypeScript, Jest with `jest-expo`, React Native Testing Library, Husky, and lint-staged.
+
+Run lint:
+
+```bash
+npm run lint
+```
+
+Fix lint issues when possible:
+
+```bash
+npm run lint:fix
+```
+
+Format files:
+
+```bash
+npm run format
+```
+
+Check formatting:
+
+```bash
+npm run format:check
+```
+
+Run TypeScript validation:
+
+```bash
+npm run typecheck
+```
+
+Run the complete local quality check:
+
+```bash
+npm run check
+```
+
+Pre-commit hooks run `lint-staged` on staged files only. The hook formats staged JSON/Markdown/code files and runs ESLint fixes on staged JavaScript/TypeScript files. It intentionally does not run builds or full test suites.
+
 ## Test
 
 ```bash
 npm test
+```
+
+Watch tests while developing:
+
+```bash
+npm run test:watch
 ```
 
 ## Coverage
@@ -120,11 +168,9 @@ npm test
 npm run test:coverage
 ```
 
-The current coverage metric focuses on pure TypeScript logic under `src/lib/**/*.ts`.
-It does not measure screens, React Native components, hooks, or local storage behavior yet.
+The current coverage metric focuses mainly on pure TypeScript logic under `src/lib/**/*.ts`, with a small React Native Testing Library render test to validate component test setup. It does not broadly measure screens, hooks, or local storage behavior yet.
 
-The first recorded baseline is available in `docs/quality/coverage-baseline.md`.
-Generated coverage reports are written to `coverage/` and ignored by git.
+The first recorded baseline is available in `docs/quality/coverage-baseline.md` and was recorded before the Jest migration. Generated coverage reports are written to `coverage/` and ignored by git.
 
 ## Generate APK for Android
 
@@ -182,6 +228,7 @@ This means:
 - restore validates the `.c12f` file before replacing local data
 - changed or corrupted backup content is rejected by the SHA-256 integrity check
 - reset clears local data and recreates only the default category and settings
+- `.env` and local environment files are ignored by git; real secrets should not be stored in the app bundle
 
 ## Roadmap
 

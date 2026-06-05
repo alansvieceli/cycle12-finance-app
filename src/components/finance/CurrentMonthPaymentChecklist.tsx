@@ -1,21 +1,21 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import {
-    calculatePaymentSummary,
-    getMonthlyValueAmount,
-    isAccountItemPaid,
-    ProjectionMonth,
-} from "../../lib/financeCalculations";
-import { currencyFormatter } from "../../lib/formatters";
-import { sortAccountItemsByDueDay } from "../../lib/sorting";
-import { colors } from "../../theme/colors";
+  calculatePaymentSummary,
+  getMonthlyValueAmount,
+  isAccountItemPaid,
+  ProjectionMonth,
+} from '../../lib/financeCalculations';
+import { currencyFormatter } from '../../lib/formatters';
+import { sortAccountItemsByDueDay } from '../../lib/sorting';
+import { colors } from '../../theme/colors';
 import {
-    AccountItem,
-    Category,
-    MonthlyPaymentStatus,
-    MonthlyValue,
-} from "../../types/finance";
-import { ActionButton } from "../common/ActionButton";
+  AccountItem,
+  Category,
+  MonthlyPaymentStatus,
+  MonthlyValue,
+} from '../../types/finance';
+import { ActionButton } from '../common/ActionButton';
 
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
@@ -23,7 +23,7 @@ type CurrentMonthPaymentChecklistProps = {
   monthlyValues: MonthlyValue[];
   onTogglePaymentStatus: (
     accountItemId: string,
-    projectionMonth: Pick<ProjectionMonth, "month" | "year">,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
   ) => void;
   onClose?: () => void;
   paymentStatuses: MonthlyPaymentStatus[];
@@ -52,9 +52,7 @@ export function CurrentMonthPaymentChecklist({
       <View style={styles.header}>
         <View style={styles.headerText}>
           <Text style={styles.sectionTitle}>Pagamentos do Mês</Text>
-          <Text style={styles.sectionHint}>
-            Marque manualmente o que já foi pago.
-          </Text>
+          <Text style={styles.sectionHint}>Marque manualmente o que já foi pago.</Text>
         </View>
         {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
@@ -87,36 +85,27 @@ export function CurrentMonthPaymentChecklist({
             return (
               <Pressable
                 key={accountItem.id}
-                onPress={() =>
-                  onTogglePaymentStatus(accountItem.id, projectionMonth)
-                }
-                style={[
-                  styles.paymentRow,
-                  isPaid ? styles.paymentRowPaid : null,
-                ]}
+                onPress={() => onTogglePaymentStatus(accountItem.id, projectionMonth)}
+                style={[styles.paymentRow, isPaid ? styles.paymentRowPaid : null]}
               >
-                <View
-                  style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}
-                >
+                <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
                   <Text
                     style={[
                       styles.checkboxText,
                       isPaid ? styles.checkboxTextPaid : null,
                     ]}
                   >
-                    {isPaid ? "✓" : ""}
+                    {isPaid ? '✓' : ''}
                   </Text>
                 </View>
                 <View style={styles.paymentInfo}>
                   <Text style={styles.accountName}>{accountItem.name}</Text>
                   <Text style={styles.accountMeta}>
-                    Dia {accountItem.dueDay} ·{" "}
+                    Dia {accountItem.dueDay} ·{' '}
                     {getCategoryName(categories, accountItem.categoryId)}
                   </Text>
                 </View>
-                <Text
-                  style={[styles.amount, isPaid ? styles.amountPaid : null]}
-                >
+                <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
                   {currencyFormatter.format(amount)}
                 </Text>
               </Pressable>
@@ -142,7 +131,7 @@ function SummaryValue({ label, value }: { label: string; value: string }) {
 }
 
 function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? "-";
+  return categories.find((category) => category.id === categoryId)?.name ?? '-';
 }
 
 const styles = StyleSheet.create({
@@ -154,10 +143,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     gap: 10,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   headerText: {
     flex: 1,
@@ -165,7 +154,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   sectionHint: {
@@ -175,7 +164,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   summaryGrid: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
     marginTop: 14,
   },
@@ -189,14 +178,14 @@ const styles = StyleSheet.create({
   summaryLabel: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   summaryAmount: {
     color: colors.textPrimary,
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
     marginTop: 8,
   },
@@ -205,12 +194,12 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   paymentRow: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
     minHeight: 62,
     padding: 10,
@@ -220,13 +209,13 @@ const styles = StyleSheet.create({
     borderColor: colors.positive,
   },
   checkbox: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
     borderRadius: 6,
     borderWidth: 1,
     height: 28,
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 28,
   },
   checkboxPaid: {
@@ -236,7 +225,7 @@ const styles = StyleSheet.create({
   checkboxText: {
     color: colors.textPrimary,
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: '900',
     letterSpacing: 0,
   },
   checkboxTextPaid: {
@@ -248,7 +237,7 @@ const styles = StyleSheet.create({
   accountName: {
     color: colors.textPrimary,
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   accountMeta: {
@@ -261,9 +250,9 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     flexShrink: 0,
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
-    textAlign: "right",
+    textAlign: 'right',
   },
   amountPaid: {
     color: colors.positive,

@@ -21,9 +21,7 @@ export type GiftedDonutPoint = {
   value: number;
 };
 
-export function toGiftedBalanceBarData(
-  points: MonthlyChartPoint[],
-): GiftedBarPoint[] {
+export function toGiftedBalanceBarData(points: MonthlyChartPoint[]): GiftedBarPoint[] {
   return points.map((point) => ({
     disablePress: true,
     frontColor: point.value < 0 ? colors.negative : colors.positive,

@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { ActionButton } from "../components/common/ActionButton";
-import { AccountEditor } from "../components/finance/AccountEditor";
-import { MonthlyValueEditor } from "../components/finance/MonthlyValueEditor";
-import { useFinanceState } from "../hooks/useFinanceState";
-import { ProjectionMonth } from "../lib/financeCalculations";
+import { ActionButton } from '../components/common/ActionButton';
+import { AccountEditor } from '../components/finance/AccountEditor';
+import { MonthlyValueEditor } from '../components/finance/MonthlyValueEditor';
+import { useFinanceState } from '../hooks/useFinanceState';
+import { ProjectionMonth } from '../lib/financeCalculations';
 
 type PlanningScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
   projectionMonths: ProjectionMonth[];
 };
 
-export function PlanningScreen({
-  finance,
-  projectionMonths,
-}: PlanningScreenProps) {
+export function PlanningScreen({ finance, projectionMonths }: PlanningScreenProps) {
   const { actions, financeState, formState, selectedAccountItem } = finance;
   const [isManagingAccounts, setIsManagingAccounts] = useState(false);
 

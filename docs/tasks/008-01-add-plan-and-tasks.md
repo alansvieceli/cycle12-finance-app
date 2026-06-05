@@ -13,4 +13,3 @@ Create the plan and task breakdown for Spec 008.
 - Plan exists under `docs/plans/`.
 - Tasks exist under `docs/tasks/`.
 - Tasks follow a sequential implementation order.
-

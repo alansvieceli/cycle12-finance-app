@@ -21,16 +21,16 @@ Build the first functional finance projection experience: local data storage, ed
 
 ## Proposed Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/002-01-add-local-storage-foundation.md` | Add the local persistence dependency and define storage/data model foundations |
-| 2 | `docs/tasks/002-02-add-finance-calculations.md` | Add calculation helpers and focused unit tests for projection totals |
-| 3 | `docs/tasks/002-03-build-projection-overview.md` | Build the main 12-month projection overview screen |
-| 4 | `docs/tasks/002-04-build-settings-editor.md` | Add editing for monthly salary and current month extra balance |
-| 5 | `docs/tasks/002-05-build-category-account-editor.md` | Add create/edit/delete flows for categories and account items |
-| 6 | `docs/tasks/002-06-build-monthly-value-editor.md` | Add editing for account item values per month |
-| 7 | `docs/tasks/002-07-persist-and-load-finance-data.md` | Wire app state to local persistence and reload saved data on startup |
-| 8 | `docs/tasks/002-08-update-docs-and-validate.md` | Update README and run available validation commands |
+| #   | File                                                 | Description                                                                    |
+| --- | ---------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1   | `docs/tasks/002-01-add-local-storage-foundation.md`  | Add the local persistence dependency and define storage/data model foundations |
+| 2   | `docs/tasks/002-02-add-finance-calculations.md`      | Add calculation helpers and focused unit tests for projection totals           |
+| 3   | `docs/tasks/002-03-build-projection-overview.md`     | Build the main 12-month projection overview screen                             |
+| 4   | `docs/tasks/002-04-build-settings-editor.md`         | Add editing for monthly salary and current month extra balance                 |
+| 5   | `docs/tasks/002-05-build-category-account-editor.md` | Add create/edit/delete flows for categories and account items                  |
+| 6   | `docs/tasks/002-06-build-monthly-value-editor.md`    | Add editing for account item values per month                                  |
+| 7   | `docs/tasks/002-07-persist-and-load-finance-data.md` | Wire app state to local persistence and reload saved data on startup           |
+| 8   | `docs/tasks/002-08-update-docs-and-validate.md`      | Update README and run available validation commands                            |
 
 ## Sequential Order
 

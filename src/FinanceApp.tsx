@@ -62,9 +62,7 @@ export function FinanceApp() {
           <PlanningScreen finance={finance} projectionMonths={projectionMonths} />
         ) : null}
 
-        {activeTab === 'categories' ? (
-          <CategoriesScreen finance={finance} />
-        ) : null}
+        {activeTab === 'categories' ? <CategoriesScreen finance={finance} /> : null}
 
         {activeTab === 'settings' ? <SettingsScreen finance={finance} /> : null}
       </ScrollView>

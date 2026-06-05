@@ -9,11 +9,7 @@ type CurrencyInputProps = {
   value: number;
 };
 
-export function CurrencyInput({
-  label,
-  onChangeValue,
-  value,
-}: CurrencyInputProps) {
+export function CurrencyInput({ label, onChangeValue, value }: CurrencyInputProps) {
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.inputLabel}>{label}</Text>

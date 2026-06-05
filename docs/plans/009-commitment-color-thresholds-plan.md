@@ -18,14 +18,14 @@ Add configurable warning and danger color thresholds to the commitment percentag
 
 ## Tasks
 
-| Task | File | Description |
-|---|---|---|
-| 009-01 | `009-01-add-plan-and-tasks.md` | Create this plan and all task files. |
-| 009-02 | `009-02-update-data-model.md` | Add threshold fields to `FinanceSettings`, `emptyFinanceState`, `normalizeFinanceState`, and `useFinanceState` actions. |
-| 009-03 | `009-03-add-commitment-color-helper.md` | Add pure helper `resolveCommitmentColor` in `src/lib/` with unit tests. |
-| 009-04 | `009-04-update-settings-screen.md` | Add warning and danger threshold inputs to `SettingsScreen`. |
-| 009-05 | `009-05-update-summary-color.md` | Apply `resolveCommitmentColor` to the commitment percentage field in `SummaryScreen` or `MonthSummaryCard`. |
-| 009-06 | `009-06-update-docs-and-validate.md` | Update README, run TypeScript check and tests. |
+| Task   | File                                    | Description                                                                                                             |
+| ------ | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 009-01 | `009-01-add-plan-and-tasks.md`          | Create this plan and all task files.                                                                                    |
+| 009-02 | `009-02-update-data-model.md`           | Add threshold fields to `FinanceSettings`, `emptyFinanceState`, `normalizeFinanceState`, and `useFinanceState` actions. |
+| 009-03 | `009-03-add-commitment-color-helper.md` | Add pure helper `resolveCommitmentColor` in `src/lib/` with unit tests.                                                 |
+| 009-04 | `009-04-update-settings-screen.md`      | Add warning and danger threshold inputs to `SettingsScreen`.                                                            |
+| 009-05 | `009-05-update-summary-color.md`        | Apply `resolveCommitmentColor` to the commitment percentage field in `SummaryScreen` or `MonthSummaryCard`.             |
+| 009-06 | `009-06-update-docs-and-validate.md`    | Update README, run TypeScript check and tests.                                                                          |
 
 ## Sequential Order
 

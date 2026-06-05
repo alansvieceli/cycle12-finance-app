@@ -10,8 +10,8 @@ Configure the app to use a project-specific Cycle12 Finance splash screen and di
 
 ## Tasks
 
-| Task | File | Purpose |
-|---|---|---|
+| Task   | File                                                    | Purpose                                                                       |
+| ------ | ------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | 013-01 | `docs/tasks/013-01-configure-splash-screen-branding.md` | Add the splash asset, update Expo config, update documentation, and validate. |
 
 ## Notes

@@ -18,14 +18,14 @@ Refactor the React Native app into focused modules so `App.tsx` becomes a small 
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/004-01-extract-formatting-and-input-utils.md` | Move formatting, parsing, clamping, and id helpers out of `App.tsx` |
-| 2 | `docs/tasks/004-02-extract-finance-state-hook.md` | Move finance state, persistence, and update actions into `useFinanceState` |
-| 3 | `docs/tasks/004-03-extract-common-components.md` | Extract reusable common UI components |
-| 4 | `docs/tasks/004-04-extract-finance-components.md` | Extract finance-specific display/editor components |
-| 5 | `docs/tasks/004-05-extract-screens-and-app-shell.md` | Extract screen components and reduce `App.tsx` to a small root |
-| 6 | `docs/tasks/004-06-update-docs-and-validate.md` | Update README and run final validation |
+| #   | File                                                      | Description                                                                |
+| --- | --------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1   | `docs/tasks/004-01-extract-formatting-and-input-utils.md` | Move formatting, parsing, clamping, and id helpers out of `App.tsx`        |
+| 2   | `docs/tasks/004-02-extract-finance-state-hook.md`         | Move finance state, persistence, and update actions into `useFinanceState` |
+| 3   | `docs/tasks/004-03-extract-common-components.md`          | Extract reusable common UI components                                      |
+| 4   | `docs/tasks/004-04-extract-finance-components.md`         | Extract finance-specific display/editor components                         |
+| 5   | `docs/tasks/004-05-extract-screens-and-app-shell.md`      | Extract screen components and reduce `App.tsx` to a small root             |
+| 6   | `docs/tasks/004-06-update-docs-and-validate.md`           | Update README and run final validation                                     |
 
 ## Sequential Order
 

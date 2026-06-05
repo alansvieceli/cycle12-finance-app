@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest';
-
 import { calculateAdjustedMonthlyValue } from './monthlyValueAdjustments';
 
 describe('calculateAdjustedMonthlyValue', () => {
@@ -10,9 +8,9 @@ describe('calculateAdjustedMonthlyValue', () => {
   });
 
   it('subtracts comma decimal input correctly', () => {
-    expect(
-      calculateAdjustedMonthlyValue(1245.11, '132,45', 'subtract'),
-    ).toBeCloseTo(1112.66);
+    expect(calculateAdjustedMonthlyValue(1245.11, '132,45', 'subtract')).toBeCloseTo(
+      1112.66,
+    );
   });
 
   it('clamps subtraction below zero to zero', () => {
@@ -25,9 +23,9 @@ describe('calculateAdjustedMonthlyValue', () => {
 
   it('handles direct numeric current values safely', () => {
     expect(calculateAdjustedMonthlyValue(Number.NaN, '10,00', 'add')).toBe(10);
-    expect(calculateAdjustedMonthlyValue(Number.POSITIVE_INFINITY, '10,00', 'add')).toBe(
-      10,
-    );
+    expect(
+      calculateAdjustedMonthlyValue(Number.POSITIVE_INFINITY, '10,00', 'add'),
+    ).toBe(10);
   });
 
   it('ignores negative adjustment direction from the input text', () => {

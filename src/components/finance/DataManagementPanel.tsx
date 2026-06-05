@@ -1,21 +1,21 @@
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system/legacy";
-import * as Sharing from "expo-sharing";
-import { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
+import { useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
-import { calculateSha256 } from "../../lib/backupCrypto";
+import { calculateSha256 } from '../../lib/backupCrypto';
 import {
-    BACKUP_FILE_EXTENSION,
-    BackupValidationError,
-    buildResetFinanceState,
-    createBackupEnvelope,
-    parseAndValidateBackupContent,
-    serializeBackupEnvelope,
-} from "../../lib/financeBackup";
-import { colors } from "../../theme/colors";
-import { FinanceState } from "../../types/finance";
-import { ActionButton } from "../common/ActionButton";
+  BACKUP_FILE_EXTENSION,
+  BackupValidationError,
+  buildResetFinanceState,
+  createBackupEnvelope,
+  parseAndValidateBackupContent,
+  serializeBackupEnvelope,
+} from '../../lib/financeBackup';
+import { colors } from '../../theme/colors';
+import { FinanceState } from '../../types/finance';
+import { ActionButton } from '../common/ActionButton';
 
 type DataManagementPanelProps = {
   financeState: FinanceState;
@@ -28,10 +28,8 @@ export function DataManagementPanel({
   onClose,
   onReplaceFinanceState,
 }: DataManagementPanelProps) {
-  const [message, setMessage] = useState("");
-  const [activeAction, setActiveAction] = useState<"backup" | "restore" | null>(
-    null,
-  );
+  const [message, setMessage] = useState('');
+  const [activeAction, setActiveAction] = useState<'backup' | 'restore' | null>(null);
   const isBusy = activeAction !== null;
 
   async function handleBackup() {
@@ -39,14 +37,11 @@ export function DataManagementPanel({
       return;
     }
 
-    setActiveAction("backup");
-    setMessage("");
+    setActiveAction('backup');
+    setMessage('');
 
     try {
-      const envelope = await createBackupEnvelope(
-        financeState,
-        calculateSha256,
-      );
+      const envelope = await createBackupEnvelope(financeState, calculateSha256);
       const content = serializeBackupEnvelope(envelope);
       const fileName = `cycle12-finance-backup-${formatFileDate(
         envelope.exportedAt,
@@ -63,13 +58,13 @@ export function DataManagementPanel({
       }
 
       await Sharing.shareAsync(fileUri, {
-        dialogTitle: "Backup Cycle12 Finance",
-        mimeType: "application/json",
-        UTI: "public.json",
+        dialogTitle: 'Backup Cycle12 Finance',
+        mimeType: 'application/json',
+        UTI: 'public.json',
       });
-      setMessage("Backup criado e pronto para salvar ou compartilhar.");
+      setMessage('Backup criado e pronto para salvar ou compartilhar.');
     } catch {
-      setMessage("Não foi possível criar o backup agora.");
+      setMessage('Não foi possível criar o backup agora.');
     } finally {
       setActiveAction(null);
     }
@@ -80,14 +75,14 @@ export function DataManagementPanel({
       return;
     }
 
-    setActiveAction("restore");
-    setMessage("");
+    setActiveAction('restore');
+    setMessage('');
 
     try {
       const result = await DocumentPicker.getDocumentAsync({
         copyToCacheDirectory: true,
         multiple: false,
-        type: "*/*",
+        type: '*/*',
       });
 
       if (result.canceled) {
@@ -97,15 +92,12 @@ export function DataManagementPanel({
       const asset = result.assets[0];
 
       if (!asset) {
-        setMessage("Nenhum arquivo selecionado.");
+        setMessage('Nenhum arquivo selecionado.');
         return;
       }
 
-      if (
-        asset.name &&
-        !asset.name.toLowerCase().endsWith(BACKUP_FILE_EXTENSION)
-      ) {
-        setMessage("Selecione um arquivo de backup .c12f.");
+      if (asset.name && !asset.name.toLowerCase().endsWith(BACKUP_FILE_EXTENSION)) {
+        setMessage('Selecione um arquivo de backup .c12f.');
         return;
       }
 
@@ -118,12 +110,12 @@ export function DataManagementPanel({
       );
 
       onReplaceFinanceState(restoredState);
-      setMessage("Backup restaurado com sucesso.");
+      setMessage('Backup restaurado com sucesso.');
     } catch (error) {
       setMessage(
         error instanceof BackupValidationError
           ? error.message
-          : "Não foi possível restaurar o backup.",
+          : 'Não foi possível restaurar o backup.',
       );
     } finally {
       setActiveAction(null);
@@ -136,17 +128,17 @@ export function DataManagementPanel({
     }
 
     Alert.alert(
-      "Confirmar limpeza",
-      "Isso vai apagar os dados atuais deste dispositivo e recriar apenas os valores padrão. Deseja continuar?",
+      'Confirmar limpeza',
+      'Isso vai apagar os dados atuais deste dispositivo e recriar apenas os valores padrão. Deseja continuar?',
       [
-        { style: "cancel", text: "Cancelar" },
+        { style: 'cancel', text: 'Cancelar' },
         {
           onPress: () => {
             onReplaceFinanceState(buildResetFinanceState());
-            setMessage("Dados limpos e valores padrão recriados.");
+            setMessage('Dados limpos e valores padrão recriados.');
           },
-          style: "destructive",
-          text: "Limpar Tudo",
+          style: 'destructive',
+          text: 'Limpar Tudo',
         },
       ],
     );
@@ -166,20 +158,14 @@ export function DataManagementPanel({
 
       <View style={styles.actions}>
         <ActionButton
-          label={activeAction === "backup" ? "Processando..." : "Fazer Backup"}
+          label={activeAction === 'backup' ? 'Processando...' : 'Fazer Backup'}
           onPress={handleBackup}
         />
         <ActionButton
-          label={
-            activeAction === "restore" ? "Processando..." : "Restaurar Backup"
-          }
+          label={activeAction === 'restore' ? 'Processando...' : 'Restaurar Backup'}
           onPress={handleRestore}
         />
-        <ActionButton
-          label="Limpar Tudo"
-          onPress={handleReset}
-          variant="danger"
-        />
+        <ActionButton label="Limpar Tudo" onPress={handleReset} variant="danger" />
       </View>
 
       {message ? <Text style={styles.message}>{message}</Text> : null}
@@ -221,7 +207,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   titleGroup: {

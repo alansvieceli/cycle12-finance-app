@@ -1,26 +1,22 @@
-import { CategoryBarChart } from "../components/finance/CategoryBarChart";
-import { MonthlyBarChart } from "../components/finance/MonthlyBarChart";
+import { CategoryBarChart } from '../components/finance/CategoryBarChart';
+import { MonthlyBarChart } from '../components/finance/MonthlyBarChart';
 import {
   buildCurrentMonthCategoryChartData,
   buildMonthlyExpenseChartData,
   buildSurplusShortfallChartData,
-} from "../lib/chartData";
-import { ProjectionMonth } from "../lib/financeCalculations";
-import { FinanceState } from "../types/finance";
+} from '../lib/chartData';
+import { ProjectionMonth } from '../lib/financeCalculations';
+import { FinanceState } from '../types/finance';
 
 type ChartsScreenProps = {
   financeState: FinanceState;
   projectionMonths: ProjectionMonth[];
 };
 
-export function ChartsScreen({
-  financeState,
-  projectionMonths,
-}: ChartsScreenProps) {
+export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenProps) {
   const currentProjectionMonth =
-    projectionMonths.find(
-      (projectionMonth) => projectionMonth.isCurrentMonth,
-    ) ?? projectionMonths[0];
+    projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
+    projectionMonths[0];
 
   return (
     <>

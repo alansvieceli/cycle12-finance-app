@@ -10,12 +10,12 @@ Replace the simple view-based charts in the `Gráficos` tab with `react-native-g
 
 ## Tasks
 
-| Task | File | Purpose |
-|---|---|---|
-| 011-01 | `docs/tasks/011-01-add-gifted-charts-dependencies.md` | Verify and install the chart library and required Expo-compatible peers. |
-| 011-02 | `docs/tasks/011-02-add-gifted-chart-adapters.md` | Add pure adapter helpers for gifted chart data shapes and cover them with tests. |
-| 011-03 | `docs/tasks/011-03-replace-chart-components.md` | Replace monthly/category chart components with gifted bar, line/area, and donut charts. |
-| 011-04 | `docs/tasks/011-04-update-docs-and-validate.md` | Update README and run validation. |
+| Task   | File                                                  | Purpose                                                                                 |
+| ------ | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| 011-01 | `docs/tasks/011-01-add-gifted-charts-dependencies.md` | Verify and install the chart library and required Expo-compatible peers.                |
+| 011-02 | `docs/tasks/011-02-add-gifted-chart-adapters.md`      | Add pure adapter helpers for gifted chart data shapes and cover them with tests.        |
+| 011-03 | `docs/tasks/011-03-replace-chart-components.md`       | Replace monthly/category chart components with gifted bar, line/area, and donut charts. |
+| 011-04 | `docs/tasks/011-04-update-docs-and-validate.md`       | Update README and run validation.                                                       |
 
 ## Dependency Notes
 

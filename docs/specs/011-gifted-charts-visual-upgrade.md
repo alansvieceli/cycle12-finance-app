@@ -8,11 +8,11 @@ Upgrade the `Gráficos` tab from simple view-based charts to richer chart types 
 
 Spec 008 introduced the first `Gráficos` tab with simple React Native view-based charts and intentionally avoided a chart dependency. The user now wants to improve the chart visuals:
 
-| Current Insight | New Chart Type |
-|---|---|
-| Sobra ou Falta por mês | Positive/negative columns |
-| Despesas por mês | Line chart with filled area |
-| Categorias do mês atual | Donut chart |
+| Current Insight         | New Chart Type              |
+| ----------------------- | --------------------------- |
+| Sobra ou Falta por mês  | Positive/negative columns   |
+| Despesas por mês        | Line chart with filled area |
+| Categorias do mês atual | Donut chart                 |
 
 This direction makes sense for the app because each proposed chart type matches the financial question it answers:
 

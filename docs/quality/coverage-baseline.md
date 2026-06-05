@@ -23,33 +23,33 @@ npm run test:coverage
 
 ## Current Result
 
-Updated after adding formatter tests, payment summary logic, sorting helpers, and chart data helpers:
+Updated after migrating the primary test runner to Jest/Expo, adding a small React Native Testing Library render test, and covering the local storage adapter:
 
-- Test files: 5 passed
-- Tests: 24 passed
-- Statements: 97.87% (92/94)
-- Branches: 85.24% (52/61)
-- Functions: 100% (50/50)
-- Lines: 97.8% (89/91)
+- Test suites: 11 passed
+- Tests: 53 passed
+- Statements: 88.42%
+- Branches: 76.64%
+- Functions: 100%
+- Lines: 88.08%
 
 ## Included Scope
 
-The current baseline measures unit-test coverage for pure TypeScript logic under:
+The current baseline primarily measures unit-test coverage for pure TypeScript logic under:
 
 ```text
 src/lib/**/*.ts
 ```
 
-This keeps the first metric focused on deterministic business logic such as finance calculations, parsers, formatters, and small utilities.
+It also includes a small component render test to validate the React Native Testing Library setup and focused storage adapter tests for AsyncStorage persistence behavior.
 
 ## Excluded Scope
 
 The baseline does not currently measure coverage for:
 
 - `App.tsx`
-- React Native screens and components
+- Broad React Native screen and component coverage
 - hooks
-- AsyncStorage persistence code
+- Broad AsyncStorage persistence scenarios beyond the storage adapter
 - Type-only modules
 - test files
 

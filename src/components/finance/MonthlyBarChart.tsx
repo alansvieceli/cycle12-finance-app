@@ -1,25 +1,19 @@
-import { useState } from "react";
-import {
-    Pressable,
-    StyleSheet,
-    Text,
-    useWindowDimensions,
-    View,
-} from "react-native";
-import { BarChart, LineChart } from "react-native-gifted-charts";
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { BarChart, LineChart } from 'react-native-gifted-charts';
 
-import { MonthlyChartPoint } from "../../lib/chartData";
-import { currencyFormatter } from "../../lib/formatters";
+import { MonthlyChartPoint } from '../../lib/chartData';
+import { currencyFormatter } from '../../lib/formatters';
 import {
-    toGiftedBalanceBarData,
-    toGiftedExpenseLineData,
-} from "../../lib/giftedChartAdapters";
-import { colors } from "../../theme/colors";
+  toGiftedBalanceBarData,
+  toGiftedExpenseLineData,
+} from '../../lib/giftedChartAdapters';
+import { colors } from '../../theme/colors';
 
 type MonthlyBarChartProps = {
   data: MonthlyChartPoint[];
   emptyText: string;
-  mode?: "expense" | "balance";
+  mode?: 'expense' | 'balance';
   title: string;
   totalLabel: string;
 };
@@ -27,7 +21,7 @@ type MonthlyBarChartProps = {
 export function MonthlyBarChart({
   data,
   emptyText,
-  mode = "expense",
+  mode = 'expense',
   title,
   totalLabel,
 }: MonthlyBarChartProps) {
@@ -41,8 +35,7 @@ export function MonthlyBarChart({
   const isNegativeTotal = total < 0;
   const chartMaxValue = Math.max(maxValue * 1.18, 1);
   const positiveChartMaxValue = Math.max(maxPositiveValue * 1.18, 1);
-  const negativeChartMinValue =
-    minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;
+  const negativeChartMinValue = minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;
   const chartSpacing =
     data.length > 1 ? Math.max((chartWidth - 64) / data.length, 10) : 24;
   const balanceBarData = toGiftedBalanceBarData(data);
@@ -58,7 +51,7 @@ export function MonthlyBarChart({
             <Text
               style={[
                 styles.totalAmount,
-                mode === "balance"
+                mode === 'balance'
                   ? isNegativeTotal
                     ? styles.negativeAmount
                     : styles.positiveAmount
@@ -70,7 +63,7 @@ export function MonthlyBarChart({
           </View>
 
           <View style={styles.chartBox}>
-            {mode === "balance" ? (
+            {mode === 'balance' ? (
               <BarChart
                 backgroundColor={colors.surface}
                 barBorderRadius={5}
@@ -87,9 +80,7 @@ export function MonthlyBarChart({
                 maxValue={positiveChartMaxValue}
                 mostNegativeValue={negativeChartMinValue}
                 noOfSections={3}
-                noOfSectionsBelowXAxis={
-                  data.some((point) => point.value < 0) ? 2 : 0
-                }
+                noOfSectionsBelowXAxis={data.some((point) => point.value < 0) ? 2 : 0}
                 rulesColor={colors.border}
                 rulesThickness={1}
                 spacing={chartSpacing}
@@ -141,13 +132,11 @@ export function MonthlyBarChart({
           </View>
 
           <Pressable
-            onPress={() =>
-              setIsValueListVisible((currentValue) => !currentValue)
-            }
+            onPress={() => setIsValueListVisible((currentValue) => !currentValue)}
             style={styles.valuesToggle}
           >
             <Text style={styles.valuesToggleText}>
-              {isValueListVisible ? "Ocultar valores" : "Valores"}
+              {isValueListVisible ? 'Ocultar valores' : 'Valores'}
             </Text>
           </Pressable>
 
@@ -159,7 +148,7 @@ export function MonthlyBarChart({
                   <Text
                     style={[
                       styles.valueAmount,
-                      mode === "balance"
+                      mode === 'balance'
                         ? point.value < 0
                           ? styles.negativeAmount
                           : styles.positiveAmount
@@ -184,22 +173,22 @@ function formatCurrencyAxisLabel(label: string) {
   const numericValue = Number(label);
 
   if (!Number.isFinite(numericValue)) {
-    return "";
+    return '';
   }
 
   if (numericValue === 0) {
-    return "0";
+    return '0';
   }
 
   const absoluteValue = Math.abs(numericValue);
-  const sign = numericValue < 0 ? "-" : "";
+  const sign = numericValue < 0 ? '-' : '';
 
   if (absoluteValue >= 1000) {
     const compactValue = absoluteValue / 1000;
     const formattedValue =
       compactValue >= 10
         ? String(Math.round(compactValue))
-        : compactValue.toFixed(1).replace(".", ",");
+        : compactValue.toFixed(1).replace('.', ',');
 
     return `${sign}${formattedValue}k`;
   }
@@ -218,7 +207,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   totalBox: {
@@ -231,14 +220,14 @@ const styles = StyleSheet.create({
   totalLabel: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   totalAmount: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: '900',
     letterSpacing: 0,
     marginTop: 8,
   },
@@ -249,23 +238,23 @@ const styles = StyleSheet.create({
     color: colors.negativeText,
   },
   chartBox: {
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   axisLabel: {
     color: colors.textSecondary,
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   valuesToggle: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginTop: 14,
     minHeight: 40,
     paddingHorizontal: 12,
@@ -273,7 +262,7 @@ const styles = StyleSheet.create({
   valuesToggleText: {
     color: colors.accent,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: '900',
     letterSpacing: 0,
   },
   valueList: {
@@ -284,26 +273,26 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   valueRow: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     gap: 10,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     minHeight: 24,
   },
   valueMonth: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   valueAmount: {
     color: colors.textPrimary,
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: '900',
     letterSpacing: 0,
-    textAlign: "right",
+    textAlign: 'right',
   },
   emptyText: {
     color: colors.textSecondary,

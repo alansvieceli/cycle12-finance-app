@@ -20,14 +20,14 @@ Refactor the current single-screen finance app into a clearer four-tab workflow 
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/003-01-add-visible-month-setting.md` | Add `visibleMonthCount` to settings, defaults, storage normalization, and calculation usage |
-| 2 | `docs/tasks/003-02-add-tab-shell.md` | Add the four-tab app shell and move existing sections into tab-specific views |
-| 3 | `docs/tasks/003-03-refine-summary-tab.md` | Make `Resumo` read-only and focused on calculated monthly/category totals |
-| 4 | `docs/tasks/003-04-refine-planning-tab.md` | Improve account and monthly value editing in `Planejamento` |
-| 5 | `docs/tasks/003-05-refine-categories-and-settings-tabs.md` | Improve `Categorias` and `Ajustes`, including visible month controls |
-| 6 | `docs/tasks/003-06-update-docs-and-validate.md` | Update README and run final validation |
+| #   | File                                                       | Description                                                                                 |
+| --- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 1   | `docs/tasks/003-01-add-visible-month-setting.md`           | Add `visibleMonthCount` to settings, defaults, storage normalization, and calculation usage |
+| 2   | `docs/tasks/003-02-add-tab-shell.md`                       | Add the four-tab app shell and move existing sections into tab-specific views               |
+| 3   | `docs/tasks/003-03-refine-summary-tab.md`                  | Make `Resumo` read-only and focused on calculated monthly/category totals                   |
+| 4   | `docs/tasks/003-04-refine-planning-tab.md`                 | Improve account and monthly value editing in `Planejamento`                                 |
+| 5   | `docs/tasks/003-05-refine-categories-and-settings-tabs.md` | Improve `Categorias` and `Ajustes`, including visible month controls                        |
+| 6   | `docs/tasks/003-06-update-docs-and-validate.md`            | Update README and run final validation                                                      |
 
 ## Sequential Order
 

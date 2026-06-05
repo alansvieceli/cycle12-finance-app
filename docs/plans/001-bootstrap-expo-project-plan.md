@@ -18,12 +18,12 @@ Scaffold the initial React Native Expo project with TypeScript inside the existi
 
 ## Tasks
 
-| # | File | Description |
-|---|------|-------------|
-| 1 | `docs/tasks/001-01-create-expo-project.md` | Scaffold the Expo project using the blank TypeScript template |
-| 2 | `docs/tasks/001-02-create-home-screen.md` | Replace default screen content with "Cycle12 Finance" text |
-| 3 | `docs/tasks/001-03-update-readme.md` | Write README with description, install, and run instructions |
-| 4 | `docs/tasks/001-04-validate.md` | Run TypeScript check and confirm Expo start works |
+| #   | File                                       | Description                                                   |
+| --- | ------------------------------------------ | ------------------------------------------------------------- |
+| 1   | `docs/tasks/001-01-create-expo-project.md` | Scaffold the Expo project using the blank TypeScript template |
+| 2   | `docs/tasks/001-02-create-home-screen.md`  | Replace default screen content with "Cycle12 Finance" text    |
+| 3   | `docs/tasks/001-03-update-readme.md`       | Write README with description, install, and run instructions  |
+| 4   | `docs/tasks/001-04-validate.md`            | Run TypeScript check and confirm Expo start works             |
 
 ## Sequential Order
 

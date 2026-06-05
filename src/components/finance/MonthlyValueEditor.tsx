@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import { formatMonthLabel } from '../../lib/formatters';
@@ -52,10 +45,7 @@ export function MonthlyValueEditor({
   }>();
   const [adjustmentInput, setAdjustmentInput] = useState('');
 
-  function openAdjustment(
-    rowKey: string,
-    operation: MonthlyValueAdjustmentOperation,
-  ) {
+  function openAdjustment(rowKey: string, operation: MonthlyValueAdjustmentOperation) {
     setActiveAdjustment({ operation, rowKey });
     setAdjustmentInput('');
   }
@@ -79,40 +69,39 @@ export function MonthlyValueEditor({
             showsHorizontalScrollIndicator={false}
             style={styles.accountSelector}
           >
-            {sortAccountItems(accountItems, categories)
-              .map((accountItem) => (
-                <Pressable
-                  key={accountItem.id}
-                  onPress={() => onSelectAccountItem(accountItem.id)}
+            {sortAccountItems(accountItems, categories).map((accountItem) => (
+              <Pressable
+                key={accountItem.id}
+                onPress={() => onSelectAccountItem(accountItem.id)}
+                style={[
+                  styles.accountSelectorButton,
+                  selectedAccountItem.id === accountItem.id
+                    ? styles.accountSelectorButtonActive
+                    : null,
+                ]}
+              >
+                <Text
                   style={[
-                    styles.accountSelectorButton,
+                    styles.accountSelectorAccountText,
                     selectedAccountItem.id === accountItem.id
-                      ? styles.accountSelectorButtonActive
+                      ? styles.accountSelectorButtonTextActive
                       : null,
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.accountSelectorAccountText,
-                      selectedAccountItem.id === accountItem.id
-                        ? styles.accountSelectorButtonTextActive
-                        : null,
-                    ]}
-                  >
-                    {accountItem.name}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.accountSelectorCategoryText,
-                      selectedAccountItem.id === accountItem.id
-                        ? styles.accountSelectorButtonTextActive
-                        : null,
-                    ]}
-                  >
-                    {getCategoryName(categories, accountItem.categoryId)}
-                  </Text>
-                </Pressable>
-              ))}
+                  {accountItem.name}
+                </Text>
+                <Text
+                  style={[
+                    styles.accountSelectorCategoryText,
+                    selectedAccountItem.id === accountItem.id
+                      ? styles.accountSelectorButtonTextActive
+                      : null,
+                  ]}
+                >
+                  {getCategoryName(categories, accountItem.categoryId)}
+                </Text>
+              </Pressable>
+            ))}
           </ScrollView>
 
           <View style={styles.monthValueList}>
@@ -125,10 +114,7 @@ export function MonthlyValueEditor({
                   <View style={styles.monthValueRow}>
                     <View style={styles.monthValueLabel}>
                       <Text style={styles.monthValueName}>
-                        {formatMonthLabel(
-                          projectionMonth.year,
-                          projectionMonth.month,
-                        )}
+                        {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
                       </Text>
                       <Text style={styles.monthValueCategory}>
                         {getCategoryName(categories, selectedAccountItem.categoryId)}
