@@ -1,10 +1,15 @@
 {
   "expo": {
-    "name": "cycle12-finance-app",
+    "name": "Cycle12 Finance",
     "slug": "cycle12-finance-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-finance.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
