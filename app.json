@@ -4,22 +4,15 @@
     "slug": "cycle12-finance-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash-finance.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#121212"
-    },
+    "icon": "./assets/icon-finance.png",
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#121212",
+        "foregroundImage": "./assets/adaptive-icon-finance.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.cycle12financeapp"
@@ -31,12 +24,13 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/splash-finance.png",
+          "image": "./assets/splash-logo-finance.png",
           "backgroundColor": "#121212",
           "resizeMode": "contain",
           "imageWidth": 280
         }
       ],
+      "./plugins/with-android-centered-splash",
       "expo-sharing"
     ]
   }
