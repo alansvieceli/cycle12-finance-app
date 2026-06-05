@@ -2,7 +2,7 @@
   "expo": {
     "name": "Cycle12 Finance",
     "slug": "cycle12-finance-app",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon-finance.png",
     "userInterfaceStyle": "dark",
