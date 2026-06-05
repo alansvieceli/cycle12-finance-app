@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import { formatMonthLabel } from '../../lib/formatters';
@@ -41,18 +49,35 @@ export function MonthlyValueEditor({
 }: MonthlyValueEditorProps) {
   const [activeAdjustment, setActiveAdjustment] = useState<{
     operation: MonthlyValueAdjustmentOperation;
-    rowKey: string;
+    projectionMonth: ProjectionMonth;
   }>();
   const [adjustmentInput, setAdjustmentInput] = useState('');
 
-  function openAdjustment(rowKey: string, operation: MonthlyValueAdjustmentOperation) {
-    setActiveAdjustment({ operation, rowKey });
+  function openAdjustment(
+    projectionMonth: ProjectionMonth,
+    operation: MonthlyValueAdjustmentOperation,
+  ) {
+    setActiveAdjustment({ operation, projectionMonth });
     setAdjustmentInput('');
   }
 
   function closeAdjustment() {
     setActiveAdjustment(undefined);
     setAdjustmentInput('');
+  }
+
+  function confirmAdjustment() {
+    if (!selectedAccountItem || !activeAdjustment) {
+      return;
+    }
+
+    onAdjustMonthlyValue(
+      selectedAccountItem.id,
+      activeAdjustment.projectionMonth,
+      adjustmentInput,
+      activeAdjustment.operation,
+    );
+    closeAdjustment();
   }
 
   return (
@@ -106,18 +131,12 @@ export function MonthlyValueEditor({
 
           <View style={styles.monthValueList}>
             {projectionMonths.map((projectionMonth) => {
-              const rowKey = `${selectedAccountItem.id}-${projectionMonth.key}`;
-              const isAdjusting = activeAdjustment?.rowKey === rowKey;
-
               return (
                 <View key={projectionMonth.key} style={styles.monthValueItem}>
                   <View style={styles.monthValueRow}>
                     <View style={styles.monthValueLabel}>
                       <Text style={styles.monthValueName}>
                         {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
-                      </Text>
-                      <Text style={styles.monthValueCategory}>
-                        {getCategoryName(categories, selectedAccountItem.categoryId)}
                       </Text>
                     </View>
                     <View style={styles.monthValueControlGroup}>
@@ -139,14 +158,14 @@ export function MonthlyValueEditor({
                       <View style={styles.adjustmentButtons}>
                         <Pressable
                           accessibilityLabel="Adicionar ajuste"
-                          onPress={() => openAdjustment(rowKey, 'add')}
+                          onPress={() => openAdjustment(projectionMonth, 'add')}
                           style={[styles.adjustmentButton, styles.addButton]}
                         >
                           <Text style={styles.addButtonText}>+</Text>
                         </Pressable>
                         <Pressable
                           accessibilityLabel="Subtrair ajuste"
-                          onPress={() => openAdjustment(rowKey, 'subtract')}
+                          onPress={() => openAdjustment(projectionMonth, 'subtract')}
                           style={[styles.adjustmentButton, styles.subtractButton]}
                         >
                           <Text style={styles.subtractButtonText}>-</Text>
@@ -154,45 +173,68 @@ export function MonthlyValueEditor({
                       </View>
                     </View>
                   </View>
-                  {isAdjusting ? (
-                    <View style={styles.adjustmentEntry}>
-                      <TextInput
-                        autoFocus
-                        keyboardType="decimal-pad"
-                        onChangeText={setAdjustmentInput}
-                        placeholder="0,00"
-                        placeholderTextColor={colors.textSecondary}
-                        style={[styles.input, styles.adjustmentInput]}
-                        value={adjustmentInput}
-                      />
-                      <Pressable
-                        accessibilityLabel="Confirmar ajuste"
-                        onPress={() => {
-                          onAdjustMonthlyValue(
-                            selectedAccountItem.id,
-                            projectionMonth,
-                            adjustmentInput,
-                            activeAdjustment.operation,
-                          );
-                          closeAdjustment();
-                        }}
-                        style={[styles.confirmButton, styles.addButton]}
-                      >
-                        <Text style={styles.addButtonText}>OK</Text>
-                      </Pressable>
-                      <Pressable
-                        accessibilityLabel="Cancelar ajuste"
-                        onPress={closeAdjustment}
-                        style={[styles.confirmButton, styles.cancelButton]}
-                      >
-                        <Text style={styles.cancelButtonText}>X</Text>
-                      </Pressable>
-                    </View>
-                  ) : null}
                 </View>
               );
             })}
           </View>
+
+          <Modal
+            animationType="fade"
+            onRequestClose={closeAdjustment}
+            transparent
+            visible={Boolean(activeAdjustment)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalCard}>
+                <Text style={styles.adjustmentTitle}>
+                  {activeAdjustment
+                    ? `${activeAdjustment.operation === 'add' ? 'Adicionar' : 'Subtrair'} em ${formatMonthLabel(
+                        activeAdjustment.projectionMonth.year,
+                        activeAdjustment.projectionMonth.month,
+                      )}`
+                    : ''}
+                </Text>
+                <TextInput
+                  autoFocus
+                  keyboardType="decimal-pad"
+                  onChangeText={setAdjustmentInput}
+                  placeholder="0,00"
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.input, styles.adjustmentInput]}
+                  value={adjustmentInput}
+                />
+                <View style={styles.modalActions}>
+                  <Pressable
+                    accessibilityLabel="Cancelar ajuste"
+                    onPress={closeAdjustment}
+                    style={[styles.modalButton, styles.cancelButton]}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancelar</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Confirmar ajuste"
+                    onPress={confirmAdjustment}
+                    style={[
+                      styles.modalButton,
+                      activeAdjustment?.operation === 'subtract'
+                        ? styles.subtractConfirmButton
+                        : styles.addButton,
+                    ]}
+                  >
+                    <Text
+                      style={
+                        activeAdjustment?.operation === 'subtract'
+                          ? styles.subtractConfirmButtonText
+                          : styles.addButtonText
+                      }
+                    >
+                      OK
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </>
       ) : (
         <Text style={styles.emptyText}>
@@ -286,30 +328,23 @@ const styles = StyleSheet.create({
   monthValueItem: {
     borderTopColor: colors.border,
     borderTopWidth: 1,
-    gap: 8,
     paddingTop: 10,
   },
   monthValueRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
+    gap: 6,
+    justifyContent: 'space-between',
   },
   monthValueLabel: {
     flex: 1,
-    minWidth: 104,
+    minWidth: 92,
   },
   monthValueName: {
     color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 0,
-  },
-  monthValueCategory: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    letterSpacing: 0,
-    marginTop: 3,
   },
   monthValueControlGroup: {
     alignItems: 'center',
@@ -329,7 +364,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   monthValueInput: {
-    width: 118,
+    width: 106,
     textAlign: 'right',
   },
   adjustmentButtons: {
@@ -339,9 +374,9 @@ const styles = StyleSheet.create({
   adjustmentButton: {
     alignItems: 'center',
     borderRadius: 8,
-    height: 40,
+    height: 42,
     justifyContent: 'center',
-    width: 40,
+    width: 38,
   },
   addButton: {
     backgroundColor: colors.accent,
@@ -363,28 +398,58 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 0,
   },
-  adjustmentEntry: {
+  modalOverlay: {
     alignItems: 'center',
-    flexDirection: 'row',
-    gap: 6,
-    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 12,
+    maxWidth: 360,
+    padding: 16,
+    width: '100%',
+  },
+  adjustmentTitle: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '800',
+    letterSpacing: 0,
   },
   adjustmentInput: {
-    flex: 1,
-    maxWidth: 150,
     textAlign: 'right',
   },
-  confirmButton: {
+  modalActions: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-end',
+  },
+  modalButton: {
     alignItems: 'center',
     borderRadius: 8,
-    height: 40,
+    minHeight: 42,
     justifyContent: 'center',
-    width: 44,
+    minWidth: 96,
+    paddingHorizontal: 12,
   },
   cancelButton: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
     borderWidth: 1,
+  },
+  subtractConfirmButton: {
+    backgroundColor: colors.negative,
+  },
+  subtractConfirmButtonText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '900',
+    letterSpacing: 0,
   },
   cancelButtonText: {
     color: colors.textSecondary,
