@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { sortAccountItems, sortCategories } from "../../lib/sorting";
+import { colors } from "../../theme/colors";
 import { AccountItem, Category } from "../../types/finance";
 import { ActionButton } from "../common/ActionButton";
 
@@ -59,6 +60,7 @@ export function AccountEditor({
           <TextInput
             onChangeText={onChangeNewAccountName}
             placeholder="Nova conta"
+            placeholderTextColor={colors.textSecondary}
             style={styles.input}
             value={newAccountName}
           />
@@ -112,6 +114,7 @@ export function AccountEditor({
             keyboardType="number-pad"
             onChangeText={onChangeNewAccountDueDay}
             placeholder="Dia"
+            placeholderTextColor={colors.textSecondary}
             style={[styles.input, styles.dueDayInput]}
             value={newAccountDueDay}
           />
@@ -165,8 +168,8 @@ function getCategoryName(categories: Category[], categoryId: string) {
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: "#ffffff",
-    borderColor: "#dfe7e4",
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
@@ -178,17 +181,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   sectionTitle: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "800",
     letterSpacing: 0,
   },
   input: {
-    backgroundColor: "#f7faf9",
-    borderColor: "#c9d6d2",
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "700",
     letterSpacing: 0,
@@ -204,8 +207,8 @@ const styles = StyleSheet.create({
   },
   categoryPickerButton: {
     alignItems: "center",
-    backgroundColor: "#f7faf9",
-    borderColor: "#c9d6d2",
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: "row",
@@ -215,46 +218,46 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   categoryPickerText: {
-    color: "#17211f",
+    color: colors.textPrimary,
     flex: 1,
     fontSize: 18,
     fontWeight: "800",
     letterSpacing: 0,
   },
   categoryPickerIcon: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: 0,
   },
   categoryPickerOptions: {
-    backgroundColor: "#ffffff",
-    borderColor: "#c9d6d2",
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
     overflow: "hidden",
   },
   categoryPickerOption: {
-    borderTopColor: "#e7eeeb",
+    borderTopColor: colors.border,
     borderTopWidth: 1,
     minHeight: 44,
     justifyContent: "center",
     paddingHorizontal: 12,
   },
   categoryPickerOptionActive: {
-    backgroundColor: "#176a4d",
+    backgroundColor: colors.accent,
   },
   categoryPickerOptionText: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: "700",
     letterSpacing: 0,
   },
   categoryPickerOptionTextActive: {
-    color: "#ffffff",
+    color: colors.accentText,
   },
   accountEditorRow: {
-    borderTopColor: "#e7eeeb",
+    borderTopColor: colors.border,
     borderTopWidth: 1,
     gap: 8,
     marginTop: 10,
@@ -271,8 +274,8 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     alignItems: "center",
-    backgroundColor: "#eef4f2",
-    borderColor: "#c9d6d2",
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
     flex: 1,
@@ -281,14 +284,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   categoryButtonText: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 0,
     textAlign: "center",
   },
   emptyText: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,

@@ -3,6 +3,7 @@ import { StyleProp, TextInput, TextStyle } from 'react-native';
 
 import { formatEditableAmount } from '../../lib/formatters';
 import { parseCurrencyInput } from '../../lib/inputParsers';
+import { colors } from '../../theme/colors';
 
 type EditableAmountInputProps = {
   onChangeValue: (value: string) => void;
@@ -43,6 +44,7 @@ export function EditableAmountInput({
       onChangeText={handleChangeText}
       onFocus={() => setIsFocused(true)}
       placeholder={placeholder}
+      placeholderTextColor={colors.textSecondary}
       style={style}
       value={draftValue}
     />

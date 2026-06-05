@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { colors } from '../../theme/colors';
 import { EditableAmountInput } from './EditableAmountInput';
 
 type CurrencyInputProps = {
@@ -30,18 +31,18 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   inputLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   input: {
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 0,

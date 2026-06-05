@@ -1,5 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { colors } from '../../theme/colors';
+
 export type TabItem<T extends string> = {
   id: T;
   label: string;
@@ -49,8 +51,8 @@ export function TabBar<T extends string>({
 
 const styles = StyleSheet.create({
   tabBarContainer: {
-    backgroundColor: '#ffffff',
-    borderBottomColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderBottomColor: colors.border,
     borderBottomWidth: 1,
   },
   tabBar: {
@@ -68,16 +70,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   tabButtonActive: {
-    backgroundColor: '#176a4d',
+    backgroundColor: colors.accent,
   },
   tabButtonText: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'center',
   },
   tabButtonTextActive: {
-    color: '#ffffff',
+    color: colors.accentText,
   },
 });

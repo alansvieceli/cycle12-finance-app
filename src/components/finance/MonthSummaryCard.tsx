@@ -7,6 +7,7 @@ import {
   formatMonthLabel,
   percentageFormatter,
 } from '../../lib/formatters';
+import { colors } from '../../theme/colors';
 
 type MonthSummaryCardProps = {
   commitmentDangerThreshold: number;
@@ -95,8 +96,8 @@ function SummaryValue({
 
 const styles = StyleSheet.create({
   monthCard: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
@@ -108,13 +109,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   monthName: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
   },
   currentMonthLabel: {
-    color: '#3d6f66',
+    color: colors.accent,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
@@ -129,10 +130,10 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   positiveBalance: {
-    color: '#176a4d',
+    color: colors.positive,
   },
   negativeBalance: {
-    color: '#a33b2f',
+    color: colors.negativeText,
   },
   summaryGrid: {
     flexDirection: 'row',
@@ -140,21 +141,21 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   summaryValue: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: colors.surfaceMuted,
     borderRadius: 8,
     flex: 1,
     minHeight: 68,
     padding: 12,
   },
   summaryLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   summaryAmount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 17,
     fontWeight: '800',
     letterSpacing: 0,
@@ -162,8 +163,8 @@ const styles = StyleSheet.create({
   },
   detailsButton: {
     alignItems: 'center',
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: 'center',
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   detailsButtonText: {
-    color: '#176a4d',
+    color: colors.accent,
     fontSize: 13,
     fontWeight: '800',
     letterSpacing: 0,

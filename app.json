@@ -10,7 +10,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#121212"
     },
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },

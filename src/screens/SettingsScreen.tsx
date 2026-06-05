@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CurrencyInput } from '../components/common/CurrencyInput';
 import { useFinanceState } from '../hooks/useFinanceState';
+import { colors } from '../theme/colors';
 
 type SettingsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
@@ -99,6 +100,7 @@ function ThresholdInput({
       onChangeText={handleChangeText}
       onFocus={() => setIsFocused(true)}
       placeholder={placeholder}
+      placeholderTextColor={colors.textSecondary}
       style={styles.input}
       value={draftValue}
     />
@@ -143,6 +145,7 @@ function VisibleMonthCountInput({
       onChangeText={handleChangeText}
       onFocus={() => setIsFocused(true)}
       placeholder="12"
+      placeholderTextColor={colors.textSecondary}
       style={styles.input}
       value={draftValue}
     />
@@ -151,20 +154,20 @@ function VisibleMonthCountInput({
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
   },
   storageMessage: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
     marginTop: 8,
@@ -177,18 +180,18 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   inputLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   input: {
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 0,
@@ -196,7 +199,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   inputHint: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
   },

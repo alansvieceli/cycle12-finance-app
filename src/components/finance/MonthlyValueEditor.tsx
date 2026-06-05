@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import { formatMonthLabel } from '../../lib/formatters';
 import { sortAccountItems } from '../../lib/sorting';
+import { colors } from '../../theme/colors';
 import { AccountItem, Category, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
 
@@ -139,20 +140,20 @@ function getMonthlyValueAmount(
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
   },
   editorHint: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 8,
@@ -162,8 +163,8 @@ const styles = StyleSheet.create({
   },
   accountSelectorButton: {
     alignItems: 'center',
-    backgroundColor: '#eef4f2',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: 'center',
@@ -173,21 +174,21 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   accountSelectorButtonActive: {
-    backgroundColor: '#176a4d',
-    borderColor: '#176a4d',
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   accountSelectorButtonTextActive: {
-    color: '#ffffff',
+    color: colors.accentText,
   },
   accountSelectorAccountText: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'center',
   },
   accountSelectorCategoryText: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   monthValueRow: {
     alignItems: 'center',
-    borderTopColor: '#e7eeeb',
+    borderTopColor: colors.border,
     borderTopWidth: 1,
     flexDirection: 'row',
     gap: 10,
@@ -210,23 +211,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   monthValueName: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 0,
   },
   monthValueCategory: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 3,
   },
   input: {
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 0,
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   emptyText: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,

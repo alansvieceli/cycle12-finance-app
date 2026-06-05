@@ -1,0 +1,18 @@
+export const colors = {
+  background: '#121212',
+  surface: '#1E1E1E',
+  surfaceMuted: '#242424',
+  surfaceRaised: '#2A2A2A',
+  border: '#333333',
+  borderStrong: '#444444',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#A3A3A3',
+  accent: '#F97316',
+  accentText: '#121212',
+  commitmentLow: '#FFFFFF',
+  commitmentMedium: '#FACC15',
+  commitmentHigh: '#EF4444',
+  positive: '#22C55E',
+  negative: '#EF4444',
+  negativeText: '#F87171',
+};

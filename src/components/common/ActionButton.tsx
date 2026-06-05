@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
+import { colors } from '../../theme/colors';
+
 type ActionButtonProps = {
   label: string;
   onPress: () => void;
@@ -39,11 +41,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   primaryButton: {
-    backgroundColor: '#176a4d',
+    backgroundColor: colors.accent,
   },
   dangerButton: {
-    backgroundColor: '#f9e8e5',
-    borderColor: '#e3b8b1',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.negative,
     borderWidth: 1,
   },
   buttonText: {
@@ -51,11 +53,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   primaryButtonText: {
-    color: '#ffffff',
+    color: colors.accentText,
     fontSize: 13,
   },
   dangerButtonText: {
-    color: '#94372d',
+    color: colors.negativeText,
     fontSize: 12,
   },
 });

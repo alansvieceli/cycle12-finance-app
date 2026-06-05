@@ -4,6 +4,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { ActionButton } from '../common/ActionButton';
 import { Category } from '../../types/finance';
 import { sortCategories } from '../../lib/sorting';
+import { colors } from '../../theme/colors';
 
 type CategoryEditorProps = {
   categories: Category[];
@@ -35,6 +36,7 @@ export function CategoryEditor({
         <TextInput
           onChangeText={onChangeNewCategoryName}
           placeholder="Nova categoria"
+          placeholderTextColor={colors.textSecondary}
           style={[styles.input, styles.createInput]}
           value={newCategoryName}
         />
@@ -42,6 +44,7 @@ export function CategoryEditor({
           keyboardType="number-pad"
           onChangeText={onChangeNewCategorySortOrder}
           placeholder="Ordem"
+          placeholderTextColor={colors.textSecondary}
           style={[styles.input, styles.sortOrderInput]}
           value={newCategorySortOrder}
         />
@@ -107,6 +110,7 @@ function SortOrderInput({
       onChangeText={handleChangeText}
       onFocus={() => setIsFocused(true)}
       placeholder="0"
+      placeholderTextColor={colors.textSecondary}
       style={[styles.input, styles.sortOrderInput]}
       value={draftValue}
     />
@@ -115,14 +119,14 @@ function SortOrderInput({
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
@@ -135,11 +139,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 0,
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
   },
   editorRow: {
     alignItems: 'center',
-    borderTopColor: '#e7eeeb',
+    borderTopColor: colors.border,
     borderTopWidth: 1,
     flexDirection: 'row',
     gap: 10,

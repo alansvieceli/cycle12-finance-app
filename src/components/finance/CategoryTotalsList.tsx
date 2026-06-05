@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { CategoryMonthTotal } from '../../lib/financeCalculations';
 import { currencyFormatter } from '../../lib/formatters';
+import { colors } from '../../theme/colors';
 
 type CategoryTotalsListProps = {
   categoryNamesById: Record<string, string>;
@@ -30,7 +31,7 @@ export function CategoryTotalsList({
 
 const styles = StyleSheet.create({
   categoryList: {
-    borderTopColor: '#e7eeeb',
+    borderTopColor: colors.border,
     borderTopWidth: 1,
     marginTop: 14,
     paddingTop: 6,
@@ -42,13 +43,13 @@ const styles = StyleSheet.create({
     minHeight: 32,
   },
   categoryName: {
-    color: '#32403d',
+    color: colors.textSecondary,
     flex: 1,
     fontSize: 14,
     letterSpacing: 0,
   },
   categoryAmount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0,

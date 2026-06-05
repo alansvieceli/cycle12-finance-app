@@ -3,6 +3,7 @@ import { DimensionValue } from 'react-native';
 
 import { MonthlyChartPoint } from '../../lib/chartData';
 import { currencyFormatter } from '../../lib/formatters';
+import { colors } from '../../theme/colors';
 
 type MonthlyBarChartProps = {
   data: MonthlyChartPoint[];
@@ -92,14 +93,14 @@ export function MonthlyBarChart({
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
@@ -109,21 +110,21 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   totalBox: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: colors.surfaceMuted,
     borderRadius: 8,
     marginTop: 14,
     minHeight: 64,
     padding: 12,
   },
   totalLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   totalAmount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '900',
     letterSpacing: 0,
@@ -133,14 +134,14 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   monthLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   barTrack: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: colors.surfaceRaised,
     borderRadius: 8,
     height: 14,
     overflow: 'hidden',
@@ -150,28 +151,28 @@ const styles = StyleSheet.create({
     height: 14,
   },
   expenseBar: {
-    backgroundColor: '#2d6f85',
+    backgroundColor: colors.accent,
   },
   positiveBar: {
-    backgroundColor: '#176a4d',
+    backgroundColor: colors.positive,
   },
   negativeBar: {
-    backgroundColor: '#a33b2f',
+    backgroundColor: colors.negative,
   },
   amount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: '800',
     letterSpacing: 0,
   },
   positiveAmount: {
-    color: '#176a4d',
+    color: colors.positive,
   },
   negativeAmount: {
-    color: '#a33b2f',
+    color: colors.negativeText,
   },
   emptyText: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,

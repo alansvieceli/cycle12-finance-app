@@ -9,6 +9,7 @@ import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { SummaryScreen } from './screens/SummaryScreen';
+import { colors } from './theme/colors';
 
 type AppTab = 'summary' | 'charts' | 'planning' | 'categories' | 'settings';
 
@@ -74,30 +75,30 @@ export function FinanceApp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f7f6',
+    backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: '#16302b',
+    backgroundColor: colors.background,
     paddingBottom: 24,
     paddingHorizontal: 20,
     paddingTop: 56,
   },
   eyebrow: {
-    color: '#8fd3c7',
+    color: colors.accent,
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   title: {
-    color: '#ffffff',
+    color: colors.textPrimary,
     fontSize: 28,
     fontWeight: '800',
     letterSpacing: 0,
     marginTop: 8,
   },
   subtitle: {
-    color: '#d7e4e0',
+    color: colors.textSecondary,
     fontSize: 15,
     lineHeight: 21,
     marginTop: 8,

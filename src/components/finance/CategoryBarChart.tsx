@@ -3,6 +3,7 @@ import { DimensionValue } from 'react-native';
 
 import { CategoryChartPoint } from '../../lib/chartData';
 import { currencyFormatter } from '../../lib/formatters';
+import { colors } from '../../theme/colors';
 
 type CategoryBarChartProps = {
   data: CategoryChartPoint[];
@@ -60,14 +61,14 @@ export function CategoryBarChart({
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
@@ -77,21 +78,21 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   totalBox: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: colors.surfaceMuted,
     borderRadius: 8,
     marginTop: 14,
     minHeight: 64,
     padding: 12,
   },
   totalLabel: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
   totalAmount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '900',
     letterSpacing: 0,
@@ -107,32 +108,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   categoryName: {
-    color: '#17211f',
+    color: colors.textPrimary,
     flex: 1,
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 0,
   },
   amount: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'right',
   },
   barTrack: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: colors.surfaceRaised,
     borderRadius: 8,
     height: 14,
     overflow: 'hidden',
   },
   barFill: {
-    backgroundColor: '#176a4d',
+    backgroundColor: colors.accent,
     borderRadius: 8,
     height: 14,
   },
   emptyText: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,

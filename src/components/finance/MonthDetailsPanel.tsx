@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { ActionButton } from '../common/ActionButton';
 import { CategoryMonthTotal, ProjectionMonth } from '../../lib/financeCalculations';
 import { currencyFormatter, formatMonthLabel } from '../../lib/formatters';
+import { colors } from '../../theme/colors';
 import { CategoryTotalsList } from './CategoryTotalsList';
 
 type MonthDetailsPanelProps = {
@@ -44,8 +45,8 @@ export function MonthDetailsPanel({
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
@@ -60,13 +61,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
   },
   sectionHint: {
-    color: '#60716d',
+    color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 18,
     marginTop: 4,

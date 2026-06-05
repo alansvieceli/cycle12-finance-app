@@ -1,3 +1,5 @@
+import { colors } from '../theme/colors';
+
 export function resolveCommitmentColor(
   commitment: number | null,
   warningThreshold: number,
@@ -8,11 +10,11 @@ export function resolveCommitmentColor(
   }
 
   if (dangerThreshold > 0 && commitment > dangerThreshold / 100) {
-    return '#d9534f';
+    return colors.commitmentHigh;
   }
 
   if (warningThreshold > 0 && commitment > warningThreshold / 100) {
-    return '#f0a500';
+    return colors.commitmentMedium;
   }
 
   return null;

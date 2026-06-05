@@ -8,6 +8,7 @@ import {
 } from "../../lib/financeCalculations";
 import { currencyFormatter } from "../../lib/formatters";
 import { sortAccountItemsByDueDay } from "../../lib/sorting";
+import { colors } from "../../theme/colors";
 import {
     AccountItem,
     Category,
@@ -146,8 +147,8 @@ function getCategoryName(categories: Category[], categoryId: string) {
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: "#ffffff",
-    borderColor: "#dfe7e4",
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
@@ -162,13 +163,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "800",
     letterSpacing: 0,
   },
   sectionHint: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 18,
     marginTop: 4,
@@ -179,21 +180,21 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   summaryValue: {
-    backgroundColor: "#eef4f2",
+    backgroundColor: colors.surfaceMuted,
     borderRadius: 8,
     flex: 1,
     minHeight: 64,
     padding: 12,
   },
   summaryLabel: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   summaryAmount: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: "800",
     letterSpacing: 0,
@@ -205,8 +206,8 @@ const styles = StyleSheet.create({
   },
   paymentRow: {
     alignItems: "center",
-    backgroundColor: "#f7faf9",
-    borderColor: "#dfe7e4",
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: "row",
@@ -215,13 +216,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   paymentRowPaid: {
-    backgroundColor: "#eef7f2",
-    borderColor: "#b8d7c6",
+    backgroundColor: colors.surfaceRaised,
+    borderColor: colors.positive,
   },
   checkbox: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#9fb3ad",
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
     borderRadius: 6,
     borderWidth: 1,
     height: 28,
@@ -229,35 +230,35 @@ const styles = StyleSheet.create({
     width: 28,
   },
   checkboxPaid: {
-    backgroundColor: "#176a4d",
-    borderColor: "#176a4d",
+    backgroundColor: colors.positive,
+    borderColor: colors.positive,
   },
   checkboxText: {
-    color: "#ffffff",
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: "900",
     letterSpacing: 0,
   },
   checkboxTextPaid: {
-    color: "#ffffff",
+    color: colors.accentText,
   },
   paymentInfo: {
     flex: 1,
   },
   accountName: {
-    color: "#17211f",
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: "800",
     letterSpacing: 0,
   },
   accountMeta: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 3,
   },
   amount: {
-    color: "#17211f",
+    color: colors.textPrimary,
     flexShrink: 0,
     fontSize: 14,
     fontWeight: "800",
@@ -265,10 +266,10 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   amountPaid: {
-    color: "#176a4d",
+    color: colors.positive,
   },
   emptyText: {
-    color: "#60716d",
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 12,
