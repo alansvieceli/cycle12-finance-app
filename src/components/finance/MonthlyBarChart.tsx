@@ -1,8 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { DimensionValue } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { BarChart, LineChart } from 'react-native-gifted-charts';
 
 import { MonthlyChartPoint } from '../../lib/chartData';
 import { currencyFormatter } from '../../lib/formatters';
+import {
+  toGiftedBalanceBarData,
+  toGiftedExpenseLineData,
+} from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
 
 type MonthlyBarChartProps = {
@@ -20,9 +25,20 @@ export function MonthlyBarChart({
   title,
   totalLabel,
 }: MonthlyBarChartProps) {
+  const [isValueListVisible, setIsValueListVisible] = useState(false);
+  const { width } = useWindowDimensions();
+  const chartWidth = Math.max(Math.min(width - 64, 360), 240);
   const maxValue = Math.max(...data.map((point) => Math.abs(point.value)), 0);
+  const maxPositiveValue = Math.max(...data.map((point) => point.value), 0);
+  const minNegativeValue = Math.min(...data.map((point) => point.value), 0);
   const total = data.reduce((sum, point) => sum + point.value, 0);
   const isNegativeTotal = total < 0;
+  const chartMaxValue = Math.max(maxValue * 1.18, 1);
+  const positiveChartMaxValue = Math.max(maxPositiveValue * 1.18, 1);
+  const negativeChartMinValue = minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;
+  const chartSpacing = data.length > 1 ? Math.max((chartWidth - 64) / data.length, 10) : 24;
+  const balanceBarData = toGiftedBalanceBarData(data);
+  const expenseLineData = toGiftedExpenseLineData(data);
 
   return (
     <View style={styles.panel}>
@@ -45,33 +61,98 @@ export function MonthlyBarChart({
             </Text>
           </View>
 
-          <View style={styles.chartRows}>
-            {data.map((point) => {
-              const widthPercent: DimensionValue =
-                maxValue > 0 ? `${Math.max((Math.abs(point.value) / maxValue) * 100, 4)}%` : '4%';
-              const isNegative = point.value < 0;
+          <View style={styles.chartBox}>
+            {mode === 'balance' ? (
+              <BarChart
+                backgroundColor={colors.surface}
+                barBorderRadius={5}
+                barWidth={22}
+                data={balanceBarData}
+                disablePress
+                disableScroll
+                endSpacing={12}
+                frontColor={colors.positive}
+                height={190}
+                initialSpacing={18}
+                isAnimated
+                labelWidth={44}
+                maxValue={positiveChartMaxValue}
+                mostNegativeValue={negativeChartMinValue}
+                noOfSections={3}
+                noOfSectionsBelowXAxis={
+                  data.some((point) => point.value < 0) ? 2 : 0
+                }
+                rulesColor={colors.border}
+                rulesThickness={1}
+                spacing={chartSpacing}
+                width={chartWidth}
+                xAxisColor={colors.borderStrong}
+                xAxisLabelTextStyle={styles.axisLabel}
+                xAxisThickness={1}
+                yAxisColor={colors.borderStrong}
+                yAxisLabelWidth={38}
+                yAxisTextStyle={styles.axisLabel}
+                yAxisThickness={1}
+                formatYLabel={formatCurrencyAxisLabel}
+              />
+            ) : (
+              <LineChart
+                areaChart
+                backgroundColor={colors.surface}
+                color={colors.accent}
+                curved
+                data={expenseLineData}
+                dataPointsColor={colors.accent}
+                dataPointsRadius={4}
+                disableScroll
+                endFillColor={colors.surface}
+                endOpacity={0.08}
+                endSpacing={12}
+                height={190}
+                initialSpacing={16}
+                isAnimated
+                maxValue={chartMaxValue}
+                noOfSections={3}
+                rulesColor={colors.border}
+                rulesThickness={1}
+                spacing={chartSpacing}
+                startFillColor={colors.accent}
+                startOpacity={0.32}
+                thickness={3}
+                width={chartWidth}
+                xAxisColor={colors.borderStrong}
+                xAxisLabelTextStyle={styles.axisLabel}
+                xAxisThickness={1}
+                yAxisColor={colors.borderStrong}
+                yAxisLabelWidth={38}
+                yAxisTextStyle={styles.axisLabel}
+                yAxisThickness={1}
+                formatYLabel={formatCurrencyAxisLabel}
+              />
+            )}
+          </View>
 
-              return (
-                <View key={point.key} style={styles.chartRow}>
-                  <Text style={styles.monthLabel}>{point.label}</Text>
-                  <View style={styles.barTrack}>
-                    <View
-                      style={[
-                        styles.barFill,
-                        { width: widthPercent },
-                        mode === 'balance'
-                          ? isNegative
-                            ? styles.negativeBar
-                            : styles.positiveBar
-                          : styles.expenseBar,
-                      ]}
-                    />
-                  </View>
+          <Pressable
+            onPress={() =>
+              setIsValueListVisible((currentValue) => !currentValue)
+            }
+            style={styles.valuesToggle}
+          >
+            <Text style={styles.valuesToggleText}>
+              {isValueListVisible ? 'Ocultar valores' : 'Mostrar valores'}
+            </Text>
+          </Pressable>
+
+          {isValueListVisible ? (
+            <View style={styles.valueList}>
+              {data.map((point) => (
+                <View key={point.key} style={styles.valueRow}>
+                  <Text style={styles.valueMonth}>{point.label}</Text>
                   <Text
                     style={[
-                      styles.amount,
+                      styles.valueAmount,
                       mode === 'balance'
-                        ? isNegative
+                        ? point.value < 0
                           ? styles.negativeAmount
                           : styles.positiveAmount
                         : null,
@@ -80,15 +161,42 @@ export function MonthlyBarChart({
                     {currencyFormatter.format(point.value)}
                   </Text>
                 </View>
-              );
-            })}
-          </View>
+              ))}
+            </View>
+          ) : null}
         </>
       ) : (
         <Text style={styles.emptyText}>{emptyText}</Text>
       )}
     </View>
   );
+}
+
+function formatCurrencyAxisLabel(label: string) {
+  const numericValue = Number(label);
+
+  if (!Number.isFinite(numericValue)) {
+    return '';
+  }
+
+  if (numericValue === 0) {
+    return '0';
+  }
+
+  const absoluteValue = Math.abs(numericValue);
+  const sign = numericValue < 0 ? '-' : '';
+
+  if (absoluteValue >= 1000) {
+    const compactValue = absoluteValue / 1000;
+    const formattedValue =
+      compactValue >= 10
+        ? String(Math.round(compactValue))
+        : compactValue.toFixed(1).replace('.', ',');
+
+    return `${sign}${formattedValue}k`;
+  }
+
+  return `${sign}${Math.round(absoluteValue)}`;
 }
 
 const styles = StyleSheet.create({
@@ -104,10 +212,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: 0,
-  },
-  chartRows: {
-    gap: 10,
-    marginTop: 14,
   },
   totalBox: {
     backgroundColor: colors.surfaceMuted,
@@ -130,46 +234,68 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     marginTop: 8,
   },
-  chartRow: {
-    gap: 6,
+  positiveAmount: {
+    color: colors.positive,
   },
-  monthLabel: {
+  negativeAmount: {
+    color: colors.negativeText,
+  },
+  chartBox: {
+    alignItems: 'center',
+    marginTop: 16,
+    overflow: 'hidden',
+  },
+  axisLabel: {
+    color: colors.textSecondary,
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  valuesToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    marginTop: 14,
+    minHeight: 40,
+    paddingHorizontal: 12,
+  },
+  valuesToggleText: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 0,
+  },
+  valueList: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 8,
+    gap: 8,
+    marginTop: 14,
+    padding: 12,
+  },
+  valueRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'space-between',
+    minHeight: 24,
+  },
+  valueMonth: {
     color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0,
     textTransform: 'uppercase',
   },
-  barTrack: {
-    backgroundColor: colors.surfaceRaised,
-    borderRadius: 8,
-    height: 14,
-    overflow: 'hidden',
-  },
-  barFill: {
-    borderRadius: 8,
-    height: 14,
-  },
-  expenseBar: {
-    backgroundColor: colors.accent,
-  },
-  positiveBar: {
-    backgroundColor: colors.positive,
-  },
-  negativeBar: {
-    backgroundColor: colors.negative,
-  },
-  amount: {
+  valueAmount: {
     color: colors.textPrimary,
+    flexShrink: 1,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '900',
     letterSpacing: 0,
-  },
-  positiveAmount: {
-    color: colors.positive,
-  },
-  negativeAmount: {
-    color: colors.negativeText,
+    textAlign: 'right',
   },
   emptyText: {
     color: colors.textSecondary,

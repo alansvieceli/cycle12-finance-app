@@ -16,3 +16,14 @@ export const colors = {
   negative: '#EF4444',
   negativeText: '#F87171',
 };
+
+export const chartPalette = [
+  colors.accent,
+  colors.positive,
+  colors.commitmentMedium,
+  colors.negativeText,
+  '#38BDF8',
+  '#A78BFA',
+  '#F472B6',
+  '#94A3B8',
+];

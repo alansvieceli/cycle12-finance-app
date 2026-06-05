@@ -9,7 +9,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Starts empty so the user can fill their own categories, accounts, and values.
 - Shows a finance projection for up to 12 months.
 - Lets the user choose how many months appear in the summary, from 1 to 12.
-- Shows a read-only charts tab for monthly trends and current-month category totals.
+- Shows a read-only charts tab with positive/negative columns, expense area line chart, current-month category donut chart, and expandable monthly values.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, and editable monthly values.
 - Keeps category and account lists consistently ordered across planning and summary views.
@@ -51,6 +51,7 @@ Important project rules live in:
 - TypeScript
 - AsyncStorage for local device persistence
 - Expo Splash Screen for native loading screen branding
+- React Native Gifted Charts for finance visualizations
 - Vitest for unit tests
 
 ## Source Structure
@@ -83,7 +84,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, `expo-splash-screen` for native loading screen branding, and `vitest` for unit tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and `vitest` for unit tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
