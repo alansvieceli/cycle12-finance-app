@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { ActionButton } from '../components/common/ActionButton';
-import { AccountEditor } from '../components/finance/AccountEditor';
-import { MonthlyValueEditor } from '../components/finance/MonthlyValueEditor';
-import { ProjectionMonth } from '../lib/financeCalculations';
-import { useFinanceState } from '../hooks/useFinanceState';
+import { ActionButton } from "../components/common/ActionButton";
+import { AccountEditor } from "../components/finance/AccountEditor";
+import { MonthlyValueEditor } from "../components/finance/MonthlyValueEditor";
+import { useFinanceState } from "../hooks/useFinanceState";
+import { ProjectionMonth } from "../lib/financeCalculations";
 
 type PlanningScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
@@ -40,7 +40,7 @@ export function PlanningScreen({
       ) : (
         <>
           <ActionButton
-            label="Gerenciar contas"
+            label="Gerenciar Contas"
             onPress={() => setIsManagingAccounts(true)}
           />
           <MonthlyValueEditor

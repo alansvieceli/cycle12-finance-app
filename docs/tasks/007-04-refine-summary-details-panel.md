@@ -18,7 +18,7 @@ Make `Resumo` easier to scan by moving month category totals into a details pane
 2. Add an action to open month details.
 3. Add a month details panel with category totals directly below the selected month.
 4. Use consistent sorting for category totals.
-5. Add a `Pagamentos do mês` action that opens the current-month payment checklist in a panel.
+5. Add a `Pagamentos do Mês` action that opens the current-month payment checklist in a panel.
 6. Add a close/back action for the payment panel.
 
 ## Acceptance Criteria

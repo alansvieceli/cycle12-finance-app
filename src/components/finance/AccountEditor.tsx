@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
-import { ActionButton } from '../common/ActionButton';
-import { AccountItem, Category } from '../../types/finance';
-import { sortAccountItems, sortCategories } from '../../lib/sorting';
+import { sortAccountItems, sortCategories } from "../../lib/sorting";
+import { AccountItem, Category } from "../../types/finance";
+import { ActionButton } from "../common/ActionButton";
 
 type AccountEditorProps = {
   accountItems: AccountItem[];
@@ -41,15 +41,16 @@ export function AccountEditor({
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false);
   const sortedCategories = sortCategories(categories);
   const selectedNewAccountCategoryId =
-    newAccountCategoryId || sortedCategories[0]?.id || '';
+    newAccountCategoryId || sortedCategories[0]?.id || "";
   const selectedNewAccountCategoryName =
-    sortedCategories.find((category) => category.id === selectedNewAccountCategoryId)
-      ?.name ?? 'Categoria';
+    sortedCategories.find(
+      (category) => category.id === selectedNewAccountCategoryId,
+    )?.name ?? "Categoria";
 
   return (
     <View style={styles.panel}>
       <View style={styles.panelHeader}>
-        <Text style={styles.sectionTitle}>Gerenciar contas</Text>
+        <Text style={styles.sectionTitle}>Gerenciar Contas</Text>
         {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
 
@@ -72,7 +73,7 @@ export function AccountEditor({
                 {selectedNewAccountCategoryName}
               </Text>
               <Text style={styles.categoryPickerIcon}>
-                {isCategoryPickerOpen ? '^' : 'v'}
+                {isCategoryPickerOpen ? "^" : "v"}
               </Text>
             </Pressable>
 
@@ -123,73 +124,73 @@ export function AccountEditor({
       )}
 
       {sortAccountItems(accountItems, categories).map((accountItem) => (
-          <View key={accountItem.id} style={styles.accountEditorRow}>
+        <View key={accountItem.id} style={styles.accountEditorRow}>
+          <TextInput
+            onChangeText={(name) => onChangeAccountName(accountItem.id, name)}
+            style={styles.input}
+            value={accountItem.name}
+          />
+          <View style={styles.accountMetaRow}>
+            <Pressable
+              onPress={() => onCycleAccountCategory(accountItem.id)}
+              style={styles.categoryButton}
+            >
+              <Text style={styles.categoryButtonText}>
+                {getCategoryName(categories, accountItem.categoryId)}
+              </Text>
+            </Pressable>
             <TextInput
-              onChangeText={(name) => onChangeAccountName(accountItem.id, name)}
-              style={styles.input}
-              value={accountItem.name}
+              keyboardType="number-pad"
+              onChangeText={(dueDay) =>
+                onChangeAccountDueDay(accountItem.id, dueDay)
+              }
+              style={[styles.input, styles.dueDayInput]}
+              value={String(accountItem.dueDay)}
             />
-            <View style={styles.accountMetaRow}>
-              <Pressable
-                onPress={() => onCycleAccountCategory(accountItem.id)}
-                style={styles.categoryButton}
-              >
-                <Text style={styles.categoryButtonText}>
-                  {getCategoryName(categories, accountItem.categoryId)}
-                </Text>
-              </Pressable>
-              <TextInput
-                keyboardType="number-pad"
-                onChangeText={(dueDay) =>
-                  onChangeAccountDueDay(accountItem.id, dueDay)
-                }
-                style={[styles.input, styles.dueDayInput]}
-                value={String(accountItem.dueDay)}
-              />
-              <ActionButton
-                label="Excluir"
-                onPress={() => onDeleteAccountItem(accountItem.id)}
-                variant="danger"
-              />
-            </View>
+            <ActionButton
+              label="Excluir"
+              onPress={() => onDeleteAccountItem(accountItem.id)}
+              variant="danger"
+            />
           </View>
+        </View>
       ))}
     </View>
   );
 }
 
 function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
+  return categories.find((category) => category.id === categoryId)?.name ?? "-";
 }
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: "#ffffff",
+    borderColor: "#dfe7e4",
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   panelHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   sectionTitle: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   input: {
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    backgroundColor: "#f7faf9",
+    borderColor: "#c9d6d2",
     borderRadius: 8,
     borderWidth: 1,
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
@@ -202,92 +203,92 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryPickerButton: {
-    alignItems: 'center',
-    backgroundColor: '#f7faf9',
-    borderColor: '#c9d6d2',
+    alignItems: "center",
+    backgroundColor: "#f7faf9",
+    borderColor: "#c9d6d2",
     borderRadius: 8,
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    justifyContent: 'center',
+    justifyContent: "center",
     minHeight: 48,
     paddingHorizontal: 12,
   },
   categoryPickerText: {
-    color: '#17211f',
+    color: "#17211f",
     flex: 1,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   categoryPickerIcon: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: "900",
     letterSpacing: 0,
   },
   categoryPickerOptions: {
-    backgroundColor: '#ffffff',
-    borderColor: '#c9d6d2',
+    backgroundColor: "#ffffff",
+    borderColor: "#c9d6d2",
     borderRadius: 8,
     borderWidth: 1,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   categoryPickerOption: {
-    borderTopColor: '#e7eeeb',
+    borderTopColor: "#e7eeeb",
     borderTopWidth: 1,
     minHeight: 44,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 12,
   },
   categoryPickerOptionActive: {
-    backgroundColor: '#176a4d',
+    backgroundColor: "#176a4d",
   },
   categoryPickerOptionText: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
   },
   categoryPickerOptionTextActive: {
-    color: '#ffffff',
+    color: "#ffffff",
   },
   accountEditorRow: {
-    borderTopColor: '#e7eeeb',
+    borderTopColor: "#e7eeeb",
     borderTopWidth: 1,
     gap: 8,
     marginTop: 10,
     paddingTop: 10,
   },
   accountMetaRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: 8,
   },
   dueDayInput: {
     maxWidth: 78,
-    textAlign: 'center',
+    textAlign: "center",
   },
   categoryButton: {
-    alignItems: 'center',
-    backgroundColor: '#eef4f2',
-    borderColor: '#c9d6d2',
+    alignItems: "center",
+    backgroundColor: "#eef4f2",
+    borderColor: "#c9d6d2",
     borderRadius: 8,
     borderWidth: 1,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     minHeight: 44,
     paddingHorizontal: 10,
   },
   categoryButtonText: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
-    textAlign: 'center',
+    textAlign: "center",
   },
   emptyText: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 14,
     lineHeight: 20,
     marginTop: 10,

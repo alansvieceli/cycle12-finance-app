@@ -14,7 +14,7 @@ Make `Planejamento` focus on monthly values and move account management into an 
 
 ## Steps
 
-1. Add a `Gerenciar contas` action to `Planejamento`.
+1. Add a `Gerenciar Contas` action to `Planejamento`.
 2. Show account management only when the panel is open.
 3. Add a close/back action for the panel.
 4. Add category selection during account creation using a compact combo/dropdown-style control.

@@ -1,24 +1,24 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState } from "react";
 
-import { ActionButton } from '../components/common/ActionButton';
+import { ActionButton } from "../components/common/ActionButton";
+import { CurrentMonthPaymentChecklist } from "../components/finance/CurrentMonthPaymentChecklist";
+import { MonthDetailsPanel } from "../components/finance/MonthDetailsPanel";
+import { MonthSummaryCard } from "../components/finance/MonthSummaryCard";
 import {
-  calculateCategoryTotals,
-  calculateIncomeCommitmentPercentage,
-  calculateMonthlyTotalExpenses,
-  calculateSurplusOrShortfall,
-  ProjectionMonth,
-} from '../lib/financeCalculations';
-import { sortCategories } from '../lib/sorting';
-import { FinanceState } from '../types/finance';
-import { CurrentMonthPaymentChecklist } from '../components/finance/CurrentMonthPaymentChecklist';
-import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
-import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
+    calculateCategoryTotals,
+    calculateIncomeCommitmentPercentage,
+    calculateMonthlyTotalExpenses,
+    calculateSurplusOrShortfall,
+    ProjectionMonth,
+} from "../lib/financeCalculations";
+import { sortCategories } from "../lib/sorting";
+import { FinanceState } from "../types/finance";
 
 type SummaryScreenProps = {
   financeState: FinanceState;
   onTogglePaymentStatus: (
     accountItemId: string,
-    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    projectionMonth: Pick<ProjectionMonth, "month" | "year">,
   ) => void;
   projectionMonths: ProjectionMonth[];
 };
@@ -60,7 +60,7 @@ export function SummaryScreen({
 
       {currentProjectionMonth && !isManagingCurrentMonthPayments ? (
         <ActionButton
-          label="Pagamentos do mês"
+          label="Pagamentos do Mês"
           onPress={() => setIsManagingCurrentMonthPayments(true)}
         />
       ) : null}
@@ -87,10 +87,16 @@ export function SummaryScreen({
         return (
           <Fragment key={projectionMonth.key}>
             <MonthSummaryCard
-              commitmentDangerThreshold={financeState.settings.commitmentDangerThreshold}
-              commitmentWarningThreshold={financeState.settings.commitmentWarningThreshold}
+              commitmentDangerThreshold={
+                financeState.settings.commitmentDangerThreshold
+              }
+              commitmentWarningThreshold={
+                financeState.settings.commitmentWarningThreshold
+              }
               monthlyTotalExpenses={monthlyTotalExpenses}
-              onOpenDetails={() => setSelectedDetailsMonthKey(projectionMonth.key)}
+              onOpenDetails={() =>
+                setSelectedDetailsMonthKey(projectionMonth.key)
+              }
               projectionMonth={projectionMonth}
               salaryCommitmentPercentage={salaryCommitmentPercentage}
               surplusOrShortfall={surplusOrShortfall}

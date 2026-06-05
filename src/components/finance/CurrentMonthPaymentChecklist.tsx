@@ -1,20 +1,20 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { ActionButton } from '../common/ActionButton';
 import {
-  calculatePaymentSummary,
-  getMonthlyValueAmount,
-  isAccountItemPaid,
-  ProjectionMonth,
-} from '../../lib/financeCalculations';
-import { currencyFormatter } from '../../lib/formatters';
+    calculatePaymentSummary,
+    getMonthlyValueAmount,
+    isAccountItemPaid,
+    ProjectionMonth,
+} from "../../lib/financeCalculations";
+import { currencyFormatter } from "../../lib/formatters";
+import { sortAccountItemsByDueDay } from "../../lib/sorting";
 import {
-  AccountItem,
-  Category,
-  MonthlyPaymentStatus,
-  MonthlyValue,
-} from '../../types/finance';
-import { sortAccountItemsByDueDay } from '../../lib/sorting';
+    AccountItem,
+    Category,
+    MonthlyPaymentStatus,
+    MonthlyValue,
+} from "../../types/finance";
+import { ActionButton } from "../common/ActionButton";
 
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
@@ -22,7 +22,7 @@ type CurrentMonthPaymentChecklistProps = {
   monthlyValues: MonthlyValue[];
   onTogglePaymentStatus: (
     accountItemId: string,
-    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    projectionMonth: Pick<ProjectionMonth, "month" | "year">,
   ) => void;
   onClose?: () => void;
   paymentStatuses: MonthlyPaymentStatus[];
@@ -50,14 +50,19 @@ export function CurrentMonthPaymentChecklist({
     <View style={styles.panel}>
       <View style={styles.header}>
         <View style={styles.headerText}>
-          <Text style={styles.sectionTitle}>Pagamentos do mês</Text>
-          <Text style={styles.sectionHint}>Marque manualmente o que já foi pago.</Text>
+          <Text style={styles.sectionTitle}>Pagamentos do Mês</Text>
+          <Text style={styles.sectionHint}>
+            Marque manualmente o que já foi pago.
+          </Text>
         </View>
         {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
       </View>
 
       <View style={styles.summaryGrid}>
-        <SummaryValue label="Pago" value={currencyFormatter.format(paymentSummary.totalPaid)} />
+        <SummaryValue
+          label="Pago"
+          value={currencyFormatter.format(paymentSummary.totalPaid)}
+        />
         <SummaryValue
           label="Pendente"
           value={currencyFormatter.format(paymentSummary.totalPending)}
@@ -81,21 +86,36 @@ export function CurrentMonthPaymentChecklist({
             return (
               <Pressable
                 key={accountItem.id}
-                onPress={() => onTogglePaymentStatus(accountItem.id, projectionMonth)}
-                style={[styles.paymentRow, isPaid ? styles.paymentRowPaid : null]}
+                onPress={() =>
+                  onTogglePaymentStatus(accountItem.id, projectionMonth)
+                }
+                style={[
+                  styles.paymentRow,
+                  isPaid ? styles.paymentRowPaid : null,
+                ]}
               >
-                <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
-                  <Text style={[styles.checkboxText, isPaid ? styles.checkboxTextPaid : null]}>
-                    {isPaid ? '✓' : ''}
+                <View
+                  style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}
+                >
+                  <Text
+                    style={[
+                      styles.checkboxText,
+                      isPaid ? styles.checkboxTextPaid : null,
+                    ]}
+                  >
+                    {isPaid ? "✓" : ""}
                   </Text>
                 </View>
                 <View style={styles.paymentInfo}>
                   <Text style={styles.accountName}>{accountItem.name}</Text>
                   <Text style={styles.accountMeta}>
-                    Dia {accountItem.dueDay} · {getCategoryName(categories, accountItem.categoryId)}
+                    Dia {accountItem.dueDay} ·{" "}
+                    {getCategoryName(categories, accountItem.categoryId)}
                   </Text>
                 </View>
-                <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
+                <Text
+                  style={[styles.amount, isPaid ? styles.amountPaid : null]}
+                >
                   {currencyFormatter.format(amount)}
                 </Text>
               </Pressable>
@@ -121,61 +141,61 @@ function SummaryValue({ label, value }: { label: string; value: string }) {
 }
 
 function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
+  return categories.find((category) => category.id === categoryId)?.name ?? "-";
 }
 
 const styles = StyleSheet.create({
   panel: {
-    backgroundColor: '#ffffff',
-    borderColor: '#dfe7e4',
+    backgroundColor: "#ffffff",
+    borderColor: "#dfe7e4",
     borderRadius: 8,
     borderWidth: 1,
     padding: 16,
   },
   header: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   headerText: {
     flex: 1,
   },
   sectionTitle: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   sectionHint: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 13,
     lineHeight: 18,
     marginTop: 4,
   },
   summaryGrid: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginTop: 14,
   },
   summaryValue: {
-    backgroundColor: '#eef4f2',
+    backgroundColor: "#eef4f2",
     borderRadius: 8,
     flex: 1,
     minHeight: 64,
     padding: 12,
   },
   summaryLabel: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   summaryAmount: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
     marginTop: 8,
   },
@@ -184,71 +204,71 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   paymentRow: {
-    alignItems: 'center',
-    backgroundColor: '#f7faf9',
-    borderColor: '#dfe7e4',
+    alignItems: "center",
+    backgroundColor: "#f7faf9",
+    borderColor: "#dfe7e4",
     borderRadius: 8,
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     minHeight: 62,
     padding: 10,
   },
   paymentRowPaid: {
-    backgroundColor: '#eef7f2',
-    borderColor: '#b8d7c6',
+    backgroundColor: "#eef7f2",
+    borderColor: "#b8d7c6",
   },
   checkbox: {
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderColor: '#9fb3ad',
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderColor: "#9fb3ad",
     borderRadius: 6,
     borderWidth: 1,
     height: 28,
-    justifyContent: 'center',
+    justifyContent: "center",
     width: 28,
   },
   checkboxPaid: {
-    backgroundColor: '#176a4d',
-    borderColor: '#176a4d',
+    backgroundColor: "#176a4d",
+    borderColor: "#176a4d",
   },
   checkboxText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: '900',
+    fontWeight: "900",
     letterSpacing: 0,
   },
   checkboxTextPaid: {
-    color: '#ffffff',
+    color: "#ffffff",
   },
   paymentInfo: {
     flex: 1,
   },
   accountName: {
-    color: '#17211f',
+    color: "#17211f",
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   accountMeta: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 3,
   },
   amount: {
-    color: '#17211f',
+    color: "#17211f",
     flexShrink: 0,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
-    textAlign: 'right',
+    textAlign: "right",
   },
   amountPaid: {
-    color: '#176a4d',
+    color: "#176a4d",
   },
   emptyText: {
-    color: '#60716d',
+    color: "#60716d",
     fontSize: 14,
     lineHeight: 20,
     marginTop: 12,

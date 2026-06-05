@@ -84,7 +84,7 @@ Account management should move into a dedicated panel/screen-like section opened
 
 Recommended behavior:
 
-- Add a `Gerenciar contas` action in `Planejamento`.
+- Add a `Gerenciar Contas` action in `Planejamento`.
 - When opened, show account creation and account editing controls.
 - Allow closing the panel and returning to monthly value editing.
 - Keep the panel local to the current screen; do not add a navigation library.
@@ -146,7 +146,7 @@ Current-month payment tracking should remain easy to access, but should not make
 
 Recommended behavior:
 
-- Add a `Pagamentos do mês` action in `Resumo`.
+- Add a `Pagamentos do Mês` action in `Resumo`.
 - When opened, show the current-month payment checklist in a dedicated panel.
 - Allow closing the panel and returning to the monthly summary list.
 - For this spec, prioritize moving category totals out of every month card.

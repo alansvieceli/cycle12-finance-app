@@ -33,7 +33,7 @@ export function FinanceApp() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.eyebrow}>Cycle12 Finance</Text>
-        <Text style={styles.title}>Projeção financeira</Text>
+        <Text style={styles.title}>Projeção Financeira</Text>
         <Text style={styles.subtitle}>
           Acompanhe despesas, comprometimento do salário e sobra ou falta mensal.
         </Text>
