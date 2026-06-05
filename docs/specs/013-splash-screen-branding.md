@@ -13,6 +13,8 @@ This change should make the app feel more intentional before the first screen lo
 ## Goals
 
 - Configure a custom Expo splash screen.
+- Use the official `expo-splash-screen` config plugin for SDK 52+ splash configuration.
+- Update generated Android splash resources when the native `android/` project already exists.
 - Use a finance-themed splash image created for this project.
 - Prefer the display name `Cycle12 Finance` instead of the raw package-style name.
 - Use a dark splash background that can align with the planned dark theme.
@@ -60,6 +62,22 @@ Implementation should update `app.json` to include an explicit Expo splash confi
 }
 ```
 
+Implementation should also configure the `expo-splash-screen` plugin:
+
+```json
+"plugins": [
+  [
+    "expo-splash-screen",
+    {
+      "image": "./assets/splash-finance.png",
+      "backgroundColor": "#121212",
+      "resizeMode": "contain",
+      "imageWidth": 280
+    }
+  ]
+]
+```
+
 Implementation should also evaluate changing:
 
 ```json
@@ -68,10 +86,19 @@ Implementation should also evaluate changing:
 
 The `slug`, Android package name, and internal code identifiers should remain unchanged unless separately requested.
 
+Because this repository includes a generated `android/` project, implementation must also keep the Android native resources aligned with the Expo config:
+
+- `android/app/src/main/res/values/colors.xml`
+- `android/app/src/main/res/values/strings.xml`
+- `android/app/src/main/res/drawable-*/splashscreen_logo.png`
+- Android 12+ splash style resources when needed
+
 ## Acceptance Criteria
 
 - A finance-themed splash image exists in `assets/`.
 - `app.json` uses the custom splash image.
+- `app.json` configures the `expo-splash-screen` plugin with the custom image.
+- Android native splash resources use the custom splash image.
 - Splash background uses `#121212`.
 - The visible app display name is `Cycle12 Finance` if supported by the Expo configuration.
 - Existing icon assets are not overwritten without explicit approval.

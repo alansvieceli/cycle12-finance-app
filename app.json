@@ -26,6 +26,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-finance.png",
+          "backgroundColor": "#121212",
+          "resizeMode": "contain",
+          "imageWidth": 280
+        }
+      ]
+    ]
   }
 }

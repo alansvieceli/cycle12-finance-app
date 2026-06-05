@@ -49,6 +49,7 @@ Important project rules live in:
 - React Native
 - TypeScript
 - AsyncStorage for local device persistence
+- Expo Splash Screen for native loading screen branding
 - Vitest for unit tests
 
 ## Source Structure
@@ -81,7 +82,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage and `vitest` for unit tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, `expo-splash-screen` for native loading screen branding, and `vitest` for unit tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
