@@ -55,6 +55,8 @@ yarn-error.*
 
 # OS / local env
 .DS_Store
+.codex/
+.mcp.json
 *.pem
 .env
 .env.*
