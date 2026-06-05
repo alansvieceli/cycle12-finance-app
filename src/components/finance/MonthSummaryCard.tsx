@@ -1,13 +1,13 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { resolveCommitmentColor } from '../../lib/commitmentColor';
-import { ProjectionMonth } from '../../lib/financeCalculations';
+import { resolveCommitmentColor } from "../../lib/commitmentColor";
+import { ProjectionMonth } from "../../lib/financeCalculations";
 import {
-  currencyFormatter,
-  formatMonthLabel,
-  percentageFormatter,
-} from '../../lib/formatters';
-import { colors } from '../../theme/colors';
+    currencyFormatter,
+    formatMonthLabel,
+    percentageFormatter,
+} from "../../lib/formatters";
+import { colors } from "../../theme/colors";
 
 type MonthSummaryCardProps = {
   commitmentDangerThreshold: number;
@@ -47,7 +47,9 @@ export function MonthSummaryCard({
         <Text
           style={[
             styles.balance,
-            surplusOrShortfall < 0 ? styles.negativeBalance : styles.positiveBalance,
+            surplusOrShortfall < 0
+              ? styles.negativeBalance
+              : styles.positiveBalance,
           ]}
         >
           {currencyFormatter.format(surplusOrShortfall)}
@@ -64,14 +66,14 @@ export function MonthSummaryCard({
           label="Comprometido"
           value={
             salaryCommitmentPercentage === null
-              ? '-'
+              ? "-"
               : percentageFormatter.format(salaryCommitmentPercentage)
           }
         />
       </View>
 
       <Pressable onPress={onOpenDetails} style={styles.detailsButton}>
-        <Text style={styles.detailsButtonText}>Ver detalhes</Text>
+        <Text style={styles.detailsButtonText}>Detalhes</Text>
       </Pressable>
     </View>
   );
@@ -89,7 +91,9 @@ function SummaryValue({
   return (
     <View style={styles.summaryValue}>
       <Text style={styles.summaryLabel}>{label}</Text>
-      <Text style={[styles.summaryAmount, color ? { color } : null]}>{value}</Text>
+      <Text style={[styles.summaryAmount, color ? { color } : null]}>
+        {value}
+      </Text>
     </View>
   );
 }
@@ -103,31 +107,31 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   monthHeader: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
+    alignItems: "flex-start",
+    flexDirection: "row",
     gap: 12,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   monthName: {
     color: colors.textPrimary,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
   currentMonthLabel: {
     color: colors.accent,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
     marginTop: 4,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   balance: {
     flexShrink: 1,
     fontSize: 17,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
-    textAlign: 'right',
+    textAlign: "right",
   },
   positiveBalance: {
     color: colors.positive,
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
     color: colors.negativeText,
   },
   summaryGrid: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginTop: 16,
   },
@@ -150,24 +154,24 @@ const styles = StyleSheet.create({
   summaryLabel: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   summaryAmount: {
     color: colors.textPrimary,
     fontSize: 17,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
     marginTop: 8,
   },
   detailsButton: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
     borderRadius: 8,
     borderWidth: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 12,
     minHeight: 42,
     paddingHorizontal: 12,
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
   detailsButtonText: {
     color: colors.accent,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0,
   },
 });
