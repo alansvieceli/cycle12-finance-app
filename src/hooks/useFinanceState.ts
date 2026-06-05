@@ -8,6 +8,7 @@ import {
   parseSortOrder,
 } from '../lib/inputParsers';
 import { sortAccountItems, sortCategories } from '../lib/sorting';
+import { advanceWindow, getNextWindowStart } from '../lib/windowAdvance';
 import {
   loadFinanceState,
   normalizeFinanceState,
@@ -24,6 +25,9 @@ export function useFinanceState() {
   const [financeState, setFinanceState] = useState(emptyFinanceState);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategorySortOrder, setNewCategorySortOrder] = useState('');
+  const [newCategoryPropagation, setNewCategoryPropagation] = useState('zero');
+  const [newCategoryInstallmentEndDate, setNewCategoryInstallmentEndDate] =
+    useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
@@ -50,12 +54,19 @@ export function useFinanceState() {
           return;
         }
 
-        setFinanceState(storedState);
-        setSelectedAccountItemId(
-          sortAccountItems(storedState.accountItems, storedState.categories)[0]?.id ??
-            '',
+        const currentDate = new Date();
+        const advancedState = advanceWindow(
+          storedState,
+          currentDate.getFullYear(),
+          (currentDate.getMonth() + 1) as FinanceState['settings']['windowStartMonth'],
         );
-        setNewAccountCategoryId(sortCategories(storedState.categories)[0]?.id ?? '');
+
+        setFinanceState(advancedState);
+        setSelectedAccountItemId(
+          sortAccountItems(advancedState.accountItems, advancedState.categories)[0]
+            ?.id ?? '',
+        );
+        setNewAccountCategoryId(sortCategories(advancedState.categories)[0]?.id ?? '');
       } catch {
         if (isMounted) {
           setStorageMessage(
@@ -106,20 +117,18 @@ export function useFinanceState() {
     }));
   }
 
-  function updateVisibleMonthCount(value: string) {
+  function updateSummaryVisibleMonthCount(value: string) {
     const numericValue = value.replace(/\D/g, '');
 
     if (!numericValue) {
       return;
     }
 
-    const parsedValue = Number(numericValue);
-
     setFinanceState((currentState) => ({
       ...currentState,
       settings: {
         ...currentState.settings,
-        visibleMonthCount: clampVisibleMonthCount(parsedValue),
+        summaryVisibleMonthCount: clampVisibleMonthCount(Number(numericValue)),
       },
     }));
   }
@@ -145,7 +154,12 @@ export function useFinanceState() {
   }
 
   function replaceFinanceState(nextState: FinanceState) {
-    const normalizedState = normalizeFinanceState(nextState);
+    const currentDate = new Date();
+    const normalizedState = advanceWindow(
+      normalizeFinanceState(nextState),
+      currentDate.getFullYear(),
+      (currentDate.getMonth() + 1) as FinanceState['settings']['windowStartMonth'],
+    );
     const sortedCategories = sortCategories(normalizedState.categories);
     const sortedAccounts = sortAccountItems(
       normalizedState.accountItems,
@@ -157,6 +171,8 @@ export function useFinanceState() {
     setNewAccountCategoryId(sortedCategories[0]?.id ?? '');
     setNewCategoryName('');
     setNewCategorySortOrder('');
+    setNewCategoryPropagation('zero');
+    setNewCategoryInstallmentEndDate('');
     setNewAccountName('');
     setNewAccountDueDay('');
   }
@@ -175,7 +191,16 @@ export function useFinanceState() {
         ...currentState.categories,
         {
           id: categoryId,
+          installmentEndDate:
+            newCategoryPropagation === 'installment'
+              ? newCategoryInstallmentEndDate.trim()
+              : undefined,
           name: categoryName,
+          propagation:
+            newCategoryPropagation === 'fixed' ||
+            newCategoryPropagation === 'installment'
+              ? newCategoryPropagation
+              : 'zero',
           sortOrder: parseSortOrder(newCategorySortOrder),
         },
       ],
@@ -183,6 +208,8 @@ export function useFinanceState() {
     setNewAccountCategoryId((currentCategoryId) => currentCategoryId || categoryId);
     setNewCategoryName('');
     setNewCategorySortOrder('');
+    setNewCategoryPropagation('zero');
+    setNewCategoryInstallmentEndDate('');
   }
 
   function updateCategoryName(categoryId: string, name: string) {
@@ -200,6 +227,36 @@ export function useFinanceState() {
       categories: currentState.categories.map((category) =>
         category.id === categoryId
           ? { ...category, sortOrder: parseSortOrder(sortOrder) }
+          : category,
+      ),
+    }));
+  }
+
+  function updateCategoryPropagation(categoryId: string, propagation: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: currentState.categories.map((category) =>
+        category.id === categoryId
+          ? {
+              ...category,
+              installmentEndDate:
+                propagation === 'installment' ? category.installmentEndDate : undefined,
+              propagation:
+                propagation === 'fixed' || propagation === 'installment'
+                  ? propagation
+                  : 'zero',
+            }
+          : category,
+      ),
+    }));
+  }
+
+  function updateCategoryInstallmentEndDate(categoryId: string, value: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: currentState.categories.map((category) =>
+        category.id === categoryId
+          ? { ...category, installmentEndDate: value }
           : category,
       ),
     }));
@@ -462,6 +519,14 @@ export function useFinanceState() {
     });
   }
 
+  function advanceWindowMonth() {
+    setFinanceState((currentState) => {
+      const nextWindowStart = getNextWindowStart(currentState);
+
+      return advanceWindow(currentState, nextWindowStart.year, nextWindowStart.month);
+    });
+  }
+
   return {
     actions: {
       createAccountItem,
@@ -472,10 +537,13 @@ export function useFinanceState() {
       setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,
+      setNewCategoryInstallmentEndDate,
       setNewCategoryName,
+      setNewCategoryPropagation,
       setNewCategorySortOrder,
       setSelectedAccountItemId,
       adjustMonthlyValue,
+      advanceWindowMonth,
       replaceFinanceState,
       toggleMonthlyPaymentStatus,
       updateAccountDueDay,
@@ -484,17 +552,21 @@ export function useFinanceState() {
       updateCommitmentWarningThreshold,
       updateCurrentMonthExtraBalance,
       updateCategoryName,
+      updateCategoryInstallmentEndDate,
+      updateCategoryPropagation,
       updateCategorySortOrder,
       updateMonthlySalary,
       updateMonthlyValue,
-      updateVisibleMonthCount,
+      updateSummaryVisibleMonthCount,
     },
     financeState,
     formState: {
       newAccountCategoryId,
       newAccountDueDay,
       newAccountName,
+      newCategoryInstallmentEndDate,
       newCategoryName,
+      newCategoryPropagation,
       newCategorySortOrder,
     },
     selectedAccountItem,

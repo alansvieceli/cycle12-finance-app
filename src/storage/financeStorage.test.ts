@@ -22,6 +22,7 @@ const sampleState: FinanceState = {
     {
       id: 'category-fixed',
       name: 'Fixos',
+      propagation: 'zero',
       sortOrder: 0,
     },
   ],
@@ -46,7 +47,9 @@ const sampleState: FinanceState = {
     commitmentWarningThreshold: 60,
     currentMonthExtraBalance: 250,
     monthlySalary: 5000,
-    visibleMonthCount: 6,
+    summaryVisibleMonthCount: 6,
+    windowStartMonth: 6,
+    windowStartYear: 2026,
   },
 };
 
@@ -72,24 +75,38 @@ describe('financeStorage', () => {
     await expect(loadFinanceState()).resolves.toEqual(emptyFinanceState);
   });
 
-  it('normalizes legacy state defaults and visible month limits', () => {
+  it('normalizes legacy state defaults and rolling window fields', () => {
     const legacyState = {
       ...emptyFinanceState,
+      categories: [{ id: 'legacy', name: 'Legado', sortOrder: 0 }],
       paymentStatuses: undefined,
       settings: {
         monthlySalary: 3000,
-        visibleMonthCount: 99,
+        visibleMonthCount: 4,
       },
     } as unknown as FinanceState;
 
-    expect(normalizeFinanceState(legacyState)).toEqual({
+    const normalizedState = normalizeFinanceState(legacyState);
+
+    expect(normalizedState).toEqual({
       ...emptyFinanceState,
+      categories: [
+        {
+          id: 'legacy',
+          installmentEndDate: undefined,
+          name: 'Legado',
+          propagation: 'zero',
+          sortOrder: 0,
+        },
+      ],
       paymentStatuses: [],
       settings: {
         ...emptyFinanceState.settings,
         monthlySalary: 3000,
-        visibleMonthCount: 12,
+        summaryVisibleMonthCount: 4,
       },
     });
+    expect(normalizedState.settings.windowStartMonth).toBeGreaterThanOrEqual(1);
+    expect(normalizedState.settings.windowStartMonth).toBeLessThanOrEqual(12);
   });
 });

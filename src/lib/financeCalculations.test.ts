@@ -8,11 +8,16 @@ import {
   calculateSurplusOrShortfall,
   createProjectionMonths,
 } from './financeCalculations';
-import { AccountItem, Category, MonthlyValue } from '../types/finance';
+import { AccountItem, Category, FinanceSettings, MonthlyValue } from '../types/finance';
 
 const categories: Category[] = [
-  { id: 'credit-card', name: 'Cartão de Crédito', sortOrder: 1 },
-  { id: 'home', name: 'Casa', sortOrder: 2 },
+  {
+    id: 'credit-card',
+    name: 'Cartão de Crédito',
+    propagation: 'zero',
+    sortOrder: 1,
+  },
+  { id: 'home', name: 'Casa', propagation: 'zero', sortOrder: 2 },
 ];
 
 const accountItems: AccountItem[] = [
@@ -89,12 +94,14 @@ describe('finance calculations', () => {
   });
 
   it('calculates commitment from available income for the projection month', () => {
-    const settings = {
+    const settings: FinanceSettings = {
       monthlySalary: 3000,
       currentMonthExtraBalance: 1000,
-      visibleMonthCount: 12,
+      summaryVisibleMonthCount: 12,
       commitmentWarningThreshold: 80,
       commitmentDangerThreshold: 90,
+      windowStartMonth: 6,
+      windowStartYear: 2026,
     };
 
     expect(
@@ -119,12 +126,14 @@ describe('finance calculations', () => {
   });
 
   it('includes extra balance only for the current month surplus calculation', () => {
-    const settings = {
+    const settings: FinanceSettings = {
       monthlySalary: 3000,
       currentMonthExtraBalance: 500,
-      visibleMonthCount: 12,
+      summaryVisibleMonthCount: 12,
       commitmentWarningThreshold: 80,
       commitmentDangerThreshold: 90,
+      windowStartMonth: 6,
+      windowStartYear: 2026,
     };
 
     expect(calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: true })).toBe(

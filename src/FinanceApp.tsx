@@ -22,12 +22,25 @@ const tabs: TabItem<AppTab>[] = [
 ];
 
 export function FinanceApp() {
-  const projectionMonths = useMemo(() => createProjectionMonths(), []);
   const finance = useFinanceState();
   const [activeTab, setActiveTab] = useState<AppTab>('summary');
+  const projectionMonths = useMemo(
+    () =>
+      createProjectionMonths(
+        new Date(
+          finance.financeState.settings.windowStartYear,
+          finance.financeState.settings.windowStartMonth - 1,
+          1,
+        ),
+      ),
+    [
+      finance.financeState.settings.windowStartMonth,
+      finance.financeState.settings.windowStartYear,
+    ],
+  );
   const visibleProjectionMonths = projectionMonths.slice(
     0,
-    finance.financeState.settings.visibleMonthCount,
+    finance.financeState.settings.summaryVisibleMonthCount,
   );
 
   return (

@@ -22,6 +22,7 @@ const sampleState: FinanceState = {
     {
       id: 'category-fixed',
       name: 'Fixos',
+      propagation: 'zero',
       sortOrder: 0,
     },
   ],
@@ -46,7 +47,9 @@ const sampleState: FinanceState = {
     commitmentWarningThreshold: 60,
     currentMonthExtraBalance: 250,
     monthlySalary: 5000,
-    visibleMonthCount: 12,
+    summaryVisibleMonthCount: 12,
+    windowStartMonth: 6,
+    windowStartYear: 2026,
   },
 };
 
@@ -122,7 +125,14 @@ describe('financeBackup', () => {
   it('builds the documented reset defaults', () => {
     expect(buildResetFinanceState()).toEqual({
       accountItems: [],
-      categories: [{ id: 'category-outros', name: 'Outros', sortOrder: 0 }],
+      categories: [
+        {
+          id: 'category-outros',
+          name: 'Outros',
+          propagation: 'zero',
+          sortOrder: 0,
+        },
+      ],
       monthlyValues: [],
       paymentStatuses: [],
       settings: {
@@ -130,7 +140,9 @@ describe('financeBackup', () => {
         commitmentWarningThreshold: 60,
         currentMonthExtraBalance: 0,
         monthlySalary: 0,
-        visibleMonthCount: 12,
+        summaryVisibleMonthCount: 12,
+        windowStartMonth: expect.any(Number),
+        windowStartYear: expect.any(Number),
       },
     });
   });

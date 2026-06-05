@@ -29,9 +29,9 @@ const financeState: FinanceState = {
     },
   ],
   categories: [
-    { id: 'home', name: 'Casa', sortOrder: 2 },
-    { id: 'cards', name: 'Cartões', sortOrder: 1 },
-    { id: 'empty', name: 'Vazia', sortOrder: 3 },
+    { id: 'home', name: 'Casa', propagation: 'zero', sortOrder: 2 },
+    { id: 'cards', name: 'Cartões', propagation: 'zero', sortOrder: 1 },
+    { id: 'empty', name: 'Vazia', propagation: 'zero', sortOrder: 3 },
   ],
   monthlyValues: [
     { accountItemId: 'nubank', amount: 1000, month: 6, year: 2026 },
@@ -42,9 +42,11 @@ const financeState: FinanceState = {
   settings: {
     currentMonthExtraBalance: 500,
     monthlySalary: 3000,
-    visibleMonthCount: 2,
+    summaryVisibleMonthCount: 2,
     commitmentWarningThreshold: 80,
     commitmentDangerThreshold: 90,
+    windowStartMonth: 6,
+    windowStartYear: 2026,
   },
 };
 

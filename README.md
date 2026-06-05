@@ -7,11 +7,12 @@ The app is designed for single-user, local-first control of monthly expenses ove
 ## App Behavior
 
 - Starts empty so the user can fill their own categories, accounts, and values.
-- Shows a finance projection for up to 12 months.
-- Lets the user choose how many months appear in the summary, from 1 to 12.
+- Shows a rolling 12-month finance projection starting at the current month.
+- Advances the planning window automatically when the calendar month changes.
+- Lets the user choose how many months appear in the summary and charts, from 1 to 12.
 - Shows a read-only charts tab with positive/negative columns, expense area line chart, current-month category donut chart, and expandable monthly values.
 - Tracks fixed monthly salary and an extra balance for the current month.
-- Supports categories, account items, due days, and editable monthly values.
+- Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Keeps planning focused on monthly values, with account management opened from a separate panel.
@@ -26,7 +27,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
-- Can reset local data to the default state: category `Outros`, 12 summary months, 60% warning threshold, and 80% danger threshold.
+- Can reset local data to the default state: category `Outros`, current 12-month window, 60% warning threshold, and 80% danger threshold.
 
 ## Current Workflow
 
@@ -55,7 +56,7 @@ Important project rules live in:
 - Expo File System, Document Picker, Sharing, and Crypto for local `.c12f` backup and restore
 - Expo Splash Screen for native loading screen branding
 - React Native Gifted Charts for finance visualizations
-- Vitest for unit tests
+- Jest/Expo and React Native Testing Library for tests
 
 ## Source Structure
 
@@ -223,6 +224,9 @@ This means:
 - there is no remote sync
 - payment status is saved only on this device
 - monthly adjustments update only the final saved monthly account value
+- the rolling 12-month window start is saved locally and can advance automatically or manually
+- the summary/chart visible month count is saved locally and does not change the 12-month planning window
+- category propagation rules define how new months are filled when the window advances
 - uninstalling the app can remove local data
 - backup creates a portable `.c12f` file with the current local finance state
 - restore validates the `.c12f` file before replacing local data

@@ -23,14 +23,14 @@ npm run test:coverage
 
 ## Current Result
 
-Updated after migrating the primary test runner to Jest/Expo, adding a small React Native Testing Library render test, and covering the local storage adapter:
+Updated after migrating the primary test runner to Jest/Expo, adding a small React Native Testing Library render test, covering the local storage adapter, and adding rolling-window propagation tests:
 
-- Test suites: 11 passed
-- Tests: 53 passed
-- Statements: 88.42%
-- Branches: 76.64%
-- Functions: 100%
-- Lines: 88.08%
+- Test suites: 12 passed
+- Tests: 62 passed
+- Statements: 89.07%
+- Branches: 76.92%
+- Functions: 99.12%
+- Lines: 88.81%
 
 ## Included Scope
 
@@ -40,7 +40,7 @@ The current baseline primarily measures unit-test coverage for pure TypeScript l
 src/lib/**/*.ts
 ```
 
-It also includes a small component render test to validate the React Native Testing Library setup and focused storage adapter tests for AsyncStorage persistence behavior.
+It also includes a small component render test to validate the React Native Testing Library setup, focused storage adapter tests for AsyncStorage persistence behavior, and rolling-window propagation tests.
 
 ## Excluded Scope
 

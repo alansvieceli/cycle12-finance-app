@@ -1,17 +1,23 @@
 export type MonthNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
+export type CategoryPropagation = 'fixed' | 'zero' | 'installment';
+
 export type FinanceSettings = {
   monthlySalary: number;
   currentMonthExtraBalance: number;
-  visibleMonthCount: number;
+  summaryVisibleMonthCount: number;
   commitmentWarningThreshold: number;
   commitmentDangerThreshold: number;
+  windowStartYear: number;
+  windowStartMonth: MonthNumber;
 };
 
 export type Category = {
   id: string;
   name: string;
   sortOrder: number;
+  propagation: CategoryPropagation;
+  installmentEndDate?: string;
 };
 
 export type AccountItem = {
@@ -44,13 +50,21 @@ export type FinanceState = {
   paymentStatuses: MonthlyPaymentStatus[];
 };
 
-export const emptyFinanceState: FinanceState = {
-  settings: {
+export function createDefaultFinanceSettings(date = new Date()): FinanceSettings {
+  return {
     monthlySalary: 0,
     currentMonthExtraBalance: 0,
-    visibleMonthCount: 12,
+    summaryVisibleMonthCount: 12,
+    windowStartYear: date.getFullYear(),
+    windowStartMonth: (date.getMonth() + 1) as MonthNumber,
     commitmentWarningThreshold: 80,
     commitmentDangerThreshold: 90,
+  };
+}
+
+export const emptyFinanceState: FinanceState = {
+  settings: {
+    ...createDefaultFinanceSettings(),
   },
   categories: [],
   accountItems: [],

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ActionButton } from '../components/common/ActionButton';
 import { CurrencyInput } from '../components/common/CurrencyInput';
 import { DataManagementPanel } from '../components/finance/DataManagementPanel';
 import { useFinanceState } from '../hooks/useFinanceState';
+import { createProjectionMonths } from '../lib/financeCalculations';
+import { formatMonthLabel } from '../lib/formatters';
 import { colors } from '../theme/colors';
 
 type SettingsScreenProps = {
@@ -14,6 +16,22 @@ type SettingsScreenProps = {
 export function SettingsScreen({ finance }: SettingsScreenProps) {
   const { actions, financeState, storageMessage } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
+  const projectionMonths = createProjectionMonths(
+    new Date(
+      financeState.settings.windowStartYear,
+      financeState.settings.windowStartMonth - 1,
+      1,
+    ),
+  );
+  const lastProjectionMonth = projectionMonths[projectionMonths.length - 1];
+  const nextProjectionMonth = createProjectionMonths(
+    new Date(
+      financeState.settings.windowStartYear,
+      financeState.settings.windowStartMonth,
+      1,
+    ),
+    1,
+  )[0];
 
   if (isDataManagementOpen) {
     return (
@@ -47,12 +65,46 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
           onChangeValue={actions.updateCurrentMonthExtraBalance}
         />
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Meses no resumo</Text>
+          <Text style={styles.inputLabel}>Meses no resumo e gráficos</Text>
           <VisibleMonthCountInput
-            onChangeValue={actions.updateVisibleMonthCount}
-            value={financeState.settings.visibleMonthCount}
+            onChangeValue={actions.updateSummaryVisibleMonthCount}
+            value={financeState.settings.summaryVisibleMonthCount}
           />
-          <Text style={styles.inputHint}>Escolha de 1 a 12 meses.</Text>
+          <Text style={styles.inputHint}>
+            Escolha de 1 a 12 meses. O planejamento continua mantendo 12 meses.
+          </Text>
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Janela atual</Text>
+          <Text style={styles.windowRange}>
+            {formatMonthLabel(
+              financeState.settings.windowStartYear,
+              financeState.settings.windowStartMonth,
+            )}{' '}
+            - {formatMonthLabel(lastProjectionMonth.year, lastProjectionMonth.month)}
+          </Text>
+          <Text style={styles.inputHint}>
+            A janela sempre mostra 12 meses a partir do mês atual.
+          </Text>
+          <ActionButton
+            label="Avançar mês"
+            onPress={() =>
+              Alert.alert(
+                `Avançar para ${formatMonthLabel(
+                  nextProjectionMonth.year,
+                  nextProjectionMonth.month,
+                )}?`,
+                `Os valores de ${formatMonthLabel(
+                  financeState.settings.windowStartYear,
+                  financeState.settings.windowStartMonth,
+                )} serão removidos e um novo mês será gerado com base nas regras de propagação.`,
+                [
+                  { text: 'Cancelar', style: 'cancel' },
+                  { text: 'Confirmar', onPress: actions.advanceWindowMonth },
+                ],
+              )
+            }
+          />
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Alerta de comprometimento</Text>
@@ -221,6 +273,19 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
+  },
+  windowRange: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 8,
+    borderWidth: 1,
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '800',
+    letterSpacing: 0,
+    minHeight: 48,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
   dataActions: {
     marginTop: 4,

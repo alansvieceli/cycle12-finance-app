@@ -4,9 +4,9 @@ import { AccountItem, Category } from '../types/finance';
 describe('sorting helpers', () => {
   it('sorts categories by sort order and name', () => {
     const categories: Category[] = [
-      { id: 'b', name: 'Moradia', sortOrder: 2 },
-      { id: 'c', name: 'Cartões', sortOrder: 0 },
-      { id: 'a', name: 'Alimentação', sortOrder: 0 },
+      { id: 'b', name: 'Moradia', propagation: 'zero', sortOrder: 2 },
+      { id: 'c', name: 'Cartões', propagation: 'zero', sortOrder: 0 },
+      { id: 'a', name: 'Alimentação', propagation: 'zero', sortOrder: 0 },
     ];
 
     expect(sortCategories(categories).map((category) => category.id)).toEqual([
@@ -18,8 +18,8 @@ describe('sorting helpers', () => {
 
   it('sorts accounts by category order, category name, due day, and account name', () => {
     const categories: Category[] = [
-      { id: 'home', name: 'Casa', sortOrder: 2 },
-      { id: 'cards', name: 'Cartões', sortOrder: 1 },
+      { id: 'home', name: 'Casa', propagation: 'zero', sortOrder: 2 },
+      { id: 'cards', name: 'Cartões', propagation: 'zero', sortOrder: 1 },
     ];
     const accountItems: AccountItem[] = [
       {
@@ -51,7 +51,9 @@ describe('sorting helpers', () => {
   });
 
   it('sorts accounts by due day before name even when account sort order exists', () => {
-    const categories: Category[] = [{ id: 'cards', name: 'Cartões', sortOrder: 1 }];
+    const categories: Category[] = [
+      { id: 'cards', name: 'Cartões', propagation: 'zero', sortOrder: 1 },
+    ];
     const accountItems = [
       {
         id: 'late',

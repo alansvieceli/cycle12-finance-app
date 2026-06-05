@@ -1,7 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { clampVisibleMonthCount } from '../lib/inputParsers';
-import { FinanceState, emptyFinanceState } from '../types/finance';
+import {
+  Category,
+  CategoryPropagation,
+  FinanceSettings,
+  FinanceState,
+  MonthNumber,
+  createDefaultFinanceSettings,
+  emptyFinanceState,
+} from '../types/finance';
 
 const FINANCE_STATE_STORAGE_KEY = '@cycle12-finance-app/finance-state/v2';
 
@@ -29,13 +37,67 @@ export async function clearFinanceState(): Promise<void> {
 export function normalizeFinanceState(financeState: FinanceState): FinanceState {
   return {
     ...financeState,
+    categories: financeState.categories.map(normalizeCategory),
     paymentStatuses: financeState.paymentStatuses ?? [],
-    settings: {
-      ...emptyFinanceState.settings,
-      ...financeState.settings,
-      visibleMonthCount: clampVisibleMonthCount(
-        financeState.settings.visibleMonthCount,
-      ),
-    },
+    settings: normalizeSettings(financeState.settings),
   };
+}
+
+function normalizeCategory(category: Category): Category {
+  const propagation = normalizePropagation(category.propagation);
+
+  return {
+    ...category,
+    propagation,
+    installmentEndDate:
+      propagation === 'installment' && typeof category.installmentEndDate === 'string'
+        ? category.installmentEndDate
+        : undefined,
+  };
+}
+
+function normalizePropagation(
+  propagation: CategoryPropagation | undefined,
+): CategoryPropagation {
+  return propagation === 'fixed' || propagation === 'installment'
+    ? propagation
+    : 'zero';
+}
+
+function normalizeSettings(
+  settings: (Partial<FinanceSettings> & { visibleMonthCount?: number }) | undefined,
+): FinanceSettings {
+  const defaultSettings = createDefaultFinanceSettings();
+  const summaryVisibleMonthCount =
+    settings?.summaryVisibleMonthCount ?? settings?.visibleMonthCount;
+  const { visibleMonthCount: _visibleMonthCount, ...currentSettings } = settings ?? {};
+
+  return {
+    ...defaultSettings,
+    ...currentSettings,
+    summaryVisibleMonthCount: clampVisibleMonthCount(summaryVisibleMonthCount),
+    windowStartYear: normalizeYear(settings?.windowStartYear, defaultSettings),
+    windowStartMonth: normalizeMonth(settings?.windowStartMonth, defaultSettings),
+  };
+}
+
+function normalizeYear(
+  year: number | undefined,
+  defaultSettings: FinanceSettings,
+): number {
+  return typeof year === 'number' && Number.isFinite(year)
+    ? Math.round(year)
+    : defaultSettings.windowStartYear;
+}
+
+function normalizeMonth(
+  month: MonthNumber | undefined,
+  defaultSettings: FinanceSettings,
+): MonthNumber {
+  return typeof month === 'number' &&
+    Number.isInteger(month) &&
+    month >= 1 &&
+    month <= 12
+    ? month
+    : defaultSettings.windowStartMonth;
 }

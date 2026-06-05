@@ -1,13 +1,14 @@
-import { clampVisibleMonthCount } from './inputParsers';
 import { normalizeFinanceState } from '../storage/financeStorage';
 import {
   AccountItem,
   Category,
+  CategoryPropagation,
   FinanceSettings,
   FinanceState,
   MonthNumber,
   MonthlyPaymentStatus,
   MonthlyValue,
+  createDefaultFinanceSettings,
 } from '../types/finance';
 
 export const BACKUP_FORMAT = 'cycle12-finance-backup';
@@ -47,12 +48,15 @@ export class BackupValidationError extends Error {
 }
 
 export function buildResetFinanceState(): FinanceState {
+  const defaultSettings = createDefaultFinanceSettings();
+
   return {
     accountItems: [],
     categories: [
       {
         id: RESET_CATEGORY_ID,
         name: 'Outros',
+        propagation: 'zero',
         sortOrder: 0,
       },
     ],
@@ -63,7 +67,9 @@ export function buildResetFinanceState(): FinanceState {
       commitmentWarningThreshold: 60,
       currentMonthExtraBalance: 0,
       monthlySalary: 0,
-      visibleMonthCount: 12,
+      summaryVisibleMonthCount: 12,
+      windowStartMonth: defaultSettings.windowStartMonth,
+      windowStartYear: defaultSettings.windowStartYear,
     },
   };
 }
@@ -214,6 +220,8 @@ function validateSettings(value: unknown): FinanceSettings {
     throw new BackupValidationError('Configurações do backup inválidas.');
   }
 
+  const defaultSettings = createDefaultFinanceSettings();
+
   return {
     commitmentDangerThreshold: validatePercent(
       value.commitmentDangerThreshold,
@@ -228,9 +236,17 @@ function validateSettings(value: unknown): FinanceSettings {
       'Extra do mês atual inválido.',
     ),
     monthlySalary: validateNumber(value.monthlySalary, 'Salário mensal inválido.'),
-    visibleMonthCount: clampVisibleMonthCount(
-      validateNumber(value.visibleMonthCount, 'Meses de resumo inválido.'),
+    summaryVisibleMonthCount: validateOptionalVisibleMonthCount(
+      value.summaryVisibleMonthCount ?? value.visibleMonthCount,
     ),
+    windowStartMonth:
+      value.windowStartMonth === undefined
+        ? defaultSettings.windowStartMonth
+        : validateMonth(value.windowStartMonth),
+    windowStartYear:
+      value.windowStartYear === undefined
+        ? defaultSettings.windowStartYear
+        : validateNumber(value.windowStartYear, 'Ano da janela inválido.'),
   };
 }
 
@@ -245,11 +261,27 @@ function validateCategories(value: unknown): Category[] {
     }
 
     return {
+      installmentEndDate:
+        typeof category.installmentEndDate === 'string'
+          ? category.installmentEndDate
+          : undefined,
       id: validateString(category.id, 'Categoria sem identificador válido.'),
       name: validateString(category.name, 'Categoria sem nome válido.'),
+      propagation:
+        category.propagation === undefined
+          ? 'zero'
+          : validateCategoryPropagation(category.propagation),
       sortOrder: validateNumber(category.sortOrder, 'Ordem da categoria inválida.'),
     };
   });
+}
+
+function validateCategoryPropagation(value: unknown): CategoryPropagation {
+  if (value === 'fixed' || value === 'zero' || value === 'installment') {
+    return value;
+  }
+
+  throw new BackupValidationError('Propagação da categoria inválida.');
 }
 
 function validateAccountItems(value: unknown, categoryIds: Set<string>): AccountItem[] {
@@ -371,6 +403,20 @@ function validatePercent(value: unknown, message: string): number {
   }
 
   return numericValue;
+}
+
+function validateVisibleMonthCount(value: unknown): number {
+  const numericValue = validateNumber(value, 'Meses de visualização inválido.');
+
+  if (!Number.isInteger(numericValue) || numericValue < 1 || numericValue > 12) {
+    throw new BackupValidationError('Meses de visualização inválido.');
+  }
+
+  return numericValue;
+}
+
+function validateOptionalVisibleMonthCount(value: unknown): number {
+  return value === undefined ? 12 : validateVisibleMonthCount(value);
 }
 
 function validateMonth(value: unknown): MonthNumber {
