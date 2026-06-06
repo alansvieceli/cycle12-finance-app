@@ -1,14 +1,19 @@
 import { CategoryBarChart } from '../components/finance/CategoryBarChart';
 import { MonthlyBarChart } from '../components/finance/MonthlyBarChart';
+import { MonthlyCommitmentList } from '../components/finance/MonthlyCommitmentList';
+import { PaymentSummaryPanel } from '../components/finance/PaymentSummaryPanel';
 import {
   buildCurrentMonthCategoryChartData,
-  buildMonthlyExpenseChartData,
+  buildMonthlyCommitmentChartData,
   buildSurplusShortfallChartData,
 } from '../lib/chartData';
 import { resolveCommitmentColor } from '../lib/commitmentColor';
 import {
   calculateIncomeCommitmentPercentage,
   calculateMonthlyTotalExpenses,
+  calculatePaymentSummary,
+  getMonthlyValueAmount,
+  isAccountItemPaid,
   ProjectionMonth,
 } from '../lib/financeCalculations';
 import { colors } from '../theme/colors';
@@ -23,6 +28,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
   const currentProjectionMonth =
     projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
     projectionMonths[0];
+
   const currentMonthTotalExpenses = currentProjectionMonth
     ? calculateMonthlyTotalExpenses(
         financeState.categories,
@@ -31,6 +37,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         currentProjectionMonth,
       )
     : 0;
+
   const currentMonthCommitment = currentProjectionMonth
     ? calculateIncomeCommitmentPercentage(
         currentMonthTotalExpenses,
@@ -38,6 +45,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         currentProjectionMonth,
       )
     : null;
+
   const currentMonthCommitmentColor =
     resolveCommitmentColor(
       currentMonthCommitment,
@@ -45,21 +53,51 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
       financeState.settings.commitmentDangerThreshold,
     ) ?? colors.positive;
 
+  const paymentSummary = currentProjectionMonth
+    ? calculatePaymentSummary(
+        financeState.accountItems,
+        financeState.monthlyValues,
+        financeState.paymentStatuses,
+        currentProjectionMonth,
+      )
+    : { totalPaid: 0, totalPending: 0 };
+
+  const accountsWithValues = currentProjectionMonth
+    ? financeState.accountItems.filter(
+        (item) =>
+          getMonthlyValueAmount(
+            financeState.monthlyValues,
+            item.id,
+            currentProjectionMonth,
+          ) > 0,
+      )
+    : [];
+
+  const paidCount = currentProjectionMonth
+    ? accountsWithValues.filter((item) =>
+        isAccountItemPaid(
+          financeState.paymentStatuses,
+          item.id,
+          currentProjectionMonth,
+        ),
+      ).length
+    : 0;
+
   return (
     <>
-      <MonthlyBarChart
-        data={buildSurplusShortfallChartData(financeState, projectionMonths)}
-        emptyText="Configure meses e valores para visualizar sobra ou falta."
-        mode="balance"
-        title="Saldo por mês"
-        totalLabel="Total no período"
+      <MonthlyCommitmentList
+        data={buildMonthlyCommitmentChartData(financeState, projectionMonths)}
+        emptyText="Configure salário e valores mensais para visualizar comprometimento."
+        title="Comprometimento por mês"
       />
 
-      <MonthlyBarChart
-        data={buildMonthlyExpenseChartData(financeState, projectionMonths)}
-        emptyText="Configure valores mensais para visualizar despesas."
-        title="Despesas por mês"
-        totalLabel="Total no período"
+      <PaymentSummaryPanel
+        emptyText="Nenhuma conta com valor configurado para o mês atual."
+        paidCount={paidCount}
+        title="Pago vs Pendente — mês atual"
+        totalAccounts={accountsWithValues.length}
+        totalPaid={paymentSummary.totalPaid}
+        totalPending={paymentSummary.totalPending}
       />
 
       {currentProjectionMonth ? (
@@ -74,6 +112,14 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
           totalLabel="Total do mês atual"
         />
       ) : null}
+
+      <MonthlyBarChart
+        data={buildSurplusShortfallChartData(financeState, projectionMonths)}
+        emptyText="Configure meses e valores para visualizar sobra ou falta."
+        mode="balance"
+        title="Sobra ou falta por mês"
+        totalLabel="Total no período"
+      />
     </>
   );
 }
