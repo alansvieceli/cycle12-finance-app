@@ -4,6 +4,7 @@ import {
   Modal,
   Pressable,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   View,
@@ -12,22 +13,26 @@ import {
 import { ActionButton } from '../components/common/ActionButton';
 import { CurrencyInput } from '../components/common/CurrencyInput';
 import { DataManagementPanel } from '../components/finance/DataManagementPanel';
+import { AppLockState } from '../hooks/useAppLock';
 import { useFinanceState } from '../hooks/useFinanceState';
+import { APP_LOCK_TIMEOUT_OPTIONS } from '../lib/appLock';
 import { createProjectionMonths } from '../lib/financeCalculations';
 import { formatMonthLabel } from '../lib/formatters';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 
 type SettingsScreenProps = {
+  appLock: AppLockState;
   finance: ReturnType<typeof useFinanceState>;
 };
 
 const MONTH_COUNT_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-export function SettingsScreen({ finance }: SettingsScreenProps) {
+export function SettingsScreen({ appLock, finance }: SettingsScreenProps) {
   const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
+  const [isSecurityTimeoutPickerOpen, setIsSecurityTimeoutPickerOpen] = useState(false);
   const projectionMonths = createProjectionMonths(
     new Date(
       financeState.settings.windowStartYear,
@@ -55,6 +60,35 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
     );
   }
 
+  async function handleToggleAppLock(nextValue: boolean) {
+    const result = await appLock.setEnabled(nextValue);
+
+    if (result.success) {
+      return;
+    }
+
+    if (result.reason === 'not_available') {
+      Alert.alert(
+        'Biometria indisponível',
+        'Este aparelho não tem biometria disponível para proteger o app.',
+      );
+      return;
+    }
+
+    if (result.reason === 'not_enrolled') {
+      Alert.alert(
+        'Biometria não cadastrada',
+        'Cadastre uma digital ou reconhecimento facial no aparelho antes de ativar o bloqueio.',
+      );
+      return;
+    }
+
+    Alert.alert(
+      'Bloqueio não ativado',
+      'A autenticação não foi concluída. O bloqueio continua desligado.',
+    );
+  }
+
   return (
     <View style={styles.root}>
       <View style={styles.card}>
@@ -79,6 +113,29 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
               {financeState.settings.summaryVisibleMonthCount} ▾
             </Text>
           </Pressable>
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Comprometimento</Text>
+        <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
+        <View style={styles.thresholdPair}>
+          <View style={styles.thresholdItem}>
+            <Text style={styles.inputLabel}>Alerta:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentWarningThreshold}
+              placeholder="80"
+              value={financeState.settings.commitmentWarningThreshold}
+            />
+          </View>
+          <View style={styles.thresholdItem}>
+            <Text style={styles.inputLabel}>Perigo:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentDangerThreshold}
+              placeholder="90"
+              value={financeState.settings.commitmentDangerThreshold}
+            />
+          </View>
         </View>
       </View>
 
@@ -118,26 +175,30 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Comprometimento</Text>
-        <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
-        <View style={styles.thresholdPair}>
-          <View style={styles.thresholdItem}>
-            <Text style={styles.inputLabel}>Alerta:</Text>
-            <ThresholdInput
-              onChangeValue={actions.updateCommitmentWarningThreshold}
-              placeholder="80"
-              value={financeState.settings.commitmentWarningThreshold}
-            />
-          </View>
-          <View style={styles.thresholdItem}>
-            <Text style={styles.inputLabel}>Perigo:</Text>
-            <ThresholdInput
-              onChangeValue={actions.updateCommitmentDangerThreshold}
-              placeholder="90"
-              value={financeState.settings.commitmentDangerThreshold}
-            />
-          </View>
+        <Text style={styles.cardTitle}>Segurança</Text>
+        <View style={styles.settingRow}>
+          <Text style={styles.inputLabel}>Bloquear com biometria:</Text>
+          <Switch
+            onValueChange={handleToggleAppLock}
+            thumbColor={appLock.enabled ? colors.accent : colors.textSecondary}
+            trackColor={{
+              false: colors.surfaceMuted,
+              true: colors.accent,
+            }}
+            value={appLock.enabled}
+          />
         </View>
+        {appLock.enabled ? (
+          <View style={styles.settingRow}>
+            <Text style={styles.inputLabel}>Bloquear após:</Text>
+            <Pressable
+              onPress={() => setIsSecurityTimeoutPickerOpen(true)}
+              style={styles.comboButton}
+            >
+              <Text style={styles.comboButtonText}>{appLock.timeoutMinutes} min ▾</Text>
+            </Pressable>
+          </View>
+        ) : null}
       </View>
 
       <View style={styles.card}>
@@ -182,6 +243,49 @@ export function SettingsScreen({ finance }: SettingsScreenProps) {
                       ]}
                     >
                       {n}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        onRequestClose={() => setIsSecurityTimeoutPickerOpen(false)}
+        transparent
+        visible={isSecurityTimeoutPickerOpen}
+      >
+        <Pressable
+          onPress={() => setIsSecurityTimeoutPickerOpen(false)}
+          style={styles.modalOverlay}
+        >
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Bloquear após</Text>
+            <View style={styles.monthCountGrid}>
+              {APP_LOCK_TIMEOUT_OPTIONS.map((timeoutMinutes) => {
+                const isSelected = appLock.timeoutMinutes === timeoutMinutes;
+                return (
+                  <Pressable
+                    key={timeoutMinutes}
+                    onPress={() => {
+                      void appLock.setTimeoutMinutes(timeoutMinutes);
+                      setIsSecurityTimeoutPickerOpen(false);
+                    }}
+                    style={[
+                      styles.monthCountOption,
+                      isSelected && styles.monthCountOptionActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.monthCountOptionText,
+                        isSelected && styles.monthCountOptionTextActive,
+                      ]}
+                    >
+                      {timeoutMinutes} min
                     </Text>
                   </Pressable>
                 );

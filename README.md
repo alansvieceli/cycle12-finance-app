@@ -14,7 +14,7 @@ The main areas are:
 - `Gráficos`: read-only charts for commitment, paid vs pending totals, category distribution, and monthly balance trends.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
 - `Contas`: category and account management.
-- `Ajustes`: salary, extra balance, visible month count, thresholds, window advance, backup, restore, and reset.
+- `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, and reset.
 
 For deeper project and agent context, read `docs/app-context.md`.
 
@@ -42,6 +42,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Uses a dark premium finance theme with orange navigation and action accents.
 - Treats credit card bills as manually editable monthly totals.
 - Uses the Cycle12 Finance `12` logo for the Android launcher icon and native splash screen.
+- Offers optional biometric app lock from Ajustes, disabled by default.
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
@@ -73,6 +74,7 @@ Important project rules live in:
 - TypeScript
 - AsyncStorage for local device persistence
 - Expo File System, Document Picker, Sharing, and Crypto for local `.c12f` backup and restore
+- Expo Local Authentication and Blur for optional biometric app lock
 - Expo Splash Screen for native loading screen branding
 - React Native Gifted Charts for finance visualizations
 - Jest/Expo and React Native Testing Library for tests
@@ -107,7 +109,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, React Native Gifted Charts for chart rendering, and Jest/Expo with React Native Testing Library for tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, Expo Local Authentication and Blur for optional app lock, `expo-splash-screen` for native loading screen branding, React Native Gifted Charts for chart rendering, and Jest/Expo with React Native Testing Library for tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
@@ -246,6 +248,7 @@ This means:
 - addition adjustments can apply the same entered amount to multiple consecutive months inside the current 12-month planning window
 - the rolling 12-month window start is saved locally and can advance automatically or manually
 - the summary/chart visible month count is saved locally and does not change the 12-month planning window
+- optional app lock settings are saved locally and are not included in finance backup files
 - category propagation rules define how new months are filled when the window advances
 - uninstalling the app can remove local data
 - backup creates a portable `.c12f` file with the current local finance state

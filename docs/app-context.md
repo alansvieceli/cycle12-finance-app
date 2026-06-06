@@ -20,11 +20,13 @@ The app is for a user who wants to:
 - track paid and pending account items for the current month.
 - see whether each month ends with surplus or shortfall.
 - keep data private and stored only on the device.
+- optionally protect app access with the device's enrolled biometrics.
 - export and restore local backups when needed.
 
 ## Core Product Principles
 
 - Local-first: there is no backend, login, remote sync, or cloud account.
+- Optional security: biometric app lock is local-only and disabled by default.
 - Android-first: validation and manual testing target Android emulator first.
 - Simple and maintainable: avoid unnecessary dependencies and complex architecture.
 - Finance-focused: UI changes should support fast scanning, monthly planning, and practical money decisions.
@@ -42,6 +44,7 @@ The app is for a user who wants to:
 - Rolling window: the app stores and displays 12 projected months starting from the saved current window month.
 - Category propagation rule: defines how values are filled when the 12-month window advances.
 - Backup file: a local `.c12f` JSON-based export with integrity validation.
+- App lock settings: local app security settings that are separate from finance backup data.
 
 ## Primary Navigation
 
@@ -119,8 +122,11 @@ It includes:
 - commitment warning and danger thresholds.
 - 12-month window advance behavior.
 - backup, restore, and reset data management.
+- optional biometric app lock controls in the `Segurança` section.
 
 Destructive actions, such as reset, should remain explicit and require confirmation.
+
+The `Segurança` section lets the user enable `Bloquear com biometria` and choose `Bloquear após` timeout options. The feature is disabled by default. Enabling it requires enrolled biometrics and successful device authentication.
 
 ## Secondary Views
 
@@ -152,12 +158,32 @@ Credit card bills are treated as manually editable monthly totals. The app does 
 
 All finance data is stored locally on the device through AsyncStorage.
 
+Optional app-lock settings are also stored locally, but they are not part of the `.c12f` finance backup payload.
+
 Backup and restore behavior:
 
 - export creates a portable `.c12f` file.
 - restore validates file format, version, SHA-256 integrity hash, data shape, and internal references.
 - corrupted or manually changed backup content is rejected.
 - reset clears local data and recreates only the default category and settings.
+
+## App Lock
+
+The app can optionally lock access with device biometrics.
+
+Behavior:
+
+- disabled by default.
+- configured in `Ajustes` under `Segurança`.
+- requires enrolled biometrics before it can be enabled.
+- requires a successful biometric authentication before saving the enabled state.
+- locks on cold start when enabled.
+- locks after returning from background if the configured timeout has elapsed.
+- uses the operating system authentication prompt, including supported biometric modality and system-owned fallback behavior.
+
+If the device has no enrolled biometrics, the feature remains disabled.
+
+This is not an account system and does not add a custom in-app PIN.
 
 Uninstalling the app can remove local data from the device.
 
@@ -176,6 +202,7 @@ Current branding uses:
 - TypeScript.
 - AsyncStorage for local persistence.
 - Expo File System, Document Picker, Sharing, and Crypto for local backup/restore.
+- Expo Local Authentication and Blur for optional app lock.
 - Expo Splash Screen for native loading branding.
 - React Native Gifted Charts for chart rendering.
 - Jest/Expo with React Native Testing Library for tests.

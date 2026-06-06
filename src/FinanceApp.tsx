@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { AppLockOverlay } from './components/common/AppLockOverlay';
 import { TabBar, TabItem } from './components/common/TabBar';
 import { CurrentMonthPaymentChecklist } from './components/finance/CurrentMonthPaymentChecklist';
 import { createProjectionMonths } from './lib/financeCalculations';
+import { useAppLock } from './hooks/useAppLock';
 import { useFinanceState } from './hooks/useFinanceState';
 import { AccountsScreen } from './screens/AccountsScreen';
 import { AdjustmentsScreen } from './screens/AdjustmentsScreen';
@@ -25,6 +27,7 @@ const tabs: TabItem<AppTab>[] = [
 
 export function FinanceApp() {
   const finance = useFinanceState();
+  const appLock = useAppLock();
   const [activeTab, setActiveTab] = useState<AppTab>('summary');
   const [isPaymentViewOpen, setIsPaymentViewOpen] = useState(false);
   const projectionMonths = useMemo(
@@ -100,10 +103,18 @@ export function FinanceApp() {
 
         {activeTab === 'accounts' ? <AccountsScreen finance={finance} /> : null}
 
-        {activeTab === 'adjustments' ? <AdjustmentsScreen finance={finance} /> : null}
+        {activeTab === 'adjustments' ? (
+          <AdjustmentsScreen appLock={appLock} finance={finance} />
+        ) : null}
       </ScrollView>
 
       <TabBar activeTab={activeTab} onChangeTab={changeTab} tabs={tabs} />
+      <AppLockOverlay
+        enabled={appLock.enabled}
+        isInitializing={appLock.isInitializing}
+        locked={appLock.locked}
+        onUnlock={appLock.unlock}
+      />
     </View>
   );
 }

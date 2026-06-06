@@ -1,16 +1,18 @@
 import { StyleSheet, View } from 'react-native';
 
+import { AppLockState } from '../hooks/useAppLock';
 import { useFinanceState } from '../hooks/useFinanceState';
 import { SettingsScreen } from './SettingsScreen';
 
 type AdjustmentsScreenProps = {
+  appLock: AppLockState;
   finance: ReturnType<typeof useFinanceState>;
 };
 
-export function AdjustmentsScreen({ finance }: AdjustmentsScreenProps) {
+export function AdjustmentsScreen({ appLock, finance }: AdjustmentsScreenProps) {
   return (
     <View style={styles.container}>
-      <SettingsScreen finance={finance} />
+      <SettingsScreen appLock={appLock} finance={finance} />
     </View>
   );
 }

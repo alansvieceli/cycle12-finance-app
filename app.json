@@ -30,6 +30,12 @@
           "imageWidth": 180
         }
       ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Permitir que o Cycle12 Finance use o Face ID para desbloquear o app."
+        }
+      ],
       "./plugins/with-android-centered-splash",
       "expo-sharing"
     ]
