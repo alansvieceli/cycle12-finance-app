@@ -5,7 +5,7 @@ import { colors } from '../../theme/colors';
 type ActionButtonProps = {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'danger';
 };
 
 export function ActionButton({
@@ -14,16 +14,28 @@ export function ActionButton({
   variant = 'primary',
 }: ActionButtonProps) {
   const isDanger = variant === 'danger';
+  const isSecondary = variant === 'secondary';
 
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.button, isDanger ? styles.dangerButton : styles.primaryButton]}
+      style={[
+        styles.button,
+        isDanger
+          ? styles.dangerButton
+          : isSecondary
+            ? styles.secondaryButton
+            : styles.primaryButton,
+      ]}
     >
       <Text
         style={[
           styles.buttonText,
-          isDanger ? styles.dangerButtonText : styles.primaryButtonText,
+          isDanger
+            ? styles.dangerButtonText
+            : isSecondary
+              ? styles.secondaryButtonText
+              : styles.primaryButtonText,
         ]}
       >
         {label}
@@ -44,8 +56,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
   },
   dangerButton: {
+    backgroundColor: colors.negative,
+  },
+  secondaryButton: {
     backgroundColor: colors.surfaceMuted,
-    borderColor: colors.negative,
+    borderColor: colors.borderStrong,
     borderWidth: 1,
   },
   buttonText: {
@@ -57,7 +72,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   dangerButtonText: {
-    color: colors.negativeText,
-    fontSize: 12,
+    color: colors.textPrimary,
+    fontSize: 13,
+  },
+  secondaryButtonText: {
+    color: colors.textPrimary,
+    fontSize: 13,
   },
 });

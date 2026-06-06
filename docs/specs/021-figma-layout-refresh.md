@@ -32,7 +32,7 @@ The design also shows a `Pagamentos` view. It is treated as a secondary screen o
 - Replace the horizontal tab bar with a fixed bottom navigation with five areas.
 - Keep all existing finance state, persistence, calculations, backup/restore, categories, accounts, monthly values, payment statuses, charts, and settings behavior.
 - Move account management out of `Planejamento` into a dedicated `Contas` tab.
-- Combine category management and app settings into an `Ajustes` tab.
+- Group category and account management inside the `Contas` tab.
 - Make `Resumo` emphasize the current selected month with compact KPI cards and a payment shortcut.
 - Keep `Pagamentos` as a dedicated view reachable from the summary.
 - Keep visual-only changes mostly untested, while preserving tests for pure business logic.
@@ -117,12 +117,15 @@ Planning focuses on selecting an account and editing monthly values. The previou
 ### Contas
 
 Account creation and editing moves to a dedicated tab using the existing `AccountEditor` behavior.
+The tab should expose compact internal sections for:
+
+- `Categorias`
+- `Contas`
 
 ### Ajustes
 
 The `Ajustes` tab combines:
 
-- Category management.
 - Salary and extra-balance settings.
 - Visible month count.
 - Commitment warning and danger thresholds.
@@ -147,8 +150,8 @@ Tests should be added or updated only if implementation changes:
 
 - The app uses the Figma color system.
 - The root navigation is a fixed five-item bottom navigation.
-- `Contas` is available as its own tab.
-- `Ajustes` contains category management and settings/data management.
+- `Contas` is available as its own tab with `Categorias` and `Contas` internal sections.
+- `Ajustes` contains settings/data management.
 - `Planejar` no longer owns account management.
 - `Resumo` exposes the payment view as a dedicated in-app view.
 - Existing finance calculations and persisted user data continue to drive all displayed values.

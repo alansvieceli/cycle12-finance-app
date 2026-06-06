@@ -12,7 +12,7 @@ type CurrencyInputProps = {
 export function CurrencyInput({ label, onChangeValue, value }: CurrencyInputProps) {
   return (
     <View style={styles.inputGroup}>
-      <Text style={styles.inputLabel}>{label}</Text>
+      <Text style={styles.inputLabel}>{label}:</Text>
       <EditableAmountInput
         onChangeValue={onChangeValue}
         style={styles.input}
@@ -24,14 +24,16 @@ export function CurrencyInput({ label, onChangeValue, value }: CurrencyInputProp
 
 const styles = StyleSheet.create({
   inputGroup: {
-    gap: 6,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
   },
   inputLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    flex: 1,
+    fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0,
-    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -39,10 +41,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0,
+    maxWidth: 150,
     minHeight: 48,
+    minWidth: 128,
     paddingHorizontal: 12,
+    textAlign: 'left',
   },
 });

@@ -7,12 +7,13 @@ Move existing screen responsibilities into the Figma target information architec
 ## Scope
 
 - Keep `Planejar` focused on monthly values.
-- Expose account management as a `Contas` tab.
-- Combine categories and settings into `Ajustes`.
+- Expose category and account management as internal sections inside the `Contas` tab.
+- Keep settings and data management inside `Ajustes`.
 - Keep payment checklist reachable from `Resumo`.
 
 ## Acceptance Criteria
 
 - Account management is no longer nested inside planning.
-- Categories and settings are both reachable from adjustments.
+- Categories and accounts are reachable from the `Contas` tab.
+- Settings remain reachable from `Ajustes`.
 - Payment checklist remains functional with existing payment status state.

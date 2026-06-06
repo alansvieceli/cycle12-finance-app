@@ -21,7 +21,8 @@ describe('formatters', () => {
   });
 
   it('formats editable amounts for text inputs', () => {
-    expect(formatEditableAmount(1234.56)).toBe('1234,56');
+    expect(formatEditableAmount(1234.56)).toBe('1.234,56');
+    expect(formatEditableAmount(13450.13)).toBe('13.450,13');
     expect(formatEditableAmount(213.3)).toBe('213,30');
     expect(formatEditableAmount(-10.5)).toBe('-10,50');
     expect(formatEditableAmount(0)).toBe('');
@@ -30,7 +31,7 @@ describe('formatters', () => {
   });
 
   it('formats month labels with the first letter capitalized', () => {
-    expect(formatMonthLabel(2026, 1)).toBe('Janeiro de 2026');
-    expect(formatMonthLabel(2026, 12)).toBe('Dezembro de 2026');
+    expect(formatMonthLabel(2026, 1)).toBe('Janeiro/2026');
+    expect(formatMonthLabel(2026, 12)).toBe('Dezembro/2026');
   });
 });

@@ -16,7 +16,7 @@ type SettingsScreenProps = {
 
 export function SettingsScreen({
   finance,
-  title = 'Configurações',
+  title = 'Configuração financeira',
 }: SettingsScreenProps) {
   const { actions, financeState, storageMessage } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
@@ -59,28 +59,35 @@ export function SettingsScreen({
       )}
       <View style={styles.inputGrid}>
         <CurrencyInput
-          label="Salário mensal"
+          label="Salário Mensal"
           value={financeState.settings.monthlySalary}
           onChangeValue={actions.updateMonthlySalary}
         />
         <CurrencyInput
-          label="Extra do mês atual"
+          label="Extra do Mês Atual"
           value={financeState.settings.currentMonthExtraBalance}
           onChangeValue={actions.updateCurrentMonthExtraBalance}
         />
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Meses no resumo e gráficos</Text>
-          <VisibleMonthCountInput
-            onChangeValue={actions.updateSummaryVisibleMonthCount}
-            value={financeState.settings.summaryVisibleMonthCount}
-          />
-          <Text style={styles.inputHint}>
-            Escolha de 1 a 12 meses. O planejamento continua mantendo 12 meses.
+          <View style={styles.settingRow}>
+            <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
+            <VisibleMonthCountInput
+              onChangeValue={actions.updateSummaryVisibleMonthCount}
+              value={financeState.settings.summaryVisibleMonthCount}
+            />
+          </View>
+          <Text style={[styles.inputHint, styles.summaryMonthHint]}>
+            1 a 12 meses. Planejamento mantém 12.
           </Text>
         </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Janela atual</Text>
-          <Text style={styles.windowRange}>
+        <View style={styles.windowBox}>
+          <Text style={styles.groupTitle}>Janela Atual</Text>
+          <Text
+            adjustsFontSizeToFit
+            minimumFontScale={0.82}
+            numberOfLines={1}
+            style={styles.windowRangeHighlight}
+          >
             {formatMonthLabel(
               financeState.settings.windowStartYear,
               financeState.settings.windowStartMonth,
@@ -88,7 +95,7 @@ export function SettingsScreen({
             - {formatMonthLabel(lastProjectionMonth.year, lastProjectionMonth.month)}
           </Text>
           <Text style={styles.inputHint}>
-            A janela sempre mostra 12 meses a partir do mês atual.
+            A janela mostrará 12 meses a partir do mês atual.
           </Text>
           <ActionButton
             label="Avançar mês"
@@ -110,27 +117,31 @@ export function SettingsScreen({
             }
           />
         </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Alerta de comprometimento</Text>
-          <ThresholdInput
-            onChangeValue={actions.updateCommitmentWarningThreshold}
-            placeholder="80"
-            value={financeState.settings.commitmentWarningThreshold}
-          />
-          <Text style={styles.inputHint}>0 a 100. Deixe 0 para desativar.</Text>
-        </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Perigo de comprometimento</Text>
-          <ThresholdInput
-            onChangeValue={actions.updateCommitmentDangerThreshold}
-            placeholder="90"
-            value={financeState.settings.commitmentDangerThreshold}
-          />
-          <Text style={styles.inputHint}>0 a 100. Deixe 0 para desativar.</Text>
+        <View style={styles.commitmentBox}>
+          <Text style={styles.groupTitle}>Comprometimento</Text>
+          <Text style={styles.commitmentHint}>
+            Use 0 a 100. Deixe 0 para desativar.
+          </Text>
+          <View style={styles.settingRow}>
+            <Text style={styles.inputLabel}>Alerta:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentWarningThreshold}
+              placeholder="80"
+              value={financeState.settings.commitmentWarningThreshold}
+            />
+          </View>
+          <View style={styles.settingRow}>
+            <Text style={styles.inputLabel}>Perigo:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentDangerThreshold}
+              placeholder="90"
+              value={financeState.settings.commitmentDangerThreshold}
+            />
+          </View>
         </View>
         <View style={styles.dataActions}>
           <ActionButton
-            label="Gerenciar dados"
+            label="Backup e restauração"
             onPress={() => setIsDataManagementOpen(true)}
           />
         </View>
@@ -256,10 +267,10 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    flex: 1,
+    fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0,
-    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -267,29 +278,64 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0,
+    maxWidth: 150,
     minHeight: 48,
+    minWidth: 128,
     paddingHorizontal: 12,
+    textAlign: 'left',
   },
   inputHint: {
     color: colors.textSecondary,
     fontSize: 12,
     letterSpacing: 0,
+    textAlign: 'left',
   },
-  windowRange: {
+  commitmentBox: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '800',
+    gap: 10,
+    padding: 12,
+  },
+  commitmentHint: {
+    color: colors.textSecondary,
+    fontSize: 11,
     letterSpacing: 0,
-    minHeight: 48,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    lineHeight: 16,
+  },
+  groupTitle: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '900',
+    letterSpacing: 0,
+  },
+  summaryMonthHint: {
+    textAlign: 'right',
+  },
+  windowBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 10,
+    padding: 12,
+  },
+  windowRangeHighlight: {
+    color: colors.textPrimary,
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 0,
+    lineHeight: 18,
+    textAlign: 'center',
+  },
+  settingRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
   },
   dataActions: {
     marginTop: 4,

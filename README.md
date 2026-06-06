@@ -17,8 +17,8 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Supports adding the same adjustment amount across multiple consecutive months from the `+` adjustment modal.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Contas, and Ajustes.
-- Keeps planning focused on monthly values, with account management available from the dedicated Contas tab.
-- Combines category management, finance settings, and local data actions in Ajustes.
+- Keeps planning focused on monthly values, with category and account management available from the dedicated Contas tab.
+- Combines finance settings and local data actions in Ajustes.
 - Lets the user select a category while creating an account.
 - Tracks current-month paid/unpaid status manually for each account item.
 - Opens current-month payment tracking from the Resumo payment shortcut.

@@ -13,7 +13,6 @@ export const percentageFormatter = new Intl.NumberFormat('pt-BR', {
 
 const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
   month: 'long',
-  year: 'numeric',
 });
 
 export function formatEditableAmount(value: number) {
@@ -21,11 +20,15 @@ export function formatEditableAmount(value: number) {
     return '';
   }
 
-  return value.toFixed(2).replace('.', ',');
+  return new Intl.NumberFormat('pt-BR', {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  }).format(value);
 }
 
 export function formatMonthLabel(year: number, month: number) {
-  const label = monthFormatter.format(new Date(year, month - 1, 1));
+  const monthLabel = monthFormatter.format(new Date(year, month - 1, 1));
+  const label = `${monthLabel}/${year}`;
 
   return label.charAt(0).toUpperCase() + label.slice(1);
 }

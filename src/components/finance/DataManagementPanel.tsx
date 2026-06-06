@@ -148,12 +148,12 @@ export function DataManagementPanel({
     <View style={styles.panel}>
       <View style={styles.header}>
         <View style={styles.titleGroup}>
-          <Text style={styles.sectionTitle}>Gerenciar dados</Text>
+          <Text style={styles.sectionTitle}>Backup e restauração</Text>
           <Text style={styles.description}>
-            Backup, restauração e reset usam apenas os dados locais deste app.
+            Salve, restaure ou limpe os dados locais deste app.
           </Text>
         </View>
-        <ActionButton label="Voltar" onPress={onClose} />
+        <ActionButton label="Voltar" onPress={onClose} variant="secondary" />
       </View>
 
       <View style={styles.actions}>

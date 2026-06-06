@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0,
     minHeight: 48,
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   categoryPickerText: {
     color: colors.textPrimary,
     flex: 1,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '800',
     letterSpacing: 0,
   },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   categoryPickerOptionText: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0,
   },

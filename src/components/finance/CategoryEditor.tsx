@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0,
     minHeight: 48,
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
   },
   yearText: {
     color: colors.textPrimary,
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '900',
     letterSpacing: 0,
     minWidth: 72,
