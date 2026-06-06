@@ -5,7 +5,13 @@ import {
   buildMonthlyExpenseChartData,
   buildSurplusShortfallChartData,
 } from '../lib/chartData';
-import { ProjectionMonth } from '../lib/financeCalculations';
+import { resolveCommitmentColor } from '../lib/commitmentColor';
+import {
+  calculateIncomeCommitmentPercentage,
+  calculateMonthlyTotalExpenses,
+  ProjectionMonth,
+} from '../lib/financeCalculations';
+import { colors } from '../theme/colors';
 import { FinanceState } from '../types/finance';
 
 type ChartsScreenProps = {
@@ -17,6 +23,27 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
   const currentProjectionMonth =
     projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
     projectionMonths[0];
+  const currentMonthTotalExpenses = currentProjectionMonth
+    ? calculateMonthlyTotalExpenses(
+        financeState.categories,
+        financeState.accountItems,
+        financeState.monthlyValues,
+        currentProjectionMonth,
+      )
+    : 0;
+  const currentMonthCommitment = currentProjectionMonth
+    ? calculateIncomeCommitmentPercentage(
+        currentMonthTotalExpenses,
+        financeState.settings,
+        currentProjectionMonth,
+      )
+    : null;
+  const currentMonthCommitmentColor =
+    resolveCommitmentColor(
+      currentMonthCommitment,
+      financeState.settings.commitmentWarningThreshold,
+      financeState.settings.commitmentDangerThreshold,
+    ) ?? colors.positive;
 
   return (
     <>
@@ -24,7 +51,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         data={buildSurplusShortfallChartData(financeState, projectionMonths)}
         emptyText="Configure meses e valores para visualizar sobra ou falta."
         mode="balance"
-        title="Sobra ou falta por mês"
+        title="Saldo por mês"
         totalLabel="Total no período"
       />
 
@@ -43,6 +70,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
           )}
           emptyText="Preencha valores do mês atual para visualizar categorias."
           title="Categorias no mês atual"
+          totalAmountColor={currentMonthCommitmentColor}
           totalLabel="Total do mês atual"
         />
       ) : null}

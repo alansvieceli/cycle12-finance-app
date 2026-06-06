@@ -10,6 +10,7 @@ type CategoryBarChartProps = {
   data: CategoryChartPoint[];
   emptyText: string;
   title: string;
+  totalAmountColor?: string;
   totalLabel: string;
 };
 
@@ -17,6 +18,7 @@ export function CategoryBarChart({
   data,
   emptyText,
   title,
+  totalAmountColor,
   totalLabel,
 }: CategoryBarChartProps) {
   const total = data.reduce((sum, point) => sum + point.value, 0);
@@ -29,7 +31,14 @@ export function CategoryBarChart({
         <>
           <View style={styles.totalBox}>
             <Text style={styles.totalLabel}>{totalLabel}</Text>
-            <Text style={styles.totalAmount}>{currencyFormatter.format(total)}</Text>
+            <Text
+              style={[
+                styles.totalAmount,
+                totalAmountColor ? { color: totalAmountColor } : null,
+              ]}
+            >
+              {currencyFormatter.format(total)}
+            </Text>
           </View>
 
           <View style={styles.donutBox}>
@@ -38,7 +47,12 @@ export function CategoryBarChart({
               centerLabelComponent={() => (
                 <View style={styles.centerLabel}>
                   <Text style={styles.centerLabelText}>Total</Text>
-                  <Text style={styles.centerLabelAmount}>
+                  <Text
+                    style={[
+                      styles.centerLabelAmount,
+                      totalAmountColor ? { color: totalAmountColor } : null,
+                    ]}
+                  >
                     {currencyFormatter.format(total)}
                   </Text>
                 </View>
@@ -100,18 +114,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   totalBox: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 16,
     marginTop: 14,
     minHeight: 64,
-    padding: 12,
   },
   totalLabel: {
     color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
-    textTransform: 'uppercase',
   },
   totalAmount: {
     color: colors.textPrimary,

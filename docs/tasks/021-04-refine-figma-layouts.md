@@ -25,3 +25,4 @@ Bring the main screens closer to the Figma layout while keeping implementation s
 - Balanced the vertical spacing above the greeting with the spacing before the month controls.
 - Aligned the summary commitment percentage color with the progress bar states: default white, warning yellow, and danger red.
 - Revised quick Figma rules in the spec and tightened the app against them: currency keeps two decimals, core touch targets are at least 44 px, card radii use the 16-24 px range, and account/category deletion now requires confirmation.
+- Matched chart total labels to sentence case and applied commitment colors to the current-month category total.

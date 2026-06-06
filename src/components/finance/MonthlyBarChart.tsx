@@ -76,7 +76,7 @@ export function MonthlyBarChart({
                 height={190}
                 initialSpacing={18}
                 isAnimated
-                labelWidth={44}
+                labelWidth={22}
                 maxValue={positiveChartMaxValue}
                 mostNegativeValue={negativeChartMinValue}
                 noOfSections={3}
@@ -211,18 +211,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   totalBox: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 16,
     marginTop: 14,
     minHeight: 64,
-    padding: 12,
   },
   totalLabel: {
     color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0,
-    textTransform: 'uppercase',
   },
   totalAmount: {
     color: colors.textPrimary,
@@ -247,6 +243,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0,
+    textAlign: 'center',
   },
   valuesToggle: {
     alignItems: 'center',

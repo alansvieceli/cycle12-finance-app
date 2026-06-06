@@ -177,7 +177,9 @@ export function SummaryScreen({
                   {currencyFormatter.format(currentSurplusOrShortfall)}
                 </Text>
                 <View style={styles.commitmentHeader}>
-                  <Text style={styles.commitmentLabel}>Comprometimento do salário</Text>
+                  <Text style={styles.commitmentLabel}>
+                    Comprometimento do salário + extra
+                  </Text>
                   <Text style={[styles.commitmentValue, { color: commitmentColor }]}>
                     {currentCommitmentPercentage === null
                       ? '-'
