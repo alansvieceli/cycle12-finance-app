@@ -6,7 +6,7 @@ import { typography } from '../../theme/typography';
 type ActionButtonProps = {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost-danger';
 };
 
 export function ActionButton({
@@ -16,6 +16,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isDanger = variant === 'danger';
   const isSecondary = variant === 'secondary';
+  const isGhostDanger = variant === 'ghost-danger';
 
   return (
     <Pressable
@@ -26,7 +27,9 @@ export function ActionButton({
           ? styles.dangerButton
           : isSecondary
             ? styles.secondaryButton
-            : styles.primaryButton,
+            : isGhostDanger
+              ? styles.ghostDangerButton
+              : styles.primaryButton,
       ]}
     >
       <Text
@@ -36,7 +39,9 @@ export function ActionButton({
             ? styles.dangerButtonText
             : isSecondary
               ? styles.secondaryButtonText
-              : styles.primaryButtonText,
+              : isGhostDanger
+                ? styles.ghostDangerButtonText
+                : styles.primaryButtonText,
         ]}
       >
         {label}
@@ -64,6 +69,11 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderWidth: 1,
   },
+  ghostDangerButton: {
+    backgroundColor: 'transparent',
+    borderColor: colors.border,
+    borderWidth: 1,
+  },
   buttonText: {
     letterSpacing: 0,
     ...typography.button,
@@ -76,5 +86,8 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     color: colors.textPrimary,
+  },
+  ghostDangerButtonText: {
+    color: colors.negativeText,
   },
 });

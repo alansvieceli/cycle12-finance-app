@@ -166,7 +166,11 @@ export function DataManagementPanel({
           label={activeAction === 'restore' ? 'Processando...' : 'Restaurar backup'}
           onPress={handleRestore}
         />
-        <ActionButton label="Limpar tudo" onPress={handleReset} variant="danger" />
+        <ActionButton
+          label="Limpar tudo"
+          onPress={handleReset}
+          variant="ghost-danger"
+        />
       </View>
 
       {message ? <Text style={styles.message}>{message}</Text> : null}

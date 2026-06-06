@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     minWidth: 128,
     paddingHorizontal: 12,
-    textAlign: 'left',
+    textAlign: 'right',
     ...typography.inputCompact,
   },
 });

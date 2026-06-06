@@ -71,12 +71,18 @@ export function CategoryEditor({
   onCreateCategory,
   onDeleteCategory,
 }: CategoryEditorProps) {
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string>();
+  const [isCreateOpen, setIsCreateOpen] = useState(categories.length === 0);
   const [activePropagationSelector, setActivePropagationSelector] = useState<string>();
   const [activeMonthSelector, setActiveMonthSelector] = useState<string>();
 
   function closeSelectors() {
     setActivePropagationSelector(undefined);
     setActiveMonthSelector(undefined);
+  }
+
+  function toggleExpand(categoryId: string) {
+    setExpandedCategoryId((prev) => (prev === categoryId ? undefined : categoryId));
   }
 
   function confirmDeleteCategory(category: Category) {
@@ -94,88 +100,136 @@ export function CategoryEditor({
     );
   }
 
+  const sortedCategories = sortCategories(categories);
+
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>Categorias</Text>
-      <View style={styles.createSection}>
-        <Text style={styles.subsectionTitle}>Adicionar categoria</Text>
-        <View style={styles.createRow}>
-          <TextInput
-            onChangeText={onChangeNewCategoryName}
-            placeholder="Nova categoria"
-            placeholderTextColor={colors.textSecondary}
-            style={[styles.input, styles.createInput]}
-            value={newCategoryName}
-          />
-          <TextInput
-            keyboardType="number-pad"
-            onChangeText={onChangeNewCategorySortOrder}
-            placeholder="Ordem"
-            placeholderTextColor={colors.textSecondary}
-            style={[styles.input, styles.sortOrderInput]}
-            value={newCategorySortOrder}
-          />
-          <PropagationSelector
-            label="Propagação"
-            onOpen={() => setActivePropagationSelector('new')}
-            selectorId="new"
-            value={newCategoryPropagation}
-            visibleSelectorId={activePropagationSelector}
-          />
-          {newCategoryPropagation === 'installment' ? (
-            <MonthYearSelector
-              onOpen={() => setActiveMonthSelector('new')}
-              selectorId="new"
-              value={newCategoryInstallmentEndDate}
-              visibleSelectorId={activeMonthSelector}
+
+      {sortedCategories.length > 0 && (
+        <View style={styles.listSection}>
+          {sortedCategories.map((category) => {
+            const isExpanded = expandedCategoryId === category.id;
+
+            return (
+              <View key={category.id} style={styles.listItem}>
+                <Pressable
+                  onPress={() => toggleExpand(category.id)}
+                  style={styles.compactRow}
+                >
+                  <Text numberOfLines={1} style={styles.itemName}>
+                    {category.name}
+                  </Text>
+                  <View style={styles.badgesRow}>
+                    <PropagationBadge value={category.propagation} />
+                    {category.propagation === 'installment' &&
+                    category.installmentEndDate ? (
+                      <View style={styles.badge}>
+                        <Text style={styles.badgeText}>
+                          {formatInstallmentEndDate(category.installmentEndDate)}
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View style={[styles.badge, styles.sortBadge]}>
+                      <Text style={styles.badgeText}>#{category.sortOrder}</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.expandChevron}>{isExpanded ? '▴' : '▾'}</Text>
+                </Pressable>
+
+                {isExpanded && (
+                  <View style={styles.expandedContent}>
+                    <View style={styles.editFieldsRow}>
+                      <TextInput
+                        onChangeText={(name) => onChangeCategoryName(category.id, name)}
+                        style={[styles.input, styles.nameInput]}
+                        value={category.name}
+                      />
+                      <SortOrderInput
+                        onChangeValue={(sortOrder) =>
+                          onChangeCategorySortOrder(category.id, sortOrder)
+                        }
+                        value={category.sortOrder}
+                      />
+                    </View>
+                    <View style={styles.editFieldsRow}>
+                      <PropagationSelector
+                        label="Propagação"
+                        onOpen={() => setActivePropagationSelector(category.id)}
+                        selectorId={category.id}
+                        value={category.propagation}
+                        visibleSelectorId={activePropagationSelector}
+                      />
+                      {category.propagation === 'installment' ? (
+                        <MonthYearSelector
+                          onOpen={() => setActiveMonthSelector(category.id)}
+                          selectorId={category.id}
+                          value={category.installmentEndDate ?? ''}
+                          visibleSelectorId={activeMonthSelector}
+                        />
+                      ) : null}
+                    </View>
+                    <ActionButton
+                      label="Excluir categoria"
+                      onPress={() => confirmDeleteCategory(category)}
+                      variant="ghost-danger"
+                    />
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </View>
+      )}
+
+      <Pressable
+        onPress={() => setIsCreateOpen((p) => !p)}
+        style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
+      >
+        <Text style={styles.createToggleText}>Nova categoria</Text>
+        <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
+      </Pressable>
+
+      {isCreateOpen && (
+        <View style={styles.createForm}>
+          <View style={styles.createRow}>
+            <TextInput
+              onChangeText={onChangeNewCategoryName}
+              placeholder="Nome"
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.input, styles.createInput]}
+              value={newCategoryName}
             />
-          ) : null}
+            <TextInput
+              keyboardType="number-pad"
+              onChangeText={onChangeNewCategorySortOrder}
+              placeholder="Ordem"
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.input, styles.sortOrderInput]}
+              value={newCategorySortOrder}
+            />
+          </View>
+          <View style={styles.createRow}>
+            <PropagationSelector
+              label="Propagação"
+              onOpen={() => setActivePropagationSelector('new')}
+              selectorId="new"
+              value={newCategoryPropagation}
+              visibleSelectorId={activePropagationSelector}
+            />
+            {newCategoryPropagation === 'installment' ? (
+              <MonthYearSelector
+                onOpen={() => setActiveMonthSelector('new')}
+                selectorId="new"
+                value={newCategoryInstallmentEndDate}
+                visibleSelectorId={activeMonthSelector}
+              />
+            ) : null}
+          </View>
           <ActionButton label="Adicionar" onPress={onCreateCategory} />
         </View>
-      </View>
+      )}
 
-      <View style={styles.listSection}>
-        <Text style={styles.subsectionTitle}>Categorias cadastradas</Text>
-        {sortCategories(categories).map((category) => (
-          <View key={category.id} style={styles.editorRow}>
-            <View style={styles.editorMainRow}>
-              <TextInput
-                onChangeText={(name) => onChangeCategoryName(category.id, name)}
-                style={[styles.input, styles.rowInput]}
-                value={category.name}
-              />
-              <SortOrderInput
-                onChangeValue={(sortOrder) =>
-                  onChangeCategorySortOrder(category.id, sortOrder)
-                }
-                value={category.sortOrder}
-              />
-              <ActionButton
-                label="Excluir"
-                onPress={() => confirmDeleteCategory(category)}
-                variant="danger"
-              />
-            </View>
-            <View style={styles.propagationRow}>
-              <PropagationSelector
-                label="Propagação"
-                onOpen={() => setActivePropagationSelector(category.id)}
-                selectorId={category.id}
-                value={category.propagation}
-                visibleSelectorId={activePropagationSelector}
-              />
-              {category.propagation === 'installment' ? (
-                <MonthYearSelector
-                  onOpen={() => setActiveMonthSelector(category.id)}
-                  selectorId={category.id}
-                  value={category.installmentEndDate ?? ''}
-                  visibleSelectorId={activeMonthSelector}
-                />
-              ) : null}
-            </View>
-          </View>
-        ))}
-      </View>
       <PropagationModal
         onChangeValue={(value) => {
           if (!activePropagationSelector) {
@@ -216,6 +270,17 @@ export function CategoryEditor({
         }
         visible={Boolean(activeMonthSelector)}
       />
+    </View>
+  );
+}
+
+function PropagationBadge({ value }: { value: string }) {
+  const option =
+    propagationOptions.find((o) => o.value === value) ?? propagationOptions[1];
+
+  return (
+    <View style={styles.badge}>
+      <Text style={styles.badgeText}>{option.label}</Text>
     </View>
   );
 }
@@ -467,30 +532,68 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.textPrimary,
     letterSpacing: 0,
+    marginBottom: 8,
     ...typography.sectionTitle,
   },
-  subsectionTitle: {
+  listSection: {
+    marginBottom: 10,
+  },
+  listItem: {
+    borderTopColor: colors.border,
+    borderTopWidth: 1,
+  },
+  compactRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    minHeight: 44,
+    paddingVertical: 8,
+  },
+  itemName: {
+    color: colors.textPrimary,
+    flex: 1,
+    letterSpacing: 0,
+    ...typography.body,
+  },
+  badgesRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  badge: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  sortBadge: {
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+  },
+  badgeText: {
     color: colors.textSecondary,
     letterSpacing: 0,
-    textTransform: 'uppercase',
-    ...typography.label,
+    ...typography.caption,
   },
-  createSection: {
-    borderBottomColor: colors.border,
-    borderBottomWidth: 1,
-    gap: 10,
-    marginTop: 14,
-    paddingBottom: 14,
+  expandChevron: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.caption,
   },
-  listSection: {
-    gap: 10,
-    marginTop: 14,
+  expandedContent: {
+    borderTopColor: colors.border,
+    borderTopWidth: 1,
+    gap: 8,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
-  createRow: {
+  editFieldsRow: {
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 8,
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -499,39 +602,62 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     letterSpacing: 0,
-    minHeight: 48,
+    minHeight: 44,
     paddingHorizontal: 12,
     ...typography.inputCompact,
   },
-  createInput: {
+  nameInput: {
     flex: 1,
-    minWidth: 160,
+    minWidth: 140,
   },
   sortOrderInput: {
     maxWidth: 92,
     textAlign: 'center',
   },
-  editorRow: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    gap: 8,
-    paddingTop: 10,
+  createToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minHeight: 44,
+    paddingHorizontal: 14,
   },
-  editorMainRow: {
+  createToggleOpen: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomWidth: 0,
+  },
+  createToggleText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.body,
+  },
+  createToggleIcon: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  createForm: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderWidth: 1,
+    gap: 8,
+    padding: 12,
+  },
+  createRow: {
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 8,
   },
-  rowInput: {
+  createInput: {
     flex: 1,
-    minWidth: 160,
-  },
-  propagationRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+    minWidth: 140,
   },
   selectorButton: {
     alignItems: 'center',
@@ -540,7 +666,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 46,
+    minHeight: 44,
     minWidth: 156,
     paddingHorizontal: 12,
   },

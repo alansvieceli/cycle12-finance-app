@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { ActionButton } from '../components/common/ActionButton';
 import { CurrencyInput } from '../components/common/CurrencyInput';
@@ -15,12 +23,15 @@ type SettingsScreenProps = {
   title?: string;
 };
 
+const MONTH_COUNT_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 export function SettingsScreen({
   finance,
   title = 'Preferências',
 }: SettingsScreenProps) {
   const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
+  const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
   const projectionMonths = createProjectionMonths(
     new Date(
       financeState.settings.windowStartYear,
@@ -52,7 +63,7 @@ export function SettingsScreen({
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>{title}</Text>
       <View style={styles.inputGrid}>
-        <View style={styles.financeBox}>
+        <View style={styles.box}>
           <Text style={styles.groupTitle}>Valores e visualização</Text>
           <CurrencyInput
             label="Salário Mensal"
@@ -64,20 +75,20 @@ export function SettingsScreen({
             value={financeState.settings.currentMonthExtraBalance}
             onChangeValue={actions.updateCurrentMonthExtraBalance}
           />
-          <View style={styles.inputGroup}>
-            <View style={styles.settingRow}>
-              <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
-              <VisibleMonthCountInput
-                onChangeValue={actions.updateSummaryVisibleMonthCount}
-                value={financeState.settings.summaryVisibleMonthCount}
-              />
-            </View>
-            <Text style={[styles.inputHint, styles.summaryMonthHint]}>
-              1 a 12 meses. Planejamento mantém 12.
-            </Text>
+          <View style={styles.settingRow}>
+            <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
+            <Pressable
+              onPress={() => setIsMonthCountPickerOpen(true)}
+              style={styles.comboButton}
+            >
+              <Text style={styles.comboButtonText}>
+                {financeState.settings.summaryVisibleMonthCount} ▾
+              </Text>
+            </Pressable>
           </View>
         </View>
-        <View style={styles.windowBox}>
+
+        <View style={styles.box}>
           <Text style={styles.groupTitle}>Janela Atual</Text>
           <Text
             adjustsFontSizeToFit
@@ -90,9 +101,6 @@ export function SettingsScreen({
               financeState.settings.windowStartMonth,
             )}{' '}
             - {formatMonthLabel(lastProjectionMonth.year, lastProjectionMonth.month)}
-          </Text>
-          <Text style={styles.inputHint}>
-            A janela mostrará 12 meses a partir do mês atual.
           </Text>
           <ActionButton
             label="Avançar mês"
@@ -114,35 +122,78 @@ export function SettingsScreen({
             }
           />
         </View>
-        <View style={styles.commitmentBox}>
+
+        <View style={styles.box}>
           <Text style={styles.groupTitle}>Comprometimento</Text>
-          <Text style={styles.commitmentHint}>
-            Use 0 a 100. Deixe 0 para desativar.
-          </Text>
-          <View style={styles.settingRow}>
-            <Text style={styles.inputLabel}>Alerta:</Text>
-            <ThresholdInput
-              onChangeValue={actions.updateCommitmentWarningThreshold}
-              placeholder="80"
-              value={financeState.settings.commitmentWarningThreshold}
-            />
-          </View>
-          <View style={styles.settingRow}>
-            <Text style={styles.inputLabel}>Perigo:</Text>
-            <ThresholdInput
-              onChangeValue={actions.updateCommitmentDangerThreshold}
-              placeholder="90"
-              value={financeState.settings.commitmentDangerThreshold}
-            />
+          <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
+          <View style={styles.thresholdPair}>
+            <View style={styles.thresholdItem}>
+              <Text style={styles.inputLabel}>Alerta:</Text>
+              <ThresholdInput
+                onChangeValue={actions.updateCommitmentWarningThreshold}
+                placeholder="80"
+                value={financeState.settings.commitmentWarningThreshold}
+              />
+            </View>
+            <View style={styles.thresholdItem}>
+              <Text style={styles.inputLabel}>Perigo:</Text>
+              <ThresholdInput
+                onChangeValue={actions.updateCommitmentDangerThreshold}
+                placeholder="90"
+                value={financeState.settings.commitmentDangerThreshold}
+              />
+            </View>
           </View>
         </View>
-        <View style={styles.dataActions}>
-          <ActionButton
-            label="Backup e restauração"
-            onPress={() => setIsDataManagementOpen(true)}
-          />
-        </View>
+
+        <ActionButton
+          label="Backup e restauração"
+          onPress={() => setIsDataManagementOpen(true)}
+        />
       </View>
+
+      <Modal
+        animationType="fade"
+        onRequestClose={() => setIsMonthCountPickerOpen(false)}
+        transparent
+        visible={isMonthCountPickerOpen}
+      >
+        <Pressable
+          onPress={() => setIsMonthCountPickerOpen(false)}
+          style={styles.modalOverlay}
+        >
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Meses no Resumo e Gráficos</Text>
+            <View style={styles.monthCountGrid}>
+              {MONTH_COUNT_OPTIONS.map((n) => {
+                const isSelected = financeState.settings.summaryVisibleMonthCount === n;
+                return (
+                  <Pressable
+                    key={n}
+                    onPress={() => {
+                      actions.updateSummaryVisibleMonthCount(String(n));
+                      setIsMonthCountPickerOpen(false);
+                    }}
+                    style={[
+                      styles.monthCountOption,
+                      isSelected && styles.monthCountOptionActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.monthCountOptionText,
+                        isSelected && styles.monthCountOptionTextActive,
+                      ]}
+                    >
+                      {n}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -184,52 +235,7 @@ function ThresholdInput({
       onFocus={() => setIsFocused(true)}
       placeholder={placeholder}
       placeholderTextColor={colors.textSecondary}
-      style={styles.input}
-      value={draftValue}
-    />
-  );
-}
-
-function VisibleMonthCountInput({
-  onChangeValue,
-  value,
-}: {
-  onChangeValue: (value: string) => void;
-  value: number;
-}) {
-  const [draftValue, setDraftValue] = useState(String(value));
-  const [isFocused, setIsFocused] = useState(false);
-
-  useEffect(() => {
-    if (!isFocused) {
-      setDraftValue(String(value));
-    }
-  }, [isFocused, value]);
-
-  function handleChangeText(nextValue: string) {
-    const numericValue = nextValue.replace(/\D/g, '');
-
-    setDraftValue(numericValue);
-
-    if (numericValue) {
-      onChangeValue(numericValue);
-    }
-  }
-
-  function handleBlur() {
-    setIsFocused(false);
-    setDraftValue(String(value));
-  }
-
-  return (
-    <TextInput
-      keyboardType="number-pad"
-      onBlur={handleBlur}
-      onChangeText={handleChangeText}
-      onFocus={() => setIsFocused(true)}
-      placeholder="12"
-      placeholderTextColor={colors.textSecondary}
-      style={styles.input}
+      style={styles.smallInput}
       value={draftValue}
     />
   );
@@ -249,57 +255,15 @@ const styles = StyleSheet.create({
     ...typography.sectionTitle,
   },
   inputGrid: {
-    gap: 12,
-    marginTop: 14,
+    gap: 10,
+    marginTop: 10,
   },
-  inputGroup: {
-    gap: 6,
-  },
-  inputLabel: {
-    color: colors.textSecondary,
-    flex: 1,
-    letterSpacing: 0,
-    ...typography.bodySmall,
-  },
-  input: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    maxWidth: 150,
-    minHeight: 48,
-    minWidth: 128,
-    paddingHorizontal: 12,
-    textAlign: 'left',
-    ...typography.inputCompact,
-  },
-  inputHint: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    textAlign: 'left',
-    ...typography.bodySmall,
-  },
-  commitmentBox: {
+  box: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
     borderRadius: 16,
     borderWidth: 1,
-    gap: 10,
-    padding: 12,
-  },
-  commitmentHint: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.caption,
-  },
-  financeBox: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 16,
-    borderWidth: 1,
-    gap: 10,
+    gap: 8,
     padding: 12,
   },
   groupTitle: {
@@ -307,16 +271,51 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.cardTitle,
   },
-  summaryMonthHint: {
-    textAlign: 'right',
+  settingRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
   },
-  windowBox: {
+  inputLabel: {
+    color: colors.textSecondary,
+    flex: 1,
+    letterSpacing: 0,
+    ...typography.bodySmall,
+  },
+  smallInput: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 1,
-    gap: 10,
-    padding: 12,
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    minHeight: 44,
+    minWidth: 72,
+    maxWidth: 88,
+    paddingHorizontal: 12,
+    textAlign: 'center',
+    ...typography.inputCompact,
+  },
+  comboButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    minWidth: 72,
+    paddingHorizontal: 14,
+  },
+  comboButtonText: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  hint: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.caption,
   },
   windowRangeHighlight: {
     color: colors.textPrimary,
@@ -324,12 +323,64 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     ...typography.amountSmall,
   },
-  settingRow: {
-    alignItems: 'center',
+  thresholdPair: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 12,
   },
-  dataActions: {
-    marginTop: 4,
+  thresholdItem: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 12,
+    maxWidth: 320,
+    padding: 16,
+    width: '100%',
+  },
+  modalTitle: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  monthCountGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  monthCountOption: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexBasis: '17%',
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  monthCountOptionActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  monthCountOptionText: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  monthCountOptionTextActive: {
+    color: colors.accentText,
   },
 });
