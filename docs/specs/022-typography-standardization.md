@@ -69,7 +69,7 @@ Create semantic tokens based on the existing app style:
 | `button`       |   13 |          18 | `800`  |
 | `tab`          |   12 |          16 | `800`  |
 | `caption`      |   11 |          15 | `800`  |
-| `input`        |   18 |          24 | `700`  |
+| `input`        |   16 |          22 | `700`  |
 | `inputCompact` |   14 |          20 | `700`  |
 
 Weights should also be exported for local composition:

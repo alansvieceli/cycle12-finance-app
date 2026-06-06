@@ -68,9 +68,9 @@ export const typography = {
     lineHeight: 15,
   },
   input: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: fontWeights.semibold,
-    lineHeight: 24,
+    lineHeight: 22,
   },
   inputCompact: {
     fontSize: 14,

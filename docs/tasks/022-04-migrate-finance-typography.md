@@ -19,3 +19,7 @@ Apply typography tokens to finance components and screens.
 - Finance screen text roles consume typography tokens.
 - Hardcoded typography values are minimized.
 - Any remaining exception is intentional and documented.
+
+## Implementation Notes
+
+- Main input typography was reduced from 18/24 to 16/22 after visual review so edit fields do not feel larger than surrounding text.
