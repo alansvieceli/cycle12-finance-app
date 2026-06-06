@@ -5,6 +5,7 @@ import { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   currencyFormatter,
   formatMonthLabel,
+  maskCurrency,
   percentageFormatter,
 } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
@@ -18,6 +19,7 @@ type MonthSummaryCardProps = {
   projectionMonth: ProjectionMonth;
   salaryCommitmentPercentage: number | null;
   surplusOrShortfall: number;
+  valuesHidden: boolean;
 };
 
 export function MonthSummaryCard({
@@ -28,6 +30,7 @@ export function MonthSummaryCard({
   projectionMonth,
   salaryCommitmentPercentage,
   surplusOrShortfall,
+  valuesHidden,
 }: MonthSummaryCardProps) {
   const commitmentColor = resolveCommitmentColor(
     salaryCommitmentPercentage,
@@ -51,14 +54,14 @@ export function MonthSummaryCard({
             surplusOrShortfall < 0 ? styles.negativeBalance : styles.positiveBalance,
           ]}
         >
-          {currencyFormatter.format(surplusOrShortfall)}
+          {maskCurrency(surplusOrShortfall, valuesHidden)}
         </Text>
       </View>
 
       <View style={styles.summaryGrid}>
         <SummaryValue
           label="Despesas"
-          value={currencyFormatter.format(monthlyTotalExpenses)}
+          value={maskCurrency(monthlyTotalExpenses, valuesHidden)}
         />
         <SummaryValue
           color={commitmentColor}

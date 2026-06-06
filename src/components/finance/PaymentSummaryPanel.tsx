@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { currencyFormatter } from '../../lib/formatters';
+import { maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
@@ -11,6 +11,7 @@ type PaymentSummaryPanelProps = {
   totalAccounts: number;
   totalPaid: number;
   totalPending: number;
+  valuesHidden: boolean;
 };
 
 export function PaymentSummaryPanel({
@@ -20,6 +21,7 @@ export function PaymentSummaryPanel({
   totalAccounts,
   totalPaid,
   totalPending,
+  valuesHidden,
 }: PaymentSummaryPanelProps) {
   const totalAmount = totalPaid + totalPending;
   const paidProgress = totalAmount > 0 ? totalPaid / totalAmount : 0;
@@ -33,13 +35,13 @@ export function PaymentSummaryPanel({
             <View style={styles.kpiBox}>
               <Text style={styles.kpiLabel}>Pago</Text>
               <Text style={[styles.kpiAmount, styles.paidAmount]}>
-                {currencyFormatter.format(totalPaid)}
+                {maskCurrency(totalPaid, valuesHidden)}
               </Text>
             </View>
             <View style={styles.kpiBox}>
               <Text style={styles.kpiLabel}>Pendente</Text>
               <Text style={[styles.kpiAmount, styles.pendingAmount]}>
-                {currencyFormatter.format(totalPending)}
+                {maskCurrency(totalPending, valuesHidden)}
               </Text>
             </View>
           </View>

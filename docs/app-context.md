@@ -21,12 +21,14 @@ The app is for a user who wants to:
 - see whether each month ends with surplus or shortfall.
 - keep data private and stored only on the device.
 - optionally protect app access with the device's enrolled biometrics.
+- quickly hide all monetary values on screen without leaving the app.
 - export and restore local backups when needed.
 
 ## Core Product Principles
 
 - Local-first: there is no backend, login, remote sync, or cloud account.
 - Optional security: biometric app lock is local-only and disabled by default.
+- Privacy toggle: a session-only eye icon in the greeting row hides all monetary values across every tab until tapped again or the app is reopened.
 - Android-first: validation and manual testing target Android emulator first.
 - Simple and maintainable: avoid unnecessary dependencies and complex architecture.
 - Finance-focused: UI changes should support fast scanning, monthly planning, and practical money decisions.

@@ -26,6 +26,10 @@ export function formatEditableAmount(value: number) {
   }).format(value);
 }
 
+export function maskCurrency(value: number, hidden: boolean): string {
+  return hidden ? 'R$ ••••' : currencyFormatter.format(value);
+}
+
 export function formatMonthLabel(year: number, month: number) {
   const monthLabel = monthFormatter.format(new Date(year, month - 1, 1));
   const label = `${monthLabel}/${year}`;

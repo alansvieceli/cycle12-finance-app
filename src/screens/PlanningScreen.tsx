@@ -5,9 +5,14 @@ import { ProjectionMonth } from '../lib/financeCalculations';
 type PlanningScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
   projectionMonths: ProjectionMonth[];
+  valuesHidden: boolean;
 };
 
-export function PlanningScreen({ finance, projectionMonths }: PlanningScreenProps) {
+export function PlanningScreen({
+  finance,
+  projectionMonths,
+  valuesHidden,
+}: PlanningScreenProps) {
   const { actions, financeState, selectedAccountItem } = finance;
 
   return (
@@ -20,6 +25,7 @@ export function PlanningScreen({ finance, projectionMonths }: PlanningScreenProp
       onSelectAccountItem={actions.setSelectedAccountItemId}
       projectionMonths={projectionMonths}
       selectedAccountItem={selectedAccountItem}
+      valuesHidden={valuesHidden}
     />
   );
 }

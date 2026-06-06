@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { CategoryMonthTotal } from '../../lib/financeCalculations';
-import { currencyFormatter } from '../../lib/formatters';
+import { maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
@@ -9,12 +9,14 @@ type CategoryTotalsListProps = {
   categoryColorsById: Record<string, string>;
   categoryNamesById: Record<string, string>;
   categoryTotals: CategoryMonthTotal[];
+  valuesHidden: boolean;
 };
 
 export function CategoryTotalsList({
   categoryColorsById,
   categoryNamesById,
   categoryTotals,
+  valuesHidden,
 }: CategoryTotalsListProps) {
   return (
     <View style={styles.categoryList}>
@@ -38,7 +40,7 @@ export function CategoryTotalsList({
               </Text>
             </View>
             <Text style={styles.categoryAmount}>
-              {currencyFormatter.format(categoryTotal.total)}
+              {maskCurrency(categoryTotal.total, valuesHidden)}
             </Text>
           </View>
         ))}

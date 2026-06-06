@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppLockOverlay } from './components/common/AppLockOverlay';
+import { EyeIcon } from './components/common/EyeIcon';
 import { TabBar, TabItem } from './components/common/TabBar';
 import { CurrentMonthPaymentChecklist } from './components/finance/CurrentMonthPaymentChecklist';
 import { createProjectionMonths } from './lib/financeCalculations';
@@ -30,6 +31,7 @@ export function FinanceApp() {
   const appLock = useAppLock();
   const [activeTab, setActiveTab] = useState<AppTab>('summary');
   const [isPaymentViewOpen, setIsPaymentViewOpen] = useState(false);
+  const [valuesHidden, setValuesHidden] = useState(false);
   const projectionMonths = useMemo(
     () =>
       createProjectionMonths(
@@ -68,7 +70,15 @@ export function FinanceApp() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.greeting}>Aloha :)</Text>
+        <View style={styles.greetingRow}>
+          <Text style={styles.greeting}>Aloha :)</Text>
+          <Pressable
+            onPress={() => setValuesHidden((v) => !v)}
+            style={styles.eyeButton}
+          >
+            <EyeIcon color={colors.textSecondary} hidden={valuesHidden} />
+          </Pressable>
+        </View>
 
         {activeTab === 'summary' && isPaymentViewOpen && currentProjectionMonth ? (
           <CurrentMonthPaymentChecklist
@@ -79,6 +89,7 @@ export function FinanceApp() {
             onTogglePaymentStatus={finance.actions.toggleMonthlyPaymentStatus}
             paymentStatuses={finance.financeState.paymentStatuses}
             projectionMonth={currentProjectionMonth}
+            valuesHidden={valuesHidden}
           />
         ) : null}
 
@@ -87,6 +98,7 @@ export function FinanceApp() {
             financeState={finance.financeState}
             onOpenPayments={() => setIsPaymentViewOpen(true)}
             projectionMonths={visibleProjectionMonths}
+            valuesHidden={valuesHidden}
           />
         ) : null}
 
@@ -94,17 +106,26 @@ export function FinanceApp() {
           <ChartsScreen
             financeState={finance.financeState}
             projectionMonths={visibleProjectionMonths}
+            valuesHidden={valuesHidden}
           />
         ) : null}
 
         {activeTab === 'planning' ? (
-          <PlanningScreen finance={finance} projectionMonths={projectionMonths} />
+          <PlanningScreen
+            finance={finance}
+            projectionMonths={projectionMonths}
+            valuesHidden={valuesHidden}
+          />
         ) : null}
 
         {activeTab === 'accounts' ? <AccountsScreen finance={finance} /> : null}
 
         {activeTab === 'adjustments' ? (
-          <AdjustmentsScreen appLock={appLock} finance={finance} />
+          <AdjustmentsScreen
+            appLock={appLock}
+            finance={finance}
+            valuesHidden={valuesHidden}
+          />
         ) : null}
       </ScrollView>
 
@@ -145,9 +166,20 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: 18,
   },
+  greetingRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   greeting: {
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.screenTitle,
+  },
+  eyeButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    minWidth: 44,
   },
 });

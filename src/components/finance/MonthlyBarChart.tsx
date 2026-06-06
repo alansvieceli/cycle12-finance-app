@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-na
 import { BarChart, LineChart } from 'react-native-gifted-charts';
 
 import { MonthlyChartPoint } from '../../lib/chartData';
-import { currencyFormatter } from '../../lib/formatters';
+import { maskCurrency } from '../../lib/formatters';
 import {
   toGiftedBalanceBarData,
   toGiftedExpenseLineData,
@@ -17,6 +17,7 @@ type MonthlyBarChartProps = {
   mode?: 'expense' | 'balance';
   title: string;
   totalLabel: string;
+  valuesHidden: boolean;
 };
 
 export function MonthlyBarChart({
@@ -25,6 +26,7 @@ export function MonthlyBarChart({
   mode = 'expense',
   title,
   totalLabel,
+  valuesHidden,
 }: MonthlyBarChartProps) {
   const [isValueListVisible, setIsValueListVisible] = useState(false);
   const { width } = useWindowDimensions();
@@ -59,7 +61,7 @@ export function MonthlyBarChart({
                   : null,
               ]}
             >
-              {currencyFormatter.format(total)}
+              {maskCurrency(total, valuesHidden)}
             </Text>
           </View>
 
@@ -156,7 +158,7 @@ export function MonthlyBarChart({
                         : null,
                     ]}
                   >
-                    {currencyFormatter.format(point.value)}
+                    {maskCurrency(point.value, valuesHidden)}
                   </Text>
                 </View>
               ))}

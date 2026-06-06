@@ -24,11 +24,16 @@ import { typography } from '../theme/typography';
 type SettingsScreenProps = {
   appLock: AppLockState;
   finance: ReturnType<typeof useFinanceState>;
+  valuesHidden: boolean;
 };
 
 const MONTH_COUNT_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-export function SettingsScreen({ appLock, finance }: SettingsScreenProps) {
+export function SettingsScreen({
+  appLock,
+  finance,
+  valuesHidden,
+}: SettingsScreenProps) {
   const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
@@ -97,11 +102,13 @@ export function SettingsScreen({ appLock, finance }: SettingsScreenProps) {
           label="Salário Mensal"
           value={financeState.settings.monthlySalary}
           onChangeValue={actions.updateMonthlySalary}
+          valuesHidden={valuesHidden}
         />
         <CurrencyInput
           label="Extra do Mês Atual"
           value={financeState.settings.currentMonthExtraBalance}
           onChangeValue={actions.updateCurrentMonthExtraBalance}
+          valuesHidden={valuesHidden}
         />
         <View style={styles.settingRow}>
           <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>

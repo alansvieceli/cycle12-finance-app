@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 
 import { CategoryChartPoint } from '../../lib/chartData';
-import { currencyFormatter } from '../../lib/formatters';
+import { maskCurrency } from '../../lib/formatters';
 import { toGiftedCategoryDonutData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -13,6 +13,7 @@ type CategoryBarChartProps = {
   title: string;
   totalAmountColor?: string;
   totalLabel: string;
+  valuesHidden: boolean;
 };
 
 export function CategoryBarChart({
@@ -21,6 +22,7 @@ export function CategoryBarChart({
   title,
   totalAmountColor,
   totalLabel,
+  valuesHidden,
 }: CategoryBarChartProps) {
   const total = data.reduce((sum, point) => sum + point.value, 0);
   const donutData = toGiftedCategoryDonutData(data);
@@ -38,7 +40,7 @@ export function CategoryBarChart({
                 totalAmountColor ? { color: totalAmountColor } : null,
               ]}
             >
-              {currencyFormatter.format(total)}
+              {maskCurrency(total, valuesHidden)}
             </Text>
           </View>
 
@@ -54,7 +56,7 @@ export function CategoryBarChart({
                       totalAmountColor ? { color: totalAmountColor } : null,
                     ]}
                   >
-                    {currencyFormatter.format(total)}
+                    {maskCurrency(total, valuesHidden)}
                   </Text>
                 </View>
               )}
@@ -85,7 +87,7 @@ export function CategoryBarChart({
                     {point.label}
                   </Text>
                   <Text style={styles.amount}>
-                    {currencyFormatter.format(point.value)}
+                    {maskCurrency(point.value, valuesHidden)}
                   </Text>
                   <Text style={styles.share}>{Math.round(share * 100)}%</Text>
                 </View>

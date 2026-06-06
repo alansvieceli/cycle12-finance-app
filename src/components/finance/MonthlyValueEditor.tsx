@@ -44,6 +44,7 @@ type MonthlyValueEditorProps = {
   onSelectAccountItem: (accountItemId: string) => void;
   projectionMonths: ProjectionMonth[];
   selectedAccountItem?: AccountItem;
+  valuesHidden?: boolean;
 };
 
 export function MonthlyValueEditor({
@@ -55,6 +56,7 @@ export function MonthlyValueEditor({
   onSelectAccountItem,
   projectionMonths,
   selectedAccountItem,
+  valuesHidden = false,
 }: MonthlyValueEditorProps) {
   const [activeAdjustment, setActiveAdjustment] = useState<{
     operation: MonthlyValueAdjustmentOperation;
@@ -192,6 +194,7 @@ export function MonthlyValueEditor({
                           selectedAccountItem.id,
                           projectionMonth,
                         )}
+                        valuesHidden={valuesHidden}
                       />
                       <View style={styles.adjustmentButtons}>
                         <Pressable

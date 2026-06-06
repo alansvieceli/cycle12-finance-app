@@ -17,6 +17,7 @@ import { resolveCommitmentColor } from '../lib/commitmentColor';
 import {
   currencyFormatter,
   formatMonthLabel,
+  maskCurrency,
   percentageFormatter,
 } from '../lib/formatters';
 import { getCategoryColor } from '../lib/categoryColors';
@@ -29,12 +30,14 @@ type SummaryScreenProps = {
   financeState: FinanceState;
   onOpenPayments: () => void;
   projectionMonths: ProjectionMonth[];
+  valuesHidden: boolean;
 };
 
 export function SummaryScreen({
   financeState,
   onOpenPayments,
   projectionMonths,
+  valuesHidden,
 }: SummaryScreenProps) {
   const [selectedDetailsMonthKey, setSelectedDetailsMonthKey] = useState<string | null>(
     null,
@@ -182,7 +185,7 @@ export function SummaryScreen({
                       : styles.positiveText,
                   ]}
                 >
-                  {currencyFormatter.format(currentSurplusOrShortfall)}
+                  {maskCurrency(currentSurplusOrShortfall, valuesHidden)}
                 </Text>
                 <View style={styles.commitmentHeader}>
                   <Text style={styles.commitmentLabel}>
@@ -217,17 +220,17 @@ export function SummaryScreen({
               <View style={styles.kpiGrid}>
                 <KpiCard
                   label="Despesas"
-                  value={currencyFormatter.format(currentMonthlyTotalExpenses)}
+                  value={maskCurrency(currentMonthlyTotalExpenses, valuesHidden)}
                 />
                 <KpiCard
                   color={colors.negativeText}
                   label="Pendente"
-                  value={currencyFormatter.format(paymentSummary.totalPending)}
+                  value={maskCurrency(paymentSummary.totalPending, valuesHidden)}
                 />
                 <KpiCard
                   color={colors.positive}
                   label="Pago"
-                  value={currencyFormatter.format(paymentSummary.totalPaid)}
+                  value={maskCurrency(paymentSummary.totalPaid, valuesHidden)}
                 />
                 <KpiCard
                   color={colors.commitmentMedium}
@@ -294,6 +297,7 @@ export function SummaryScreen({
                     projectionMonth={projectionMonth}
                     salaryCommitmentPercentage={salaryCommitmentPercentage}
                     surplusOrShortfall={surplusOrShortfall}
+                    valuesHidden={valuesHidden}
                   />
                   {isDetailsOpen ? (
                     <MonthDetailsPanel
@@ -308,6 +312,7 @@ export function SummaryScreen({
                       monthlyTotalExpenses={monthlyTotalExpenses}
                       onClose={() => setSelectedDetailsMonthKey(null)}
                       projectionMonth={projectionMonth}
+                      valuesHidden={valuesHidden}
                     />
                   ) : null}
                 </Fragment>

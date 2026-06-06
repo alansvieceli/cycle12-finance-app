@@ -7,7 +7,7 @@ import {
   isAccountItemPaid,
   ProjectionMonth,
 } from '../../lib/financeCalculations';
-import { currencyFormatter } from '../../lib/formatters';
+import { maskCurrency } from '../../lib/formatters';
 import { sortAccountItemsByDueDay } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -30,6 +30,7 @@ type CurrentMonthPaymentChecklistProps = {
   onClose?: () => void;
   paymentStatuses: MonthlyPaymentStatus[];
   projectionMonth: ProjectionMonth;
+  valuesHidden: boolean;
 };
 
 type PaymentStatusFilter = 'all' | 'pending' | 'paid';
@@ -48,6 +49,7 @@ export function CurrentMonthPaymentChecklist({
   onTogglePaymentStatus,
   paymentStatuses,
   projectionMonth,
+  valuesHidden,
 }: CurrentMonthPaymentChecklistProps) {
   const [activeFilter, setActiveFilter] = useState<PaymentStatusFilter>('all');
   const paymentSummary = calculatePaymentSummary(
@@ -88,12 +90,12 @@ export function CurrentMonthPaymentChecklist({
         <SummaryValue
           color={colors.positive}
           label="Pago"
-          value={currencyFormatter.format(paymentSummary.totalPaid)}
+          value={maskCurrency(paymentSummary.totalPaid, valuesHidden)}
         />
         <SummaryValue
           color={colors.negativeText}
           label="Pendente"
-          value={currencyFormatter.format(paymentSummary.totalPending)}
+          value={maskCurrency(paymentSummary.totalPending, valuesHidden)}
         />
       </View>
 
@@ -158,7 +160,7 @@ export function CurrentMonthPaymentChecklist({
                   </Text>
                 </View>
                 <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
-                  {currencyFormatter.format(amount)}
+                  {maskCurrency(amount, valuesHidden)}
                 </Text>
               </Pressable>
             );

@@ -8,9 +8,15 @@ type CurrencyInputProps = {
   label: string;
   onChangeValue: (value: string) => void;
   value: number;
+  valuesHidden?: boolean;
 };
 
-export function CurrencyInput({ label, onChangeValue, value }: CurrencyInputProps) {
+export function CurrencyInput({
+  label,
+  onChangeValue,
+  value,
+  valuesHidden,
+}: CurrencyInputProps) {
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.inputLabel}>{label}:</Text>
@@ -18,6 +24,7 @@ export function CurrencyInput({ label, onChangeValue, value }: CurrencyInputProp
         onChangeValue={onChangeValue}
         style={styles.input}
         value={value}
+        valuesHidden={valuesHidden}
       />
     </View>
   );

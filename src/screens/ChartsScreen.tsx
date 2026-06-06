@@ -22,9 +22,14 @@ import { FinanceState } from '../types/finance';
 type ChartsScreenProps = {
   financeState: FinanceState;
   projectionMonths: ProjectionMonth[];
+  valuesHidden: boolean;
 };
 
-export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenProps) {
+export function ChartsScreen({
+  financeState,
+  projectionMonths,
+  valuesHidden,
+}: ChartsScreenProps) {
   const currentProjectionMonth =
     projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
     projectionMonths[0];
@@ -98,6 +103,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         totalAccounts={accountsWithValues.length}
         totalPaid={paymentSummary.totalPaid}
         totalPending={paymentSummary.totalPending}
+        valuesHidden={valuesHidden}
       />
 
       {currentProjectionMonth ? (
@@ -110,6 +116,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
           title="Categorias no mês atual"
           totalAmountColor={currentMonthCommitmentColor}
           totalLabel="Total do mês atual"
+          valuesHidden={valuesHidden}
         />
       ) : null}
 
@@ -119,6 +126,7 @@ export function ChartsScreen({ financeState, projectionMonths }: ChartsScreenPro
         mode="balance"
         title="Saldo por mês"
         totalLabel="Total no período"
+        valuesHidden={valuesHidden}
       />
     </>
   );

@@ -10,6 +10,7 @@ type EditableAmountInputProps = {
   placeholder?: string;
   style?: StyleProp<TextStyle>;
   value: number;
+  valuesHidden?: boolean;
 };
 
 export function EditableAmountInput({
@@ -17,6 +18,7 @@ export function EditableAmountInput({
   placeholder = '0,00',
   style,
   value,
+  valuesHidden = false,
 }: EditableAmountInputProps) {
   const [draftValue, setDraftValue] = useState(formatEditableAmount(value));
   const [isFocused, setIsFocused] = useState(false);
@@ -46,7 +48,7 @@ export function EditableAmountInput({
       placeholder={placeholder}
       placeholderTextColor={colors.textSecondary}
       style={style}
-      value={draftValue}
+      value={valuesHidden && !isFocused ? '• • •' : draftValue}
     />
   );
 }

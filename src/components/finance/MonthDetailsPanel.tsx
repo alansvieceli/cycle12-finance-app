@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
 import { CategoryMonthTotal, ProjectionMonth } from '../../lib/financeCalculations';
-import { currencyFormatter, formatMonthLabel } from '../../lib/formatters';
+import { formatMonthLabel, maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { CategoryTotalsList } from './CategoryTotalsList';
@@ -14,6 +14,7 @@ type MonthDetailsPanelProps = {
   monthlyTotalExpenses: number;
   onClose: () => void;
   projectionMonth: ProjectionMonth;
+  valuesHidden: boolean;
 };
 
 export function MonthDetailsPanel({
@@ -23,6 +24,7 @@ export function MonthDetailsPanel({
   monthlyTotalExpenses,
   onClose,
   projectionMonth,
+  valuesHidden,
 }: MonthDetailsPanelProps) {
   return (
     <View style={styles.panel}>
@@ -32,7 +34,7 @@ export function MonthDetailsPanel({
             {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
           </Text>
           <Text style={styles.sectionHint}>
-            Total previsto: {currencyFormatter.format(monthlyTotalExpenses)}
+            Total previsto: {maskCurrency(monthlyTotalExpenses, valuesHidden)}
           </Text>
         </View>
         <ActionButton label="Fechar" onPress={onClose} />
@@ -42,6 +44,7 @@ export function MonthDetailsPanel({
         categoryColorsById={categoryColorsById}
         categoryNamesById={categoryNamesById}
         categoryTotals={categoryTotals}
+        valuesHidden={valuesHidden}
       />
     </View>
   );
