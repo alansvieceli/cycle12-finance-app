@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 14,
+    borderRadius: 16,
     flex: 1,
     minHeight: 68,
     padding: 12,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     marginTop: 12,
-    minHeight: 42,
+    minHeight: 44,
     paddingHorizontal: 12,
   },
   detailsButtonText: {

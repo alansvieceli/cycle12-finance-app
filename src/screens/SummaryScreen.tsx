@@ -218,6 +218,7 @@ export function SummaryScreen({
                   value={currencyFormatter.format(paymentSummary.totalPaid)}
                 />
                 <KpiCard
+                  color={colors.commitmentMedium}
                   label="Próximo venc."
                   value={nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : '-'}
                   detail={
@@ -341,9 +342,9 @@ const styles = StyleSheet.create({
   monthPillActive: {
     alignItems: 'center',
     backgroundColor: colors.accent,
-    borderRadius: 14,
+    borderRadius: 16,
     justifyContent: 'center',
-    minHeight: 34,
+    minHeight: 44,
     paddingHorizontal: 18,
   },
   monthPillActiveText: {
@@ -356,10 +357,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 34,
+    minHeight: 44,
     paddingHorizontal: 18,
   },
   monthPillText: {
@@ -441,7 +442,7 @@ const styles = StyleSheet.create({
   kpiCard: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     flexBasis: '47%',
     flexGrow: 1,
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     borderRadius: 12,
     justifyContent: 'center',
-    minHeight: 36,
+    minHeight: 44,
     paddingHorizontal: 12,
   },
   paymentShortcutButtonText: {

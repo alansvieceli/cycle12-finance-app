@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 16,
   },

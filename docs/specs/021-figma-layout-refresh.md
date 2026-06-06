@@ -65,9 +65,10 @@ Use these values as the app's target visual tokens:
 
 Layout rules from the design:
 
+- Currency values should always use Brazilian Real formatting with two decimal places, such as `R$ 78.297,90`.
 - Touch targets should be at least 44 px tall.
 - Cards should use rounded corners around 16 to 24 px with subtle borders.
-- Dangerous actions should use red and still require existing confirmations where already present.
+- Dangerous actions should use red and require confirmation before deleting or resetting data.
 - Bottom navigation should remain fixed and expose five primary areas.
 
 ## UX Behavior

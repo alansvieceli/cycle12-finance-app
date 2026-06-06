@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   totalBox: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 14,
+    borderRadius: 16,
     marginTop: 14,
     minHeight: 64,
     padding: 12,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     marginTop: 14,
-    minHeight: 40,
+    minHeight: 44,
     paddingHorizontal: 12,
   },
   valuesToggleText: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   },
   valueList: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 14,
+    borderRadius: 16,
     gap: 8,
     marginTop: 14,
     padding: 12,

@@ -25,6 +25,8 @@ Add a current-month paid/unpaid checklist to `Resumo`.
 - Current month has a payment checklist in `Resumo`.
 - User can mark items paid or unpaid manually.
 - Paid state is visually scannable.
+- Payment totals use the standard theme colors: paid in green and pending in red.
+- Payment checklist can be filtered by all, pending, and paid items.
 - Payment status does not change planned monthly totals.
 
 ## Validation

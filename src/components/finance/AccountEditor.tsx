@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
@@ -46,6 +46,21 @@ export function AccountEditor({
   const selectedNewAccountCategoryName =
     sortedCategories.find((category) => category.id === selectedNewAccountCategoryId)
       ?.name ?? 'Categoria';
+
+  function confirmDeleteAccount(accountItem: AccountItem) {
+    Alert.alert(
+      'Excluir conta',
+      `Deseja excluir "${accountItem.name}"? Os valores e pagamentos dessa conta também serão removidos.`,
+      [
+        { style: 'cancel', text: 'Cancelar' },
+        {
+          onPress: () => onDeleteAccountItem(accountItem.id),
+          style: 'destructive',
+          text: 'Excluir',
+        },
+      ],
+    );
+  }
 
   return (
     <View style={styles.panel}>
@@ -147,7 +162,7 @@ export function AccountEditor({
             />
             <ActionButton
               label="Excluir"
-              onPress={() => onDeleteAccountItem(accountItem.id)}
+              onPress={() => confirmDeleteAccount(accountItem)}
               variant="danger"
             />
           </View>

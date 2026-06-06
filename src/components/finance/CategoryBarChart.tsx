@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   totalBox: {
     backgroundColor: colors.surfaceMuted,
-    borderRadius: 14,
+    borderRadius: 16,
     marginTop: 14,
     minHeight: 64,
     padding: 12,

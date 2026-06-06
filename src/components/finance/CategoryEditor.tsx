@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
 import { Category, CategoryPropagation } from '../../types/finance';
@@ -70,6 +78,21 @@ export function CategoryEditor({
     setActiveMonthSelector(undefined);
   }
 
+  function confirmDeleteCategory(category: Category) {
+    Alert.alert(
+      'Excluir categoria',
+      `Deseja excluir "${category.name}"? As contas, valores e pagamentos dessa categoria também serão removidos.`,
+      [
+        { style: 'cancel', text: 'Cancelar' },
+        {
+          onPress: () => onDeleteCategory(category.id),
+          style: 'destructive',
+          text: 'Excluir',
+        },
+      ],
+    );
+  }
+
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>Categorias</Text>
@@ -128,7 +151,7 @@ export function CategoryEditor({
               />
               <ActionButton
                 label="Excluir"
-                onPress={() => onDeleteCategory(category.id)}
+                onPress={() => confirmDeleteCategory(category)}
                 variant="danger"
               />
             </View>
@@ -256,7 +279,7 @@ function PropagationModal({
               </Text>
             </Pressable>
           ))}
-          <ActionButton label="Cancelar" onPress={onClose} variant="danger" />
+          <ActionButton label="Cancelar" onPress={onClose} />
         </View>
       </View>
     </Modal>
@@ -345,7 +368,7 @@ function MonthYearModal({
               </Pressable>
             ))}
           </View>
-          <ActionButton label="Cancelar" onPress={onClose} variant="danger" />
+          <ActionButton label="Cancelar" onPress={onClose} />
         </View>
       </View>
     </Modal>
@@ -596,9 +619,9 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: 12,
     borderWidth: 1,
-    height: 42,
+    height: 44,
     justifyContent: 'center',
-    width: 42,
+    width: 44,
   },
   yearButtonText: {
     color: colors.textPrimary,
@@ -627,7 +650,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexBasis: '23%',
     flexGrow: 1,
-    minHeight: 42,
+    minHeight: 44,
     justifyContent: 'center',
   },
   monthButtonText: {
