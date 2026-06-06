@@ -110,12 +110,10 @@ export function MonthlyValueEditor({
 
   return (
     <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>Valores mensais</Text>
+      <Text style={styles.sectionTitle}>Planejamento mensal</Text>
       {selectedAccountItem ? (
         <>
-          <Text style={styles.editorHint}>
-            Selecione uma conta e edite os valores previstos para cada mês.
-          </Text>
+          <Text style={styles.editorHint}>Edite os valores por conta e mês.</Text>
 
           <ScrollView
             horizontal
