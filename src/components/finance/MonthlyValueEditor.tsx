@@ -16,6 +16,7 @@ import { parseCurrencyInput } from '../../lib/inputParsers';
 import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 import { AccountItem, Category, MonthNumber, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
 
@@ -358,15 +359,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   editorHint: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 8,
+    ...typography.body,
   },
   accountSelector: {
     marginTop: 14,
@@ -392,18 +391,16 @@ const styles = StyleSheet.create({
   },
   accountSelectorAccountText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'center',
+    ...typography.button,
   },
   accountSelectorCategoryText: {
     color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '700',
     letterSpacing: 0,
     marginTop: 2,
     textAlign: 'center',
+    ...typography.caption,
   },
   monthValueList: {
     gap: 10,
@@ -426,9 +423,8 @@ const styles = StyleSheet.create({
   },
   monthValueName: {
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.amountSmall,
   },
   monthValueControlGroup: {
     alignItems: 'center',
@@ -441,11 +437,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '700',
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
+    ...typography.input,
   },
   monthValueInput: {
     width: 106,
@@ -472,15 +467,13 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: colors.accentText,
-    fontSize: 15,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   subtractButtonText: {
     color: colors.negativeText,
-    fontSize: 18,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.amountMedium,
   },
   modalOverlay: {
     alignItems: 'center',
@@ -501,9 +494,8 @@ const styles = StyleSheet.create({
   },
   adjustmentTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.cardTitle,
   },
   adjustmentInput: {
     textAlign: 'right',
@@ -516,9 +508,8 @@ const styles = StyleSheet.create({
   },
   installmentsLabel: {
     color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
   installmentsInput: {
     minHeight: 44,
@@ -527,10 +518,8 @@ const styles = StyleSheet.create({
   },
   installmentSummary: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
-    lineHeight: 17,
+    ...typography.bodySmall,
   },
   modalActions: {
     flexDirection: 'row',
@@ -555,20 +544,17 @@ const styles = StyleSheet.create({
   },
   subtractConfirmButtonText: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   cancelButtonText: {
     color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 10,
+    ...typography.body,
   },
 });

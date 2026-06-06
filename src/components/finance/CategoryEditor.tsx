@@ -13,6 +13,7 @@ import { ActionButton } from '../common/ActionButton';
 import { Category, CategoryPropagation } from '../../types/finance';
 import { sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 const propagationOptions: { label: string; value: CategoryPropagation }[] = [
   { label: 'Fixo', value: 'fixed' },
@@ -465,16 +466,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   subsectionTitle: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '800',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   createSection: {
     borderBottomColor: colors.border,
@@ -499,11 +498,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
+    ...typography.inputCompact,
   },
   createInput: {
     flex: 1,
@@ -551,15 +549,13 @@ const styles = StyleSheet.create({
   },
   selectorLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.bodySmall,
   },
   selectorText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
   monthSelectorButton: {
     minWidth: 142,
@@ -583,9 +579,8 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.cardTitle,
   },
   modalOption: {
     backgroundColor: colors.surfaceMuted,
@@ -596,16 +591,14 @@ const styles = StyleSheet.create({
   },
   modalOptionTitle: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.body,
   },
   modalOptionDescription: {
     color: colors.textSecondary,
-    fontSize: 12,
     letterSpacing: 0,
-    lineHeight: 17,
     marginTop: 3,
+    ...typography.bodySmall,
   },
   yearSelector: {
     alignItems: 'center',
@@ -625,17 +618,15 @@ const styles = StyleSheet.create({
   },
   yearButtonText: {
     color: colors.textPrimary,
-    fontSize: 24,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.screenTitle,
   },
   yearText: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '900',
     letterSpacing: 0,
     minWidth: 72,
     textAlign: 'center',
+    ...typography.amountSmall,
   },
   monthGrid: {
     flexDirection: 'row',
@@ -655,8 +646,7 @@ const styles = StyleSheet.create({
   },
   monthButtonText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
 });

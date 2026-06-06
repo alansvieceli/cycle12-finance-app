@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 export type TabItem<T extends string> = {
   id: T;
@@ -151,11 +152,10 @@ const styles = StyleSheet.create({
   },
   tabButtonText: {
     color: colors.textSecondary,
-    fontSize: 10,
-    fontWeight: '800',
     letterSpacing: 0,
     marginTop: 3,
     textAlign: 'center',
+    ...typography.tab,
   },
   tabButtonTextActive: {
     color: colors.accentText,

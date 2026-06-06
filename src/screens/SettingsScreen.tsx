@@ -8,6 +8,7 @@ import { useFinanceState } from '../hooks/useFinanceState';
 import { createProjectionMonths } from '../lib/financeCalculations';
 import { formatMonthLabel } from '../lib/formatters';
 import { colors } from '../theme/colors';
+import { typography } from '../theme/typography';
 
 type SettingsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
@@ -248,15 +249,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   storageMessage: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 19,
     marginTop: 8,
+    ...typography.bodySmall,
   },
   inputGrid: {
     gap: 12,
@@ -268,9 +267,8 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: colors.textSecondary,
     flex: 1,
-    fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.bodySmall,
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -278,20 +276,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0,
     maxWidth: 150,
     minHeight: 48,
     minWidth: 128,
     paddingHorizontal: 12,
     textAlign: 'left',
+    ...typography.inputCompact,
   },
   inputHint: {
     color: colors.textSecondary,
-    fontSize: 12,
     letterSpacing: 0,
     textAlign: 'left',
+    ...typography.bodySmall,
   },
   commitmentBox: {
     backgroundColor: colors.surfaceMuted,
@@ -303,15 +300,13 @@ const styles = StyleSheet.create({
   },
   commitmentHint: {
     color: colors.textSecondary,
-    fontSize: 11,
     letterSpacing: 0,
-    lineHeight: 16,
+    ...typography.caption,
   },
   groupTitle: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.cardTitle,
   },
   summaryMonthHint: {
     textAlign: 'right',
@@ -326,11 +321,9 @@ const styles = StyleSheet.create({
   },
   windowRangeHighlight: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
-    lineHeight: 18,
     textAlign: 'center',
+    ...typography.amountSmall,
   },
   settingRow: {
     alignItems: 'center',

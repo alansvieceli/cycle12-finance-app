@@ -3,6 +3,7 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 import { AccountItem, Category } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 
@@ -192,9 +193,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -202,11 +202,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0,
     minHeight: 48,
     paddingHorizontal: 12,
+    ...typography.inputCompact,
   },
   createAccountRow: {
     gap: 10,
@@ -230,15 +229,13 @@ const styles = StyleSheet.create({
   categoryPickerText: {
     color: colors.textPrimary,
     flex: 1,
-    fontSize: 14,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.body,
   },
   categoryPickerIcon: {
     color: colors.textSecondary,
-    fontSize: 14,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.amountSmall,
   },
   categoryPickerOptions: {
     backgroundColor: colors.surface,
@@ -259,9 +256,8 @@ const styles = StyleSheet.create({
   },
   categoryPickerOptionText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.button,
   },
   categoryPickerOptionTextActive: {
     color: colors.accentText,
@@ -295,15 +291,13 @@ const styles = StyleSheet.create({
   },
   categoryButtonText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0,
     textAlign: 'center',
+    ...typography.button,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 10,
+    ...typography.body,
   },
 });

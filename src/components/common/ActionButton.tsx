@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 type ActionButtonProps = {
   label: string;
@@ -64,19 +65,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   buttonText: {
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
   primaryButtonText: {
     color: colors.accentText,
-    fontSize: 13,
   },
   dangerButtonText: {
     color: colors.textPrimary,
-    fontSize: 13,
   },
   secondaryButtonText: {
     color: colors.textPrimary,
-    fontSize: 13,
   },
 });

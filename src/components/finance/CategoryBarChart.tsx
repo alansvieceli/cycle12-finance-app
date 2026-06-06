@@ -5,6 +5,7 @@ import { CategoryChartPoint } from '../../lib/chartData';
 import { currencyFormatter } from '../../lib/formatters';
 import { toGiftedCategoryDonutData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 type CategoryBarChartProps = {
   data: CategoryChartPoint[];
@@ -109,9 +110,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   totalBox: {
     marginTop: 14,
@@ -119,16 +119,14 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.bodySmall,
   },
   totalAmount: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '900',
     letterSpacing: 0,
     marginTop: 8,
+    ...typography.amountMedium,
   },
   donutBox: {
     alignItems: 'center',
@@ -140,17 +138,15 @@ const styles = StyleSheet.create({
   },
   centerLabelText: {
     color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '800',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.caption,
   },
   centerLabelAmount: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
     textAlign: 'center',
+    ...typography.amountSmall,
   },
   legendList: {
     gap: 10,
@@ -170,31 +166,27 @@ const styles = StyleSheet.create({
   categoryName: {
     color: colors.textPrimary,
     flex: 1,
-    fontSize: 14,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.body,
   },
   amount: {
     color: colors.textPrimary,
     flexShrink: 0,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'right',
+    ...typography.amountSmall,
   },
   share: {
     color: colors.textSecondary,
     flexShrink: 0,
-    fontSize: 12,
-    fontWeight: '800',
     letterSpacing: 0,
     minWidth: 38,
     textAlign: 'right',
+    ...typography.bodySmall,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 10,
+    ...typography.body,
   },
 });

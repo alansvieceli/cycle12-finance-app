@@ -14,6 +14,7 @@ import {
   serializeBackupEnvelope,
 } from '../../lib/financeBackup';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 import { FinanceState } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 
@@ -184,18 +185,16 @@ const styles = StyleSheet.create({
   },
   description: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 19,
     marginTop: 6,
+    ...typography.bodySmall,
   },
   header: {
     gap: 12,
   },
   message: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 19,
     marginTop: 12,
+    ...typography.bodySmall,
   },
   panel: {
     backgroundColor: colors.surface,
@@ -206,9 +205,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   titleGroup: {
     flexShrink: 1,

@@ -5,6 +5,7 @@ import { AccountEditor } from '../components/finance/AccountEditor';
 import { CategoryEditor } from '../components/finance/CategoryEditor';
 import { useFinanceState } from '../hooks/useFinanceState';
 import { colors } from '../theme/colors';
+import { typography } from '../theme/typography';
 
 type AccountsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
@@ -107,9 +108,8 @@ const styles = StyleSheet.create({
   },
   segmentButtonText: {
     color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   segmentButtonTextActive: {
     color: colors.accentText,

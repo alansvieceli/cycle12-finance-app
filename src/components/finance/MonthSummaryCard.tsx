@@ -8,6 +8,7 @@ import {
   percentageFormatter,
 } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 type MonthSummaryCardProps = {
   commitmentDangerThreshold: number;
@@ -110,24 +111,21 @@ const styles = StyleSheet.create({
   },
   monthName: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   currentMonthLabel: {
     color: colors.accent,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
     marginTop: 4,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   balance: {
     flexShrink: 1,
-    fontSize: 17,
-    fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'right',
+    ...typography.amountMedium,
   },
   positiveBalance: {
     color: colors.positive,
@@ -149,17 +147,15 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   summaryAmount: {
     color: colors.textPrimary,
-    fontSize: 17,
-    fontWeight: '800',
     letterSpacing: 0,
     marginTop: 8,
+    ...typography.amountMedium,
   },
   detailsButton: {
     alignItems: 'center',
@@ -174,8 +170,7 @@ const styles = StyleSheet.create({
   },
   detailsButtonText: {
     color: colors.accent,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
 });

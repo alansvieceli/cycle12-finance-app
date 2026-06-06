@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 import { EditableAmountInput } from './EditableAmountInput';
 
 type CurrencyInputProps = {
@@ -31,9 +32,8 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: colors.textSecondary,
     flex: 1,
-    fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.bodySmall,
   },
   input: {
     backgroundColor: colors.surfaceMuted,
@@ -41,13 +41,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0,
     maxWidth: 150,
     minHeight: 48,
     minWidth: 128,
     paddingHorizontal: 12,
     textAlign: 'left',
+    ...typography.inputCompact,
   },
 });

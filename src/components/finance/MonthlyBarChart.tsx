@@ -9,6 +9,7 @@ import {
   toGiftedExpenseLineData,
 } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 type MonthlyBarChartProps = {
   data: MonthlyChartPoint[];
@@ -206,9 +207,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   totalBox: {
     marginTop: 14,
@@ -216,16 +216,14 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.bodySmall,
   },
   totalAmount: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '900',
     letterSpacing: 0,
     marginTop: 8,
+    ...typography.amountMedium,
   },
   positiveAmount: {
     color: colors.positive,
@@ -240,10 +238,9 @@ const styles = StyleSheet.create({
   },
   axisLabel: {
     color: colors.textSecondary,
-    fontSize: 10,
-    fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'center',
+    ...typography.caption,
   },
   valuesToggle: {
     alignItems: 'center',
@@ -258,9 +255,8 @@ const styles = StyleSheet.create({
   },
   valuesToggleText: {
     color: colors.accent,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   valueList: {
     backgroundColor: colors.surfaceMuted,
@@ -278,23 +274,20 @@ const styles = StyleSheet.create({
   },
   valueMonth: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '800',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   valueAmount: {
     color: colors.textPrimary,
     flexShrink: 1,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
     textAlign: 'right',
+    ...typography.amountSmall,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 10,
+    ...typography.body,
   },
 });

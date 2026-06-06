@@ -11,6 +11,7 @@ import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
 import { SummaryScreen } from './screens/SummaryScreen';
 import { colors } from './theme/colors';
+import { typography } from './theme/typography';
 
 type AppTab = 'summary' | 'charts' | 'planning' | 'accounts' | 'adjustments';
 
@@ -135,8 +136,7 @@ const styles = StyleSheet.create({
   },
   greeting: {
     color: colors.textPrimary,
-    fontSize: 24,
-    fontWeight: '700',
     letterSpacing: 0,
+    ...typography.screenTitle,
   },
 });

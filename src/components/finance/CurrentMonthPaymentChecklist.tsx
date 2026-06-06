@@ -10,6 +10,7 @@ import {
 import { currencyFormatter } from '../../lib/formatters';
 import { sortAccountItemsByDueDay } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 import {
   AccountItem,
   Category,
@@ -219,15 +220,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   sectionHint: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
     marginTop: 4,
+    ...typography.bodySmall,
   },
   summaryGrid: {
     flexDirection: 'row',
@@ -243,17 +242,15 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   summaryAmount: {
     color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '800',
     letterSpacing: 0,
     marginTop: 8,
+    ...typography.cardTitle,
   },
   filterRow: {
     flexDirection: 'row',
@@ -274,9 +271,8 @@ const styles = StyleSheet.create({
   },
   filterButtonText: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   filterButtonTextActive: {
     color: colors.accentText,
@@ -316,9 +312,8 @@ const styles = StyleSheet.create({
   },
   checkboxText: {
     color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.cardTitle,
   },
   checkboxTextPaid: {
     color: colors.accentText,
@@ -328,31 +323,28 @@ const styles = StyleSheet.create({
   },
   accountName: {
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.amountSmall,
   },
   accountMeta: {
     color: colors.textSecondary,
-    fontSize: 12,
     letterSpacing: 0,
     marginTop: 3,
+    ...typography.bodySmall,
   },
   amount: {
     color: colors.textPrimary,
     flexShrink: 0,
-    fontSize: 14,
-    fontWeight: '800',
     letterSpacing: 0,
     textAlign: 'right',
+    ...typography.amountSmall,
   },
   amountPaid: {
     color: colors.positive,
   },
   emptyText: {
     color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
     marginTop: 12,
+    ...typography.body,
   },
 });

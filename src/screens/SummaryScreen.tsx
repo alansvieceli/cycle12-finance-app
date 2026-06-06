@@ -21,6 +21,7 @@ import {
 } from '../lib/formatters';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
+import { typography } from '../theme/typography';
 import { FinanceState } from '../types/finance';
 
 type SummaryScreenProps = {
@@ -351,9 +352,8 @@ const styles = StyleSheet.create({
   },
   monthPillActiveText: {
     color: colors.accentText,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   monthPill: {
     alignItems: 'center',
@@ -367,9 +367,8 @@ const styles = StyleSheet.create({
   },
   monthPillText: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
   balancePanel: {
     backgroundColor: colors.surface,
@@ -380,15 +379,13 @@ const styles = StyleSheet.create({
   },
   kicker: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.label,
   },
   projectedBalance: {
-    fontSize: 34,
-    fontWeight: '900',
     letterSpacing: 0,
     marginTop: 6,
+    ...typography.amountLarge,
   },
   positiveText: {
     color: colors.positive,
@@ -406,15 +403,13 @@ const styles = StyleSheet.create({
   commitmentLabel: {
     color: colors.textSecondary,
     flex: 1,
-    fontSize: 13,
-    fontWeight: '800',
     letterSpacing: 0,
+    ...typography.button,
   },
   commitmentValue: {
     color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
   progressTrack: {
     backgroundColor: colors.surfaceMuted,
@@ -430,11 +425,9 @@ const styles = StyleSheet.create({
   },
   statusHint: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
-    lineHeight: 17,
     marginTop: 10,
+    ...typography.bodySmall,
   },
   kpiGrid: {
     flexDirection: 'row',
@@ -453,24 +446,21 @@ const styles = StyleSheet.create({
   },
   kpiLabel: {
     color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '900',
     letterSpacing: 0,
     textTransform: 'uppercase',
+    ...typography.label,
   },
   kpiValue: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '900',
     letterSpacing: 0,
     marginTop: 8,
+    ...typography.amountMedium,
   },
   kpiDetail: {
     color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '700',
     letterSpacing: 0,
     marginTop: 4,
+    ...typography.caption,
   },
   paymentShortcut: {
     alignItems: 'center',
@@ -486,16 +476,14 @@ const styles = StyleSheet.create({
   },
   paymentShortcutTitle: {
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.sectionTitle,
   },
   paymentShortcutHint: {
     color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 0,
     marginTop: 5,
+    ...typography.bodySmall,
   },
   paymentShortcutButton: {
     alignItems: 'center',
@@ -507,8 +495,7 @@ const styles = StyleSheet.create({
   },
   paymentShortcutButtonText: {
     color: colors.accentText,
-    fontSize: 12,
-    fontWeight: '900',
     letterSpacing: 0,
+    ...typography.button,
   },
 });

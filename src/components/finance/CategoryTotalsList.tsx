@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CategoryMonthTotal } from '../../lib/financeCalculations';
 import { currencyFormatter } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 type CategoryTotalsListProps = {
   categoryNamesById: Record<string, string>;
@@ -45,14 +46,13 @@ const styles = StyleSheet.create({
   categoryName: {
     color: colors.textSecondary,
     flex: 1,
-    fontSize: 14,
     letterSpacing: 0,
+    ...typography.body,
   },
   categoryAmount: {
     color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0,
     marginLeft: 12,
+    ...typography.amountSmall,
   },
 });
