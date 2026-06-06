@@ -10,7 +10,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Shows a rolling 12-month finance projection starting at the current month.
 - Advances the planning window automatically when the calendar month changes.
 - Lets the user choose how many months appear in the summary and charts, from 1 to 12.
-- Shows a read-only charts tab with positive/negative columns, expense area line chart, current-month category donut chart, and expandable monthly values.
+- Shows a read-only charts tab with a per-month income commitment progress list, a paid vs pending summary for the current month, a current-month category donut chart, and positive/negative monthly balance columns with expandable values.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
