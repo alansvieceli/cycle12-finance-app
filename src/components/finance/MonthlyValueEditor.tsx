@@ -114,8 +114,6 @@ export function MonthlyValueEditor({
       <Text style={styles.sectionTitle}>Planejamento mensal</Text>
       {selectedAccountItem ? (
         <>
-          <Text style={styles.editorHint}>Edite os valores por conta e mês.</Text>
-
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -362,13 +360,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.sectionTitle,
   },
-  editorHint: {
-    color: colors.textSecondary,
-    marginTop: 8,
-    ...typography.body,
-  },
   accountSelector: {
-    marginTop: 14,
+    marginTop: 10,
   },
   accountSelectorButton: {
     alignItems: 'center',
@@ -378,9 +371,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     marginRight: 8,
-    minHeight: 52,
+    minHeight: 44,
     paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingVertical: 6,
   },
   accountSelectorButtonActive: {
     backgroundColor: colors.accent,
@@ -403,13 +396,13 @@ const styles = StyleSheet.create({
     ...typography.caption,
   },
   monthValueList: {
-    gap: 10,
-    marginTop: 14,
+    gap: 8,
+    marginTop: 10,
   },
   monthValueItem: {
     borderTopColor: colors.border,
     borderTopWidth: 1,
-    paddingTop: 10,
+    paddingTop: 8,
   },
   monthValueRow: {
     alignItems: 'center',
@@ -424,7 +417,7 @@ const styles = StyleSheet.create({
   monthValueName: {
     color: colors.textPrimary,
     letterSpacing: 0,
-    ...typography.amountSmall,
+    ...typography.body,
   },
   monthValueControlGroup: {
     alignItems: 'center',
@@ -438,7 +431,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     letterSpacing: 0,
-    minHeight: 48,
+    minHeight: 44,
     paddingHorizontal: 12,
     ...typography.input,
   },
