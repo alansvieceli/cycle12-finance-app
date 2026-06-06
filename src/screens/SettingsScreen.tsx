@@ -17,9 +17,9 @@ type SettingsScreenProps = {
 
 export function SettingsScreen({
   finance,
-  title = 'Configuração financeira',
+  title = 'Preferências',
 }: SettingsScreenProps) {
-  const { actions, financeState, storageMessage } = finance;
+  const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const projectionMonths = createProjectionMonths(
     new Date(
@@ -51,35 +51,31 @@ export function SettingsScreen({
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>{title}</Text>
-      {storageMessage ? (
-        <Text style={styles.storageMessage}>{storageMessage}</Text>
-      ) : (
-        <Text style={styles.storageMessage}>
-          Dados salvos localmente neste dispositivo.
-        </Text>
-      )}
       <View style={styles.inputGrid}>
-        <CurrencyInput
-          label="Salário Mensal"
-          value={financeState.settings.monthlySalary}
-          onChangeValue={actions.updateMonthlySalary}
-        />
-        <CurrencyInput
-          label="Extra do Mês Atual"
-          value={financeState.settings.currentMonthExtraBalance}
-          onChangeValue={actions.updateCurrentMonthExtraBalance}
-        />
-        <View style={styles.inputGroup}>
-          <View style={styles.settingRow}>
-            <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
-            <VisibleMonthCountInput
-              onChangeValue={actions.updateSummaryVisibleMonthCount}
-              value={financeState.settings.summaryVisibleMonthCount}
-            />
+        <View style={styles.financeBox}>
+          <Text style={styles.groupTitle}>Valores e visualização</Text>
+          <CurrencyInput
+            label="Salário Mensal"
+            value={financeState.settings.monthlySalary}
+            onChangeValue={actions.updateMonthlySalary}
+          />
+          <CurrencyInput
+            label="Extra do Mês Atual"
+            value={financeState.settings.currentMonthExtraBalance}
+            onChangeValue={actions.updateCurrentMonthExtraBalance}
+          />
+          <View style={styles.inputGroup}>
+            <View style={styles.settingRow}>
+              <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
+              <VisibleMonthCountInput
+                onChangeValue={actions.updateSummaryVisibleMonthCount}
+                value={financeState.settings.summaryVisibleMonthCount}
+              />
+            </View>
+            <Text style={[styles.inputHint, styles.summaryMonthHint]}>
+              1 a 12 meses. Planejamento mantém 12.
+            </Text>
           </View>
-          <Text style={[styles.inputHint, styles.summaryMonthHint]}>
-            1 a 12 meses. Planejamento mantém 12.
-          </Text>
         </View>
         <View style={styles.windowBox}>
           <Text style={styles.groupTitle}>Janela Atual</Text>
@@ -252,11 +248,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.sectionTitle,
   },
-  storageMessage: {
-    color: colors.textSecondary,
-    marginTop: 8,
-    ...typography.bodySmall,
-  },
   inputGrid: {
     gap: 12,
     marginTop: 14,
@@ -302,6 +293,14 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.caption,
+  },
+  financeBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 10,
+    padding: 12,
   },
   groupTitle: {
     color: colors.textPrimary,

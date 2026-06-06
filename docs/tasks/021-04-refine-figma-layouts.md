@@ -32,3 +32,4 @@ Bring the main screens closer to the Figma layout while keeping implementation s
 - Shortened month/year labels to `Mês/Ano` and right-aligned threshold helper text in `Ajustes`.
 - Grouped commitment thresholds into a single compact settings box and kept the current window on one line.
 - Grouped the current projection window into its own highlighted settings box.
+- Grouped the primary settings fields and removed the local-save helper text from `Ajustes`.

@@ -10,7 +10,7 @@ type AdjustmentsScreenProps = {
 export function AdjustmentsScreen({ finance }: AdjustmentsScreenProps) {
   return (
     <View style={styles.container}>
-      <SettingsScreen finance={finance} title="Configuração financeira" />
+      <SettingsScreen finance={finance} title="Preferências" />
     </View>
   );
 }
