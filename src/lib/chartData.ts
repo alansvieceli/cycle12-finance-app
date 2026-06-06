@@ -1,5 +1,6 @@
 import {
   calculateCategoryTotals,
+  calculateIncomeCommitmentPercentage,
   calculateMonthlyTotalExpenses,
   calculateSurplusOrShortfall,
   CategoryMonthTotal,
@@ -7,7 +8,9 @@ import {
 } from './financeCalculations';
 import { formatMonthLabel } from './formatters';
 import { getCategoryColor } from './categoryColors';
+import { resolveCommitmentColor } from './commitmentColor';
 import { sortCategories } from './sorting';
+import { colors } from '../theme/colors';
 import { FinanceState } from '../types/finance';
 
 export type MonthlyChartPoint = {
@@ -21,6 +24,13 @@ export type CategoryChartPoint = {
   color: string;
   label: string;
   value: number;
+};
+
+export type CommitmentChartPoint = {
+  key: string;
+  label: string;
+  percentage: number | null;
+  color: string;
 };
 
 export function buildMonthlyExpenseChartData(
@@ -89,6 +99,40 @@ export function buildCurrentMonthCategoryChartData(
       label: categoryNamesById[categoryTotal.categoryId] ?? '-',
       value: categoryTotal.total,
     }));
+}
+
+export function buildMonthlyCommitmentChartData(
+  financeState: FinanceState,
+  projectionMonths: ProjectionMonth[],
+): CommitmentChartPoint[] {
+  const sortedCategories = sortCategories(financeState.categories);
+
+  return projectionMonths.map((projectionMonth) => {
+    const totalExpenses = calculateMonthlyTotalExpenses(
+      sortedCategories,
+      financeState.accountItems,
+      financeState.monthlyValues,
+      projectionMonth,
+    );
+    const percentage = calculateIncomeCommitmentPercentage(
+      totalExpenses,
+      financeState.settings,
+      projectionMonth,
+    );
+    const color =
+      resolveCommitmentColor(
+        percentage,
+        financeState.settings.commitmentWarningThreshold,
+        financeState.settings.commitmentDangerThreshold,
+      ) ?? colors.commitmentLow;
+
+    return {
+      key: projectionMonth.key,
+      label: formatShortMonthLabel(projectionMonth),
+      percentage,
+      color,
+    };
+  });
 }
 
 function formatShortMonthLabel(projectionMonth: ProjectionMonth) {

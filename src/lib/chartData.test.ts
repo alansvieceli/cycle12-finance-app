@@ -1,5 +1,6 @@
 import {
   buildCurrentMonthCategoryChartData,
+  buildMonthlyCommitmentChartData,
   buildMonthlyExpenseChartData,
   buildSurplusShortfallChartData,
 } from './chartData';
@@ -49,6 +50,70 @@ const financeState: FinanceState = {
     windowStartYear: 2026,
   },
 };
+
+describe('buildMonthlyCommitmentChartData', () => {
+  it('returns empty array when no projection months', () => {
+    expect(buildMonthlyCommitmentChartData(financeState, [])).toEqual([]);
+  });
+
+  it('returns null percentage when salary and extra balance are zero', () => {
+    const noSalary: FinanceState = {
+      ...financeState,
+      settings: {
+        ...financeState.settings,
+        monthlySalary: 0,
+        currentMonthExtraBalance: 0,
+      },
+    };
+    const result = buildMonthlyCommitmentChartData(noSalary, projectionMonths);
+    expect(result[0].percentage).toBeNull();
+    expect(result[1].percentage).toBeNull();
+  });
+
+  it('returns correct percentage and commitmentLow color when below warning threshold', () => {
+    // Jun: 3500 available (3000 salary + 500 extra), 1250 expenses → ≈35.7% → below 80% → commitmentLow
+    const result = buildMonthlyCommitmentChartData(financeState, projectionMonths);
+    expect(result[0].key).toBe('2026-06');
+    expect(result[0].label).toBe('Jun');
+    expect(result[0].percentage).toBeCloseTo(1250 / 3500, 5);
+    expect(result[0].color).toBe('#F5F7FA'); // colors.commitmentLow
+  });
+
+  it('uses base salary only (no extra) for non-current months', () => {
+    // Jul: 3000 available (no extra), 800 expenses → ≈26.7% → below 80% → commitmentLow
+    const result = buildMonthlyCommitmentChartData(financeState, projectionMonths);
+    expect(result[1].key).toBe('2026-07');
+    expect(result[1].label).toBe('Jul');
+    expect(result[1].percentage).toBeCloseTo(800 / 3000, 5);
+    expect(result[1].color).toBe('#F5F7FA');
+  });
+
+  it('uses commitmentMedium color when percentage exceeds warning threshold', () => {
+    // Jun: 3500 available, 2600+250=2850 expenses → ≈81.4% → above 80% warning
+    const highExpenses: FinanceState = {
+      ...financeState,
+      monthlyValues: [
+        { accountItemId: 'nubank', amount: 2600, month: 6, year: 2026 },
+        { accountItemId: 'power', amount: 250, month: 6, year: 2026 },
+      ],
+    };
+    const result = buildMonthlyCommitmentChartData(highExpenses, projectionMonths);
+    expect(result[0].color).toBe('#FFC845'); // colors.commitmentMedium
+  });
+
+  it('uses commitmentHigh color when percentage exceeds danger threshold', () => {
+    // Jun: 3500 available, 3000+250=3250 expenses → ≈92.9% → above 90% danger
+    const dangerExpenses: FinanceState = {
+      ...financeState,
+      monthlyValues: [
+        { accountItemId: 'nubank', amount: 3000, month: 6, year: 2026 },
+        { accountItemId: 'power', amount: 250, month: 6, year: 2026 },
+      ],
+    };
+    const result = buildMonthlyCommitmentChartData(dangerExpenses, projectionMonths);
+    expect(result[0].color).toBe('#FF5D6C'); // colors.commitmentHigh
+  });
+});
 
 describe('chart data helpers', () => {
   it('builds monthly expense chart data', () => {
