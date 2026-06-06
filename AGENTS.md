@@ -23,6 +23,7 @@ Always follow this workflow:
 Always follow:
 
 - `docs/standards/ai-workflow.md`
+- `docs/standards/app-context-policy.md`
 - `docs/standards/readme-policy.md`
 - `docs/standards/testing-policy.md`
 - `docs/standards/ui-copy-policy.md`

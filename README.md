@@ -4,6 +4,20 @@ Cycle12 Finance is a personal finance projection app built with React Native, Ex
 
 The app is designed for single-user, local-first control of monthly expenses over a rolling planning window. It replaces a personal spreadsheet used to project account bills, salary commitment, and monthly surplus or shortfall.
 
+## Product Overview
+
+Cycle12 Finance helps one person plan recurring expenses over the next 12 months without creating an account or sending data to a server. The app starts empty, lets the user build their own categories and accounts, and keeps the monthly projection on the device.
+
+The main areas are:
+
+- `Resumo`: current month overview with projected balance, salary commitment, paid/pending information, and access to payment tracking.
+- `Gráficos`: read-only charts for commitment, paid vs pending totals, category distribution, and monthly balance trends.
+- `Planejar`: monthly value planning for existing accounts across the 12-month window.
+- `Contas`: category and account management.
+- `Ajustes`: salary, extra balance, visible month count, thresholds, window advance, backup, restore, and reset.
+
+For deeper project and agent context, read `docs/app-context.md`.
+
 ## App Behavior
 
 - Starts empty so the user can fill their own categories, accounts, and values.
@@ -48,6 +62,7 @@ Important project rules live in:
 - `AGENTS.md`
 - `CLAUDE.md`
 - `docs/standards/ai-workflow.md`
+- `docs/standards/app-context-policy.md`
 - `docs/standards/readme-policy.md`
 - `docs/standards/testing-policy.md`
 
