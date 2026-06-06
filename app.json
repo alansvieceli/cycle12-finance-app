@@ -11,8 +11,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0B0D12",
-        "foregroundImage": "./assets/app-icon.png"
+        "backgroundColor": "#F5F7FA",
+        "foregroundImage": "./assets/adaptive-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.cycle12financeapp"
@@ -25,9 +25,9 @@
         "expo-splash-screen",
         {
           "image": "./assets/splash-logo.png",
-          "backgroundColor": "#0B0D12",
+          "backgroundColor": "#F5F7FA",
           "resizeMode": "contain",
-          "imageWidth": 280
+          "imageWidth": 180
         }
       ],
       "./plugins/with-android-centered-splash",

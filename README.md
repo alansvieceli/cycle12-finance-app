@@ -27,7 +27,7 @@ The app is designed for single-user, local-first control of monthly expenses ove
 - Shows the commitment percentage in a configurable warning or danger color when it exceeds user-defined thresholds set in the Configurações tab.
 - Uses a dark premium finance theme with orange navigation and action accents.
 - Treats credit card bills as manually editable monthly totals.
-- Uses a custom Cycle12 Finance splash screen while the app loads.
+- Uses the Cycle12 Finance `12` logo for the Android launcher icon and native splash screen.
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
@@ -92,7 +92,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, `react-native-gifted-charts` for chart rendering, and Jest/Expo with React Native Testing Library for tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, `expo-splash-screen` for native loading screen branding, React Native Gifted Charts for chart rendering, and Jest/Expo with React Native Testing Library for tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
