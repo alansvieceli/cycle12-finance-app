@@ -6,11 +6,13 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
 type CategoryTotalsListProps = {
+  categoryColorsById: Record<string, string>;
   categoryNamesById: Record<string, string>;
   categoryTotals: CategoryMonthTotal[];
 };
 
 export function CategoryTotalsList({
+  categoryColorsById,
   categoryNamesById,
   categoryTotals,
 }: CategoryTotalsListProps) {
@@ -18,9 +20,21 @@ export function CategoryTotalsList({
     <View style={styles.categoryList}>
       {categoryTotals.map((categoryTotal) => (
         <View key={categoryTotal.categoryId} style={styles.categoryRow}>
-          <Text style={styles.categoryName}>
-            {categoryNamesById[categoryTotal.categoryId]}
-          </Text>
+          <View style={styles.categoryLabel}>
+            <View
+              style={[
+                styles.categoryDot,
+                {
+                  backgroundColor:
+                    categoryColorsById[categoryTotal.categoryId] ??
+                    colors.textSecondary,
+                },
+              ]}
+            />
+            <Text style={styles.categoryName}>
+              {categoryNamesById[categoryTotal.categoryId]}
+            </Text>
+          </View>
           <Text style={styles.categoryAmount}>
             {currencyFormatter.format(categoryTotal.total)}
           </Text>
@@ -42,6 +56,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     minHeight: 32,
+  },
+  categoryLabel: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    gap: 8,
+  },
+  categoryDot: {
+    borderRadius: 5,
+    height: 10,
+    width: 10,
   },
   categoryName: {
     color: colors.textSecondary,

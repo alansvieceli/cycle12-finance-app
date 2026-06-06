@@ -8,6 +8,7 @@ import { typography } from '../../theme/typography';
 import { CategoryTotalsList } from './CategoryTotalsList';
 
 type MonthDetailsPanelProps = {
+  categoryColorsById: Record<string, string>;
   categoryNamesById: Record<string, string>;
   categoryTotals: CategoryMonthTotal[];
   monthlyTotalExpenses: number;
@@ -16,6 +17,7 @@ type MonthDetailsPanelProps = {
 };
 
 export function MonthDetailsPanel({
+  categoryColorsById,
   categoryNamesById,
   categoryTotals,
   monthlyTotalExpenses,
@@ -37,6 +39,7 @@ export function MonthDetailsPanel({
       </View>
 
       <CategoryTotalsList
+        categoryColorsById={categoryColorsById}
         categoryNamesById={categoryNamesById}
         categoryTotals={categoryTotals}
       />

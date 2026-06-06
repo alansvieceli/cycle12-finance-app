@@ -18,6 +18,7 @@ export type Category = {
   sortOrder: number;
   propagation: CategoryPropagation;
   installmentEndDate?: string;
+  color?: string;
 };
 
 export type AccountItem = {

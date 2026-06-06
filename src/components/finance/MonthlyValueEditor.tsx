@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import { getCategoryColor } from '../../lib/categoryColors';
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import { currencyFormatter, formatMonthLabel } from '../../lib/formatters';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
@@ -119,39 +120,51 @@ export function MonthlyValueEditor({
             showsHorizontalScrollIndicator={false}
             style={styles.accountSelector}
           >
-            {sortAccountItems(accountItems, categories).map((accountItem) => (
-              <Pressable
-                key={accountItem.id}
-                onPress={() => onSelectAccountItem(accountItem.id)}
-                style={[
-                  styles.accountSelectorButton,
-                  selectedAccountItem.id === accountItem.id
-                    ? styles.accountSelectorButtonActive
-                    : null,
-                ]}
-              >
-                <Text
+            {sortAccountItems(accountItems, categories).map((accountItem) => {
+              const isActive = selectedAccountItem.id === accountItem.id;
+
+              return (
+                <Pressable
+                  key={accountItem.id}
+                  onPress={() => onSelectAccountItem(accountItem.id)}
                   style={[
-                    styles.accountSelectorAccountText,
-                    selectedAccountItem.id === accountItem.id
-                      ? styles.accountSelectorButtonTextActive
-                      : null,
+                    styles.accountSelectorButton,
+                    isActive ? styles.accountSelectorButtonActive : null,
                   ]}
                 >
-                  {accountItem.name}
-                </Text>
-                <Text
-                  style={[
-                    styles.accountSelectorCategoryText,
-                    selectedAccountItem.id === accountItem.id
-                      ? styles.accountSelectorButtonTextActive
-                      : null,
-                  ]}
-                >
-                  {getCategoryName(categories, accountItem.categoryId)}
-                </Text>
-              </Pressable>
-            ))}
+                  <Text
+                    style={[
+                      styles.accountSelectorAccountText,
+                      isActive ? styles.accountSelectorButtonTextActive : null,
+                    ]}
+                  >
+                    {accountItem.name}
+                  </Text>
+                  <View style={styles.accountSelectorCategory}>
+                    <View
+                      style={[
+                        styles.categoryDot,
+                        {
+                          backgroundColor: getCategoryColor(
+                            accountItem.categoryId,
+                            categories,
+                          ),
+                        },
+                        isActive ? styles.categoryDotActive : null,
+                      ]}
+                    />
+                    <Text
+                      style={[
+                        styles.accountSelectorCategoryText,
+                        isActive ? styles.accountSelectorCategoryTextActive : null,
+                      ]}
+                    >
+                      {getCategoryName(categories, accountItem.categoryId)}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            })}
           </ScrollView>
 
           <View style={styles.monthValueList}>
@@ -388,12 +401,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     ...typography.button,
   },
+  accountSelectorCategory: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 4,
+    marginTop: 2,
+  },
+  categoryDot: {
+    borderRadius: 4,
+    height: 7,
+    width: 7,
+  },
+  categoryDotActive: {
+    borderColor: 'rgba(0, 0, 0, 0.25)',
+    borderWidth: 1.5,
+  },
   accountSelectorCategoryText: {
     color: colors.textSecondary,
     letterSpacing: 0,
-    marginTop: 2,
     textAlign: 'center',
     ...typography.caption,
+  },
+  accountSelectorCategoryTextActive: {
+    color: 'rgba(0, 0, 0, 0.5)',
   },
   monthValueList: {
     gap: 8,

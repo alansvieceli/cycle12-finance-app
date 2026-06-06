@@ -53,14 +53,17 @@ export function AccountsScreen({ finance }: AccountsScreenProps) {
       {activeSection === 'categories' ? (
         <CategoryEditor
           categories={financeState.categories}
+          newCategoryColor={formState.newCategoryColor}
           newCategoryInstallmentEndDate={formState.newCategoryInstallmentEndDate}
           newCategoryName={formState.newCategoryName}
           newCategoryPropagation={formState.newCategoryPropagation}
           newCategorySortOrder={formState.newCategorySortOrder}
+          onChangeCategoryColor={actions.updateCategoryColor}
           onChangeCategoryInstallmentEndDate={actions.updateCategoryInstallmentEndDate}
           onChangeCategoryName={actions.updateCategoryName}
           onChangeCategoryPropagation={actions.updateCategoryPropagation}
           onChangeCategorySortOrder={actions.updateCategorySortOrder}
+          onChangeNewCategoryColor={actions.setNewCategoryColor}
           onChangeNewCategoryInstallmentEndDate={
             actions.setNewCategoryInstallmentEndDate
           }

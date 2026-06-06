@@ -6,6 +6,7 @@ import {
   ProjectionMonth,
 } from './financeCalculations';
 import { formatMonthLabel } from './formatters';
+import { getCategoryColor } from './categoryColors';
 import { sortCategories } from './sorting';
 import { FinanceState } from '../types/finance';
 
@@ -17,6 +18,7 @@ export type MonthlyChartPoint = {
 
 export type CategoryChartPoint = {
   categoryId: string;
+  color: string;
   label: string;
   value: number;
 };
@@ -83,6 +85,7 @@ export function buildCurrentMonthCategoryChartData(
     .filter((categoryTotal) => categoryTotal.total > 0)
     .map((categoryTotal: CategoryMonthTotal) => ({
       categoryId: categoryTotal.categoryId,
+      color: getCategoryColor(categoryTotal.categoryId, sortedCategories),
       label: categoryNamesById[categoryTotal.categoryId] ?? '-',
       value: categoryTotal.total,
     }));

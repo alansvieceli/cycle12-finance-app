@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
+import { getCategoryColor, suggestCategoryColor } from '../../lib/categoryColors';
 import { Category, CategoryPropagation } from '../../types/finance';
 import { sortCategories } from '../../lib/sorting';
-import { colors } from '../../theme/colors';
+import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
 const propagationOptions: { label: string; value: CategoryPropagation }[] = [
@@ -38,14 +39,17 @@ const monthOptions = [
 
 type CategoryEditorProps = {
   categories: Category[];
+  newCategoryColor: string;
   newCategoryName: string;
   newCategoryInstallmentEndDate: string;
   newCategoryPropagation: string;
   newCategorySortOrder: string;
+  onChangeCategoryColor: (categoryId: string, color: string) => void;
   onChangeCategoryInstallmentEndDate: (categoryId: string, value: string) => void;
   onChangeCategoryName: (categoryId: string, name: string) => void;
   onChangeCategoryPropagation: (categoryId: string, propagation: string) => void;
   onChangeCategorySortOrder: (categoryId: string, sortOrder: string) => void;
+  onChangeNewCategoryColor: (color: string) => void;
   onChangeNewCategoryInstallmentEndDate: (value: string) => void;
   onChangeNewCategoryName: (name: string) => void;
   onChangeNewCategoryPropagation: (propagation: string) => void;
@@ -56,14 +60,17 @@ type CategoryEditorProps = {
 
 export function CategoryEditor({
   categories,
+  newCategoryColor,
   newCategoryInstallmentEndDate,
   newCategoryName,
   newCategoryPropagation,
   newCategorySortOrder,
+  onChangeCategoryColor,
   onChangeCategoryInstallmentEndDate,
   onChangeCategoryName,
   onChangeCategoryPropagation,
   onChangeCategorySortOrder,
+  onChangeNewCategoryColor,
   onChangeNewCategoryInstallmentEndDate,
   onChangeNewCategoryName,
   onChangeNewCategoryPropagation,
@@ -117,6 +124,12 @@ export function CategoryEditor({
                   onPress={() => toggleExpand(category.id)}
                   style={styles.compactRow}
                 >
+                  <View
+                    style={[
+                      styles.categoryDot,
+                      { backgroundColor: getCategoryColor(category.id, categories) },
+                    ]}
+                  />
                   <Text numberOfLines={1} style={styles.itemName}>
                     {category.name}
                   </Text>
@@ -152,6 +165,12 @@ export function CategoryEditor({
                         value={category.sortOrder}
                       />
                     </View>
+                    <ColorPicker
+                      selectedColor={getCategoryColor(category.id, categories)}
+                      onSelectColor={(color) =>
+                        onChangeCategoryColor(category.id, color)
+                      }
+                    />
                     <View style={styles.editFieldsRow}>
                       <PropagationSelector
                         label="Propagação"
@@ -209,6 +228,10 @@ export function CategoryEditor({
               value={newCategorySortOrder}
             />
           </View>
+          <ColorPicker
+            selectedColor={newCategoryColor || suggestCategoryColor(categories)}
+            onSelectColor={onChangeNewCategoryColor}
+          />
           <View style={styles.createRow}>
             <PropagationSelector
               label="Propagação"
@@ -270,6 +293,30 @@ export function CategoryEditor({
         }
         visible={Boolean(activeMonthSelector)}
       />
+    </View>
+  );
+}
+
+function ColorPicker({
+  selectedColor,
+  onSelectColor,
+}: {
+  selectedColor: string;
+  onSelectColor: (color: string) => void;
+}) {
+  return (
+    <View style={styles.colorGrid}>
+      {chartPalette.map((color) => (
+        <Pressable
+          key={color}
+          onPress={() => onSelectColor(color)}
+          style={[
+            styles.colorSwatch,
+            { backgroundColor: color },
+            selectedColor === color && styles.colorSwatchSelected,
+          ]}
+        />
+      ))}
     </View>
   );
 }
@@ -549,6 +596,11 @@ const styles = StyleSheet.create({
     minHeight: 44,
     paddingVertical: 8,
   },
+  categoryDot: {
+    borderRadius: 5,
+    height: 10,
+    width: 10,
+  },
   itemName: {
     color: colors.textPrimary,
     flex: 1,
@@ -594,6 +646,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
+  },
+  colorGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  colorSwatch: {
+    borderRadius: 14,
+    height: 28,
+    width: 28,
+  },
+  colorSwatchSelected: {
+    borderColor: colors.textPrimary,
+    borderWidth: 2.5,
   },
   input: {
     backgroundColor: colors.surfaceMuted,

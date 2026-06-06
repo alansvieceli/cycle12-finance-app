@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { getCategoryColor } from '../../lib/categoryColors';
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -102,6 +103,17 @@ export function AccountEditor({
                       </Text>
                       <View style={styles.badgesRow}>
                         <View style={styles.badge}>
+                          <View
+                            style={[
+                              styles.categoryDot,
+                              {
+                                backgroundColor: getCategoryColor(
+                                  accountItem.categoryId,
+                                  categories,
+                                ),
+                              },
+                            ]}
+                          />
                           <Text style={styles.badgeText}>{categoryName}</Text>
                         </View>
                         <View style={styles.badge}>
@@ -286,12 +298,20 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   badge: {
+    alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
+    flexDirection: 'row',
+    gap: 5,
     paddingHorizontal: 8,
     paddingVertical: 3,
+  },
+  categoryDot: {
+    borderRadius: 4,
+    height: 8,
+    width: 8,
   },
   badgeText: {
     color: colors.textSecondary,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { createId } from '../lib/ids';
+import { suggestCategoryColor } from '../lib/categoryColors';
 import {
   clampVisibleMonthCount,
   parseCurrencyInput,
@@ -29,6 +30,7 @@ export function useFinanceState() {
   const [newCategoryPropagation, setNewCategoryPropagation] = useState('zero');
   const [newCategoryInstallmentEndDate, setNewCategoryInstallmentEndDate] =
     useState('');
+  const [newCategoryColor, setNewCategoryColor] = useState('');
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
@@ -174,6 +176,7 @@ export function useFinanceState() {
     setNewCategorySortOrder('');
     setNewCategoryPropagation('zero');
     setNewCategoryInstallmentEndDate('');
+    setNewCategoryColor('');
     setNewAccountName('');
     setNewAccountDueDay('');
   }
@@ -192,6 +195,7 @@ export function useFinanceState() {
         ...currentState.categories,
         {
           id: categoryId,
+          color: newCategoryColor || suggestCategoryColor(currentState.categories),
           installmentEndDate:
             newCategoryPropagation === 'installment'
               ? newCategoryInstallmentEndDate.trim()
@@ -211,6 +215,7 @@ export function useFinanceState() {
     setNewCategorySortOrder('');
     setNewCategoryPropagation('zero');
     setNewCategoryInstallmentEndDate('');
+    setNewCategoryColor('');
   }
 
   function updateCategoryName(categoryId: string, name: string) {
@@ -248,6 +253,15 @@ export function useFinanceState() {
                   : 'zero',
             }
           : category,
+      ),
+    }));
+  }
+
+  function updateCategoryColor(categoryId: string, color: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      categories: currentState.categories.map((category) =>
+        category.id === categoryId ? { ...category, color } : category,
       ),
     }));
   }
@@ -533,6 +547,7 @@ export function useFinanceState() {
       setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,
+      setNewCategoryColor,
       setNewCategoryInstallmentEndDate,
       setNewCategoryName,
       setNewCategoryPropagation,
@@ -547,6 +562,7 @@ export function useFinanceState() {
       updateCommitmentDangerThreshold,
       updateCommitmentWarningThreshold,
       updateCurrentMonthExtraBalance,
+      updateCategoryColor,
       updateCategoryName,
       updateCategoryInstallmentEndDate,
       updateCategoryPropagation,
@@ -560,6 +576,7 @@ export function useFinanceState() {
       newAccountCategoryId,
       newAccountDueDay,
       newAccountName,
+      newCategoryColor,
       newCategoryInstallmentEndDate,
       newCategoryName,
       newCategoryPropagation,

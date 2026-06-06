@@ -19,6 +19,7 @@ import {
   formatMonthLabel,
   percentageFormatter,
 } from '../lib/formatters';
+import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
@@ -42,6 +43,12 @@ export function SummaryScreen({
   const sortedCategories = sortCategories(financeState.categories);
   const categoryNamesById = Object.fromEntries(
     sortedCategories.map((category) => [category.id, category.name]),
+  );
+  const categoryColorsById = Object.fromEntries(
+    sortedCategories.map((category) => [
+      category.id,
+      getCategoryColor(category.id, sortedCategories),
+    ]),
   );
   const selectedDetailsMonth = projectionMonths.find(
     (projectionMonth) => projectionMonth.key === selectedDetailsMonthKey,
@@ -286,6 +293,7 @@ export function SummaryScreen({
                   />
                   {isDetailsOpen ? (
                     <MonthDetailsPanel
+                      categoryColorsById={categoryColorsById}
                       categoryNamesById={categoryNamesById}
                       categoryTotals={calculateCategoryTotals(
                         sortedCategories,

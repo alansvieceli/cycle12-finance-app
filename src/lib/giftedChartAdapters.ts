@@ -1,4 +1,4 @@
-import { chartPalette, colors } from '../theme/colors';
+import { colors } from '../theme/colors';
 import { CategoryChartPoint, MonthlyChartPoint } from './chartData';
 
 export type GiftedBarPoint = {
@@ -45,9 +45,9 @@ export function toGiftedCategoryDonutData(
 ): GiftedDonutPoint[] {
   return points
     .filter((point) => point.value > 0)
-    .map((point, index) => ({
+    .map((point) => ({
       categoryId: point.categoryId,
-      color: chartPalette[index % chartPalette.length],
+      color: point.color,
       label: point.label,
       value: point.value,
     }));
