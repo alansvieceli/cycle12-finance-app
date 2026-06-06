@@ -20,15 +20,11 @@ import { typography } from '../theme/typography';
 
 type SettingsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
-  title?: string;
 };
 
 const MONTH_COUNT_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-export function SettingsScreen({
-  finance,
-  title = 'Preferências',
-}: SettingsScreenProps) {
+export function SettingsScreen({ finance }: SettingsScreenProps) {
   const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
@@ -60,92 +56,92 @@ export function SettingsScreen({
   }
 
   return (
-    <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <View style={styles.inputGrid}>
-        <View style={styles.box}>
-          <Text style={styles.groupTitle}>Valores e visualização</Text>
-          <CurrencyInput
-            label="Salário Mensal"
-            value={financeState.settings.monthlySalary}
-            onChangeValue={actions.updateMonthlySalary}
-          />
-          <CurrencyInput
-            label="Extra do Mês Atual"
-            value={financeState.settings.currentMonthExtraBalance}
-            onChangeValue={actions.updateCurrentMonthExtraBalance}
-          />
-          <View style={styles.settingRow}>
-            <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
-            <Pressable
-              onPress={() => setIsMonthCountPickerOpen(true)}
-              style={styles.comboButton}
-            >
-              <Text style={styles.comboButtonText}>
-                {financeState.settings.summaryVisibleMonthCount} ▾
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-
-        <View style={styles.box}>
-          <Text style={styles.groupTitle}>Janela Atual</Text>
-          <Text
-            adjustsFontSizeToFit
-            minimumFontScale={0.82}
-            numberOfLines={1}
-            style={styles.windowRangeHighlight}
+    <View style={styles.root}>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Valores e visualização</Text>
+        <CurrencyInput
+          label="Salário Mensal"
+          value={financeState.settings.monthlySalary}
+          onChangeValue={actions.updateMonthlySalary}
+        />
+        <CurrencyInput
+          label="Extra do Mês Atual"
+          value={financeState.settings.currentMonthExtraBalance}
+          onChangeValue={actions.updateCurrentMonthExtraBalance}
+        />
+        <View style={styles.settingRow}>
+          <Text style={styles.inputLabel}>Meses no Resumo e Gráficos:</Text>
+          <Pressable
+            onPress={() => setIsMonthCountPickerOpen(true)}
+            style={styles.comboButton}
           >
-            {formatMonthLabel(
-              financeState.settings.windowStartYear,
-              financeState.settings.windowStartMonth,
-            )}{' '}
-            - {formatMonthLabel(lastProjectionMonth.year, lastProjectionMonth.month)}
-          </Text>
-          <ActionButton
-            label="Avançar mês"
-            onPress={() =>
-              Alert.alert(
-                `Avançar para ${formatMonthLabel(
-                  nextProjectionMonth.year,
-                  nextProjectionMonth.month,
-                )}?`,
-                `Os valores de ${formatMonthLabel(
-                  financeState.settings.windowStartYear,
-                  financeState.settings.windowStartMonth,
-                )} serão removidos e um novo mês será gerado com base nas regras de propagação.`,
-                [
-                  { text: 'Cancelar', style: 'cancel' },
-                  { text: 'Confirmar', onPress: actions.advanceWindowMonth },
-                ],
-              )
-            }
-          />
+            <Text style={styles.comboButtonText}>
+              {financeState.settings.summaryVisibleMonthCount} ▾
+            </Text>
+          </Pressable>
         </View>
+      </View>
 
-        <View style={styles.box}>
-          <Text style={styles.groupTitle}>Comprometimento</Text>
-          <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
-          <View style={styles.thresholdPair}>
-            <View style={styles.thresholdItem}>
-              <Text style={styles.inputLabel}>Alerta:</Text>
-              <ThresholdInput
-                onChangeValue={actions.updateCommitmentWarningThreshold}
-                placeholder="80"
-                value={financeState.settings.commitmentWarningThreshold}
-              />
-            </View>
-            <View style={styles.thresholdItem}>
-              <Text style={styles.inputLabel}>Perigo:</Text>
-              <ThresholdInput
-                onChangeValue={actions.updateCommitmentDangerThreshold}
-                placeholder="90"
-                value={financeState.settings.commitmentDangerThreshold}
-              />
-            </View>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Janela Atual</Text>
+        <Text
+          adjustsFontSizeToFit
+          minimumFontScale={0.82}
+          numberOfLines={1}
+          style={styles.windowRangeHighlight}
+        >
+          {formatMonthLabel(
+            financeState.settings.windowStartYear,
+            financeState.settings.windowStartMonth,
+          )}{' '}
+          - {formatMonthLabel(lastProjectionMonth.year, lastProjectionMonth.month)}
+        </Text>
+        <ActionButton
+          label="Avançar mês"
+          onPress={() =>
+            Alert.alert(
+              `Avançar para ${formatMonthLabel(
+                nextProjectionMonth.year,
+                nextProjectionMonth.month,
+              )}?`,
+              `Os valores de ${formatMonthLabel(
+                financeState.settings.windowStartYear,
+                financeState.settings.windowStartMonth,
+              )} serão removidos e um novo mês será gerado com base nas regras de propagação.`,
+              [
+                { text: 'Cancelar', style: 'cancel' },
+                { text: 'Confirmar', onPress: actions.advanceWindowMonth },
+              ],
+            )
+          }
+        />
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Comprometimento</Text>
+        <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
+        <View style={styles.thresholdPair}>
+          <View style={styles.thresholdItem}>
+            <Text style={styles.inputLabel}>Alerta:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentWarningThreshold}
+              placeholder="80"
+              value={financeState.settings.commitmentWarningThreshold}
+            />
+          </View>
+          <View style={styles.thresholdItem}>
+            <Text style={styles.inputLabel}>Perigo:</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentDangerThreshold}
+              placeholder="90"
+              value={financeState.settings.commitmentDangerThreshold}
+            />
           </View>
         </View>
+      </View>
 
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Dados</Text>
         <ActionButton
           label="Backup e restauração"
           onPress={() => setIsDataManagementOpen(true)}
@@ -242,34 +238,21 @@ function ThresholdInput({
 }
 
 const styles = StyleSheet.create({
-  panel: {
+  root: {
+    gap: 12,
+  },
+  card: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderRadius: 18,
     borderWidth: 1,
+    gap: 10,
     padding: 16,
   },
-  sectionTitle: {
+  cardTitle: {
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.sectionTitle,
-  },
-  inputGrid: {
-    gap: 10,
-    marginTop: 10,
-  },
-  box: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 16,
-    borderWidth: 1,
-    gap: 8,
-    padding: 12,
-  },
-  groupTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
   },
   settingRow: {
     alignItems: 'center',

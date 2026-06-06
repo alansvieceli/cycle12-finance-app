@@ -206,9 +206,11 @@ export function SummaryScreen({
                   />
                 </View>
                 <Text style={styles.statusHint}>
-                  {isCommitmentOverLimit
-                    ? 'Acima do limite. Revise cartão e empréstimos.'
-                    : 'Dentro dos limites configurados.'}
+                  {currentCommitmentPercentage === null
+                    ? 'Configure o salário para ver o comprometimento.'
+                    : isCommitmentOverLimit
+                      ? 'Acima do limite. Revise cartão e empréstimos.'
+                      : 'Dentro dos limites configurados.'}
                 </Text>
               </View>
 
@@ -230,7 +232,9 @@ export function SummaryScreen({
                 <KpiCard
                   color={colors.commitmentMedium}
                   label="Próximo venc."
-                  value={nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : '-'}
+                  value={
+                    nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : 'Nenhum pendente'
+                  }
                   detail={
                     nextDueAccount
                       ? [nextDueAccount.name, nextDueAccountCategoryName]

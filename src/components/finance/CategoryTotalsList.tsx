@@ -18,28 +18,30 @@ export function CategoryTotalsList({
 }: CategoryTotalsListProps) {
   return (
     <View style={styles.categoryList}>
-      {categoryTotals.map((categoryTotal) => (
-        <View key={categoryTotal.categoryId} style={styles.categoryRow}>
-          <View style={styles.categoryLabel}>
-            <View
-              style={[
-                styles.categoryDot,
-                {
-                  backgroundColor:
-                    categoryColorsById[categoryTotal.categoryId] ??
-                    colors.textSecondary,
-                },
-              ]}
-            />
-            <Text style={styles.categoryName}>
-              {categoryNamesById[categoryTotal.categoryId]}
+      {categoryTotals
+        .filter((categoryTotal) => categoryTotal.total > 0)
+        .map((categoryTotal) => (
+          <View key={categoryTotal.categoryId} style={styles.categoryRow}>
+            <View style={styles.categoryLabel}>
+              <View
+                style={[
+                  styles.categoryDot,
+                  {
+                    backgroundColor:
+                      categoryColorsById[categoryTotal.categoryId] ??
+                      colors.textSecondary,
+                  },
+                ]}
+              />
+              <Text style={styles.categoryName}>
+                {categoryNamesById[categoryTotal.categoryId]}
+              </Text>
+            </View>
+            <Text style={styles.categoryAmount}>
+              {currencyFormatter.format(categoryTotal.total)}
             </Text>
           </View>
-          <Text style={styles.categoryAmount}>
-            {currencyFormatter.format(categoryTotal.total)}
-          </Text>
-        </View>
-      ))}
+        ))}
     </View>
   );
 }

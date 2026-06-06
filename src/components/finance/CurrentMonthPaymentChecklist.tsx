@@ -56,7 +56,10 @@ export function CurrentMonthPaymentChecklist({
     paymentStatuses,
     projectionMonth,
   );
-  const sortedAccountItems = sortAccountItemsByDueDay(accountItems);
+  const sortedAccountItems = sortAccountItemsByDueDay(accountItems).filter(
+    (accountItem) =>
+      getMonthlyValueAmount(monthlyValues, accountItem.id, projectionMonth) > 0,
+  );
   const filteredAccountItems = sortedAccountItems.filter((accountItem) => {
     const isPaid = isAccountItemPaid(paymentStatuses, accountItem.id, projectionMonth);
 
