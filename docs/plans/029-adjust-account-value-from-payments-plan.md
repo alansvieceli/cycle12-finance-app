@@ -1,6 +1,6 @@
 # Plan 029 - Adjust Account Value from Payments Screen
 
-Status: Active
+Status: Completed
 
 ## Spec
 

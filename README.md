@@ -37,6 +37,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Tracks current-month paid/unpaid status manually for each account item.
 - Opens current-month payment tracking from the Resumo payment shortcut.
 - Lets the user add a new account item with an optional value for the current month directly from the Pagamentos screen, without leaving the payment view.
+- Lets the user adjust (add or subtract) the value of an existing account item directly from the Pagamentos screen using the `±` button on each payment row.
 - Shows compact monthly summaries with category details available on demand.
 - Calculates monthly expenses, income commitment, and surplus or shortfall.
 - Shows the commitment percentage in a configurable warning or danger color when it exceeds user-defined thresholds set in the Configurações tab.

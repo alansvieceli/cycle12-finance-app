@@ -141,6 +141,7 @@ It is used to:
 - view paid and pending totals for the current month.
 - toggle current-month account items between paid and unpaid.
 - add a new account item with a value for the current month.
+- adjust (add or subtract) the value of an existing account item for the current month using the `±` button on each payment row.
 - return to `Resumo` through a clear back action.
 
 The header displays the current month and year. An `Adicionar conta` button opens a modal for creating an account item. The modal requires an existing category; if none exists, the button is disabled. New accounts created here set a value only for the current month; behavior in subsequent months follows the selected category's propagation rule.
