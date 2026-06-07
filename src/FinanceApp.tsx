@@ -9,9 +9,9 @@ import { createProjectionMonths } from './lib/financeCalculations';
 import { useAppLock } from './hooks/useAppLock';
 import { useFinanceState } from './hooks/useFinanceState';
 import { AccountsScreen } from './screens/AccountsScreen';
-import { AdjustmentsScreen } from './screens/AdjustmentsScreen';
 import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 import { SummaryScreen } from './screens/SummaryScreen';
 import { colors } from './theme/colors';
 import { typography } from './theme/typography';
@@ -122,7 +122,7 @@ export function FinanceApp() {
         {activeTab === 'accounts' ? <AccountsScreen finance={finance} /> : null}
 
         {activeTab === 'adjustments' ? (
-          <AdjustmentsScreen
+          <SettingsScreen
             appLock={appLock}
             finance={finance}
             valuesHidden={valuesHidden}

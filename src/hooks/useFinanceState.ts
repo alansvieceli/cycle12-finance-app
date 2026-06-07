@@ -40,7 +40,6 @@ export function useFinanceState() {
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
-  const [storageMessage, setStorageMessage] = useState('');
   const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
   const sortedAccountItems = sortAccountItems(
     financeState.accountItems,
@@ -76,11 +75,7 @@ export function useFinanceState() {
         );
         setNewAccountCategoryId(sortCategories(advancedState.categories)[0]?.id ?? '');
       } catch {
-        if (isMounted) {
-          setStorageMessage(
-            'Não foi possível carregar os dados locais. Começando vazio.',
-          );
-        }
+        // load failure is silent — app starts empty
       } finally {
         if (isMounted) {
           setHasLoadedStoredState(true);
@@ -101,7 +96,7 @@ export function useFinanceState() {
     }
 
     saveFinanceState(financeState).catch(() => {
-      setStorageMessage('Não foi possível salvar os dados locais agora.');
+      // save failure is silent
     });
   }, [financeState, hasLoadedStoredState]);
 
@@ -613,7 +608,6 @@ export function useFinanceState() {
     },
     selectedAccountItem,
     selectedAccountItemId,
-    storageMessage,
   };
 }
 
