@@ -295,6 +295,7 @@ const styles = StyleSheet.create({
   },
   listSection: {
     marginBottom: 10,
+    marginTop: 12,
   },
   listItem: {
     borderTopColor: colors.border,

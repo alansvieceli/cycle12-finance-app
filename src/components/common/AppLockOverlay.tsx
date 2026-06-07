@@ -39,11 +39,13 @@ export function AppLockOverlay({
   return (
     <View style={styles.overlay}>
       <View style={styles.content}>
-        <Image
-          accessibilityIgnoresInvertColors
-          source={require('../../../assets/app-icon.png')}
-          style={styles.logo}
-        />
+        <View style={styles.logoContainer}>
+          <Image
+            accessibilityIgnoresInvertColors
+            source={require('../../../assets/app-icon.png')}
+            style={styles.logo}
+          />
+        </View>
         <Text style={styles.title}>Cycle12 Finance</Text>
         {enabled && locked ? (
           <ActionButton label="Desbloquear" onPress={onUnlock} />
@@ -71,6 +73,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     width: '100%',
+  },
+  logoContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 28,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
   },
   logo: {
     borderRadius: 28,

@@ -39,17 +39,17 @@ export function SelectField({
         <View style={styles.triggerContent}>
           <Text style={styles.triggerLabel}>{fieldLabel}</Text>
           {selected?.sublabel ? (
-            <>
+            <View style={styles.triggerRow}>
               <Text style={styles.triggerValue} numberOfLines={1}>
                 {selected.label}
               </Text>
-              <View style={styles.triggerRow}>
-                {selected.color ? (
-                  <View style={[styles.dot, { backgroundColor: selected.color }]} />
-                ) : null}
-                <Text style={styles.triggerSublabel}>{selected.sublabel}</Text>
-              </View>
-            </>
+              {selected.color ? (
+                <View style={[styles.dot, { backgroundColor: selected.color }]} />
+              ) : null}
+              <Text style={styles.triggerSublabel} numberOfLines={1}>
+                {selected.sublabel}
+              </Text>
+            </View>
           ) : (
             <View style={styles.triggerRow}>
               {selected?.color ? (
