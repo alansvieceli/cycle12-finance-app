@@ -113,6 +113,58 @@ export function CategoryEditor({
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>Categorias</Text>
 
+      <Pressable
+        onPress={() => setIsCreateOpen((p) => !p)}
+        style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
+      >
+        <Text style={styles.createToggleText}>Nova categoria</Text>
+        <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
+      </Pressable>
+
+      {isCreateOpen && (
+        <View style={styles.createForm}>
+          <View style={styles.createRow}>
+            <TextInput
+              onChangeText={onChangeNewCategoryName}
+              placeholder="Nome"
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.input, styles.createInput]}
+              value={newCategoryName}
+            />
+            <TextInput
+              keyboardType="number-pad"
+              onChangeText={onChangeNewCategorySortOrder}
+              placeholder="Ordem"
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.input, styles.sortOrderInput]}
+              value={newCategorySortOrder}
+            />
+          </View>
+          <ColorPicker
+            selectedColor={newCategoryColor || suggestCategoryColor(categories)}
+            onSelectColor={onChangeNewCategoryColor}
+          />
+          <View style={styles.createRow}>
+            <PropagationSelector
+              label="Propagação"
+              onOpen={() => setActivePropagationSelector('new')}
+              selectorId="new"
+              value={newCategoryPropagation}
+              visibleSelectorId={activePropagationSelector}
+            />
+            {newCategoryPropagation === 'installment' ? (
+              <MonthYearSelector
+                onOpen={() => setActiveMonthSelector('new')}
+                selectorId="new"
+                value={newCategoryInstallmentEndDate}
+                visibleSelectorId={activeMonthSelector}
+              />
+            ) : null}
+          </View>
+          <ActionButton label="Adicionar" onPress={onCreateCategory} />
+        </View>
+      )}
+
       {sortedCategories.length > 0 && (
         <View style={styles.listSection}>
           {sortedCategories.map((category) => {
@@ -198,58 +250,6 @@ export function CategoryEditor({
               </View>
             );
           })}
-        </View>
-      )}
-
-      <Pressable
-        onPress={() => setIsCreateOpen((p) => !p)}
-        style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
-      >
-        <Text style={styles.createToggleText}>Nova categoria</Text>
-        <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
-      </Pressable>
-
-      {isCreateOpen && (
-        <View style={styles.createForm}>
-          <View style={styles.createRow}>
-            <TextInput
-              onChangeText={onChangeNewCategoryName}
-              placeholder="Nome"
-              placeholderTextColor={colors.textSecondary}
-              style={[styles.input, styles.createInput]}
-              value={newCategoryName}
-            />
-            <TextInput
-              keyboardType="number-pad"
-              onChangeText={onChangeNewCategorySortOrder}
-              placeholder="Ordem"
-              placeholderTextColor={colors.textSecondary}
-              style={[styles.input, styles.sortOrderInput]}
-              value={newCategorySortOrder}
-            />
-          </View>
-          <ColorPicker
-            selectedColor={newCategoryColor || suggestCategoryColor(categories)}
-            onSelectColor={onChangeNewCategoryColor}
-          />
-          <View style={styles.createRow}>
-            <PropagationSelector
-              label="Propagação"
-              onOpen={() => setActivePropagationSelector('new')}
-              selectorId="new"
-              value={newCategoryPropagation}
-              visibleSelectorId={activePropagationSelector}
-            />
-            {newCategoryPropagation === 'installment' ? (
-              <MonthYearSelector
-                onOpen={() => setActiveMonthSelector('new')}
-                selectorId="new"
-                value={newCategoryInstallmentEndDate}
-                visibleSelectorId={activeMonthSelector}
-              />
-            ) : null}
-          </View>
-          <ActionButton label="Adicionar" onPress={onCreateCategory} />
         </View>
       )}
 

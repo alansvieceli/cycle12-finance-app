@@ -22,7 +22,7 @@ const tabs: TabItem<AppTab>[] = [
   { id: 'summary', icon: 'summary', label: 'Resumo' },
   { id: 'charts', icon: 'charts', label: 'Gráficos' },
   { id: 'planning', icon: 'planning', label: 'Planejar' },
-  { id: 'accounts', icon: 'accounts', label: 'Contas' },
+  { id: 'accounts', icon: 'accounts', label: 'Cadastros' },
   { id: 'adjustments', icon: 'adjustments', label: 'Ajustes' },
 ];
 

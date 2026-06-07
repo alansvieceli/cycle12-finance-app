@@ -14,11 +14,8 @@ import {
   suggestNextCategorySortOrder,
 } from '../lib/sorting';
 import { advanceWindow, getNextWindowStart } from '../lib/windowAdvance';
-import {
-  loadFinanceState,
-  normalizeFinanceState,
-  saveFinanceState,
-} from '../storage/financeStorage';
+import { normalizeFinanceState } from '../lib/financeBackup';
+import { loadFinanceState, saveFinanceState } from '../storage/financeStorage';
 import {
   AccountItem,
   FinanceState,
@@ -245,14 +242,24 @@ export function useFinanceState() {
   }
 
   function updateCategorySortOrder(categoryId: string, sortOrder: string) {
-    setFinanceState((currentState) => ({
-      ...currentState,
-      categories: currentState.categories.map((category) =>
-        category.id === categoryId
-          ? { ...category, sortOrder: parseSortOrder(sortOrder) }
-          : category,
-      ),
-    }));
+    const newSortOrder = parseSortOrder(sortOrder);
+    setFinanceState((currentState) => {
+      const hasConflict = currentState.categories.some(
+        (category) => category.id !== categoryId && category.sortOrder === newSortOrder,
+      );
+      return {
+        ...currentState,
+        categories: currentState.categories.map((category) => {
+          if (category.id === categoryId) {
+            return { ...category, sortOrder: newSortOrder };
+          }
+          if (hasConflict && category.sortOrder >= newSortOrder) {
+            return { ...category, sortOrder: category.sortOrder + 1 };
+          }
+          return category;
+        }),
+      };
+    });
   }
 
   function updateCategoryPropagation(categoryId: string, propagation: string) {

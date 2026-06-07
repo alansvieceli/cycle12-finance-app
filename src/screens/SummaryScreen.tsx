@@ -110,7 +110,14 @@ export function SummaryScreen({
     ? categoryNamesById[nextDueAccount.categoryId]
     : undefined;
   const currentMonthPayableAccounts = currentProjectionMonth
-    ? financeState.accountItems
+    ? financeState.accountItems.filter(
+        (accountItem) =>
+          getMonthlyValueAmount(
+            financeState.monthlyValues,
+            accountItem.id,
+            currentProjectionMonth,
+          ) > 0,
+      )
     : [];
   const currentMonthPendingAccounts = currentProjectionMonth
     ? currentMonthPayableAccounts.filter(

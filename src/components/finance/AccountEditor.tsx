@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
@@ -83,6 +91,46 @@ export function AccountEditor({
         </Text>
       ) : (
         <>
+          <Pressable
+            onPress={() => setIsCreateOpen((p) => !p)}
+            style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
+          >
+            <Text style={styles.createToggleText}>Nova conta</Text>
+            <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
+          </Pressable>
+
+          {isCreateOpen && (
+            <View style={styles.createForm}>
+              <View style={styles.createRow}>
+                <TextInput
+                  onChangeText={onChangeNewAccountName}
+                  placeholder="Nome da conta"
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.input, styles.createInput]}
+                  value={newAccountName}
+                />
+                <TextInput
+                  keyboardType="number-pad"
+                  onChangeText={onChangeNewAccountDueDay}
+                  placeholder="Dia"
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.input, styles.dueDayInput]}
+                  value={newAccountDueDay}
+                />
+              </View>
+              <Pressable
+                onPress={() => setIsCategoryPickerOpen(true)}
+                style={styles.categoryPickerButton}
+              >
+                <Text style={styles.categoryPickerText}>
+                  {selectedNewAccountCategoryName}
+                </Text>
+                <Text style={styles.categoryPickerIcon}>▾</Text>
+              </Pressable>
+              <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
+            </View>
+          )}
+
           {sortAccountItems(accountItems, categories).length > 0 && (
             <View style={styles.listSection}>
               {sortAccountItems(accountItems, categories).map((accountItem) => {
@@ -162,83 +210,56 @@ export function AccountEditor({
               })}
             </View>
           )}
-
-          <Pressable
-            onPress={() => setIsCreateOpen((p) => !p)}
-            style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
-          >
-            <Text style={styles.createToggleText}>Nova conta</Text>
-            <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
-          </Pressable>
-
-          {isCreateOpen && (
-            <View style={styles.createForm}>
-              <View style={styles.createRow}>
-                <TextInput
-                  onChangeText={onChangeNewAccountName}
-                  placeholder="Nome da conta"
-                  placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, styles.createInput]}
-                  value={newAccountName}
-                />
-                <TextInput
-                  keyboardType="number-pad"
-                  onChangeText={onChangeNewAccountDueDay}
-                  placeholder="Dia"
-                  placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, styles.dueDayInput]}
-                  value={newAccountDueDay}
-                />
-              </View>
-              <View style={styles.categoryPicker}>
-                <Pressable
-                  onPress={() => setIsCategoryPickerOpen((v) => !v)}
-                  style={styles.categoryPickerButton}
-                >
-                  <Text style={styles.categoryPickerText}>
-                    {selectedNewAccountCategoryName}
-                  </Text>
-                  <Text style={styles.categoryPickerIcon}>
-                    {isCategoryPickerOpen ? '▴' : '▾'}
-                  </Text>
-                </Pressable>
-
-                {isCategoryPickerOpen ? (
-                  <View style={styles.categoryPickerOptions}>
-                    {sortedCategories.map((category) => (
-                      <Pressable
-                        key={category.id}
-                        onPress={() => {
-                          onChangeNewAccountCategoryId(category.id);
-                          setIsCategoryPickerOpen(false);
-                        }}
-                        style={[
-                          styles.categoryPickerOption,
-                          selectedNewAccountCategoryId === category.id
-                            ? styles.categoryPickerOptionActive
-                            : null,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.categoryPickerOptionText,
-                            selectedNewAccountCategoryId === category.id
-                              ? styles.categoryPickerOptionTextActive
-                              : null,
-                          ]}
-                        >
-                          {category.name}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                ) : null}
-              </View>
-              <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
-            </View>
-          )}
         </>
       )}
+
+      <Modal
+        animationType="slide"
+        onRequestClose={() => setIsCategoryPickerOpen(false)}
+        transparent
+        visible={isCategoryPickerOpen}
+      >
+        <Pressable
+          onPress={() => setIsCategoryPickerOpen(false)}
+          style={styles.bottomSheetOverlay}
+        >
+          <Pressable style={styles.bottomSheet}>
+            <Text style={styles.bottomSheetTitle}>Categoria</Text>
+            {sortedCategories.map((category) => (
+              <Pressable
+                key={category.id}
+                onPress={() => {
+                  onChangeNewAccountCategoryId(category.id);
+                  setIsCategoryPickerOpen(false);
+                }}
+                style={[
+                  styles.bottomSheetOption,
+                  selectedNewAccountCategoryId === category.id
+                    ? styles.bottomSheetOptionActive
+                    : null,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.categoryDot,
+                    { backgroundColor: getCategoryColor(category.id, categories) },
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.bottomSheetOptionText,
+                    selectedNewAccountCategoryId === category.id
+                      ? styles.bottomSheetOptionTextActive
+                      : null,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </Pressable>
+            ))}
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -413,9 +434,6 @@ const styles = StyleSheet.create({
   createInput: {
     flex: 1,
   },
-  categoryPicker: {
-    gap: 6,
-  },
   categoryPickerButton: {
     alignItems: 'center',
     backgroundColor: colors.surface,
@@ -439,29 +457,46 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.caption,
   },
-  categoryPickerOptions: {
+  bottomSheetOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  bottomSheet: {
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: 12,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
-    overflow: 'hidden',
+    gap: 4,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  categoryPickerOption: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    minHeight: 44,
-    justifyContent: 'center',
+  bottomSheetTitle: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    marginBottom: 8,
+    ...typography.bodySmall,
+  },
+  bottomSheetOption: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flexDirection: 'row',
+    gap: 12,
+    minHeight: 48,
     paddingHorizontal: 12,
   },
-  categoryPickerOptionActive: {
+  bottomSheetOptionActive: {
     backgroundColor: colors.accent,
   },
-  categoryPickerOptionText: {
+  bottomSheetOptionText: {
     color: colors.textPrimary,
+    flex: 1,
     letterSpacing: 0,
-    ...typography.button,
+    ...typography.body,
   },
-  categoryPickerOptionTextActive: {
+  bottomSheetOptionTextActive: {
     color: colors.accentText,
   },
 });

@@ -3,10 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   clearFinanceState,
   loadFinanceState,
-  normalizeFinanceState,
   saveFinanceState,
 } from './financeStorage';
-import { buildResetFinanceState } from '../lib/financeBackup';
+import { buildResetFinanceState, normalizeFinanceState } from '../lib/financeBackup';
 import { FinanceState, emptyFinanceState } from '../types/finance';
 
 const sampleState: FinanceState = {

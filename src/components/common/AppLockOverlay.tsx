@@ -1,4 +1,4 @@
-import { BlurView } from 'expo-blur';
+import { useEffect, useRef } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '../../theme/colors';
@@ -19,13 +19,25 @@ export function AppLockOverlay({
   onUnlock,
 }: AppLockOverlayProps) {
   const shouldShow = isInitializing || (enabled && locked);
+  const hasAutoTriggered = useRef(false);
+
+  useEffect(() => {
+    if (enabled && locked && !hasAutoTriggered.current) {
+      hasAutoTriggered.current = true;
+      onUnlock();
+    }
+
+    if (!locked) {
+      hasAutoTriggered.current = false;
+    }
+  }, [enabled, locked, onUnlock]);
 
   if (!shouldShow) {
     return null;
   }
 
   return (
-    <BlurView intensity={80} style={styles.overlay} tint="dark">
+    <View style={styles.overlay}>
       <View style={styles.content}>
         <Image
           accessibilityIgnoresInvertColors
@@ -37,14 +49,14 @@ export function AppLockOverlay({
           <ActionButton label="Desbloquear" onPress={onUnlock} />
         ) : null}
       </View>
-    </BlurView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   overlay: {
     alignItems: 'center',
-    backgroundColor: 'rgba(11, 13, 18, 0.72)',
+    backgroundColor: colors.background,
     bottom: 0,
     elevation: 24,
     justifyContent: 'center',
