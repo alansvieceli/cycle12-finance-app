@@ -196,22 +196,31 @@ The current coverage metric focuses mainly on pure TypeScript logic under `src/l
 
 The first recorded baseline is available in `docs/quality/coverage-baseline.md` and was recorded before the Jest migration. Generated coverage reports are written to `coverage/` and ignored by git.
 
-## Generate APK for Android
+## Release Builds
 
-There are two ways to generate an APK to install directly on a device.
+### Android
 
-### Option 1: EAS Build (recommended, cloud-based)
+There are two ways to generate an Android build.
+
+#### Option 1: EAS Build (recommended, cloud-based)
+
+Produces an `.apk` (sideload) or `.aab` (Google Play). Works on any OS.
 
 ```bash
 npm install -g eas-cli
 eas login
 eas build:configure
+
+# APK for direct install
 eas build -p android --profile preview
+
+# AAB for Google Play
+eas build -p android --profile production
 ```
 
-A download link for the `.apk` is provided when the build finishes. Requires a free account at [expo.dev](https://expo.dev).
+A download link is provided when the build finishes. Requires a free account at [expo.dev](https://expo.dev).
 
-### Option 2: Local build (requires Android Studio)
+#### Option 2: Local build (requires Android Studio)
 
 ```bash
 npx expo run:android --variant release
@@ -224,6 +233,40 @@ android/app/build/outputs/apk/release/app-release.apk
 ```
 
 Transfer it to the device via cable or cloud storage and install it. You may need to enable **Install from unknown sources** in Android settings.
+
+---
+
+### iOS
+
+> **Requires a Mac with Xcode installed.** iOS builds cannot be produced on Windows or Linux.
+
+There are two ways to generate an iOS build.
+
+#### Option 1: EAS Build (recommended, cloud-based)
+
+Produces an `.ipa` ready for TestFlight or App Store submission. Runs on Expo's servers — you still need a Mac to configure signing credentials the first time.
+
+```bash
+npm install -g eas-cli
+eas login
+eas build:configure
+
+# IPA for TestFlight / Ad Hoc
+eas build -p ios --profile preview
+
+# IPA for App Store submission
+eas build -p ios --profile production
+```
+
+A download link is provided when the build finishes. Requires a free account at [expo.dev](https://expo.dev) and an Apple Developer account for distribution.
+
+#### Option 2: Local build (requires Xcode on macOS)
+
+```bash
+npx expo run:ios --configuration Release
+```
+
+The app opens in the iOS Simulator or on a connected device. To archive for distribution, open the generated `ios/` project in Xcode and use **Product → Archive**.
 
 ## TypeScript Check
 
