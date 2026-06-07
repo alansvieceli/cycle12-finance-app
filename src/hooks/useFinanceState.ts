@@ -124,6 +124,17 @@ export function useFinanceState() {
     }));
   }
 
+  function addCurrentMonthExtraBalance(amount: number) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: {
+        ...currentState.settings,
+        currentMonthExtraBalance:
+          currentState.settings.currentMonthExtraBalance + amount,
+      },
+    }));
+  }
+
   function updateSummaryVisibleMonthCount(value: string) {
     const numericValue = value.replace(/\D/g, '');
 
@@ -568,6 +579,7 @@ export function useFinanceState() {
 
   return {
     actions: {
+      addCurrentMonthExtraBalance,
       createAccountItem,
       createAccountItemAndSetValue,
       createCategory,

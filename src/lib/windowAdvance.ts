@@ -91,6 +91,7 @@ function advanceWindowOneStep(state: FinanceState): FinanceState {
       ...state.settings,
       windowStartYear: nextWindowStart.year,
       windowStartMonth: nextWindowStart.month,
+      currentMonthExtraBalance: 0,
     },
   };
 }

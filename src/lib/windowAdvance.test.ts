@@ -237,4 +237,32 @@ describe('windowAdvance', () => {
     expect(entries).not.toContainEqual({ month: 6, year: 2026 });
     expect(entries).not.toContainEqual({ month: 7, year: 2026 });
   });
+
+  it('resets currentMonthExtraBalance to 0 when the window advances one step', () => {
+    const stateWithExtra: FinanceState = {
+      ...baseState,
+      settings: {
+        ...baseState.settings,
+        currentMonthExtraBalance: 500,
+      },
+    };
+
+    const advancedState = advanceWindow(stateWithExtra, 2026, 7);
+
+    expect(advancedState.settings.currentMonthExtraBalance).toBe(0);
+  });
+
+  it('resets currentMonthExtraBalance to 0 even when advancing multiple steps', () => {
+    const stateWithExtra: FinanceState = {
+      ...baseState,
+      settings: {
+        ...baseState.settings,
+        currentMonthExtraBalance: 1200,
+      },
+    };
+
+    const advancedState = advanceWindow(stateWithExtra, 2026, 9);
+
+    expect(advancedState.settings.currentMonthExtraBalance).toBe(0);
+  });
 });
