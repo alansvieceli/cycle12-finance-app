@@ -13,6 +13,8 @@ import { FinanceSettings, MonthHistoryEntry } from '../../types/finance';
 
 type HistoryCardProps = {
   entry: MonthHistoryEntry;
+  isExpanded: boolean;
+  onToggle: () => void;
   settings: Pick<
     FinanceSettings,
     'commitmentWarningThreshold' | 'commitmentDangerThreshold'
@@ -22,8 +24,13 @@ type HistoryCardProps = {
 
 type DetailTab = 'categories' | 'accounts';
 
-export function HistoryCard({ entry, settings, valuesHidden }: HistoryCardProps) {
-  const [expanded, setExpanded] = useState(false);
+export function HistoryCard({
+  entry,
+  isExpanded,
+  onToggle,
+  settings,
+  valuesHidden,
+}: HistoryCardProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>('categories');
 
   const ratio = entry.totalIncome > 0 ? entry.totalExpenses / entry.totalIncome : 0;
@@ -42,11 +49,11 @@ export function HistoryCard({ entry, settings, valuesHidden }: HistoryCardProps)
 
   return (
     <View style={styles.card}>
-      <Pressable onPress={() => setExpanded((prev) => !prev)} style={styles.header}>
+      <Pressable onPress={onToggle} style={styles.header}>
         <Text style={styles.monthLabel}>
           {formatMonthLabel(entry.year, entry.month)}
         </Text>
-        <Text style={styles.chevron}>{expanded ? '∧' : '›'}</Text>
+        <Text style={styles.chevron}>{isExpanded ? '∧' : '›'}</Text>
       </Pressable>
 
       <View style={styles.metricsRow}>
@@ -78,7 +85,7 @@ export function HistoryCard({ entry, settings, valuesHidden }: HistoryCardProps)
         </Text>
       </View>
 
-      {expanded ? (
+      {isExpanded ? (
         <View style={styles.detail}>
           <View style={styles.tabs}>
             <Pressable
@@ -118,14 +125,30 @@ export function HistoryCard({ entry, settings, valuesHidden }: HistoryCardProps)
                   </Text>
                 </View>
               ))
-            : sortedAccounts.map((account) => (
-                <View key={account.id} style={styles.row}>
-                  <Text style={styles.rowName}>{account.name}</Text>
-                  <Text style={styles.rowAmount}>
-                    {maskCurrency(account.amount, valuesHidden)}
-                  </Text>
-                </View>
-              ))}
+            : (() => {
+                const categoryMap = new Map(entry.categories.map((c) => [c.id, c]));
+                const grouped = new Map<string, typeof sortedAccounts>();
+                for (const account of sortedAccounts) {
+                  const existing = grouped.get(account.categoryId) ?? [];
+                  grouped.set(account.categoryId, [...existing, account]);
+                }
+                return Array.from(grouped.entries()).map(([categoryId, accounts]) => {
+                  const categoryName = categoryMap.get(categoryId)?.name ?? categoryId;
+                  return (
+                    <View key={categoryId}>
+                      <Text style={styles.groupHeader}>{categoryName}</Text>
+                      {accounts.map((account) => (
+                        <View key={account.id} style={styles.row}>
+                          <Text style={styles.rowName}>{account.name}</Text>
+                          <Text style={styles.rowAmount}>
+                            {maskCurrency(account.amount, valuesHidden)}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  );
+                });
+              })()}
         </View>
       ) : null}
     </View>
@@ -241,5 +264,11 @@ const styles = StyleSheet.create({
   rowAmount: {
     color: colors.textPrimary,
     ...typography.body,
+  },
+  groupHeader: {
+    color: colors.textSecondary,
+    marginTop: 8,
+    textTransform: 'uppercase',
+    ...typography.label,
   },
 });

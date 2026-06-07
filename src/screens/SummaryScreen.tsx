@@ -41,6 +41,7 @@ export function SummaryScreen({
     null,
   );
   const [activeView, setActiveView] = useState<ActiveView>('current');
+  const [expandedHistoryKey, setExpandedHistoryKey] = useState<string | null>(null);
   const sortedCategories = sortCategories(financeState.categories);
   const categoryNamesById = Object.fromEntries(
     sortedCategories.map((category) => [category.id, category.name]),
@@ -342,14 +343,21 @@ export function SummaryScreen({
                   </Text>
                 </View>
               ) : (
-                financeState.monthHistory.map((entry) => (
-                  <HistoryCard
-                    key={`${entry.year}-${entry.month}`}
-                    entry={entry}
-                    settings={financeState.settings}
-                    valuesHidden={valuesHidden}
-                  />
-                ))
+                financeState.monthHistory.map((entry) => {
+                  const key = `${entry.year}-${entry.month}`;
+                  return (
+                    <HistoryCard
+                      key={key}
+                      entry={entry}
+                      isExpanded={expandedHistoryKey === key}
+                      onToggle={() =>
+                        setExpandedHistoryKey((prev) => (prev === key ? null : key))
+                      }
+                      settings={financeState.settings}
+                      valuesHidden={valuesHidden}
+                    />
+                  );
+                })
               )}
             </>
           )}
