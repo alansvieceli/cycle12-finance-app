@@ -176,6 +176,7 @@ export function CurrentMonthPaymentChecklist({
 
     return true;
   });
+  const activeColor = adjustmentMode === 'add' ? colors.accent : colors.negative;
 
   return (
     <View style={styles.panel}>
@@ -264,8 +265,6 @@ export function CurrentMonthPaymentChecklist({
               projectionMonth,
             );
             const isExpanded = expandedAccountItemId === accountItem.id;
-            const activeColor =
-              adjustmentMode === 'add' ? colors.accent : colors.negative;
 
             return (
               <View
@@ -385,8 +384,8 @@ export function CurrentMonthPaymentChecklist({
                           { backgroundColor: activeColor },
                         ]}
                       >
-                        <Text style={styles.adjustConfirmLabel}>Novo total</Text>
-                        <Text style={styles.adjustConfirmValue}>
+                        <Text style={styles.adjustConfirmText}>Novo total</Text>
+                        <Text style={styles.adjustConfirmText}>
                           {maskCurrency(
                             calculateAdjustedMonthlyValue(
                               amount,
@@ -627,7 +626,6 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 14,
   },
-  // Replaces paymentRow — now a wrapper View so the expansion panel sits outside the toggle Pressable
   paymentRowWrapper: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
@@ -639,7 +637,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceRaised,
     borderColor: colors.positive,
   },
-  // The tappable top portion of each row
   paymentRowTop: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -693,7 +690,6 @@ const styles = StyleSheet.create({
   amountPaid: {
     color: colors.positive,
   },
-  // ± toggle button
   adjustToggleButton: {
     alignItems: 'center',
     backgroundColor: colors.surfaceRaised,
@@ -709,7 +705,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.button,
   },
-  // Adjustment panel
   adjustPanel: {
     borderTopColor: colors.border,
     borderTopWidth: 1,
@@ -775,13 +770,8 @@ const styles = StyleSheet.create({
     minHeight: 44,
     paddingHorizontal: 12,
   },
-  adjustConfirmLabel: {
-    color: '#000000',
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  adjustConfirmValue: {
-    color: '#000000',
+  adjustConfirmText: {
+    color: colors.accentText,
     letterSpacing: 0,
     ...typography.button,
   },
