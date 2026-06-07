@@ -15,7 +15,12 @@ import {
   normalizeFinanceState,
   saveFinanceState,
 } from '../storage/financeStorage';
-import { FinanceState, MonthlyValue, emptyFinanceState } from '../types/finance';
+import {
+  AccountItem,
+  FinanceState,
+  MonthlyValue,
+  emptyFinanceState,
+} from '../types/finance';
 import { ProjectionMonth } from '../lib/financeCalculations';
 import {
   MonthlyValueAdjustmentOperation,
@@ -454,6 +459,29 @@ export function useFinanceState() {
     });
   }
 
+  function createAccountItemAndSetValue(
+    name: string,
+    categoryId: string,
+    dueDay: number,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    amount: number,
+  ) {
+    const accountItemId = createId('account');
+
+    setFinanceState((currentState) =>
+      buildAccountItemWithValueState(
+        currentState,
+        accountItemId,
+        name,
+        categoryId,
+        dueDay,
+        projectionMonth,
+        amount,
+      ),
+    );
+    setSelectedAccountItemId(accountItemId);
+  }
+
   function setMonthlyValueAmount(
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
@@ -540,6 +568,7 @@ export function useFinanceState() {
   return {
     actions: {
       createAccountItem,
+      createAccountItemAndSetValue,
       createCategory,
       cycleAccountCategory,
       deleteAccountItem,
@@ -585,6 +614,43 @@ export function useFinanceState() {
     selectedAccountItem,
     selectedAccountItemId,
     storageMessage,
+  };
+}
+
+export function buildAccountItemWithValueState(
+  currentState: FinanceState,
+  accountItemId: string,
+  name: string,
+  categoryId: string,
+  dueDay: number,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  amount: number,
+): FinanceState {
+  const newItem: AccountItem = {
+    id: accountItemId,
+    categoryId,
+    dueDay,
+    name: name.trim(),
+    sortOrder: 0,
+  };
+  const withNewItem: FinanceState = {
+    ...currentState,
+    accountItems: [...currentState.accountItems, newItem],
+  };
+
+  if (amount <= 0) return withNewItem;
+
+  return {
+    ...withNewItem,
+    monthlyValues: [
+      ...withNewItem.monthlyValues,
+      {
+        accountItemId,
+        amount,
+        month: projectionMonth.month,
+        year: projectionMonth.year,
+      },
+    ],
   };
 }
 

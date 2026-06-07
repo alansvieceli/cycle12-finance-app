@@ -86,6 +86,7 @@ export function FinanceApp() {
             categories={finance.financeState.categories}
             monthlyValues={finance.financeState.monthlyValues}
             onClose={() => setIsPaymentViewOpen(false)}
+            onCreateAccountItem={finance.actions.createAccountItemAndSetValue}
             onTogglePaymentStatus={finance.actions.toggleMonthlyPaymentStatus}
             paymentStatuses={finance.financeState.paymentStatuses}
             projectionMonth={currentProjectionMonth}

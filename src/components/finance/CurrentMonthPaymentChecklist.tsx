@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import {
   calculatePaymentSummary,
@@ -8,6 +16,7 @@ import {
   ProjectionMonth,
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
+import { parseCurrencyInput, parseDueDay } from '../../lib/inputParsers';
 import { sortAccountItemsByDueDay } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -19,10 +28,24 @@ import {
 } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 
+const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', { month: 'short' });
+
+function formatPaymentMonthLabel(year: number, month: number) {
+  const raw = shortMonthFormatter.format(new Date(year, month - 1, 1)).replace('.', '');
+  return `${raw.charAt(0).toUpperCase()}${raw.slice(1)} / ${year}`;
+}
+
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
   categories: Category[];
   monthlyValues: MonthlyValue[];
+  onCreateAccountItem: (
+    name: string,
+    categoryId: string,
+    dueDay: number,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    amount: number,
+  ) => void;
   onTogglePaymentStatus: (
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
@@ -46,12 +69,47 @@ export function CurrentMonthPaymentChecklist({
   categories,
   monthlyValues,
   onClose,
+  onCreateAccountItem,
   onTogglePaymentStatus,
   paymentStatuses,
   projectionMonth,
   valuesHidden,
 }: CurrentMonthPaymentChecklistProps) {
   const [activeFilter, setActiveFilter] = useState<PaymentStatusFilter>('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newCategoryId, setNewCategoryId] = useState('');
+  const [newDueDay, setNewDueDay] = useState('');
+  const [newAmount, setNewAmount] = useState('');
+
+  function openAddModal() {
+    const firstCategoryId = categories[0]?.id ?? '';
+    setNewName('');
+    setNewCategoryId(firstCategoryId);
+    setNewDueDay(String(new Date().getDate()));
+    setNewAmount('');
+    setIsAddModalOpen(true);
+  }
+
+  function closeAddModal() {
+    setIsAddModalOpen(false);
+  }
+
+  function saveNewAccount() {
+    const name = newName.trim();
+    const categoryId = newCategoryId || categories[0]?.id || '';
+
+    if (!name || !categoryId) return;
+
+    onCreateAccountItem(
+      name,
+      categoryId,
+      parseDueDay(newDueDay),
+      projectionMonth,
+      parseCurrencyInput(newAmount),
+    );
+    setIsAddModalOpen(false);
+  }
   const paymentSummary = calculatePaymentSummary(
     accountItems,
     monthlyValues,
@@ -79,11 +137,38 @@ export function CurrentMonthPaymentChecklist({
   return (
     <View style={styles.panel}>
       <View style={styles.header}>
-        <View style={styles.headerText}>
-          <Text style={styles.sectionTitle}>Pagamentos do mês</Text>
-          <Text style={styles.sectionHint}>Marque manualmente o que já foi pago.</Text>
+        <Text style={styles.sectionLabel}>Pagamentos</Text>
+        <Text style={styles.sectionHint}>Marque o que já foi pago.</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.sectionTitle}>
+            {formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)}
+          </Text>
+          {onClose ? (
+            <ActionButton label="Voltar" onPress={onClose} variant="secondary" />
+          ) : null}
         </View>
-        {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
+        <Pressable
+          disabled={categories.length === 0}
+          onPress={openAddModal}
+          style={[
+            styles.addButton,
+            categories.length === 0 ? styles.addButtonDisabled : null,
+          ]}
+        >
+          <Text
+            style={[
+              styles.addButtonText,
+              categories.length === 0 ? styles.addButtonTextDisabled : null,
+            ]}
+          >
+            Adicionar conta
+          </Text>
+        </Pressable>
+        {categories.length === 0 ? (
+          <Text style={styles.addButtonHint}>
+            Crie uma categoria em Contas primeiro.
+          </Text>
+        ) : null}
       </View>
 
       <View style={styles.summaryGrid}>
@@ -169,6 +254,98 @@ export function CurrentMonthPaymentChecklist({
       ) : (
         <Text style={styles.emptyText}>{getEmptyText(activeFilter)}</Text>
       )}
+
+      <Modal
+        animationType="fade"
+        onRequestClose={closeAddModal}
+        transparent
+        visible={isAddModalOpen}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>
+              {`Nova conta — ${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)}`}
+            </Text>
+
+            <TextInput
+              autoFocus
+              onChangeText={setNewName}
+              placeholder="Nome da conta..."
+              placeholderTextColor={colors.textSecondary}
+              style={styles.modalInput}
+              value={newName}
+            />
+
+            <View>
+              <Text style={styles.modalFieldLabel}>Categoria</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.categoryScroll}
+              >
+                {categories.map((category) => {
+                  const isActive = newCategoryId === category.id;
+                  return (
+                    <Pressable
+                      key={category.id}
+                      onPress={() => setNewCategoryId(category.id)}
+                      style={[
+                        styles.categoryChip,
+                        isActive ? styles.categoryChipActive : null,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.categoryChipText,
+                          isActive ? styles.categoryChipTextActive : null,
+                        ]}
+                      >
+                        {category.name}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            </View>
+
+            <View style={styles.modalRow}>
+              <View style={styles.modalFieldDueDay}>
+                <Text style={styles.modalFieldLabel}>Dia de venc.</Text>
+                <TextInput
+                  keyboardType="number-pad"
+                  onChangeText={setNewDueDay}
+                  placeholder="1"
+                  placeholderTextColor={colors.textSecondary}
+                  style={styles.modalInput}
+                  value={newDueDay}
+                />
+              </View>
+              <View style={styles.modalFieldValue}>
+                <Text style={styles.modalFieldLabel}>
+                  {`Valor (${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)})`}
+                </Text>
+                <TextInput
+                  keyboardType="decimal-pad"
+                  onChangeText={setNewAmount}
+                  placeholder="0,00"
+                  placeholderTextColor={colors.textSecondary}
+                  style={styles.modalInput}
+                  value={newAmount}
+                />
+              </View>
+            </View>
+
+            <View style={styles.modalActions}>
+              <Pressable onPress={closeAddModal} style={styles.modalCancelButton}>
+                <Text style={styles.modalCancelButtonText}>Cancelar</Text>
+              </Pressable>
+              <Pressable onPress={saveNewAccount} style={styles.modalSaveButton}>
+                <Text style={styles.modalSaveButtonText}>Salvar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -215,22 +392,54 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    gap: 10,
-    justifyContent: 'space-between',
+    gap: 6,
   },
-  headerText: {
-    flex: 1,
+  sectionLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    ...typography.label,
+  },
+  sectionHint: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.bodySmall,
+  },
+  headerRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 2,
   },
   sectionTitle: {
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.sectionTitle,
   },
-  sectionHint: {
+  addButton: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 16,
+  },
+  addButtonDisabled: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderWidth: 1,
+  },
+  addButtonText: {
+    color: colors.accentText,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  addButtonTextDisabled: {
     color: colors.textSecondary,
-    marginTop: 4,
+  },
+  addButtonHint: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
     ...typography.bodySmall,
   },
   summaryGrid: {
@@ -351,5 +560,115 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 12,
     ...typography.body,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 12,
+    maxWidth: 360,
+    padding: 16,
+    width: '100%',
+  },
+  modalTitle: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  modalInput: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    minHeight: 44,
+    paddingHorizontal: 12,
+    ...typography.input,
+  },
+  modalFieldLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    marginBottom: 4,
+    ...typography.label,
+  },
+  categoryScroll: {
+    flexGrow: 0,
+  },
+  categoryChip: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 999,
+    borderWidth: 1,
+    justifyContent: 'center',
+    marginRight: 6,
+    minHeight: 36,
+    paddingHorizontal: 14,
+  },
+  categoryChipActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  categoryChipText: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  categoryChipTextActive: {
+    color: colors.accentText,
+  },
+  modalRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  modalFieldDueDay: {
+    flex: 1,
+  },
+  modalFieldValue: {
+    flex: 2,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-end',
+  },
+  modalCancelButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 42,
+    minWidth: 96,
+    paddingHorizontal: 12,
+  },
+  modalCancelButtonText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  modalSaveButton: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    justifyContent: 'center',
+    minHeight: 42,
+    minWidth: 96,
+    paddingHorizontal: 12,
+  },
+  modalSaveButtonText: {
+    color: colors.accentText,
+    letterSpacing: 0,
+    ...typography.button,
   },
 });
