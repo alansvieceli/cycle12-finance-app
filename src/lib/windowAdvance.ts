@@ -2,6 +2,7 @@ import {
   AccountItem,
   Category,
   FinanceState,
+  MonthHistoryEntry,
   MonthNumber,
   MonthlyValue,
 } from '../types/finance';
@@ -65,8 +66,15 @@ function advanceWindowOneStep(state: FinanceState): FinanceState {
     (monthlyValue) => !isSameMonth(monthlyValue, oldestMonth),
   );
 
+  const historyEntry = buildHistoryEntry(state, oldestMonth);
+  const updatedHistory = [historyEntry, ...(state.monthHistory ?? [])].slice(
+    0,
+    MAX_HISTORY_ENTRIES,
+  );
+
   return {
     ...state,
+    monthHistory: updatedHistory,
     monthlyValues: [
       ...monthlyValuesWithoutOldest,
       ...buildTrailingMonthValues(
@@ -84,6 +92,59 @@ function advanceWindowOneStep(state: FinanceState): FinanceState {
       windowStartYear: nextWindowStart.year,
       windowStartMonth: nextWindowStart.month,
     },
+  };
+}
+
+const MAX_HISTORY_ENTRIES = 12;
+
+function buildHistoryEntry(
+  state: FinanceState,
+  oldestMonth: MonthReference,
+): MonthHistoryEntry {
+  const accountAmounts = state.accountItems.map((accountItem) => {
+    const value = state.monthlyValues.find(
+      (v) =>
+        v.accountItemId === accountItem.id &&
+        v.month === oldestMonth.month &&
+        v.year === oldestMonth.year,
+    );
+    return { accountItem, amount: value?.amount ?? 0 };
+  });
+
+  const categoryMap = new Map(state.categories.map((c) => [c.id, c]));
+
+  const categoryTotals = new Map<string, number>();
+  for (const { accountItem, amount } of accountAmounts) {
+    const prev = categoryTotals.get(accountItem.categoryId) ?? 0;
+    categoryTotals.set(accountItem.categoryId, prev + amount);
+  }
+
+  const categories = Array.from(categoryTotals.entries()).map(([id, total]) => {
+    const category = categoryMap.get(id);
+    return {
+      id,
+      name: category?.name ?? id,
+      color: category?.color,
+      total,
+    };
+  });
+
+  const accounts = accountAmounts.map(({ accountItem, amount }) => ({
+    id: accountItem.id,
+    name: accountItem.name,
+    categoryId: accountItem.categoryId,
+    amount,
+  }));
+
+  const totalExpenses = accountAmounts.reduce((sum, { amount }) => sum + amount, 0);
+
+  return {
+    month: oldestMonth.month,
+    year: oldestMonth.year,
+    totalIncome: state.settings.monthlySalary + state.settings.currentMonthExtraBalance,
+    totalExpenses,
+    categories,
+    accounts,
   };
 }
 

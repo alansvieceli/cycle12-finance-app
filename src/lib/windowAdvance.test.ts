@@ -168,4 +168,73 @@ describe('windowAdvance', () => {
       year: 2027,
     });
   });
+
+  it('captures a history entry before dropping the oldest month', () => {
+    const advancedState = advanceWindow(baseState, 2026, 7);
+
+    expect(advancedState.monthHistory).toHaveLength(1);
+    expect(advancedState.monthHistory[0]).toMatchObject({
+      month: 6,
+      year: 2026,
+    });
+  });
+
+  it('captures totalIncome as salary plus extra balance', () => {
+    const stateWithExtra = {
+      ...baseState,
+      settings: {
+        ...baseState.settings,
+        monthlySalary: 3000,
+        currentMonthExtraBalance: 500,
+      },
+    };
+    const advancedState = advanceWindow(stateWithExtra, 2026, 7);
+
+    expect(advancedState.monthHistory[0].totalIncome).toBe(3500);
+  });
+
+  it('captures totalExpenses as the sum of all account values for that month', () => {
+    const advancedState = advanceWindow(baseState, 2026, 7);
+
+    // rent 900 + card 300 + loan 150 = 1350
+    expect(advancedState.monthHistory[0].totalExpenses).toBe(1350);
+  });
+
+  it('captures per-category totals correctly', () => {
+    const advancedState = advanceWindow(baseState, 2026, 7);
+    const entry = advancedState.monthHistory[0];
+
+    const fixedCategory = entry.categories.find((c) => c.id === 'fixed');
+    expect(fixedCategory?.total).toBe(900);
+
+    const zeroCategory = entry.categories.find((c) => c.id === 'zero');
+    expect(zeroCategory?.total).toBe(300);
+  });
+
+  it('snapshots category and account names at advance time', () => {
+    const advancedState = advanceWindow(baseState, 2026, 7);
+    const entry = advancedState.monthHistory[0];
+
+    expect(entry.categories.find((c) => c.id === 'fixed')?.name).toBe('Fixos');
+    expect(entry.accounts.find((a) => a.id === 'rent')?.name).toBe('Aluguel');
+  });
+
+  it('caps monthHistory at 12 entries after multiple advances', () => {
+    // baseState starts at Jun 2026; advancing to Aug 2027 = 14 advance steps
+    const advancedState = advanceWindow(baseState, 2027, 8);
+
+    expect(advancedState.monthHistory).toHaveLength(12);
+  });
+
+  it('drops the oldest history entry when the cap is exceeded', () => {
+    // 14 advances: Jun 2026 through Jul 2026 are beyond the 12-entry cap
+    const advancedState = advanceWindow(baseState, 2027, 8);
+    const entries = advancedState.monthHistory.map((e) => ({
+      month: e.month,
+      year: e.year,
+    }));
+
+    expect(entries).not.toContainEqual({ month: 6, year: 2026 });
+    expect(entries).not.toContainEqual({ month: 7, year: 2026 });
+  });
 });
