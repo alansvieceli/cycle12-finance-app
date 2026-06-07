@@ -30,8 +30,9 @@ describe('formatters', () => {
     expect(formatEditableAmount(Number.POSITIVE_INFINITY)).toBe('');
   });
 
-  it('formats month labels with the first letter capitalized', () => {
-    expect(formatMonthLabel(2026, 1)).toBe('Janeiro/2026');
-    expect(formatMonthLabel(2026, 12)).toBe('Dezembro/2026');
+  it('formats month labels with abbreviated month and full year', () => {
+    expect(formatMonthLabel(2026, 1)).toBe('Jan/2026');
+    expect(formatMonthLabel(2026, 9)).toBe('Set/2026');
+    expect(formatMonthLabel(2026, 12)).toBe('Dez/2026');
   });
 });

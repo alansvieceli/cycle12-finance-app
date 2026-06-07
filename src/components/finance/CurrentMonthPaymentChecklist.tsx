@@ -330,7 +330,7 @@ export function CurrentMonthPaymentChecklist({
                           style={[
                             styles.adjustModeButtonText,
                             adjustmentMode === 'add'
-                              ? { color: '#000000' }
+                              ? { color: colors.accentText }
                               : { color: colors.textSecondary },
                           ]}
                         >
@@ -360,7 +360,7 @@ export function CurrentMonthPaymentChecklist({
                           style={[
                             styles.adjustModeButtonText,
                             adjustmentMode === 'subtract'
-                              ? { color: '#000000' }
+                              ? { color: colors.accentText }
                               : { color: colors.textSecondary },
                           ]}
                         >

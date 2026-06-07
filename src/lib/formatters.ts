@@ -12,7 +12,7 @@ export const percentageFormatter = new Intl.NumberFormat('pt-BR', {
 });
 
 const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
-  month: 'long',
+  month: 'short',
 });
 
 export function formatEditableAmount(value: number) {
@@ -31,7 +31,9 @@ export function maskCurrency(value: number, hidden: boolean): string {
 }
 
 export function formatMonthLabel(year: number, month: number) {
-  const monthLabel = monthFormatter.format(new Date(year, month - 1, 1));
+  const monthLabel = monthFormatter
+    .format(new Date(year, month - 1, 1))
+    .replace(/\.$/, '');
   const label = `${monthLabel}/${year}`;
 
   return label.charAt(0).toUpperCase() + label.slice(1);
