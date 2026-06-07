@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { clampVisibleMonthCount } from '../lib/inputParsers';
+import { buildResetFinanceState } from '../lib/financeBackup';
 import {
   Category,
   CategoryPropagation,
@@ -17,7 +18,7 @@ export async function loadFinanceState(): Promise<FinanceState> {
   const storedValue = await AsyncStorage.getItem(FINANCE_STATE_STORAGE_KEY);
 
   if (!storedValue) {
-    return emptyFinanceState;
+    return buildResetFinanceState();
   }
 
   return normalizeFinanceState({

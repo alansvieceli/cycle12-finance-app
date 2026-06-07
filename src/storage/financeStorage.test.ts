@@ -6,6 +6,7 @@ import {
   normalizeFinanceState,
   saveFinanceState,
 } from './financeStorage';
+import { buildResetFinanceState } from '../lib/financeBackup';
 import { FinanceState, emptyFinanceState } from '../types/finance';
 
 const sampleState: FinanceState = {
@@ -59,8 +60,8 @@ describe('financeStorage', () => {
     await AsyncStorage.clear();
   });
 
-  it('loads the empty finance state when storage has no value', async () => {
-    await expect(loadFinanceState()).resolves.toEqual(emptyFinanceState);
+  it('loads the reset defaults when storage has no value', async () => {
+    await expect(loadFinanceState()).resolves.toEqual(buildResetFinanceState());
   });
 
   it('saves and loads a normalized finance state', async () => {
@@ -73,7 +74,7 @@ describe('financeStorage', () => {
     await saveFinanceState(sampleState);
     await clearFinanceState();
 
-    await expect(loadFinanceState()).resolves.toEqual(emptyFinanceState);
+    await expect(loadFinanceState()).resolves.toEqual(buildResetFinanceState());
   });
 
   it('normalizes legacy state defaults and rolling window fields', () => {

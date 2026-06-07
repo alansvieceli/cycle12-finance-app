@@ -58,21 +58,13 @@ export function buildResetFinanceState(): FinanceState {
         id: RESET_CATEGORY_ID,
         name: 'Outros',
         propagation: 'zero',
-        sortOrder: 0,
+        sortOrder: 9,
       },
     ],
     monthHistory: [],
     monthlyValues: [],
     paymentStatuses: [],
-    settings: {
-      commitmentDangerThreshold: 80,
-      commitmentWarningThreshold: 60,
-      currentMonthExtraBalance: 0,
-      monthlySalary: 0,
-      summaryVisibleMonthCount: 12,
-      windowStartMonth: defaultSettings.windowStartMonth,
-      windowStartYear: defaultSettings.windowStartYear,
-    },
+    settings: defaultSettings,
   };
 }
 

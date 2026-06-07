@@ -80,7 +80,7 @@ export function createDefaultFinanceSettings(date = new Date()): FinanceSettings
     summaryVisibleMonthCount: 12,
     windowStartYear: date.getFullYear(),
     windowStartMonth: (date.getMonth() + 1) as MonthNumber,
-    commitmentWarningThreshold: 80,
+    commitmentWarningThreshold: 70,
     commitmentDangerThreshold: 90,
   };
 }
