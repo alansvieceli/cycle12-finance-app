@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import { ProjectionMonth } from '../../lib/financeCalculations';
@@ -20,6 +12,7 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { AccountItem, Category, MonthNumber, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
+import { SelectField } from '../common/SelectField';
 
 const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', {
   month: 'short',
@@ -117,57 +110,17 @@ export function MonthlyValueEditor({
       <Text style={styles.sectionTitle}>Planejamento mensal</Text>
       {selectedAccountItem ? (
         <>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.accountSelector}
-          >
-            {sortAccountItems(accountItems, categories).map((accountItem) => {
-              const isActive = selectedAccountItem.id === accountItem.id;
-
-              return (
-                <Pressable
-                  key={accountItem.id}
-                  onPress={() => onSelectAccountItem(accountItem.id)}
-                  style={[
-                    styles.accountSelectorButton,
-                    isActive ? styles.accountSelectorButtonActive : null,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.accountSelectorAccountText,
-                      isActive ? styles.accountSelectorButtonTextActive : null,
-                    ]}
-                  >
-                    {accountItem.name}
-                  </Text>
-                  <View style={styles.accountSelectorCategory}>
-                    <View
-                      style={[
-                        styles.categoryDot,
-                        {
-                          backgroundColor: getCategoryColor(
-                            accountItem.categoryId,
-                            categories,
-                          ),
-                        },
-                        isActive ? styles.categoryDotActive : null,
-                      ]}
-                    />
-                    <Text
-                      style={[
-                        styles.accountSelectorCategoryText,
-                        isActive ? styles.accountSelectorCategoryTextActive : null,
-                      ]}
-                    >
-                      {getCategoryName(categories, accountItem.categoryId)}
-                    </Text>
-                  </View>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+          <SelectField
+            fieldLabel="Conta"
+            onChange={onSelectAccountItem}
+            options={sortAccountItems(accountItems, categories).map((accountItem) => ({
+              id: accountItem.id,
+              label: accountItem.name,
+              sublabel: getCategoryName(categories, accountItem.categoryId),
+              color: getCategoryColor(accountItem.categoryId, categories),
+            }))}
+            value={selectedAccountItem.id}
+          />
 
           <View style={styles.monthValueList}>
             {projectionMonths.map((projectionMonth) => {
@@ -375,58 +328,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.sectionTitle,
-  },
-  accountSelector: {
-    marginTop: 10,
-  },
-  accountSelectorButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 14,
-    borderWidth: 1,
-    justifyContent: 'center',
-    marginRight: 8,
-    minHeight: 44,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  accountSelectorButtonActive: {
-    backgroundColor: colors.accent,
-    borderColor: colors.accent,
-  },
-  accountSelectorButtonTextActive: {
-    color: colors.accentText,
-  },
-  accountSelectorAccountText: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    textAlign: 'center',
-    ...typography.button,
-  },
-  accountSelectorCategory: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 4,
-    marginTop: 2,
-  },
-  categoryDot: {
-    borderRadius: 4,
-    height: 7,
-    width: 7,
-  },
-  categoryDotActive: {
-    borderColor: 'rgba(0, 0, 0, 0.25)',
-    borderWidth: 1.5,
-  },
-  accountSelectorCategoryText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    textAlign: 'center',
-    ...typography.caption,
-  },
-  accountSelectorCategoryTextActive: {
-    color: 'rgba(0, 0, 0, 0.5)',
   },
   monthValueList: {
     gap: 8,

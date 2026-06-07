@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { getCategoryColor } from '../../lib/categoryColors';
 import {
   calculatePaymentSummary,
   getMonthlyValueAmount,
@@ -17,7 +10,7 @@ import {
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
 import { parseCurrencyInput, parseDueDay } from '../../lib/inputParsers';
-import { sortAccountItemsByDueDay } from '../../lib/sorting';
+import { sortAccountItemsByDueDay, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import {
@@ -27,6 +20,7 @@ import {
   MonthlyValue,
 } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
+import { SelectField } from '../common/SelectField';
 
 const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', { month: 'short' });
 
@@ -276,37 +270,16 @@ export function CurrentMonthPaymentChecklist({
               value={newName}
             />
 
-            <View>
-              <Text style={styles.modalFieldLabel}>Categoria</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.categoryScroll}
-              >
-                {categories.map((category) => {
-                  const isActive = newCategoryId === category.id;
-                  return (
-                    <Pressable
-                      key={category.id}
-                      onPress={() => setNewCategoryId(category.id)}
-                      style={[
-                        styles.categoryChip,
-                        isActive ? styles.categoryChipActive : null,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.categoryChipText,
-                          isActive ? styles.categoryChipTextActive : null,
-                        ]}
-                      >
-                        {category.name}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
-            </View>
+            <SelectField
+              fieldLabel="Categoria"
+              onChange={setNewCategoryId}
+              options={sortCategories(categories).map((category) => ({
+                id: category.id,
+                label: category.name,
+                color: getCategoryColor(category.id, categories),
+              }))}
+              value={newCategoryId}
+            />
 
             <View style={styles.modalRow}>
               <View style={styles.modalFieldDueDay}>
@@ -599,32 +572,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     marginBottom: 4,
     ...typography.label,
-  },
-  categoryScroll: {
-    flexGrow: 0,
-  },
-  categoryChip: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 999,
-    borderWidth: 1,
-    justifyContent: 'center',
-    marginRight: 6,
-    minHeight: 36,
-    paddingHorizontal: 14,
-  },
-  categoryChipActive: {
-    backgroundColor: colors.accent,
-    borderColor: colors.accent,
-  },
-  categoryChipText: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  categoryChipTextActive: {
-    color: colors.accentText,
   },
   modalRow: {
     flexDirection: 'row',
