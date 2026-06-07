@@ -7,7 +7,7 @@ import {
   parseAndValidateBackupContent,
   serializeBackupEnvelope,
 } from './financeBackup';
-import { FinanceState } from '../types/finance';
+import { FinanceState, MonthNumber } from '../types/finance';
 
 const sampleState: FinanceState = {
   accountItems: [
@@ -533,5 +533,51 @@ describe('validateFinanceState — field errors', () => {
         testHash,
       ),
     ).rejects.toThrow('Vencimento da conta inválido');
+  });
+
+  it('preserves monthHistory through a backup round-trip', async () => {
+    const stateWithHistory = {
+      ...sampleState,
+      monthHistory: [
+        {
+          month: 5 as MonthNumber,
+          year: 2026,
+          totalIncome: 5000,
+          totalExpenses: 3200,
+          categories: [
+            { id: 'category-fixed', name: 'Fixos', color: '#FF0000', total: 3200 },
+          ],
+          accounts: [
+            {
+              id: 'account-rent',
+              name: 'Aluguel',
+              categoryId: 'category-fixed',
+              amount: 3200,
+            },
+          ],
+        },
+      ],
+    };
+    const envelope = await createBackupEnvelope(
+      stateWithHistory,
+      testHash,
+      '2026-06-05T12:00:00.000Z',
+    );
+    const restoredState = await parseAndValidateBackupContent(
+      serializeBackupEnvelope(envelope),
+      testHash,
+    );
+
+    expect(restoredState.monthHistory).toEqual(stateWithHistory.monthHistory);
+  });
+
+  it('restores monthHistory as [] when field is missing from backup', async () => {
+    const dataWithoutHistory = { ...validData };
+    const restoredState = await parseAndValidateBackupContent(
+      buildEnvelopeJson(dataWithoutHistory),
+      testHash,
+    );
+
+    expect(restoredState.monthHistory).toEqual([]);
   });
 });

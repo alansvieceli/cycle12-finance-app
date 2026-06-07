@@ -5,6 +5,7 @@ import {
   CategoryPropagation,
   FinanceSettings,
   FinanceState,
+  MonthHistoryEntry,
   MonthNumber,
   MonthlyPaymentStatus,
   MonthlyValue,
@@ -206,7 +207,7 @@ function validateFinanceState(value: unknown): FinanceState {
     value.paymentStatuses,
     accountItemIds,
   );
-  const monthHistory = Array.isArray(value.monthHistory) ? value.monthHistory : [];
+  const monthHistory = validateMonthHistory(value.monthHistory);
 
   return normalizeFinanceState({
     accountItems,
@@ -216,6 +217,83 @@ function validateFinanceState(value: unknown): FinanceState {
     paymentStatuses,
     settings,
   });
+}
+
+function validateMonthHistory(value: unknown): MonthHistoryEntry[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const result: MonthHistoryEntry[] = [];
+
+  for (const entry of value) {
+    if (!isRecord(entry)) continue;
+
+    const month = typeof entry.month === 'number' ? entry.month : null;
+    const year = typeof entry.year === 'number' ? entry.year : null;
+    const totalIncome =
+      typeof entry.totalIncome === 'number' ? entry.totalIncome : null;
+    const totalExpenses =
+      typeof entry.totalExpenses === 'number' ? entry.totalExpenses : null;
+
+    if (
+      month === null ||
+      year === null ||
+      totalIncome === null ||
+      totalExpenses === null ||
+      !Number.isInteger(month) ||
+      month < 1 ||
+      month > 12
+    ) {
+      continue;
+    }
+
+    const categories = Array.isArray(entry.categories)
+      ? entry.categories
+          .filter(isRecord)
+          .filter(
+            (c) =>
+              typeof c.id === 'string' &&
+              typeof c.name === 'string' &&
+              typeof c.total === 'number',
+          )
+          .map((c) => ({
+            id: c.id as string,
+            name: c.name as string,
+            color: typeof c.color === 'string' ? c.color : undefined,
+            total: c.total as number,
+          }))
+      : [];
+
+    const accounts = Array.isArray(entry.accounts)
+      ? entry.accounts
+          .filter(isRecord)
+          .filter(
+            (a) =>
+              typeof a.id === 'string' &&
+              typeof a.name === 'string' &&
+              typeof a.categoryId === 'string' &&
+              typeof a.amount === 'number',
+          )
+          .map((a) => ({
+            id: a.id as string,
+            name: a.name as string,
+            categoryId: a.categoryId as string,
+            amount: a.amount as number,
+          }))
+      : [];
+
+    result.push({
+      month: month as MonthNumber,
+      year,
+      totalIncome,
+      totalExpenses,
+      categories,
+      accounts,
+    });
+  }
+
+  return result;
 }
 
 function validateSettings(value: unknown): FinanceSettings {
