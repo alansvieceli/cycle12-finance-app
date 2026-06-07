@@ -34,6 +34,7 @@ const financeState: FinanceState = {
     { id: 'cards', name: 'Cartões', propagation: 'zero', sortOrder: 1 },
     { id: 'empty', name: 'Vazia', propagation: 'zero', sortOrder: 3 },
   ],
+  monthHistory: [],
   monthlyValues: [
     { accountItemId: 'nubank', amount: 1000, month: 6, year: 2026 },
     { accountItemId: 'power', amount: 250, month: 6, year: 2026 },

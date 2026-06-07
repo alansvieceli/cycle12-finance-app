@@ -43,12 +43,32 @@ export type MonthlyPaymentStatus = {
   isPaid: boolean;
 };
 
+export type MonthHistoryEntry = {
+  month: MonthNumber;
+  year: number;
+  totalIncome: number;
+  totalExpenses: number;
+  categories: {
+    id: string;
+    name: string;
+    color?: string;
+    total: number;
+  }[];
+  accounts: {
+    id: string;
+    name: string;
+    categoryId: string;
+    amount: number;
+  }[];
+};
+
 export type FinanceState = {
   settings: FinanceSettings;
   categories: Category[];
   accountItems: AccountItem[];
   monthlyValues: MonthlyValue[];
   paymentStatuses: MonthlyPaymentStatus[];
+  monthHistory: MonthHistoryEntry[];
 };
 
 export function createDefaultFinanceSettings(date = new Date()): FinanceSettings {
@@ -71,4 +91,5 @@ export const emptyFinanceState: FinanceState = {
   accountItems: [],
   monthlyValues: [],
   paymentStatuses: [],
+  monthHistory: [],
 };

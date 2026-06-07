@@ -60,6 +60,7 @@ export function buildResetFinanceState(): FinanceState {
         sortOrder: 0,
       },
     ],
+    monthHistory: [],
     monthlyValues: [],
     paymentStatuses: [],
     settings: {
@@ -205,10 +206,12 @@ function validateFinanceState(value: unknown): FinanceState {
     value.paymentStatuses,
     accountItemIds,
   );
+  const monthHistory = Array.isArray(value.monthHistory) ? value.monthHistory : [];
 
   return normalizeFinanceState({
     accountItems,
     categories,
+    monthHistory,
     monthlyValues,
     paymentStatuses,
     settings,

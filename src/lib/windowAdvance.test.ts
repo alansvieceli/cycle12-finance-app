@@ -46,6 +46,7 @@ const baseState: FinanceState = {
       sortOrder: 2,
     },
   ],
+  monthHistory: [],
   monthlyValues: [
     { accountItemId: 'rent', amount: 900, month: 6, year: 2026 },
     { accountItemId: 'card', amount: 300, month: 6, year: 2026 },

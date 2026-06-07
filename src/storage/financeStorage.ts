@@ -38,6 +38,9 @@ export function normalizeFinanceState(financeState: FinanceState): FinanceState 
   return {
     ...financeState,
     categories: financeState.categories.map(normalizeCategory),
+    monthHistory: Array.isArray(financeState.monthHistory)
+      ? financeState.monthHistory
+      : [],
     paymentStatuses: financeState.paymentStatuses ?? [],
     settings: normalizeSettings(financeState.settings),
   };

@@ -27,6 +27,7 @@ const sampleState: FinanceState = {
       sortOrder: 0,
     },
   ],
+  monthHistory: [],
   monthlyValues: [
     {
       accountItemId: 'account-rent',
@@ -134,6 +135,7 @@ describe('financeBackup', () => {
           sortOrder: 0,
         },
       ],
+      monthHistory: [],
       monthlyValues: [],
       paymentStatuses: [],
       settings: {
