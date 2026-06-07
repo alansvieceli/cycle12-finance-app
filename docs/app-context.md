@@ -40,7 +40,7 @@ The app is for a user who wants to:
 - Account item: an expense or bill with a name, category, due day, and monthly values.
 - Monthly value: the editable amount for an account item in a specific projected month.
 - Salary: the fixed monthly income used for commitment and balance calculations.
-- Current month extra balance: an extra amount that affects the current month projection.
+- Current month extra balance: an extra amount that affects the current month projection. Added quickly via the "+" button in the Resumo balance panel or edited directly in Ajustes. Resets to zero automatically when the planning window advances.
 - Payment status: manual paid/unpaid state for current-month account items.
 - Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, and per-category/per-account breakdowns. Up to 12 entries are kept.
 - Visible month count: how many projection months appear in summary and charts, from 1 to 12.
@@ -72,6 +72,7 @@ It shows:
 - monthly expense, paid, pending, and next due information when available.
 - compact monthly summaries.
 - a shortcut to current-month payment tracking.
+- a "+" button on the balance panel for quickly adding an extra amount to the current month income.
 - past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown.
 
 `Resumo` should stay mostly read-only. It can open secondary views, but it should not become the main place for editing categories, accounts, or monthly values.
