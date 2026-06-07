@@ -99,13 +99,13 @@ export function SettingsScreen({
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Valores e visualização</Text>
         <CurrencyInput
-          label="Salário Mensal"
+          label="Salário mensal"
           value={financeState.settings.monthlySalary}
           onChangeValue={actions.updateMonthlySalary}
           valuesHidden={valuesHidden}
         />
         <CurrencyInput
-          label="Extra do Mês Atual"
+          label="Renda Extra"
           value={financeState.settings.currentMonthExtraBalance}
           onChangeValue={actions.updateCurrentMonthExtraBalance}
           valuesHidden={valuesHidden}
