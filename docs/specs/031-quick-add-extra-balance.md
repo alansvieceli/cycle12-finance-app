@@ -6,7 +6,7 @@ Add a "+" button to the balance panel in the Resumo tab that lets the user quick
 
 ## Context
 
-`currentMonthExtraBalance` is a settings field editable only in `Ajustes` → "Extra do Mês Atual". The use case is ad-hoc: the user receives unexpected income (freelance, repayment, bonus) and wants to see the impact on the projected balance immediately.
+`currentMonthExtraBalance` is a settings field editable only in `Ajustes` → "Renda Extra". The use case is ad-hoc: the user receives unexpected income (freelance, repayment, bonus) and wants to see the impact on the projected balance immediately.
 
 Today two problems exist:
 
@@ -17,7 +17,7 @@ This spec adds a fast entry point in `Resumo` and fixes the persistence bug.
 
 ## Non-Goals
 
-- Do not remove the existing `CurrencyInput` for this field in `Ajustes`. It stays as the manual override / clear path.
+- Do not remove the existing `CurrencyInput` for this field in `Ajustes` ("Renda Extra"). It stays as the manual override / clear path.
 - Do not add a subtraction flow to the quick modal. Reducing the value is done via `Ajustes`.
 - Do not show a history of extra entries.
 - Do not show the accumulated extra visually in the balance panel (no badge, no label).

@@ -10,7 +10,7 @@
 
 ---
 
-Status: Pending
+Status: Completed
 
 ## Spec
 

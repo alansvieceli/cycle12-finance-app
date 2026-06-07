@@ -1,6 +1,6 @@
 # Task 031-01 - Reset Extra on Window Advance and Add Action
 
-Status: Pending
+Status: Completed
 
 ## Spec
 

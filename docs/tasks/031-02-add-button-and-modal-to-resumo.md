@@ -1,6 +1,6 @@
 # Task 031-02 - Add "+" Button and Modal to SummaryScreen
 
-Status: Pending
+Status: Completed
 
 ## Spec
 
