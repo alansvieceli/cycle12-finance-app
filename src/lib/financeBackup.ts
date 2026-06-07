@@ -261,6 +261,7 @@ function validateMonthHistory(value: unknown): MonthHistoryEntry[] {
             id: c.id as string,
             name: c.name as string,
             color: typeof c.color === 'string' ? c.color : undefined,
+            sortOrder: typeof c.sortOrder === 'number' ? c.sortOrder : undefined,
             total: c.total as number,
           }))
       : [];
@@ -279,6 +280,7 @@ function validateMonthHistory(value: unknown): MonthHistoryEntry[] {
             id: a.id as string,
             name: a.name as string,
             categoryId: a.categoryId as string,
+            dueDay: typeof a.dueDay === 'number' ? a.dueDay : undefined,
             amount: a.amount as number,
           }))
       : [];

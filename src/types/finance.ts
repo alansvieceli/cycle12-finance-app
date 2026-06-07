@@ -52,12 +52,14 @@ export type MonthHistoryEntry = {
     id: string;
     name: string;
     color?: string;
+    sortOrder?: number;
     total: number;
   }[];
   accounts: {
     id: string;
     name: string;
     categoryId: string;
+    dueDay?: number;
     amount: number;
   }[];
 };

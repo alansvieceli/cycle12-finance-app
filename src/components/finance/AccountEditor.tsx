@@ -320,8 +320,8 @@ const styles = StyleSheet.create({
   },
   expandChevron: {
     color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.caption,
+    fontSize: 22,
+    lineHeight: 26,
   },
   expandedContent: {
     borderTopColor: colors.border,

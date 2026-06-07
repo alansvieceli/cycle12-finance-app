@@ -125,6 +125,7 @@ function buildHistoryEntry(
       id,
       name: category?.name ?? id,
       color: category?.color,
+      sortOrder: category?.sortOrder,
       total,
     };
   });
@@ -133,6 +134,7 @@ function buildHistoryEntry(
     id: accountItem.id,
     name: accountItem.name,
     categoryId: accountItem.categoryId,
+    dueDay: accountItem.dueDay,
     amount,
   }));
 

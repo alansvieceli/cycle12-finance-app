@@ -7,11 +7,12 @@ import {
   maskCurrency,
   percentageFormatter,
 } from '../../lib/formatters';
-import { colors } from '../../theme/colors';
+import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
-import { FinanceSettings, MonthHistoryEntry } from '../../types/finance';
+import { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
 
 type HistoryCardProps = {
+  categories: Pick<Category, 'id' | 'sortOrder'>[];
   entry: MonthHistoryEntry;
   isExpanded: boolean;
   onToggle: () => void;
@@ -25,6 +26,7 @@ type HistoryCardProps = {
 type DetailTab = 'categories' | 'accounts';
 
 export function HistoryCard({
+  categories,
   entry,
   isExpanded,
   onToggle,
@@ -42,10 +44,26 @@ export function HistoryCard({
     ) ?? colors.commitmentLow;
   const progressWidthPercent = Math.min(ratio * 100, 100);
 
-  const sortedCategories = [...entry.categories].sort((a, b) => b.total - a.total);
+  const liveSortOrderById = new Map(categories.map((c) => [c.id, c.sortOrder]));
+  const resolveSortOrder = (id: string, snapshotOrder?: number) =>
+    liveSortOrderById.get(id) ?? snapshotOrder ?? 0;
+
+  const sortedCategories = [...entry.categories].sort(
+    (a, b) => resolveSortOrder(a.id, a.sortOrder) - resolveSortOrder(b.id, b.sortOrder),
+  );
+
+  const categorySortOrderById = new Map(
+    entry.categories.map((c) => [c.id, resolveSortOrder(c.id, c.sortOrder)]),
+  );
   const sortedAccounts = [...entry.accounts]
     .filter((a) => a.amount > 0)
-    .sort((a, b) => b.amount - a.amount);
+    .sort((a, b) => {
+      const catDiff =
+        (categorySortOrderById.get(a.categoryId) ?? 0) -
+        (categorySortOrderById.get(b.categoryId) ?? 0);
+      if (catDiff !== 0) return catDiff;
+      return (a.dueDay ?? 0) - (b.dueDay ?? 0);
+    });
 
   return (
     <View style={styles.card}>
@@ -53,7 +71,7 @@ export function HistoryCard({
         <Text style={styles.monthLabel}>
           {formatMonthLabel(entry.year, entry.month)}
         </Text>
-        <Text style={styles.chevron}>{isExpanded ? '∧' : '›'}</Text>
+        <Text style={styles.chevron}>{isExpanded ? '▴' : '▾'}</Text>
       </Pressable>
 
       <View style={styles.metricsRow}>
@@ -81,21 +99,24 @@ export function HistoryCard({
           />
         </View>
         <Text style={[styles.progressLabel, { color: commitmentColor }]}>
-          {valuesHidden ? '••' : percentageFormatter.format(ratio)}
+          {percentageFormatter.format(ratio)}
         </Text>
       </View>
 
       {isExpanded ? (
         <View style={styles.detail}>
-          <View style={styles.tabs}>
+          <View style={styles.segmentedControl}>
             <Pressable
               onPress={() => setActiveTab('categories')}
-              style={[styles.tab, activeTab === 'categories' ? styles.tabActive : null]}
+              style={[
+                styles.segmentButton,
+                activeTab === 'categories' ? styles.segmentButtonActive : null,
+              ]}
             >
               <Text
                 style={[
-                  styles.tabText,
-                  activeTab === 'categories' ? styles.tabActiveText : null,
+                  styles.segmentButtonText,
+                  activeTab === 'categories' ? styles.segmentButtonTextActive : null,
                 ]}
               >
                 Categorias
@@ -103,12 +124,15 @@ export function HistoryCard({
             </Pressable>
             <Pressable
               onPress={() => setActiveTab('accounts')}
-              style={[styles.tab, activeTab === 'accounts' ? styles.tabActive : null]}
+              style={[
+                styles.segmentButton,
+                activeTab === 'accounts' ? styles.segmentButtonActive : null,
+              ]}
             >
               <Text
                 style={[
-                  styles.tabText,
-                  activeTab === 'accounts' ? styles.tabActiveText : null,
+                  styles.segmentButtonText,
+                  activeTab === 'accounts' ? styles.segmentButtonTextActive : null,
                 ]}
               >
                 Contas
@@ -117,8 +141,17 @@ export function HistoryCard({
           </View>
 
           {activeTab === 'categories'
-            ? sortedCategories.map((category) => (
+            ? sortedCategories.map((category, index) => (
                 <View key={category.id} style={styles.row}>
+                  <View
+                    style={[
+                      styles.categoryDot,
+                      {
+                        backgroundColor:
+                          category.color ?? chartPalette[index % chartPalette.length],
+                      },
+                    ]}
+                  />
                   <Text style={styles.rowName}>{category.name}</Text>
                   <Text style={styles.rowAmount}>
                     {maskCurrency(category.total, valuesHidden)}
@@ -127,16 +160,29 @@ export function HistoryCard({
               ))
             : (() => {
                 const categoryMap = new Map(entry.categories.map((c) => [c.id, c]));
+                const categoryIndexMap = new Map(
+                  sortedCategories.map((c, i) => [c.id, i]),
+                );
                 const grouped = new Map<string, typeof sortedAccounts>();
                 for (const account of sortedAccounts) {
                   const existing = grouped.get(account.categoryId) ?? [];
                   grouped.set(account.categoryId, [...existing, account]);
                 }
                 return Array.from(grouped.entries()).map(([categoryId, accounts]) => {
-                  const categoryName = categoryMap.get(categoryId)?.name ?? categoryId;
+                  const cat = categoryMap.get(categoryId);
+                  const catIndex = categoryIndexMap.get(categoryId) ?? 0;
+                  const dotColor =
+                    cat?.color ?? chartPalette[catIndex % chartPalette.length];
                   return (
                     <View key={categoryId}>
-                      <Text style={styles.groupHeader}>{categoryName}</Text>
+                      <View style={styles.groupHeaderRow}>
+                        <View
+                          style={[styles.categoryDot, { backgroundColor: dotColor }]}
+                        />
+                        <Text style={styles.groupHeader}>
+                          {cat?.name ?? categoryId}
+                        </Text>
+                      </View>
                       {accounts.map((account) => (
                         <View key={account.id} style={styles.row}>
                           <Text style={styles.rowName}>{account.name}</Text>
@@ -176,13 +222,15 @@ const styles = StyleSheet.create({
   },
   chevron: {
     color: colors.textSecondary,
-    ...typography.sectionTitle,
+    fontSize: 22,
+    lineHeight: 26,
   },
   metricsRow: {
     flexDirection: 'row',
     gap: 24,
   },
   metricBlock: {
+    flex: 1,
     gap: 4,
   },
   metricLabel: {
@@ -224,35 +272,43 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingTop: 12,
   },
-  tabs: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 4,
-  },
-  tab: {
-    alignItems: 'center',
+  segmentedControl: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
+    flexDirection: 'row',
+    gap: 6,
+    padding: 6,
+  },
+  segmentButton: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flex: 1,
     justifyContent: 'center',
     minHeight: 36,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
   },
-  tabActive: {
+  segmentButtonActive: {
     backgroundColor: colors.accent,
-    borderColor: colors.accent,
   },
-  tabText: {
-    color: colors.textPrimary,
+  segmentButtonText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
     ...typography.button,
   },
-  tabActiveText: {
+  segmentButtonTextActive: {
     color: colors.accentText,
+  },
+  categoryDot: {
+    borderRadius: 5,
+    height: 10,
+    width: 10,
   },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
+    gap: 8,
     justifyContent: 'space-between',
     minHeight: 36,
   },
@@ -265,9 +321,14 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     ...typography.body,
   },
+  groupHeaderRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+    marginTop: 8,
+  },
   groupHeader: {
     color: colors.textSecondary,
-    marginTop: 8,
     textTransform: 'uppercase',
     ...typography.label,
   },

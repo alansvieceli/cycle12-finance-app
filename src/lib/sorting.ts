@@ -36,6 +36,13 @@ export function sortAccountItemsByDueDay(accountItems: AccountItem[]): AccountIt
     );
 }
 
+export function suggestNextCategorySortOrder(categories: Category[]): number {
+  const used = new Set(categories.map((c) => c.sortOrder));
+  let n = 1;
+  while (used.has(n)) n++;
+  return n;
+}
+
 export function compareCategories(firstCategory: Category, secondCategory: Category) {
   return compareCategoryValues(firstCategory, secondCategory);
 }

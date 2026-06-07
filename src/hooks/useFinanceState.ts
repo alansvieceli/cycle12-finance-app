@@ -8,7 +8,11 @@ import {
   parseDueDay,
   parseSortOrder,
 } from '../lib/inputParsers';
-import { sortAccountItems, sortCategories } from '../lib/sorting';
+import {
+  sortAccountItems,
+  sortCategories,
+  suggestNextCategorySortOrder,
+} from '../lib/sorting';
 import { advanceWindow, getNextWindowStart } from '../lib/windowAdvance';
 import {
   loadFinanceState,
@@ -206,7 +210,9 @@ export function useFinanceState() {
             newCategoryPropagation === 'installment'
               ? newCategoryPropagation
               : 'zero',
-          sortOrder: parseSortOrder(newCategorySortOrder),
+          sortOrder: newCategorySortOrder
+            ? parseSortOrder(newCategorySortOrder)
+            : suggestNextCategorySortOrder(currentState.categories),
         },
       ],
     }));

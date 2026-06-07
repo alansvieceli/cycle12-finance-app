@@ -143,6 +143,8 @@ export function SummaryScreen({
               ]}
             >
               <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
                 style={[
                   styles.monthPillText,
                   activeView === 'current' ? styles.monthPillActiveText : null,
@@ -162,12 +164,14 @@ export function SummaryScreen({
               ]}
             >
               <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
                 style={[
                   styles.monthPillText,
                   activeView === 'other' ? styles.monthPillActiveText : null,
                 ]}
               >
-                Outros meses
+                Projeção
               </Text>
             </Pressable>
             <Pressable
@@ -178,6 +182,8 @@ export function SummaryScreen({
               ]}
             >
               <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
                 style={[
                   styles.monthPillText,
                   activeView === 'history' ? styles.monthPillActiveText : null,
@@ -348,6 +354,7 @@ export function SummaryScreen({
                   return (
                     <HistoryCard
                       key={key}
+                      categories={sortedCategories}
                       entry={entry}
                       isExpanded={expandedHistoryKey === key}
                       onToggle={() =>
@@ -398,13 +405,13 @@ const styles = StyleSheet.create({
   },
   monthPills: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 10,
   },
   monthPillActive: {
     alignItems: 'center',
     backgroundColor: colors.accent,
     borderRadius: 16,
+    flex: 1,
     justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: 18,
@@ -420,6 +427,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 16,
     borderWidth: 1,
+    flex: 1,
     justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: 18,
