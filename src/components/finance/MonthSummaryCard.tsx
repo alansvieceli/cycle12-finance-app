@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { resolveCommitmentColor } from '../../lib/commitmentColor';
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import {
-  currencyFormatter,
   formatMonthLabel,
   maskCurrency,
   percentageFormatter,

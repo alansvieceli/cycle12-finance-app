@@ -14,12 +14,7 @@ import {
   ProjectionMonth,
 } from '../lib/financeCalculations';
 import { resolveCommitmentColor } from '../lib/commitmentColor';
-import {
-  currencyFormatter,
-  formatMonthLabel,
-  maskCurrency,
-  percentageFormatter,
-} from '../lib/formatters';
+import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/formatters';
 import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
