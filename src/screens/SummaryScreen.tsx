@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
 import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 import {
@@ -21,6 +22,8 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { FinanceState } from '../types/finance';
 
+type ActiveView = 'current' | 'other' | 'history';
+
 type SummaryScreenProps = {
   financeState: FinanceState;
   onOpenPayments: () => void;
@@ -37,7 +40,7 @@ export function SummaryScreen({
   const [selectedDetailsMonthKey, setSelectedDetailsMonthKey] = useState<string | null>(
     null,
   );
-  const [isOtherMonthsVisible, setIsOtherMonthsVisible] = useState(false);
+  const [activeView, setActiveView] = useState<ActiveView>('current');
   const sortedCategories = sortCategories(financeState.categories);
   const categoryNamesById = Object.fromEntries(
     sortedCategories.map((category) => [category.id, category.name]),
@@ -132,16 +135,16 @@ export function SummaryScreen({
         <View style={styles.heroCard}>
           <View style={styles.monthPills}>
             <Pressable
-              onPress={() => setIsOtherMonthsVisible(false)}
+              onPress={() => setActiveView('current')}
               style={[
                 styles.monthPill,
-                !isOtherMonthsVisible ? styles.monthPillActive : null,
+                activeView === 'current' ? styles.monthPillActive : null,
               ]}
             >
               <Text
                 style={[
                   styles.monthPillText,
-                  !isOtherMonthsVisible ? styles.monthPillActiveText : null,
+                  activeView === 'current' ? styles.monthPillActiveText : null,
                 ]}
               >
                 {formatMonthLabel(
@@ -151,24 +154,40 @@ export function SummaryScreen({
               </Text>
             </Pressable>
             <Pressable
-              onPress={() => setIsOtherMonthsVisible(true)}
+              onPress={() => setActiveView('other')}
               style={[
                 styles.monthPill,
-                isOtherMonthsVisible ? styles.monthPillActive : null,
+                activeView === 'other' ? styles.monthPillActive : null,
               ]}
             >
               <Text
                 style={[
                   styles.monthPillText,
-                  isOtherMonthsVisible ? styles.monthPillActiveText : null,
+                  activeView === 'other' ? styles.monthPillActiveText : null,
                 ]}
               >
                 Outros meses
               </Text>
             </Pressable>
+            <Pressable
+              onPress={() => setActiveView('history')}
+              style={[
+                styles.monthPill,
+                activeView === 'history' ? styles.monthPillActive : null,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.monthPillText,
+                  activeView === 'history' ? styles.monthPillActiveText : null,
+                ]}
+              >
+                Histórico
+              </Text>
+            </Pressable>
           </View>
 
-          {!isOtherMonthsVisible ? (
+          {activeView === 'current' ? (
             <>
               <View style={styles.balancePanel}>
                 <Text style={styles.kicker}>Saldo projetado</Text>
@@ -256,7 +275,7 @@ export function SummaryScreen({
                 </View>
               </Pressable>
             </>
-          ) : (
+          ) : activeView === 'other' ? (
             projectionMonths.slice(1).map((projectionMonth) => {
               const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
                 sortedCategories,
@@ -313,6 +332,26 @@ export function SummaryScreen({
                 </Fragment>
               );
             })
+          ) : (
+            <>
+              {financeState.monthHistory.length === 0 ? (
+                <View style={styles.emptyHistory}>
+                  <Text style={styles.emptyHistoryText}>
+                    Nenhum mês registrado ainda. O histórico é salvo automaticamente
+                    quando o mês avança.
+                  </Text>
+                </View>
+              ) : (
+                financeState.monthHistory.map((entry) => (
+                  <HistoryCard
+                    key={`${entry.year}-${entry.month}`}
+                    entry={entry}
+                    settings={financeState.settings}
+                    valuesHidden={valuesHidden}
+                  />
+                ))
+              )}
+            </>
           )}
         </View>
       ) : null}
@@ -509,5 +548,20 @@ const styles = StyleSheet.create({
     color: colors.accentText,
     letterSpacing: 0,
     ...typography.button,
+  },
+  emptyHistory: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 18,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 120,
+    padding: 24,
+  },
+  emptyHistoryText: {
+    color: colors.textSecondary,
+    textAlign: 'center',
+    ...typography.body,
   },
 });
