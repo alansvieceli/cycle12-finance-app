@@ -10,6 +10,10 @@ import {
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
 import { parseCurrencyInput, parseDueDay } from '../../lib/inputParsers';
+import {
+  calculateAdjustedMonthlyValue,
+  MonthlyValueAdjustmentOperation,
+} from '../../lib/monthlyValueAdjustments';
 import { sortAccountItemsByDueDay, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -33,6 +37,12 @@ type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
   categories: Category[];
   monthlyValues: MonthlyValue[];
+  onAdjustMonthlyValue: (
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+    adjustmentInput: string,
+    operation: MonthlyValueAdjustmentOperation,
+  ) => void;
   onCreateAccountItem: (
     name: string,
     categoryId: string,
@@ -62,6 +72,7 @@ export function CurrentMonthPaymentChecklist({
   accountItems,
   categories,
   monthlyValues,
+  onAdjustMonthlyValue,
   onClose,
   onCreateAccountItem,
   onTogglePaymentStatus,
@@ -75,6 +86,14 @@ export function CurrentMonthPaymentChecklist({
   const [newCategoryId, setNewCategoryId] = useState('');
   const [newDueDay, setNewDueDay] = useState('');
   const [newAmount, setNewAmount] = useState('');
+
+  // Adjustment panel state
+  const [expandedAccountItemId, setExpandedAccountItemId] = useState<string | null>(
+    null,
+  );
+  const [adjustmentInput, setAdjustmentInput] = useState('');
+  const [adjustmentMode, setAdjustmentMode] =
+    useState<MonthlyValueAdjustmentOperation>('add');
 
   function openAddModal() {
     const firstCategoryId = categories[0]?.id ?? '';
@@ -104,6 +123,36 @@ export function CurrentMonthPaymentChecklist({
     );
     setIsAddModalOpen(false);
   }
+
+  function openAdjustPanel(accountItemId: string) {
+    if (expandedAccountItemId === accountItemId) {
+      setExpandedAccountItemId(null);
+    } else {
+      setExpandedAccountItemId(accountItemId);
+      setAdjustmentInput('');
+      setAdjustmentMode('add');
+    }
+  }
+
+  function collapseAdjustPanel() {
+    setExpandedAccountItemId(null);
+  }
+
+  function switchAdjustmentMode(mode: MonthlyValueAdjustmentOperation) {
+    setAdjustmentMode(mode);
+    setAdjustmentInput('');
+  }
+
+  function confirmAdjustment(accountItemId: string) {
+    onAdjustMonthlyValue(
+      accountItemId,
+      projectionMonth,
+      adjustmentInput,
+      adjustmentMode,
+    );
+    collapseAdjustPanel();
+  }
+
   const paymentSummary = calculatePaymentSummary(
     accountItems,
     monthlyValues,
@@ -214,34 +263,144 @@ export function CurrentMonthPaymentChecklist({
               accountItem.id,
               projectionMonth,
             );
+            const isExpanded = expandedAccountItemId === accountItem.id;
+            const activeColor =
+              adjustmentMode === 'add' ? colors.accent : colors.negative;
 
             return (
-              <Pressable
+              <View
                 key={accountItem.id}
-                onPress={() => onTogglePaymentStatus(accountItem.id, projectionMonth)}
-                style={[styles.paymentRow, isPaid ? styles.paymentRowPaid : null]}
+                style={[
+                  styles.paymentRowWrapper,
+                  isPaid ? styles.paymentRowPaid : null,
+                  isExpanded ? { borderColor: activeColor } : null,
+                ]}
               >
-                <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
-                  <Text
-                    style={[
-                      styles.checkboxText,
-                      isPaid ? styles.checkboxTextPaid : null,
-                    ]}
+                {/* Tappable top row for toggling payment status */}
+                <Pressable
+                  onPress={() => onTogglePaymentStatus(accountItem.id, projectionMonth)}
+                  style={styles.paymentRowTop}
+                >
+                  <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
+                    <Text
+                      style={[
+                        styles.checkboxText,
+                        isPaid ? styles.checkboxTextPaid : null,
+                      ]}
+                    >
+                      {isPaid ? '✓' : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.paymentInfo}>
+                    <Text style={styles.accountName}>{accountItem.name}</Text>
+                    <Text style={styles.accountMeta}>
+                      Dia {accountItem.dueDay} ·{' '}
+                      {getCategoryName(categories, accountItem.categoryId)}
+                    </Text>
+                  </View>
+                  <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
+                    {maskCurrency(amount, valuesHidden)}
+                  </Text>
+                  {/* ± button — stops propagation so it doesn't toggle payment */}
+                  <Pressable
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      openAdjustPanel(accountItem.id);
+                    }}
+                    style={styles.adjustToggleButton}
                   >
-                    {isPaid ? '✓' : ''}
-                  </Text>
-                </View>
-                <View style={styles.paymentInfo}>
-                  <Text style={styles.accountName}>{accountItem.name}</Text>
-                  <Text style={styles.accountMeta}>
-                    Dia {accountItem.dueDay} ·{' '}
-                    {getCategoryName(categories, accountItem.categoryId)}
-                  </Text>
-                </View>
-                <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
-                  {maskCurrency(amount, valuesHidden)}
-                </Text>
-              </Pressable>
+                    <Text style={styles.adjustToggleButtonText}>±</Text>
+                  </Pressable>
+                </Pressable>
+
+                {/* Inline adjustment panel */}
+                {isExpanded ? (
+                  <View style={styles.adjustPanel}>
+                    {/* +/− field row */}
+                    <View style={[styles.adjustFieldRow, { borderColor: activeColor }]}>
+                      <Pressable
+                        onPress={() => switchAdjustmentMode('add')}
+                        style={[
+                          styles.adjustModeButton,
+                          adjustmentMode === 'add'
+                            ? { backgroundColor: colors.accent }
+                            : styles.adjustModeButtonInactive,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.adjustModeButtonText,
+                            adjustmentMode === 'add'
+                              ? { color: '#000000' }
+                              : { color: colors.textSecondary },
+                          ]}
+                        >
+                          +
+                        </Text>
+                      </Pressable>
+
+                      <TextInput
+                        keyboardType="decimal-pad"
+                        onChangeText={setAdjustmentInput}
+                        placeholder="0,00"
+                        placeholderTextColor={colors.textSecondary}
+                        style={styles.adjustInput}
+                        value={adjustmentInput}
+                      />
+
+                      <Pressable
+                        onPress={() => switchAdjustmentMode('subtract')}
+                        style={[
+                          styles.adjustModeButton,
+                          adjustmentMode === 'subtract'
+                            ? { backgroundColor: colors.negative }
+                            : styles.adjustModeButtonInactive,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.adjustModeButtonText,
+                            adjustmentMode === 'subtract'
+                              ? { color: '#000000' }
+                              : { color: colors.textSecondary },
+                          ]}
+                        >
+                          −
+                        </Text>
+                      </Pressable>
+                    </View>
+
+                    {/* Confirm and cancel buttons */}
+                    <View style={styles.adjustActions}>
+                      <Pressable
+                        onPress={collapseAdjustPanel}
+                        style={styles.adjustCancelButton}
+                      >
+                        <Text style={styles.adjustCancelButtonText}>Cancelar</Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => confirmAdjustment(accountItem.id)}
+                        style={[
+                          styles.adjustConfirmButton,
+                          { backgroundColor: activeColor },
+                        ]}
+                      >
+                        <Text style={styles.adjustConfirmLabel}>Novo total</Text>
+                        <Text style={styles.adjustConfirmValue}>
+                          {maskCurrency(
+                            calculateAdjustedMonthlyValue(
+                              amount,
+                              adjustmentInput,
+                              adjustmentMode,
+                            ),
+                            valuesHidden,
+                          )}
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                ) : null}
+              </View>
             );
           })}
         </View>
@@ -468,20 +627,25 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 14,
   },
-  paymentRow: {
-    alignItems: 'center',
+  // Replaces paymentRow — now a wrapper View so the expansion panel sits outside the toggle Pressable
+  paymentRowWrapper: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: 16,
     borderWidth: 1,
-    flexDirection: 'row',
-    gap: 10,
-    minHeight: 62,
-    padding: 10,
+    overflow: 'hidden',
   },
   paymentRowPaid: {
     backgroundColor: colors.surfaceRaised,
     borderColor: colors.positive,
+  },
+  // The tappable top portion of each row
+  paymentRowTop: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    minHeight: 62,
+    padding: 10,
   },
   checkbox: {
     alignItems: 'center',
@@ -528,6 +692,98 @@ const styles = StyleSheet.create({
   },
   amountPaid: {
     color: colors.positive,
+  },
+  // ± toggle button
+  adjustToggleButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceRaised,
+    borderColor: colors.borderStrong,
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 30,
+    justifyContent: 'center',
+    width: 30,
+  },
+  adjustToggleButtonText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  // Adjustment panel
+  adjustPanel: {
+    borderTopColor: colors.border,
+    borderTopWidth: 1,
+    gap: 8,
+    padding: 10,
+  },
+  adjustFieldRow: {
+    alignItems: 'center',
+    borderColor: colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  adjustModeButton: {
+    alignItems: 'center',
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  adjustModeButtonInactive: {
+    backgroundColor: colors.surfaceMuted,
+  },
+  adjustModeButtonText: {
+    ...typography.button,
+    letterSpacing: 0,
+  },
+  adjustInput: {
+    color: colors.textPrimary,
+    flex: 1,
+    letterSpacing: 0,
+    paddingHorizontal: 12,
+    textAlign: 'center',
+    ...typography.input,
+  },
+  adjustActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  adjustCancelButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
+  },
+  adjustCancelButtonText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  adjustConfirmButton: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flex: 2,
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
+  },
+  adjustConfirmLabel: {
+    color: '#000000',
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  adjustConfirmValue: {
+    color: '#000000',
+    letterSpacing: 0,
+    ...typography.button,
   },
   emptyText: {
     color: colors.textSecondary,
