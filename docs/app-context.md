@@ -42,6 +42,7 @@ The app is for a user who wants to:
 - Salary: the fixed monthly income used for commitment and balance calculations.
 - Current month extra balance: an extra amount that affects the current month projection.
 - Payment status: manual paid/unpaid state for current-month account items.
+- Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, and per-category/per-account breakdowns. Up to 12 entries are kept.
 - Visible month count: how many projection months appear in summary and charts, from 1 to 12.
 - Rolling window: the app stores and displays 12 projected months starting from the saved current window month.
 - Category propagation rule: defines how values are filled when the 12-month window advances.
@@ -71,6 +72,7 @@ It shows:
 - monthly expense, paid, pending, and next due information when available.
 - compact monthly summaries.
 - a shortcut to current-month payment tracking.
+- past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown.
 
 `Resumo` should stay mostly read-only. It can open secondary views, but it should not become the main place for editing categories, accounts, or monthly values.
 
