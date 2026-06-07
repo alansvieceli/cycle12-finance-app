@@ -98,6 +98,7 @@ export function FinanceApp() {
         {activeTab === 'summary' && !isPaymentViewOpen ? (
           <SummaryScreen
             financeState={finance.financeState}
+            onAddExtra={finance.actions.addCurrentMonthExtraBalance}
             onOpenPayments={() => setIsPaymentViewOpen(true)}
             projectionMonths={visibleProjectionMonths}
             valuesHidden={valuesHidden}

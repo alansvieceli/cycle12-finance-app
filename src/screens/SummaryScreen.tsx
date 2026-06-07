@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
@@ -16,6 +16,7 @@ import {
 } from '../lib/financeCalculations';
 import { resolveCommitmentColor } from '../lib/commitmentColor';
 import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/formatters';
+import { parseCurrencyInput } from '../lib/inputParsers';
 import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
@@ -26,6 +27,7 @@ type ActiveView = 'current' | 'other' | 'history';
 
 type SummaryScreenProps = {
   financeState: FinanceState;
+  onAddExtra: (amount: number) => void;
   onOpenPayments: () => void;
   projectionMonths: ProjectionMonth[];
   valuesHidden: boolean;
@@ -33,6 +35,7 @@ type SummaryScreenProps = {
 
 export function SummaryScreen({
   financeState,
+  onAddExtra,
   onOpenPayments,
   projectionMonths,
   valuesHidden,
@@ -41,6 +44,8 @@ export function SummaryScreen({
     null,
   );
   const [activeView, setActiveView] = useState<ActiveView>('current');
+  const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
+  const [extraInput, setExtraInput] = useState('');
   const [expandedHistoryKey, setExpandedHistoryKey] = useState<string | null>(null);
   const sortedCategories = sortCategories(financeState.categories);
   const categoryNamesById = Object.fromEntries(
@@ -198,16 +203,27 @@ export function SummaryScreen({
             <>
               <View style={styles.balancePanel}>
                 <Text style={styles.kicker}>Saldo projetado</Text>
-                <Text
-                  style={[
-                    styles.projectedBalance,
-                    currentSurplusOrShortfall < 0
-                      ? styles.negativeText
-                      : styles.positiveText,
-                  ]}
-                >
-                  {maskCurrency(currentSurplusOrShortfall, valuesHidden)}
-                </Text>
+                <View style={styles.balanceRow}>
+                  <Text
+                    style={[
+                      styles.projectedBalance,
+                      currentSurplusOrShortfall < 0
+                        ? styles.negativeText
+                        : styles.positiveText,
+                    ]}
+                  >
+                    {maskCurrency(currentSurplusOrShortfall, valuesHidden)}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      setExtraInput('');
+                      setIsExtraModalOpen(true);
+                    }}
+                    style={styles.addExtraButton}
+                  >
+                    <Text style={styles.addExtraButtonText}>+</Text>
+                  </Pressable>
+                </View>
                 <View style={styles.commitmentHeader}>
                   <Text style={styles.commitmentLabel}>
                     Comprometimento do salário + extra
@@ -281,6 +297,59 @@ export function SummaryScreen({
                   <Text style={styles.paymentShortcutButtonText}>Detalhes</Text>
                 </View>
               </Pressable>
+
+              <Modal
+                animationType="fade"
+                onRequestClose={() => setIsExtraModalOpen(false)}
+                transparent
+                visible={isExtraModalOpen}
+              >
+                <Pressable
+                  onPress={() => setIsExtraModalOpen(false)}
+                  style={styles.modalOverlay}
+                >
+                  <Pressable style={styles.modalCard}>
+                    <Text style={styles.modalTitle}>Adicionar extra do mês</Text>
+                    <TextInput
+                      autoFocus
+                      keyboardType="decimal-pad"
+                      onChangeText={setExtraInput}
+                      placeholder="0,00"
+                      placeholderTextColor={colors.textSecondary}
+                      style={styles.modalInput}
+                      value={extraInput}
+                    />
+                    <View style={styles.modalActions}>
+                      <Pressable
+                        onPress={() => setIsExtraModalOpen(false)}
+                        style={styles.modalCancelButton}
+                      >
+                        <Text style={styles.modalCancelButtonText}>Cancelar</Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => {
+                          const amount = parseCurrencyInput(extraInput);
+                          if (amount > 0) {
+                            onAddExtra(amount);
+                          }
+                          setIsExtraModalOpen(false);
+                        }}
+                        style={styles.modalConfirmButton}
+                      >
+                        <Text style={styles.modalConfirmButtonText}>
+                          {valuesHidden
+                            ? 'Nova extra ••••'
+                            : `Nova extra ${maskCurrency(
+                                financeState.settings.currentMonthExtraBalance +
+                                  parseCurrencyInput(extraInput),
+                                false,
+                              )}`}
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </Pressable>
+                </Pressable>
+              </Modal>
             </>
           ) : activeView === 'other' ? (
             projectionMonths.slice(1).map((projectionMonth) => {
@@ -444,6 +513,94 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 20,
   },
+  balanceRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+  addExtraButton: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 999,
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  addExtraButtonText: {
+    color: colors.accentText,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 24,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 12,
+    maxWidth: 360,
+    padding: 16,
+    width: '100%',
+  },
+  modalTitle: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  modalInput: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    minHeight: 44,
+    paddingHorizontal: 12,
+    ...typography.input,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-end',
+  },
+  modalCancelButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 42,
+    minWidth: 96,
+    paddingHorizontal: 12,
+  },
+  modalCancelButtonText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  modalConfirmButton: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 42,
+    paddingHorizontal: 12,
+  },
+  modalConfirmButtonText: {
+    color: colors.accentText,
+    letterSpacing: 0,
+    ...typography.button,
+  },
   kicker: {
     color: colors.textSecondary,
     letterSpacing: 0,
@@ -451,7 +608,6 @@ const styles = StyleSheet.create({
   },
   projectedBalance: {
     letterSpacing: 0,
-    marginTop: 6,
     ...typography.amountLarge,
   },
   positiveText: {
