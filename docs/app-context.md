@@ -98,9 +98,9 @@ It focuses on:
 
 - selecting an account item.
 - viewing the 12-month planning window.
-- editing full monthly values.
-- applying partial monthly adjustments.
-- applying addition adjustments across multiple consecutive months when supported.
+- editing full monthly values directly via an inline input.
+- applying partial monthly adjustments via a `±` button on each month row, which opens a modal with add or subtract modes.
+- applying addition adjustments across multiple consecutive months (installments) when the add mode is selected.
 
 Account and category management do not belong in this tab; they live in `Contas`.
 

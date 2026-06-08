@@ -28,7 +28,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
-- Supports adding the same adjustment amount across multiple consecutive months from the `+` adjustment modal.
+- Supports adding the same adjustment amount across multiple consecutive months from the `±` adjustment modal in Planejar.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Contas, and Ajustes.
 - Keeps planning focused on monthly values, with category and account management available from the dedicated Contas tab.

@@ -3,10 +3,17 @@ import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import { ProjectionMonth } from '../../lib/financeCalculations';
-import { currencyFormatter, formatMonthLabel } from '../../lib/formatters';
+import {
+  currencyFormatter,
+  formatMonthLabel,
+  maskCurrency,
+} from '../../lib/formatters';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
 import { parseCurrencyInput } from '../../lib/inputParsers';
-import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
+import {
+  calculateAdjustedMonthlyValue,
+  MonthlyValueAdjustmentOperation,
+} from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -51,59 +58,46 @@ export function MonthlyValueEditor({
   selectedAccountItem,
   valuesHidden = false,
 }: MonthlyValueEditorProps) {
-  const [activeAdjustment, setActiveAdjustment] = useState<{
-    operation: MonthlyValueAdjustmentOperation;
-    projectionMonth: ProjectionMonth;
-  }>();
+  const [activeAdjustmentMonthKey, setActiveAdjustmentMonthKey] = useState<
+    string | null
+  >(null);
   const [adjustmentInput, setAdjustmentInput] = useState('');
+  const [adjustmentMode, setAdjustmentMode] =
+    useState<MonthlyValueAdjustmentOperation>('add');
   const [installmentsInput, setInstallmentsInput] = useState('1');
 
-  function openAdjustment(
-    projectionMonth: ProjectionMonth,
-    operation: MonthlyValueAdjustmentOperation,
-  ) {
-    setActiveAdjustment({ operation, projectionMonth });
+  function openAdjustModal(projectionMonth: ProjectionMonth) {
+    setActiveAdjustmentMonthKey(projectionMonth.key);
+    setAdjustmentInput('');
+    setAdjustmentMode('add');
+    setInstallmentsInput('1');
+  }
+
+  function closeAdjustModal() {
+    setActiveAdjustmentMonthKey(null);
+  }
+
+  function switchAdjustmentMode(mode: MonthlyValueAdjustmentOperation) {
+    setAdjustmentMode(mode);
     setAdjustmentInput('');
     setInstallmentsInput('1');
   }
 
-  function closeAdjustment() {
-    setActiveAdjustment(undefined);
-    setAdjustmentInput('');
-    setInstallmentsInput('1');
-  }
-
-  function confirmAdjustment() {
-    if (!selectedAccountItem || !activeAdjustment) {
-      return;
-    }
-
+  function confirmAdjustment(projectionMonth: ProjectionMonth) {
+    if (!selectedAccountItem) return;
     onAdjustMonthlyValue(
       selectedAccountItem.id,
-      activeAdjustment.projectionMonth,
+      projectionMonth,
       adjustmentInput,
-      activeAdjustment.operation,
-      activeAdjustment.operation === 'add'
-        ? parseInstallmentsInput(installmentsInput)
-        : undefined,
+      adjustmentMode,
+      adjustmentMode === 'add' ? parseInstallmentsInput(installmentsInput) : undefined,
     );
-    closeAdjustment();
+    closeAdjustModal();
   }
 
-  const affectedInstallmentMonths =
-    activeAdjustment?.operation === 'add' && projectionMonths[0]
-      ? buildInstallmentMonths(
-          activeAdjustment.projectionMonth.year,
-          activeAdjustment.projectionMonth.month,
-          parseInstallmentsInput(installmentsInput),
-          projectionMonths[0].year,
-          projectionMonths[0].month,
-        )
-      : [];
-  const shouldShowInstallmentSummary =
-    activeAdjustment?.operation === 'add' &&
-    parseInstallmentsInput(installmentsInput) > 1 &&
-    affectedInstallmentMonths.length > 0;
+  const activeAdjustmentMonth = projectionMonths.find(
+    (pm) => pm.key === activeAdjustmentMonthKey,
+  );
 
   return (
     <View style={styles.panel}>
@@ -123,135 +117,71 @@ export function MonthlyValueEditor({
           />
 
           <View style={styles.monthValueList}>
-            {projectionMonths.map((projectionMonth) => {
-              return (
-                <View key={projectionMonth.key} style={styles.monthValueItem}>
-                  <View style={styles.monthValueRow}>
-                    <View style={styles.monthValueLabel}>
-                      <Text style={styles.monthValueName}>
-                        {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
-                      </Text>
-                    </View>
-                    <View style={styles.monthValueControlGroup}>
-                      <EditableAmountInput
-                        onChangeValue={(amount) =>
-                          onChangeMonthlyValue(
-                            selectedAccountItem.id,
-                            projectionMonth,
-                            amount,
-                          )
-                        }
-                        style={[styles.input, styles.monthValueInput]}
-                        value={getMonthlyValueAmount(
-                          monthlyValues,
+            {projectionMonths.map((projectionMonth) => (
+              <View key={projectionMonth.key} style={styles.monthValueItem}>
+                <View style={styles.monthValueRow}>
+                  <View style={styles.monthValueLabel}>
+                    <Text style={styles.monthValueName}>
+                      {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
+                    </Text>
+                  </View>
+                  <View style={styles.monthValueControlGroup}>
+                    <EditableAmountInput
+                      onChangeValue={(amount) =>
+                        onChangeMonthlyValue(
                           selectedAccountItem.id,
                           projectionMonth,
-                        )}
-                        valuesHidden={valuesHidden}
-                      />
-                      <View style={styles.adjustmentButtons}>
-                        <Pressable
-                          accessibilityLabel="Adicionar ajuste"
-                          onPress={() => openAdjustment(projectionMonth, 'add')}
-                          style={[styles.adjustmentButton, styles.addButton]}
-                        >
-                          <Text style={styles.addButtonText}>+</Text>
-                        </Pressable>
-                        <Pressable
-                          accessibilityLabel="Subtrair ajuste"
-                          onPress={() => openAdjustment(projectionMonth, 'subtract')}
-                          style={[styles.adjustmentButton, styles.subtractButton]}
-                        >
-                          <Text style={styles.subtractButtonText}>-</Text>
-                        </Pressable>
-                      </View>
-                    </View>
+                          amount,
+                        )
+                      }
+                      style={[styles.input, styles.monthValueInput]}
+                      value={getMonthlyValueAmount(
+                        monthlyValues,
+                        selectedAccountItem.id,
+                        projectionMonth,
+                      )}
+                      valuesHidden={valuesHidden}
+                    />
+                    <Pressable
+                      accessibilityLabel="Ajustar valor"
+                      onPress={() => openAdjustModal(projectionMonth)}
+                      style={styles.adjustToggleButton}
+                    >
+                      <Text style={styles.adjustToggleButtonText}>±</Text>
+                    </Pressable>
                   </View>
                 </View>
-              );
-            })}
+              </View>
+            ))}
           </View>
 
           <Modal
             animationType="fade"
-            onRequestClose={closeAdjustment}
+            onRequestClose={closeAdjustModal}
             transparent
-            visible={Boolean(activeAdjustment)}
+            visible={Boolean(activeAdjustmentMonth)}
           >
             <View style={styles.modalOverlay}>
               <View style={styles.modalCard}>
-                <Text style={styles.adjustmentTitle}>
-                  {activeAdjustment
-                    ? `${activeAdjustment.operation === 'add' ? 'Adicionar' : 'Subtrair'} em ${formatMonthLabel(
-                        activeAdjustment.projectionMonth.year,
-                        activeAdjustment.projectionMonth.month,
-                      )}`
-                    : ''}
-                </Text>
-                <TextInput
-                  autoFocus
-                  keyboardType="decimal-pad"
-                  onChangeText={setAdjustmentInput}
-                  placeholder="0,00"
-                  placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, styles.adjustmentInput]}
-                  value={adjustmentInput}
-                />
-                {activeAdjustment?.operation === 'add' ? (
-                  <>
-                    <View style={styles.installmentsRow}>
-                      <Text style={styles.installmentsLabel}>Parcelas</Text>
-                      <TextInput
-                        keyboardType="number-pad"
-                        onChangeText={(value) =>
-                          setInstallmentsInput(sanitizeInstallmentsInput(value))
-                        }
-                        placeholder="1"
-                        placeholderTextColor={colors.textSecondary}
-                        style={[styles.input, styles.installmentsInput]}
-                        value={installmentsInput}
-                      />
-                    </View>
-                    {shouldShowInstallmentSummary ? (
-                      <Text style={styles.installmentSummary}>
-                        {formatInstallmentSummary(
-                          adjustmentInput,
-                          parseInstallmentsInput(installmentsInput),
-                          affectedInstallmentMonths,
-                        )}
-                      </Text>
-                    ) : null}
-                  </>
+                {activeAdjustmentMonth ? (
+                  <AdjustPanel
+                    accountItemId={selectedAccountItem.id}
+                    adjustmentInput={adjustmentInput}
+                    adjustmentMode={adjustmentMode}
+                    installmentsInput={installmentsInput}
+                    monthlyValues={monthlyValues}
+                    onCancel={closeAdjustModal}
+                    onConfirm={() => confirmAdjustment(activeAdjustmentMonth)}
+                    onInputChange={setAdjustmentInput}
+                    onInstallmentsChange={(v) =>
+                      setInstallmentsInput(sanitizeInstallmentsInput(v))
+                    }
+                    onSwitchMode={switchAdjustmentMode}
+                    projectionMonth={activeAdjustmentMonth}
+                    projectionMonths={projectionMonths}
+                    valuesHidden={valuesHidden}
+                  />
                 ) : null}
-                <View style={styles.modalActions}>
-                  <Pressable
-                    accessibilityLabel="Cancelar ajuste"
-                    onPress={closeAdjustment}
-                    style={[styles.modalButton, styles.cancelButton]}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancelar</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel="Confirmar ajuste"
-                    onPress={confirmAdjustment}
-                    style={[
-                      styles.modalButton,
-                      activeAdjustment?.operation === 'subtract'
-                        ? styles.subtractConfirmButton
-                        : styles.addButton,
-                    ]}
-                  >
-                    <Text
-                      style={
-                        activeAdjustment?.operation === 'subtract'
-                          ? styles.subtractConfirmButtonText
-                          : styles.addButtonText
-                      }
-                    >
-                      OK
-                    </Text>
-                  </Pressable>
-                </View>
               </View>
             </View>
           </Modal>
@@ -261,6 +191,169 @@ export function MonthlyValueEditor({
           Crie uma categoria e uma conta para editar valores mensais.
         </Text>
       )}
+    </View>
+  );
+}
+
+type AdjustPanelProps = {
+  accountItemId: string;
+  adjustmentInput: string;
+  adjustmentMode: MonthlyValueAdjustmentOperation;
+  installmentsInput: string;
+  monthlyValues: MonthlyValue[];
+  onCancel: () => void;
+  onConfirm: () => void;
+  onInputChange: (value: string) => void;
+  onInstallmentsChange: (value: string) => void;
+  onSwitchMode: (mode: MonthlyValueAdjustmentOperation) => void;
+  projectionMonth: ProjectionMonth;
+  projectionMonths: ProjectionMonth[];
+  valuesHidden: boolean;
+};
+
+function AdjustPanel({
+  accountItemId,
+  adjustmentInput,
+  adjustmentMode,
+  installmentsInput,
+  monthlyValues,
+  onCancel,
+  onConfirm,
+  onInputChange,
+  onInstallmentsChange,
+  onSwitchMode,
+  projectionMonth,
+  projectionMonths,
+  valuesHidden,
+}: AdjustPanelProps) {
+  const activeColor = adjustmentMode === 'add' ? colors.accent : colors.negative;
+  const currentAmount = getMonthlyValueAmount(
+    monthlyValues,
+    accountItemId,
+    projectionMonth,
+  );
+  const parsedInstallments = parseInstallmentsInput(installmentsInput);
+  const affectedInstallmentMonths =
+    adjustmentMode === 'add' && projectionMonths[0]
+      ? buildInstallmentMonths(
+          projectionMonth.year,
+          projectionMonth.month,
+          parsedInstallments,
+          projectionMonths[0].year,
+          projectionMonths[0].month,
+        )
+      : [];
+  const shouldShowInstallmentSummary =
+    adjustmentMode === 'add' &&
+    parsedInstallments > 1 &&
+    affectedInstallmentMonths.length > 0;
+
+  return (
+    <View style={styles.adjustPanelContent}>
+      <Text style={styles.adjustTitle}>
+        {`Ajustar — ${formatMonthLabel(projectionMonth.year, projectionMonth.month)}`}
+      </Text>
+
+      <View style={[styles.adjustFieldRow, { borderColor: activeColor }]}>
+        <Pressable
+          onPress={() => onSwitchMode('add')}
+          style={[
+            styles.adjustModeButton,
+            adjustmentMode === 'add'
+              ? { backgroundColor: colors.accent }
+              : styles.adjustModeButtonInactive,
+          ]}
+        >
+          <Text
+            style={[
+              styles.adjustModeButtonText,
+              adjustmentMode === 'add'
+                ? { color: colors.accentText }
+                : { color: colors.textSecondary },
+            ]}
+          >
+            +
+          </Text>
+        </Pressable>
+
+        <TextInput
+          autoFocus
+          keyboardType="decimal-pad"
+          onChangeText={onInputChange}
+          placeholder="0,00"
+          placeholderTextColor={colors.textSecondary}
+          style={styles.adjustInput}
+          value={adjustmentInput}
+        />
+
+        <Pressable
+          onPress={() => onSwitchMode('subtract')}
+          style={[
+            styles.adjustModeButton,
+            adjustmentMode === 'subtract'
+              ? { backgroundColor: colors.negative }
+              : styles.adjustModeButtonInactive,
+          ]}
+        >
+          <Text
+            style={[
+              styles.adjustModeButtonText,
+              adjustmentMode === 'subtract'
+                ? { color: colors.accentText }
+                : { color: colors.textSecondary },
+            ]}
+          >
+            −
+          </Text>
+        </Pressable>
+      </View>
+
+      {adjustmentMode === 'add' ? (
+        <>
+          <View style={styles.installmentsRow}>
+            <Text style={styles.installmentsLabel}>Parcelas</Text>
+            <TextInput
+              keyboardType="number-pad"
+              onChangeText={onInstallmentsChange}
+              placeholder="1"
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.input, styles.installmentsInput]}
+              value={installmentsInput}
+            />
+          </View>
+          {shouldShowInstallmentSummary ? (
+            <Text style={styles.installmentSummary}>
+              {formatInstallmentSummary(
+                adjustmentInput,
+                parsedInstallments,
+                affectedInstallmentMonths,
+              )}
+            </Text>
+          ) : null}
+        </>
+      ) : null}
+
+      <View style={styles.adjustActions}>
+        <Pressable onPress={onCancel} style={styles.adjustCancelButton}>
+          <Text style={styles.adjustCancelButtonText}>Cancelar</Text>
+        </Pressable>
+        <Pressable
+          onPress={onConfirm}
+          style={[styles.adjustConfirmButton, { backgroundColor: activeColor }]}
+        >
+          <Text style={styles.adjustConfirmText}>Novo total</Text>
+          <Text style={styles.adjustConfirmText}>
+            {maskCurrency(
+              calculateAdjustedMonthlyValue(
+                currentAmount,
+                adjustmentInput,
+                adjustmentMode,
+              ),
+              valuesHidden,
+            )}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -370,37 +463,23 @@ const styles = StyleSheet.create({
     ...typography.input,
   },
   monthValueInput: {
-    width: 106,
     textAlign: 'right',
+    width: 106,
   },
-  adjustmentButtons: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  adjustmentButton: {
+  adjustToggleButton: {
     alignItems: 'center',
-    borderRadius: 12,
-    height: 42,
-    justifyContent: 'center',
-    width: 38,
-  },
-  addButton: {
-    backgroundColor: colors.accent,
-  },
-  subtractButton: {
     backgroundColor: colors.surfaceMuted,
-    borderColor: colors.negative,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
     borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    width: 44,
   },
-  addButtonText: {
-    color: colors.accentText,
+  adjustToggleButtonText: {
+    color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.button,
-  },
-  subtractButtonText: {
-    color: colors.negativeText,
-    letterSpacing: 0,
-    ...typography.amountMedium,
   },
   modalOverlay: {
     alignItems: 'center',
@@ -414,18 +493,46 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: 18,
     borderWidth: 1,
-    gap: 12,
     maxWidth: 360,
-    padding: 16,
     width: '100%',
   },
-  adjustmentTitle: {
+  adjustPanelContent: {
+    gap: 12,
+    padding: 16,
+  },
+  adjustTitle: {
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.cardTitle,
   },
-  adjustmentInput: {
-    textAlign: 'right',
+  adjustFieldRow: {
+    alignItems: 'center',
+    borderColor: colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  adjustModeButton: {
+    alignItems: 'center',
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  adjustModeButtonInactive: {
+    backgroundColor: colors.surfaceMuted,
+  },
+  adjustModeButtonText: {
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  adjustInput: {
+    color: colors.textPrimary,
+    flex: 1,
+    letterSpacing: 0,
+    paddingHorizontal: 12,
+    textAlign: 'center',
+    ...typography.input,
   },
   installmentsRow: {
     alignItems: 'center',
@@ -448,34 +555,38 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.bodySmall,
   },
-  modalActions: {
+  adjustActions: {
     flexDirection: 'row',
     gap: 8,
-    justifyContent: 'flex-end',
   },
-  modalButton: {
+  adjustCancelButton: {
     alignItems: 'center',
-    borderRadius: 12,
-    minHeight: 42,
-    justifyContent: 'center',
-    minWidth: 96,
-    paddingHorizontal: 12,
-  },
-  cancelButton: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
+    borderRadius: 12,
     borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
   },
-  subtractConfirmButton: {
-    backgroundColor: colors.negative,
-  },
-  subtractConfirmButtonText: {
-    color: colors.textPrimary,
+  adjustCancelButtonText: {
+    color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.button,
   },
-  cancelButtonText: {
-    color: colors.textSecondary,
+  adjustConfirmButton: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flex: 2,
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
+  },
+  adjustConfirmText: {
+    color: colors.accentText,
     letterSpacing: 0,
     ...typography.button,
   },
