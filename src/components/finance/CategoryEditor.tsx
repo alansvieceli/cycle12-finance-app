@@ -82,10 +82,12 @@ export function CategoryEditor({
   const [isCreateOpen, setIsCreateOpen] = useState(categories.length === 0);
   const [activePropagationSelector, setActivePropagationSelector] = useState<string>();
   const [activeMonthSelector, setActiveMonthSelector] = useState<string>();
+  const [activeSortOrderSelector, setActiveSortOrderSelector] = useState<string>();
 
   function closeSelectors() {
     setActivePropagationSelector(undefined);
     setActiveMonthSelector(undefined);
+    setActiveSortOrderSelector(undefined);
   }
 
   function toggleExpand(categoryId: string) {
@@ -131,13 +133,11 @@ export function CategoryEditor({
               style={[styles.input, styles.createInput]}
               value={newCategoryName}
             />
-            <TextInput
-              keyboardType="number-pad"
-              onChangeText={onChangeNewCategorySortOrder}
-              placeholder="Ordem"
-              placeholderTextColor={colors.textSecondary}
-              style={[styles.input, styles.sortOrderInput]}
-              value={newCategorySortOrder}
+            <SortOrderSelector
+              isActive={activeSortOrderSelector === 'new'}
+              label="Posição"
+              onOpen={() => setActiveSortOrderSelector('new')}
+              value={newCategorySortOrder || String(categories.length + 1)}
             />
           </View>
           <ColorPicker
@@ -210,11 +210,11 @@ export function CategoryEditor({
                         style={[styles.input, styles.nameInput]}
                         value={category.name}
                       />
-                      <SortOrderInput
-                        onChangeValue={(sortOrder) =>
-                          onChangeCategorySortOrder(category.id, sortOrder)
-                        }
-                        value={category.sortOrder}
+                      <SortOrderSelector
+                        isActive={activeSortOrderSelector === category.id}
+                        label="Posição"
+                        onOpen={() => setActiveSortOrderSelector(category.id)}
+                        value={String(category.sortOrder)}
                       />
                     </View>
                     <ColorPicker
@@ -253,6 +253,30 @@ export function CategoryEditor({
         </View>
       )}
 
+      <SortOrderModal
+        currentValue={
+          activeSortOrderSelector === 'new'
+            ? newCategorySortOrder || String(categories.length + 1)
+            : String(
+                categories.find((c) => c.id === activeSortOrderSelector)?.sortOrder ??
+                  '',
+              )
+        }
+        maxOrder={
+          activeSortOrderSelector === 'new' ? categories.length + 1 : categories.length
+        }
+        onChangeValue={(value) => {
+          if (!activeSortOrderSelector) return;
+          if (activeSortOrderSelector === 'new') {
+            onChangeNewCategorySortOrder(value);
+          } else {
+            onChangeCategorySortOrder(activeSortOrderSelector, value);
+          }
+          closeSelectors();
+        }}
+        onClose={closeSelectors}
+        visible={Boolean(activeSortOrderSelector)}
+      />
       <PropagationModal
         onChangeValue={(value) => {
           if (!activePropagationSelector) {
@@ -526,45 +550,79 @@ function formatInstallmentEndDate(value: string) {
   return `${monthOptions[parsedDate.month - 1]} ${parsedDate.year}`;
 }
 
-function SortOrderInput({
-  onChangeValue,
+function SortOrderSelector({
+  isActive,
+  label,
+  onOpen,
   value,
 }: {
-  onChangeValue: (value: string) => void;
-  value: number;
+  isActive: boolean;
+  label: string;
+  onOpen: () => void;
+  value: string;
 }) {
-  const [draftValue, setDraftValue] = useState(String(value));
-  const [isFocused, setIsFocused] = useState(false);
+  return (
+    <Pressable
+      onPress={onOpen}
+      style={[
+        styles.selectorButton,
+        styles.sortSelectorButton,
+        isActive && styles.selectorButtonActive,
+      ]}
+    >
+      <Text style={styles.selectorText}>
+        <Text style={styles.selectorLabel}>{label}: </Text>
+        {value} ▾
+      </Text>
+    </Pressable>
+  );
+}
 
-  useEffect(() => {
-    if (!isFocused) {
-      setDraftValue(String(value));
-    }
-  }, [isFocused, value]);
-
-  function handleChangeText(nextValue: string) {
-    const numericValue = nextValue.replace(/\D/g, '');
-
-    setDraftValue(numericValue);
-    onChangeValue(numericValue);
-  }
-
-  function handleBlur() {
-    setIsFocused(false);
-    setDraftValue(String(value));
-  }
+function SortOrderModal({
+  currentValue,
+  maxOrder,
+  onChangeValue,
+  onClose,
+  visible,
+}: {
+  currentValue: string;
+  maxOrder: number;
+  onChangeValue: (value: string) => void;
+  onClose: () => void;
+  visible: boolean;
+}) {
+  const options = Array.from({ length: maxOrder }, (_, i) => i + 1);
 
   return (
-    <TextInput
-      keyboardType="number-pad"
-      onBlur={handleBlur}
-      onChangeText={handleChangeText}
-      onFocus={() => setIsFocused(true)}
-      placeholder="0"
-      placeholderTextColor={colors.textSecondary}
-      style={[styles.input, styles.sortOrderInput]}
-      value={draftValue}
-    />
+    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalCard}>
+          <Text style={styles.modalTitle}>Posição na lista</Text>
+          <View style={styles.orderGrid}>
+            {options.map((order) => {
+              const isSelected = String(order) === currentValue;
+              return (
+                <Pressable
+                  key={order}
+                  onPress={() => onChangeValue(String(order))}
+                  style={[styles.orderButton, isSelected && styles.orderButtonSelected]}
+                >
+                  <Text
+                    style={[
+                      styles.orderButtonText,
+                      isSelected && styles.orderButtonTextSelected,
+                    ]}
+                  >
+                    {order}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+          <ActionButton label="Cancelar" onPress={onClose} />
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -677,9 +735,36 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 140,
   },
-  sortOrderInput: {
-    maxWidth: 92,
-    textAlign: 'center',
+  sortSelectorButton: {
+    minWidth: 110,
+  },
+  orderGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  orderButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexBasis: '23%',
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  orderButtonSelected: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  orderButtonText: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  orderButtonTextSelected: {
+    color: colors.accentText,
   },
   createToggle: {
     alignItems: 'center',

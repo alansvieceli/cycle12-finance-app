@@ -52,6 +52,7 @@ export function AccountEditor({
   const [expandedAccountId, setExpandedAccountId] = useState<string>();
   const [isCreateOpen, setIsCreateOpen] = useState(accountItems.length === 0);
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false);
+  const [activeDueDayId, setActiveDueDayId] = useState<string>();
   const sortedCategories = sortCategories(categories);
   const selectedNewAccountCategoryId =
     newAccountCategoryId || sortedCategories[0]?.id || '';
@@ -109,12 +110,9 @@ export function AccountEditor({
                   style={[styles.input, styles.createInput]}
                   value={newAccountName}
                 />
-                <TextInput
-                  keyboardType="number-pad"
-                  onChangeText={onChangeNewAccountDueDay}
-                  placeholder="Dia"
-                  placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, styles.dueDayInput]}
+                <DueDayButton
+                  isActive={activeDueDayId === 'new'}
+                  onPress={() => setActiveDueDayId('new')}
                   value={newAccountDueDay}
                 />
               </View>
@@ -189,12 +187,9 @@ export function AccountEditor({
                               ← {categoryName} →
                             </Text>
                           </Pressable>
-                          <TextInput
-                            keyboardType="number-pad"
-                            onChangeText={(dueDay) =>
-                              onChangeAccountDueDay(accountItem.id, dueDay)
-                            }
-                            style={[styles.input, styles.dueDayInput]}
+                          <DueDayButton
+                            isActive={activeDueDayId === accountItem.id}
+                            onPress={() => setActiveDueDayId(accountItem.id)}
                             value={String(accountItem.dueDay)}
                           />
                         </View>
@@ -213,6 +208,24 @@ export function AccountEditor({
         </>
       )}
 
+      <DueDayModal
+        currentValue={
+          activeDueDayId === 'new'
+            ? newAccountDueDay
+            : String(accountItems.find((a) => a.id === activeDueDayId)?.dueDay ?? '')
+        }
+        onClose={() => setActiveDueDayId(undefined)}
+        onSelectDay={(day) => {
+          if (!activeDueDayId) return;
+          if (activeDueDayId === 'new') {
+            onChangeNewAccountDueDay(day);
+          } else {
+            onChangeAccountDueDay(activeDueDayId, day);
+          }
+          setActiveDueDayId(undefined);
+        }}
+        visible={Boolean(activeDueDayId)}
+      />
       <Modal
         animationType="slide"
         onRequestClose={() => setIsCategoryPickerOpen(false)}
@@ -261,6 +274,72 @@ export function AccountEditor({
         </Pressable>
       </Modal>
     </View>
+  );
+}
+
+const ALL_DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
+
+function DueDayButton({
+  isActive,
+  onPress,
+  value,
+}: {
+  isActive: boolean;
+  onPress: () => void;
+  value: string;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[styles.dueDayButton, isActive && styles.dueDayButtonActive]}
+    >
+      <Text style={styles.dueDayButtonLabel}>Dia</Text>
+      <Text style={styles.dueDayButtonValue}>{value || '—'} ▾</Text>
+    </Pressable>
+  );
+}
+
+function DueDayModal({
+  currentValue,
+  onClose,
+  onSelectDay,
+  visible,
+}: {
+  currentValue: string;
+  onClose: () => void;
+  onSelectDay: (day: string) => void;
+  visible: boolean;
+}) {
+  return (
+    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalCard}>
+          <Text style={styles.modalTitle}>Dia do vencimento</Text>
+          <View style={styles.dayGrid}>
+            {ALL_DAYS.map((day) => {
+              const isSelected = String(day) === currentValue;
+              return (
+                <Pressable
+                  key={day}
+                  onPress={() => onSelectDay(String(day))}
+                  style={[styles.dayButton, isSelected && styles.dayButtonSelected]}
+                >
+                  <Text
+                    style={[
+                      styles.dayButtonText,
+                      isSelected && styles.dayButtonTextSelected,
+                    ]}
+                  >
+                    {day}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+          <ActionButton label="Cancelar" onPress={onClose} />
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -371,9 +450,79 @@ const styles = StyleSheet.create({
   nameInput: {
     flex: 1,
   },
-  dueDayInput: {
-    maxWidth: 78,
-    textAlign: 'center',
+  dueDayButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 12,
+    minWidth: 78,
+  },
+  dueDayButtonActive: {
+    borderColor: colors.accent,
+  },
+  dueDayButtonLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.caption,
+  },
+  dueDayButtonValue: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.72)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 12,
+    maxWidth: 380,
+    padding: 16,
+    width: '100%',
+  },
+  modalTitle: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  dayGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  dayButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 10,
+    borderWidth: 1,
+    flexBasis: '12%',
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: 40,
+  },
+  dayButtonSelected: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  dayButtonText: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  dayButtonTextSelected: {
+    color: colors.accentText,
   },
   categoryButton: {
     alignItems: 'center',

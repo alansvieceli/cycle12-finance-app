@@ -201,29 +201,42 @@ export function useFinanceState() {
     }
     const categoryId = createId('category');
 
-    setFinanceState((currentState) => ({
-      ...currentState,
-      categories: [
-        ...currentState.categories,
-        {
-          id: categoryId,
-          color: newCategoryColor || suggestCategoryColor(currentState.categories),
-          installmentEndDate:
-            newCategoryPropagation === 'installment'
-              ? newCategoryInstallmentEndDate.trim()
-              : undefined,
-          name: categoryName,
-          propagation:
-            newCategoryPropagation === 'fixed' ||
-            newCategoryPropagation === 'installment'
-              ? newCategoryPropagation
-              : 'zero',
-          sortOrder: newCategorySortOrder
-            ? parseSortOrder(newCategorySortOrder)
-            : suggestNextCategorySortOrder(currentState.categories),
-        },
-      ],
-    }));
+    setFinanceState((currentState) => {
+      const chosenSortOrder = newCategorySortOrder
+        ? parseSortOrder(newCategorySortOrder)
+        : suggestNextCategorySortOrder(currentState.categories);
+      const hasConflict = currentState.categories.some(
+        (category) => category.sortOrder === chosenSortOrder,
+      );
+      const shiftedCategories = hasConflict
+        ? currentState.categories.map((category) =>
+            category.sortOrder >= chosenSortOrder
+              ? { ...category, sortOrder: category.sortOrder + 1 }
+              : category,
+          )
+        : currentState.categories;
+      return {
+        ...currentState,
+        categories: [
+          ...shiftedCategories,
+          {
+            id: categoryId,
+            color: newCategoryColor || suggestCategoryColor(currentState.categories),
+            installmentEndDate:
+              newCategoryPropagation === 'installment'
+                ? newCategoryInstallmentEndDate.trim()
+                : undefined,
+            name: categoryName,
+            propagation:
+              newCategoryPropagation === 'fixed' ||
+              newCategoryPropagation === 'installment'
+                ? newCategoryPropagation
+                : 'zero',
+            sortOrder: chosenSortOrder,
+          },
+        ],
+      };
+    });
     setNewAccountCategoryId((currentCategoryId) => currentCategoryId || categoryId);
     setNewCategoryName('');
     setNewCategorySortOrder('');
