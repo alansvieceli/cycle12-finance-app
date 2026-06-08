@@ -5,6 +5,7 @@ import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
 import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 import {
+  calculateAvailableIncome,
   calculateCategoryTotals,
   calculateIncomeCommitmentPercentage,
   calculatePaymentSummary,
@@ -141,6 +142,9 @@ export function SummaryScreen({
       financeState.settings.commitmentWarningThreshold,
       financeState.settings.commitmentDangerThreshold,
     ) ?? colors.commitmentLow;
+  const currentAvailableIncome = currentProjectionMonth
+    ? calculateAvailableIncome(financeState.settings, currentProjectionMonth)
+    : 0;
 
   return (
     <>
@@ -230,6 +234,12 @@ export function SummaryScreen({
                   >
                     <Text style={styles.addExtraButtonText}>+</Text>
                   </Pressable>
+                </View>
+                <View style={styles.incomeRow}>
+                  <Text style={styles.incomeLabel}>Recebido</Text>
+                  <Text style={styles.incomeValue}>
+                    {maskCurrency(currentAvailableIncome, valuesHidden)}
+                  </Text>
                 </View>
                 <View style={styles.commitmentHeader}>
                   <Text style={styles.commitmentLabel}>
@@ -359,62 +369,70 @@ export function SummaryScreen({
               </Modal>
             </>
           ) : activeView === 'other' ? (
-            projectionMonths.slice(1).map((projectionMonth) => {
-              const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
-                sortedCategories,
-                financeState.accountItems,
-                financeState.monthlyValues,
-                projectionMonth,
-              );
-              const salaryCommitmentPercentage = calculateIncomeCommitmentPercentage(
-                monthlyTotalExpenses,
-                financeState.settings,
-                projectionMonth,
-              );
-              const surplusOrShortfall = calculateSurplusOrShortfall(
-                financeState.settings,
-                monthlyTotalExpenses,
-                projectionMonth,
-              );
-              const isDetailsOpen = selectedDetailsMonth?.key === projectionMonth.key;
+            <>
+              <View style={styles.projectionIncomePanel}>
+                <Text style={styles.projectionIncomeLabel}>Valor a receber</Text>
+                <Text style={styles.projectionIncomeValue}>
+                  {maskCurrency(financeState.settings.monthlySalary, valuesHidden)}
+                </Text>
+              </View>
+              {projectionMonths.slice(1).map((projectionMonth) => {
+                const monthlyTotalExpenses = calculateMonthlyTotalExpenses(
+                  sortedCategories,
+                  financeState.accountItems,
+                  financeState.monthlyValues,
+                  projectionMonth,
+                );
+                const salaryCommitmentPercentage = calculateIncomeCommitmentPercentage(
+                  monthlyTotalExpenses,
+                  financeState.settings,
+                  projectionMonth,
+                );
+                const surplusOrShortfall = calculateSurplusOrShortfall(
+                  financeState.settings,
+                  monthlyTotalExpenses,
+                  projectionMonth,
+                );
+                const isDetailsOpen = selectedDetailsMonth?.key === projectionMonth.key;
 
-              return (
-                <Fragment key={projectionMonth.key}>
-                  <MonthSummaryCard
-                    commitmentDangerThreshold={
-                      financeState.settings.commitmentDangerThreshold
-                    }
-                    commitmentWarningThreshold={
-                      financeState.settings.commitmentWarningThreshold
-                    }
-                    monthlyTotalExpenses={monthlyTotalExpenses}
-                    onOpenDetails={() =>
-                      setSelectedDetailsMonthKey(projectionMonth.key)
-                    }
-                    projectionMonth={projectionMonth}
-                    salaryCommitmentPercentage={salaryCommitmentPercentage}
-                    surplusOrShortfall={surplusOrShortfall}
-                    valuesHidden={valuesHidden}
-                  />
-                  {isDetailsOpen ? (
-                    <MonthDetailsPanel
-                      categoryColorsById={categoryColorsById}
-                      categoryNamesById={categoryNamesById}
-                      categoryTotals={calculateCategoryTotals(
-                        sortedCategories,
-                        financeState.accountItems,
-                        financeState.monthlyValues,
-                        projectionMonth,
-                      )}
+                return (
+                  <Fragment key={projectionMonth.key}>
+                    <MonthSummaryCard
+                      commitmentDangerThreshold={
+                        financeState.settings.commitmentDangerThreshold
+                      }
+                      commitmentWarningThreshold={
+                        financeState.settings.commitmentWarningThreshold
+                      }
                       monthlyTotalExpenses={monthlyTotalExpenses}
-                      onClose={() => setSelectedDetailsMonthKey(null)}
+                      onOpenDetails={() =>
+                        setSelectedDetailsMonthKey(projectionMonth.key)
+                      }
                       projectionMonth={projectionMonth}
+                      salaryCommitmentPercentage={salaryCommitmentPercentage}
+                      surplusOrShortfall={surplusOrShortfall}
                       valuesHidden={valuesHidden}
                     />
-                  ) : null}
-                </Fragment>
-              );
-            })
+                    {isDetailsOpen ? (
+                      <MonthDetailsPanel
+                        categoryColorsById={categoryColorsById}
+                        categoryNamesById={categoryNamesById}
+                        categoryTotals={calculateCategoryTotals(
+                          sortedCategories,
+                          financeState.accountItems,
+                          financeState.monthlyValues,
+                          projectionMonth,
+                        )}
+                        monthlyTotalExpenses={monthlyTotalExpenses}
+                        onClose={() => setSelectedDetailsMonthKey(null)}
+                        projectionMonth={projectionMonth}
+                        valuesHidden={valuesHidden}
+                      />
+                    ) : null}
+                  </Fragment>
+                );
+              })}
+            </>
           ) : (
             <>
               {financeState.monthHistory.length === 0 ? (
@@ -607,6 +625,43 @@ const styles = StyleSheet.create({
     color: colors.accentText,
     letterSpacing: 0,
     ...typography.button,
+  },
+  incomeRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  incomeLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  incomeValue: {
+    color: colors.positive,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  projectionIncomePanel: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 16,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+  },
+  projectionIncomeLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
+  projectionIncomeValue: {
+    color: colors.positive,
+    letterSpacing: 0,
+    ...typography.amountMedium,
   },
   kicker: {
     color: colors.textSecondary,
