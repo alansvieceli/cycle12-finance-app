@@ -17,7 +17,7 @@
       "predictiveBackGestureEnabled": false,
       "softwareKeyboardLayoutMode": "resize",
       "versionCode": 204,
-      "package": "com.anonymous.cycle12financeapp"
+      "package": "br.com.cycle12.finance"
     },
     "web": {
       "favicon": "./assets/favicon.png"
