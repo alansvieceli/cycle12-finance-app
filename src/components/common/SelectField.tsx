@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -61,7 +62,7 @@ export function SelectField({
             </View>
           )}
         </View>
-        <Text style={styles.chevron}>▾</Text>
+        <Ionicons color={colors.textSecondary} name="chevron-down" size={20} />
       </Pressable>
 
       <Modal
@@ -122,7 +123,9 @@ export function SelectField({
                         </>
                       )}
                     </View>
-                    {isActive ? <Text style={styles.check}>✓</Text> : null}
+                    {isActive ? (
+                      <Ionicons color={colors.accent} name="checkmark" size={18} />
+                    ) : null}
                   </Pressable>
                 );
               })}
@@ -174,9 +177,6 @@ const styles = StyleSheet.create({
     ...typography.caption,
   },
   chevron: {
-    color: colors.textSecondary,
-    fontSize: 22,
-    lineHeight: 26,
     marginLeft: 8,
   },
   overlay: {
@@ -257,9 +257,6 @@ const styles = StyleSheet.create({
     ...typography.caption,
   },
   check: {
-    color: colors.accent,
-    fontSize: 16,
-    fontWeight: '700',
     marginLeft: 8,
   },
 });

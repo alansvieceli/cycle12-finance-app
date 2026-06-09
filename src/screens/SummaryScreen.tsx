@@ -1,3 +1,4 @@
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fragment, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -232,7 +233,11 @@ export function SummaryScreen({
                     }}
                     style={styles.addExtraButton}
                   >
-                    <Text style={styles.addExtraButtonText}>+</Text>
+                    <MaterialCommunityIcons
+                      color={colors.accentText}
+                      name="plus-thick"
+                      size={20}
+                    />
                   </Pressable>
                 </View>
                 <View style={styles.incomeRow}>
@@ -553,12 +558,6 @@ const styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     width: 32,
-  },
-  addExtraButtonText: {
-    color: colors.accentText,
-    fontSize: 20,
-    fontWeight: '700',
-    lineHeight: 24,
   },
   modalOverlay: {
     alignItems: 'center',

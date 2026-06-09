@@ -154,7 +154,12 @@ export function DataManagementPanel({
             Salve, restaure ou limpe os dados locais deste app.
           </Text>
         </View>
-        <ActionButton label="Voltar" onPress={onClose} variant="secondary" />
+        <ActionButton
+          icon="arrow-back"
+          label="Voltar"
+          onPress={onClose}
+          variant="secondary"
+        />
       </View>
 
       <View style={styles.actions}>

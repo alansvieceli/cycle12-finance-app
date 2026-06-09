@@ -1,15 +1,18 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
 type ActionButtonProps = {
+  icon?: keyof typeof Ionicons.glyphMap;
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost-danger';
 };
 
 export function ActionButton({
+  icon,
   label,
   onPress,
   variant = 'primary',
@@ -17,6 +20,21 @@ export function ActionButton({
   const isDanger = variant === 'danger';
   const isSecondary = variant === 'secondary';
   const isGhostDanger = variant === 'ghost-danger';
+
+  const textStyle = isDanger
+    ? styles.dangerButtonText
+    : isSecondary
+      ? styles.secondaryButtonText
+      : isGhostDanger
+        ? styles.ghostDangerButtonText
+        : styles.primaryButtonText;
+
+  const iconColor =
+    isDanger || isGhostDanger
+      ? colors.negativeText
+      : isSecondary
+        ? colors.textPrimary
+        : colors.accentText;
 
   return (
     <Pressable
@@ -32,20 +50,14 @@ export function ActionButton({
               : styles.primaryButton,
       ]}
     >
-      <Text
-        style={[
-          styles.buttonText,
-          isDanger
-            ? styles.dangerButtonText
-            : isSecondary
-              ? styles.secondaryButtonText
-              : isGhostDanger
-                ? styles.ghostDangerButtonText
-                : styles.primaryButtonText,
-        ]}
-      >
-        {label}
-      </Text>
+      {icon ? (
+        <View style={styles.buttonContent}>
+          <Ionicons color={iconColor} name={icon} size={16} />
+          <Text style={[styles.buttonText, textStyle]}>{label}</Text>
+        </View>
+      ) : (
+        <Text style={[styles.buttonText, textStyle]}>{label}</Text>
+      )}
     </Pressable>
   );
 }
@@ -73,6 +85,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: colors.border,
     borderWidth: 1,
+  },
+  buttonContent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
   },
   buttonText: {
     letterSpacing: 0,

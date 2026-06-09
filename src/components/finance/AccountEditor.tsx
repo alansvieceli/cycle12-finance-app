@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
   Alert,
@@ -83,7 +84,9 @@ export function AccountEditor({
     <View style={styles.panel}>
       <View style={styles.panelHeader}>
         <Text style={styles.sectionTitle}>Contas</Text>
-        {onClose ? <ActionButton label="Voltar" onPress={onClose} /> : null}
+        {onClose ? (
+          <ActionButton icon="arrow-back" label="Voltar" onPress={onClose} />
+        ) : null}
       </View>
 
       {sortedCategories.length === 0 ? (
@@ -97,7 +100,11 @@ export function AccountEditor({
             style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
           >
             <Text style={styles.createToggleText}>Nova conta</Text>
-            <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
+            <Ionicons
+              color={colors.textSecondary}
+              name={isCreateOpen ? 'chevron-up' : 'chevron-down'}
+              size={20}
+            />
           </Pressable>
 
           {isCreateOpen && (
@@ -123,7 +130,7 @@ export function AccountEditor({
                 <Text style={styles.categoryPickerText}>
                   {selectedNewAccountCategoryName}
                 </Text>
-                <Text style={styles.categoryPickerIcon}>▾</Text>
+                <Ionicons color={colors.textSecondary} name="chevron-down" size={20} />
               </Pressable>
               <ActionButton label="Adicionar" onPress={onCreateAccountItem} />
             </View>
@@ -166,7 +173,11 @@ export function AccountEditor({
                           <Text style={styles.badgeText}>dia {accountItem.dueDay}</Text>
                         </View>
                       </View>
-                      <Text style={styles.expandChevron}>{isExpanded ? '▴' : '▾'}</Text>
+                      <Ionicons
+                        color={colors.textSecondary}
+                        name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                        size={20}
+                      />
                     </Pressable>
 
                     {isExpanded && (
@@ -294,7 +305,10 @@ function DueDayButton({
       style={[styles.dueDayButton, isActive && styles.dueDayButtonActive]}
     >
       <Text style={styles.dueDayButtonLabel}>Dia</Text>
-      <Text style={styles.dueDayButtonValue}>{value || '—'} ▾</Text>
+      <View style={styles.dueDayButtonRow}>
+        <Text style={styles.dueDayButtonValue}>{value || '—'}</Text>
+        <Ionicons color={colors.textSecondary} name="chevron-down" size={14} />
+      </View>
     </Pressable>
   );
 }
@@ -419,10 +433,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.caption,
   },
-  expandChevron: {
-    color: colors.textSecondary,
-    fontSize: 22,
-    lineHeight: 26,
+  dueDayButtonRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 4,
   },
   expandedContent: {
     borderTopColor: colors.border,
@@ -601,11 +615,6 @@ const styles = StyleSheet.create({
     flex: 1,
     letterSpacing: 0,
     ...typography.body,
-  },
-  categoryPickerIcon: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.caption,
   },
   bottomSheetOverlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',

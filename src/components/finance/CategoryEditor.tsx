@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import {
   Alert,
@@ -120,7 +121,11 @@ export function CategoryEditor({
         style={[styles.createToggle, isCreateOpen && styles.createToggleOpen]}
       >
         <Text style={styles.createToggleText}>Nova categoria</Text>
-        <Text style={styles.createToggleIcon}>{isCreateOpen ? '−' : '+'}</Text>
+        <Ionicons
+          color={colors.textSecondary}
+          name={isCreateOpen ? 'chevron-up' : 'chevron-down'}
+          size={20}
+        />
       </Pressable>
 
       {isCreateOpen && (
@@ -199,7 +204,11 @@ export function CategoryEditor({
                       <Text style={styles.badgeText}>#{category.sortOrder}</Text>
                     </View>
                   </View>
-                  <Text style={styles.expandChevron}>{isExpanded ? '▴' : '▾'}</Text>
+                  <Ionicons
+                    color={colors.textSecondary}
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={20}
+                  />
                 </Pressable>
 
                 {isExpanded && (
@@ -384,7 +393,8 @@ function PropagationSelector({
     >
       <Text style={styles.selectorText}>
         <Text style={styles.selectorLabel}>{label}: </Text>
-        {currentOption.label} ▾
+        {currentOption.label}{' '}
+        <Ionicons color={colors.textSecondary} name="chevron-down" size={13} />
       </Text>
     </Pressable>
   );
@@ -446,7 +456,8 @@ function MonthYearSelector({
     >
       <Text style={styles.selectorText}>
         <Text style={styles.selectorLabel}>Fim: </Text>
-        {formatInstallmentEndDate(value) || 'Mês/ano'} ▾
+        {formatInstallmentEndDate(value) || 'Mês/ano'}{' '}
+        <Ionicons color={colors.textSecondary} name="chevron-down" size={13} />
       </Text>
     </Pressable>
   );
@@ -482,14 +493,14 @@ function MonthYearModal({
               onPress={() => setSelectedYear((currentYear) => currentYear - 1)}
               style={styles.yearButton}
             >
-              <Text style={styles.yearButtonText}>‹</Text>
+              <Ionicons color={colors.textPrimary} name="chevron-back" size={20} />
             </Pressable>
             <Text style={styles.yearText}>{selectedYear}</Text>
             <Pressable
               onPress={() => setSelectedYear((currentYear) => currentYear + 1)}
               style={styles.yearButton}
             >
-              <Text style={styles.yearButtonText}>›</Text>
+              <Ionicons color={colors.textPrimary} name="chevron-forward" size={20} />
             </Pressable>
           </View>
           <View style={styles.monthGrid}>
@@ -572,7 +583,7 @@ function SortOrderSelector({
     >
       <Text style={styles.selectorText}>
         <Text style={styles.selectorLabel}>{label}: </Text>
-        {value} ▾
+        {value} <Ionicons color={colors.textSecondary} name="chevron-down" size={13} />
       </Text>
     </Pressable>
   );

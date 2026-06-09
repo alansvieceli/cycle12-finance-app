@@ -37,7 +37,7 @@ export function MonthDetailsPanel({
             Total previsto: {maskCurrency(monthlyTotalExpenses, valuesHidden)}
           </Text>
         </View>
-        <ActionButton label="Fechar" onPress={onClose} />
+        <ActionButton icon="close" label="Fechar" onPress={onClose} />
       </View>
 
       <CategoryTotalsList

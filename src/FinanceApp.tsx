@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { Ionicons } from '@expo/vector-icons';
 import { AppLockOverlay } from './components/common/AppLockOverlay';
-import { EyeIcon } from './components/common/EyeIcon';
 import { TabBar, TabItem } from './components/common/TabBar';
 import { CurrentMonthPaymentChecklist } from './components/finance/CurrentMonthPaymentChecklist';
 import { createProjectionMonths } from './lib/financeCalculations';
@@ -76,7 +76,11 @@ export function FinanceApp() {
             onPress={() => setValuesHidden((v) => !v)}
             style={styles.eyeButton}
           >
-            <EyeIcon color={colors.textSecondary} hidden={valuesHidden} />
+            <Ionicons
+              color={colors.textSecondary}
+              name={valuesHidden ? 'eye-off-outline' : 'eye-outline'}
+              size={26}
+            />
           </Pressable>
         </View>
 

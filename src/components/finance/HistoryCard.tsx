@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -71,7 +72,11 @@ export function HistoryCard({
         <Text style={styles.monthLabel}>
           {formatMonthLabel(entry.year, entry.month)}
         </Text>
-        <Text style={styles.chevron}>{isExpanded ? '▴' : '▾'}</Text>
+        <Ionicons
+          color={colors.textSecondary}
+          name={isExpanded ? 'chevron-up' : 'chevron-down'}
+          size={22}
+        />
       </Pressable>
 
       <View style={styles.metricsRow}>
@@ -219,11 +224,6 @@ const styles = StyleSheet.create({
   monthLabel: {
     color: colors.textPrimary,
     ...typography.sectionTitle,
-  },
-  chevron: {
-    color: colors.textSecondary,
-    fontSize: 22,
-    lineHeight: 26,
   },
   metricsRow: {
     flexDirection: 'row',

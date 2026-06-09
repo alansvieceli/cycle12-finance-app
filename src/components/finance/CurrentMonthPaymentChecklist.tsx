@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { Ionicons } from '@expo/vector-icons';
 import { getCategoryColor } from '../../lib/categoryColors';
 import {
   calculatePaymentSummary,
@@ -190,7 +191,12 @@ export function CurrentMonthPaymentChecklist({
             {formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)}
           </Text>
           {onClose ? (
-            <ActionButton label="Voltar" onPress={onClose} variant="secondary" />
+            <ActionButton
+              icon="arrow-back"
+              label="Voltar"
+              onPress={onClose}
+              variant="secondary"
+            />
           ) : null}
         </View>
         <Pressable
@@ -285,14 +291,9 @@ export function CurrentMonthPaymentChecklist({
                   style={styles.paymentRowTop}
                 >
                   <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
-                    <Text
-                      style={[
-                        styles.checkboxText,
-                        isPaid ? styles.checkboxTextPaid : null,
-                      ]}
-                    >
-                      {isPaid ? '✓' : ''}
-                    </Text>
+                    {isPaid ? (
+                      <Ionicons color={colors.accentText} name="checkmark" size={16} />
+                    ) : null}
                   </View>
                   <View style={styles.paymentInfo}>
                     <Text style={styles.accountName}>{accountItem.name}</Text>
@@ -312,7 +313,11 @@ export function CurrentMonthPaymentChecklist({
                     }}
                     style={styles.adjustToggleButton}
                   >
-                    <Text style={styles.adjustToggleButtonText}>±</Text>
+                    <Ionicons
+                      color={colors.textSecondary}
+                      name="calculator-outline"
+                      size={18}
+                    />
                   </Pressable>
                 </Pressable>
 

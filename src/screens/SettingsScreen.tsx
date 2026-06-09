@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import {
   Alert,
@@ -117,8 +118,9 @@ export function SettingsScreen({
             style={styles.comboButton}
           >
             <Text style={styles.comboButtonText}>
-              {financeState.settings.summaryVisibleMonthCount} ▾
+              {financeState.settings.summaryVisibleMonthCount}
             </Text>
+            <Ionicons color={colors.textSecondary} name="chevron-down" size={16} />
           </Pressable>
         </View>
       </View>
@@ -202,7 +204,8 @@ export function SettingsScreen({
               onPress={() => setIsSecurityTimeoutPickerOpen(true)}
               style={styles.comboButton}
             >
-              <Text style={styles.comboButtonText}>{appLock.timeoutMinutes} min ▾</Text>
+              <Text style={styles.comboButtonText}>{appLock.timeoutMinutes} min</Text>
+              <Ionicons color={colors.textSecondary} name="chevron-down" size={16} />
             </Pressable>
           </View>
         ) : null}
@@ -397,6 +400,8 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: 12,
     borderWidth: 1,
+    flexDirection: 'row',
+    gap: 6,
     justifyContent: 'center',
     minHeight: 44,
     minWidth: 72,

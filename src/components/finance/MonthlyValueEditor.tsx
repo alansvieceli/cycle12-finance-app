@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
@@ -99,6 +100,15 @@ export function MonthlyValueEditor({
     (pm) => pm.key === activeAdjustmentMonthKey,
   );
 
+  const annualTotal = useMemo(() => {
+    if (!selectedAccountItem) return 0;
+    return projectionMonths.reduce(
+      (sum, pm) =>
+        sum + getMonthlyValueAmount(monthlyValues, selectedAccountItem.id, pm),
+      0,
+    );
+  }, [monthlyValues, projectionMonths, selectedAccountItem]);
+
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>Planejamento mensal</Text>
@@ -117,42 +127,79 @@ export function MonthlyValueEditor({
           />
 
           <View style={styles.monthValueList}>
-            {projectionMonths.map((projectionMonth) => (
-              <View key={projectionMonth.key} style={styles.monthValueItem}>
-                <View style={styles.monthValueRow}>
-                  <View style={styles.monthValueLabel}>
-                    <Text style={styles.monthValueName}>
-                      {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
-                    </Text>
-                  </View>
-                  <View style={styles.monthValueControlGroup}>
-                    <EditableAmountInput
-                      onChangeValue={(amount) =>
-                        onChangeMonthlyValue(
-                          selectedAccountItem.id,
-                          projectionMonth,
-                          amount,
-                        )
-                      }
-                      style={[styles.input, styles.monthValueInput]}
-                      value={getMonthlyValueAmount(
-                        monthlyValues,
-                        selectedAccountItem.id,
-                        projectionMonth,
-                      )}
-                      valuesHidden={valuesHidden}
-                    />
-                    <Pressable
-                      accessibilityLabel="Ajustar valor"
-                      onPress={() => openAdjustModal(projectionMonth)}
-                      style={styles.adjustToggleButton}
-                    >
-                      <Text style={styles.adjustToggleButtonText}>±</Text>
-                    </Pressable>
+            {projectionMonths.map((projectionMonth, index) => {
+              const amount = getMonthlyValueAmount(
+                monthlyValues,
+                selectedAccountItem.id,
+                projectionMonth,
+              );
+              const isZero = amount === 0;
+              const isCurrent = projectionMonth.isCurrentMonth;
+              const isEven = index % 2 === 0;
+
+              return (
+                <View
+                  key={projectionMonth.key}
+                  style={[
+                    styles.monthValueItem,
+                    isEven ? styles.monthValueItemEven : null,
+                    isCurrent ? styles.monthValueItemCurrent : null,
+                  ]}
+                >
+                  <View style={styles.monthValueRow}>
+                    <View style={styles.monthValueLabel}>
+                      <Text
+                        style={[
+                          styles.monthValueName,
+                          isCurrent ? styles.monthValueNameCurrent : null,
+                        ]}
+                      >
+                        {formatMonthLabel(projectionMonth.year, projectionMonth.month)}
+                      </Text>
+                      {isCurrent ? (
+                        <Text style={styles.currentMonthBadge}>Atual</Text>
+                      ) : null}
+                    </View>
+                    <View style={styles.monthValueControlGroup}>
+                      <EditableAmountInput
+                        onChangeValue={(value) =>
+                          onChangeMonthlyValue(
+                            selectedAccountItem.id,
+                            projectionMonth,
+                            value,
+                          )
+                        }
+                        style={[
+                          styles.input,
+                          styles.monthValueInput,
+                          isZero ? styles.monthValueInputZero : null,
+                        ]}
+                        value={amount}
+                        valuesHidden={valuesHidden}
+                      />
+                      <Pressable
+                        accessibilityLabel="Ajustar valor"
+                        onPress={() => openAdjustModal(projectionMonth)}
+                        style={styles.adjustToggleButton}
+                      >
+                        <Ionicons
+                          color={colors.textSecondary}
+                          name="calculator-outline"
+                          size={18}
+                        />
+                      </Pressable>
+                    </View>
                   </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
+          </View>
+
+          <View style={styles.annualTotalRow}>
+            <Text style={styles.annualTotalLabel}>Total do ano</Text>
+            <Text style={styles.annualTotalValue}>
+              {maskCurrency(annualTotal, valuesHidden)}
+            </Text>
           </View>
 
           <Modal
@@ -424,13 +471,22 @@ const styles = StyleSheet.create({
     ...typography.sectionTitle,
   },
   monthValueList: {
-    gap: 8,
-    marginTop: 10,
+    borderColor: colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: 'hidden',
   },
   monthValueItem: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    paddingTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  monthValueItemEven: {
+    backgroundColor: colors.surfaceMuted,
+  },
+  monthValueItemCurrent: {
+    backgroundColor: colors.surfaceRaised,
+    borderLeftColor: colors.accent,
+    borderLeftWidth: 3,
   },
   monthValueRow: {
     alignItems: 'center',
@@ -440,12 +496,22 @@ const styles = StyleSheet.create({
   },
   monthValueLabel: {
     flex: 1,
+    gap: 2,
     minWidth: 92,
   },
   monthValueName: {
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.body,
+  },
+  monthValueNameCurrent: {
+    color: colors.accent,
+  },
+  currentMonthBadge: {
+    color: colors.accent,
+    letterSpacing: 0,
+    textTransform: 'uppercase',
+    ...typography.label,
   },
   monthValueControlGroup: {
     alignItems: 'center',
@@ -468,6 +534,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: 106,
   },
+  monthValueInputZero: {
+    color: colors.textSecondary,
+  },
   adjustToggleButton: {
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
@@ -478,10 +547,26 @@ const styles = StyleSheet.create({
     minHeight: 44,
     width: 44,
   },
-  adjustToggleButtonText: {
+  annualTotalRow: {
+    alignItems: 'center',
+    borderColor: colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  annualTotalLabel: {
     color: colors.textSecondary,
     letterSpacing: 0,
-    ...typography.button,
+    textTransform: 'uppercase',
+    ...typography.label,
+  },
+  annualTotalValue: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.amountSmall,
   },
   modalOverlay: {
     alignItems: 'center',
