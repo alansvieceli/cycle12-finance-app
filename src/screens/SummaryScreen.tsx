@@ -147,6 +147,20 @@ export function SummaryScreen({
     ? calculateAvailableIncome(financeState.settings, currentProjectionMonth)
     : 0;
 
+  const daysUntilNextDue = (() => {
+    if (!nextDueAccount?.dueDay || !currentProjectionMonth) return null;
+    const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dueDate = new Date(
+      currentProjectionMonth.year,
+      currentProjectionMonth.month - 1,
+      nextDueAccount.dueDay,
+    );
+    return Math.round(
+      (dueDate.getTime() - todayMidnight.getTime()) / (1000 * 60 * 60 * 24),
+    );
+  })();
+
   return (
     <>
       {currentProjectionMonth ? (
@@ -304,16 +318,42 @@ export function SummaryScreen({
                           .join(' - ')
                       : undefined
                   }
+                  subvalue={
+                    daysUntilNextDue === null
+                      ? undefined
+                      : daysUntilNextDue === 0
+                        ? 'hoje'
+                        : daysUntilNextDue < 0
+                          ? `${Math.abs(daysUntilNextDue)}d atrás`
+                          : `em ${daysUntilNextDue}d`
+                  }
                 />
               </View>
 
               <Pressable onPress={onOpenPayments} style={styles.paymentShortcut}>
-                <View>
+                <View style={styles.paymentShortcutLeft}>
                   <Text style={styles.paymentShortcutTitle}>Pagamentos do mês</Text>
                   <Text style={styles.paymentShortcutHint}>
                     {currentMonthPendingAccounts.length} pendentes de{' '}
                     {currentMonthPayableAccounts.length} no total
                   </Text>
+                  {currentMonthPayableAccounts.length > 0 ? (
+                    <View style={styles.paymentProgressTrack}>
+                      <View
+                        style={[
+                          styles.paymentProgressFill,
+                          {
+                            width: `${
+                              ((currentMonthPayableAccounts.length -
+                                currentMonthPendingAccounts.length) /
+                                currentMonthPayableAccounts.length) *
+                              100
+                            }%`,
+                          },
+                        ]}
+                      />
+                    </View>
+                  ) : null}
                 </View>
                 <View style={styles.paymentShortcutButton}>
                   <Text style={styles.paymentShortcutButtonText}>Detalhes</Text>
@@ -479,17 +519,24 @@ function KpiCard({
   color,
   detail,
   label,
+  subvalue,
   value,
 }: {
   color?: string;
   detail?: string;
   label: string;
+  subvalue?: string;
   value: string;
 }) {
   return (
     <View style={styles.kpiCard}>
       <Text style={styles.kpiLabel}>{label}</Text>
-      <Text style={[styles.kpiValue, color ? { color } : null]}>{value}</Text>
+      <View style={styles.kpiValueRow}>
+        <Text style={[styles.kpiValue, color ? { color } : null]}>{value}</Text>
+        {subvalue ? (
+          <Text style={[styles.kpiSubvalue, color ? { color } : null]}>{subvalue}</Text>
+        ) : null}
+      </View>
       {detail ? (
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.kpiDetail}>
           {detail}
@@ -737,11 +784,22 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     ...typography.label,
   },
+  kpiValueRow: {
+    alignItems: 'baseline',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginTop: 8,
+  },
   kpiValue: {
     color: colors.textPrimary,
     letterSpacing: 0,
-    marginTop: 8,
     ...typography.amountMedium,
+  },
+  kpiSubvalue: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.caption,
   },
   kpiDetail: {
     color: colors.textSecondary,
@@ -760,6 +818,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     minHeight: 92,
     padding: 18,
+  },
+  paymentShortcutLeft: {
+    flex: 1,
+    gap: 6,
+  },
+  paymentProgressTrack: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 999,
+    height: 6,
+    overflow: 'hidden',
+  },
+  paymentProgressFill: {
+    backgroundColor: colors.positive,
+    borderRadius: 999,
+    height: '100%',
   },
   paymentShortcutTitle: {
     color: colors.textPrimary,
