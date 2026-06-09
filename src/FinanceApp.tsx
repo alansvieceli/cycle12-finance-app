@@ -84,6 +84,7 @@ export function FinanceApp() {
           <CurrentMonthPaymentChecklist
             accountItems={finance.financeState.accountItems}
             categories={finance.financeState.categories}
+            initialFilter="pending"
             monthlyValues={finance.financeState.monthlyValues}
             onAdjustMonthlyValue={finance.actions.adjustMonthlyValue}
             onClose={() => setIsPaymentViewOpen(false)}

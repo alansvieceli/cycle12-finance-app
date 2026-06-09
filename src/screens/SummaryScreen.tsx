@@ -406,7 +406,9 @@ export function SummaryScreen({
                       }
                       monthlyTotalExpenses={monthlyTotalExpenses}
                       onOpenDetails={() =>
-                        setSelectedDetailsMonthKey(projectionMonth.key)
+                        setSelectedDetailsMonthKey((prev) =>
+                          prev === projectionMonth.key ? null : projectionMonth.key,
+                        )
                       }
                       projectionMonth={projectionMonth}
                       salaryCommitmentPercentage={salaryCommitmentPercentage}
@@ -587,8 +589,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     letterSpacing: 0,
-    minHeight: 44,
+    minHeight: 38,
     paddingHorizontal: 12,
+    paddingVertical: 6,
     ...typography.input,
   },
   modalActions: {

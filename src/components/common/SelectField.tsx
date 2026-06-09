@@ -61,7 +61,7 @@ export function SelectField({
             </View>
           )}
         </View>
-        <Text style={styles.chevron}>⌄</Text>
+        <Text style={styles.chevron}>▾</Text>
       </Pressable>
 
       <Modal
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
   },
   chevron: {
     color: colors.textSecondary,
-    fontSize: 18,
-    lineHeight: 20,
+    fontSize: 22,
+    lineHeight: 26,
     marginLeft: 8,
   },
   overlay: {

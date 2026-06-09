@@ -36,6 +36,7 @@ function formatPaymentMonthLabel(year: number, month: number) {
 type CurrentMonthPaymentChecklistProps = {
   accountItems: AccountItem[];
   categories: Category[];
+  initialFilter?: PaymentStatusFilter;
   monthlyValues: MonthlyValue[];
   onAdjustMonthlyValue: (
     accountItemId: string,
@@ -63,14 +64,15 @@ type CurrentMonthPaymentChecklistProps = {
 type PaymentStatusFilter = 'all' | 'pending' | 'paid';
 
 const paymentStatusFilters: { id: PaymentStatusFilter; label: string }[] = [
-  { id: 'all', label: 'Todos' },
   { id: 'pending', label: 'Pendentes' },
   { id: 'paid', label: 'Pagos' },
+  { id: 'all', label: 'Todos' },
 ];
 
 export function CurrentMonthPaymentChecklist({
   accountItems,
   categories,
+  initialFilter = 'all',
   monthlyValues,
   onAdjustMonthlyValue,
   onClose,
@@ -80,7 +82,7 @@ export function CurrentMonthPaymentChecklist({
   projectionMonth,
   valuesHidden,
 }: CurrentMonthPaymentChecklistProps) {
-  const [activeFilter, setActiveFilter] = useState<PaymentStatusFilter>('all');
+  const [activeFilter, setActiveFilter] = useState<PaymentStatusFilter>(initialFilter);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newCategoryId, setNewCategoryId] = useState('');
@@ -239,6 +241,8 @@ export function CurrentMonthPaymentChecklist({
               style={[styles.filterButton, isActive ? styles.filterButtonActive : null]}
             >
               <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
                 style={[
                   styles.filterButtonText,
                   isActive ? styles.filterButtonTextActive : null,
@@ -599,23 +603,26 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+    gap: 10,
     marginTop: 14,
   },
   filterButton: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceRaised,
-    borderRadius: 999,
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: 16,
+    borderWidth: 1,
+    flex: 1,
     justifyContent: 'center',
     minHeight: 44,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
   },
   filterButtonActive: {
     backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   filterButtonText: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.button,
   },
@@ -809,8 +816,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     letterSpacing: 0,
-    minHeight: 44,
+    minHeight: 38,
     paddingHorizontal: 12,
+    paddingVertical: 6,
     ...typography.input,
   },
   modalFieldLabel: {

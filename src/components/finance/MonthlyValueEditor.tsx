@@ -415,6 +415,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 18,
     borderWidth: 1,
+    gap: 14,
     padding: 16,
   },
   sectionTitle: {
@@ -458,8 +459,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: colors.textPrimary,
     letterSpacing: 0,
-    minHeight: 44,
+    minHeight: 38,
     paddingHorizontal: 12,
+    paddingVertical: 6,
     ...typography.input,
   },
   monthValueInput: {
