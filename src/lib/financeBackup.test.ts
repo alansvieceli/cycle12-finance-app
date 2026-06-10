@@ -7,53 +7,10 @@ import {
   parseAndValidateBackupContent,
   serializeBackupEnvelope,
 } from './financeBackup';
+import { buildSampleFinanceState } from './financeStateFixtures';
 import { FinanceState, MonthNumber } from '../types/finance';
 
-const sampleState: FinanceState = {
-  accountItems: [
-    {
-      categoryId: 'category-fixed',
-      dueDay: 10,
-      id: 'account-rent',
-      name: 'Aluguel',
-      sortOrder: 0,
-    },
-  ],
-  categories: [
-    {
-      id: 'category-fixed',
-      name: 'Fixos',
-      propagation: 'zero',
-      sortOrder: 0,
-    },
-  ],
-  monthHistory: [],
-  monthlyValues: [
-    {
-      accountItemId: 'account-rent',
-      amount: 1200,
-      month: 6,
-      year: 2026,
-    },
-  ],
-  paymentStatuses: [
-    {
-      accountItemId: 'account-rent',
-      isPaid: true,
-      month: 6,
-      year: 2026,
-    },
-  ],
-  settings: {
-    commitmentDangerThreshold: 80,
-    commitmentWarningThreshold: 60,
-    currentMonthExtraBalance: 250,
-    monthlySalary: 5000,
-    summaryVisibleMonthCount: 12,
-    windowStartMonth: 6,
-    windowStartYear: 2026,
-  },
-};
+const sampleState = buildSampleFinanceState();
 
 describe('financeBackup', () => {
   it('creates and validates a backup envelope', async () => {
@@ -187,6 +144,15 @@ const validData = {
     windowStartYear: 2026,
   },
 };
+
+function buildDataWithAccount(overrides: Record<string, unknown>) {
+  return {
+    ...validData,
+    categories: [{ id: 'c1', name: 'Cat', sortOrder: 0, propagation: 'zero' }],
+    accountItems: [{ id: 'a1', categoryId: 'c1', name: 'A', dueDay: 5, sortOrder: 0 }],
+    ...overrides,
+  };
+}
 
 describe('assertBackupEnvelope', () => {
   it('rejects a non-object top-level value', async () => {
@@ -436,14 +402,7 @@ describe('validateFinanceState — field errors', () => {
   });
 
   it('rejects non-record monthly value entry', async () => {
-    const dataWithAccount = {
-      ...validData,
-      categories: [{ id: 'c1', name: 'Cat', sortOrder: 0, propagation: 'zero' }],
-      accountItems: [
-        { id: 'a1', categoryId: 'c1', name: 'A', dueDay: 5, sortOrder: 0 },
-      ],
-      monthlyValues: ['bad'],
-    };
+    const dataWithAccount = buildDataWithAccount({ monthlyValues: ['bad'] });
     await expect(
       parseAndValidateBackupContent(buildEnvelopeJson(dataWithAccount), testHash),
     ).rejects.toThrow('Valor mensal do backup inválido');
@@ -469,14 +428,7 @@ describe('validateFinanceState — field errors', () => {
   });
 
   it('rejects non-record payment status entry', async () => {
-    const dataWithAccount = {
-      ...validData,
-      categories: [{ id: 'c1', name: 'Cat', sortOrder: 0, propagation: 'zero' }],
-      accountItems: [
-        { id: 'a1', categoryId: 'c1', name: 'A', dueDay: 5, sortOrder: 0 },
-      ],
-      paymentStatuses: ['bad'],
-    };
+    const dataWithAccount = buildDataWithAccount({ paymentStatuses: ['bad'] });
     await expect(
       parseAndValidateBackupContent(buildEnvelopeJson(dataWithAccount), testHash),
     ).rejects.toThrow('Pagamento do backup inválido');
@@ -495,14 +447,9 @@ describe('validateFinanceState — field errors', () => {
   });
 
   it('rejects payment status with non-boolean isPaid', async () => {
-    const dataWithAccount = {
-      ...validData,
-      categories: [{ id: 'c1', name: 'Cat', sortOrder: 0, propagation: 'zero' }],
-      accountItems: [
-        { id: 'a1', categoryId: 'c1', name: 'A', dueDay: 5, sortOrder: 0 },
-      ],
+    const dataWithAccount = buildDataWithAccount({
       paymentStatuses: [{ accountItemId: 'a1', isPaid: 'yes', month: 6, year: 2026 }],
-    };
+    });
     await expect(
       parseAndValidateBackupContent(buildEnvelopeJson(dataWithAccount), testHash),
     ).rejects.toThrow('Status de pagamento inválido');

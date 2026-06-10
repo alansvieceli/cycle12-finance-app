@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CommitmentChartPoint } from '../../lib/chartData';
 import { percentageFormatter } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
+import { panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 
 type MonthlyCommitmentListProps = {
@@ -66,18 +67,7 @@ export function MonthlyCommitmentList({
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
-  },
+  ...panelStyles,
   list: {
     gap: 10,
     marginTop: 14,
@@ -112,10 +102,5 @@ const styles = StyleSheet.create({
     minWidth: 44,
     textAlign: 'right',
     ...typography.bodySmall,
-  },
-  emptyText: {
-    color: colors.textSecondary,
-    marginTop: 10,
-    ...typography.body,
   },
 });

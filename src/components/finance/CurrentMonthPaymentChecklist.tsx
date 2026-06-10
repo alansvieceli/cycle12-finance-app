@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getCategoryColor } from '../../lib/categoryColors';
@@ -11,12 +11,10 @@ import {
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
 import { parseDueDay } from '../../lib/inputParsers';
-import {
-  calculateAdjustedMonthlyValue,
-  MonthlyValueAdjustmentOperation,
-} from '../../lib/monthlyValueAdjustments';
+import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItemsByDueDay, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { modalFormStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 import {
   AccountItem,
@@ -26,7 +24,10 @@ import {
 } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 import { EditableAmountInput } from '../common/EditableAmountInput';
+import { ModalShell } from '../common/ModalShell';
 import { SelectField } from '../common/SelectField';
+import { AdjustmentPanel, adjustmentModeColor } from './AdjustmentPanel';
+import { SummaryValue } from './SummaryValue';
 
 const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', { month: 'short' });
 
@@ -180,7 +181,7 @@ export function CurrentMonthPaymentChecklist({
 
     return true;
   });
-  const activeColor = adjustmentMode === 'add' ? colors.accent : colors.negative;
+  const activeColor = adjustmentModeColor(adjustmentMode);
 
   return (
     <View style={styles.panel}>
@@ -325,87 +326,16 @@ export function CurrentMonthPaymentChecklist({
                 {/* Inline adjustment panel */}
                 {isExpanded ? (
                   <View style={styles.adjustPanel}>
-                    {/* +/− field row */}
-                    <View style={[styles.adjustFieldRow, { borderColor: activeColor }]}>
-                      <Pressable
-                        onPress={() => switchAdjustmentMode('add')}
-                        style={[
-                          styles.adjustModeButton,
-                          adjustmentMode === 'add'
-                            ? { backgroundColor: colors.accent }
-                            : styles.adjustModeButtonInactive,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.adjustModeButtonText,
-                            adjustmentMode === 'add'
-                              ? { color: colors.accentText }
-                              : { color: colors.textSecondary },
-                          ]}
-                        >
-                          +
-                        </Text>
-                      </Pressable>
-
-                      <EditableAmountInput
-                        autoFocus
-                        immediate
-                        onChangeValue={setAdjustmentAmount}
-                        style={styles.adjustInput}
-                        value={adjustmentAmount}
-                      />
-
-                      <Pressable
-                        onPress={() => switchAdjustmentMode('subtract')}
-                        style={[
-                          styles.adjustModeButton,
-                          adjustmentMode === 'subtract'
-                            ? { backgroundColor: colors.negative }
-                            : styles.adjustModeButtonInactive,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.adjustModeButtonText,
-                            adjustmentMode === 'subtract'
-                              ? { color: colors.accentText }
-                              : { color: colors.textSecondary },
-                          ]}
-                        >
-                          −
-                        </Text>
-                      </Pressable>
-                    </View>
-
-                    {/* Confirm and cancel buttons */}
-                    <View style={styles.adjustActions}>
-                      <Pressable
-                        onPress={collapseAdjustPanel}
-                        style={styles.adjustCancelButton}
-                      >
-                        <Text style={styles.adjustCancelButtonText}>Cancelar</Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={() => confirmAdjustment(accountItem.id)}
-                        style={[
-                          styles.adjustConfirmButton,
-                          { backgroundColor: activeColor },
-                        ]}
-                      >
-                        <Text style={styles.adjustConfirmText}>Novo total</Text>
-                        <Text style={styles.adjustConfirmText}>
-                          {maskCurrency(
-                            calculateAdjustedMonthlyValue(
-                              amount,
-                              adjustmentAmount,
-                              adjustmentMode,
-                            ),
-                            valuesHidden,
-                          )}
-                        </Text>
-                      </Pressable>
-                    </View>
+                    <AdjustmentPanel
+                      adjustmentAmount={adjustmentAmount}
+                      adjustmentMode={adjustmentMode}
+                      currentAmount={amount}
+                      onCancel={collapseAdjustPanel}
+                      onChangeAmount={setAdjustmentAmount}
+                      onConfirm={() => confirmAdjustment(accountItem.id)}
+                      onSwitchMode={switchAdjustmentMode}
+                      valuesHidden={valuesHidden}
+                    />
                   </View>
                 ) : null}
               </View>
@@ -416,91 +346,65 @@ export function CurrentMonthPaymentChecklist({
         <Text style={styles.emptyText}>{getEmptyText(activeFilter)}</Text>
       )}
 
-      <Modal
-        animationType="fade"
+      <ModalShell
         onRequestClose={closeAddModal}
-        transparent
+        title={`Nova conta — ${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)}`}
         visible={isAddModalOpen}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>
-              {`Nova conta — ${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)}`}
-            </Text>
+        <TextInput
+          autoFocus
+          onChangeText={setNewName}
+          placeholder="Nome da conta..."
+          placeholderTextColor={colors.textSecondary}
+          style={styles.modalInput}
+          value={newName}
+        />
 
+        <SelectField
+          fieldLabel="Categoria"
+          onChange={setNewCategoryId}
+          options={sortCategories(categories).map((category) => ({
+            id: category.id,
+            label: category.name,
+            color: getCategoryColor(category.id, categories),
+          }))}
+          value={newCategoryId}
+        />
+
+        <View style={styles.modalRow}>
+          <View style={styles.modalFieldDueDay}>
+            <Text style={styles.modalFieldLabel}>Dia de venc.</Text>
             <TextInput
-              autoFocus
-              onChangeText={setNewName}
-              placeholder="Nome da conta..."
+              keyboardType="number-pad"
+              onChangeText={setNewDueDay}
+              placeholder="1"
               placeholderTextColor={colors.textSecondary}
               style={styles.modalInput}
-              value={newName}
+              value={newDueDay}
             />
-
-            <SelectField
-              fieldLabel="Categoria"
-              onChange={setNewCategoryId}
-              options={sortCategories(categories).map((category) => ({
-                id: category.id,
-                label: category.name,
-                color: getCategoryColor(category.id, categories),
-              }))}
-              value={newCategoryId}
+          </View>
+          <View style={styles.modalFieldValue}>
+            <Text style={styles.modalFieldLabel}>
+              {`Valor (${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)})`}
+            </Text>
+            <EditableAmountInput
+              immediate
+              onChangeValue={setNewAmount}
+              style={styles.modalInput}
+              value={newAmount}
             />
-
-            <View style={styles.modalRow}>
-              <View style={styles.modalFieldDueDay}>
-                <Text style={styles.modalFieldLabel}>Dia de venc.</Text>
-                <TextInput
-                  keyboardType="number-pad"
-                  onChangeText={setNewDueDay}
-                  placeholder="1"
-                  placeholderTextColor={colors.textSecondary}
-                  style={styles.modalInput}
-                  value={newDueDay}
-                />
-              </View>
-              <View style={styles.modalFieldValue}>
-                <Text style={styles.modalFieldLabel}>
-                  {`Valor (${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)})`}
-                </Text>
-                <EditableAmountInput
-                  immediate
-                  onChangeValue={setNewAmount}
-                  style={styles.modalInput}
-                  value={newAmount}
-                />
-              </View>
-            </View>
-
-            <View style={styles.modalActions}>
-              <Pressable onPress={closeAddModal} style={styles.modalCancelButton}>
-                <Text style={styles.modalCancelButtonText}>Cancelar</Text>
-              </Pressable>
-              <Pressable onPress={saveNewAccount} style={styles.modalSaveButton}>
-                <Text style={styles.modalSaveButtonText}>Salvar</Text>
-              </Pressable>
-            </View>
           </View>
         </View>
-      </Modal>
-    </View>
-  );
-}
 
-function SummaryValue({
-  color,
-  label,
-  value,
-}: {
-  color?: string;
-  label: string;
-  value: string;
-}) {
-  return (
-    <View style={styles.summaryValue}>
-      <Text style={styles.summaryLabel}>{label}</Text>
-      <Text style={[styles.summaryAmount, color ? { color } : null]}>{value}</Text>
+        <View style={styles.modalActions}>
+          <Pressable onPress={closeAddModal} style={styles.modalCancelButton}>
+            <Text style={styles.modalCancelButtonText}>Cancelar</Text>
+          </Pressable>
+          <Pressable onPress={saveNewAccount} style={styles.modalSaveButton}>
+            <Text style={styles.modalSaveButtonText}>Salvar</Text>
+          </Pressable>
+        </View>
+      </ModalShell>
     </View>
   );
 }
@@ -522,6 +426,11 @@ function getEmptyText(activeFilter: PaymentStatusFilter) {
 }
 
 const styles = StyleSheet.create({
+  modalInput: modalFormStyles.input,
+  modalActions: modalFormStyles.actions,
+  modalCancelButton: modalFormStyles.cancelButton,
+  modalCancelButtonText: modalFormStyles.cancelButtonText,
+  modalSaveButtonText: modalFormStyles.confirmButtonText,
   panel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
@@ -584,25 +493,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginTop: 14,
-  },
-  summaryValue: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 16,
-    flex: 1,
-    minHeight: 64,
-    padding: 12,
-  },
-  summaryLabel: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    textTransform: 'uppercase',
-    ...typography.label,
-  },
-  summaryAmount: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    marginTop: 8,
-    ...typography.cardTitle,
   },
   filterRow: {
     flexDirection: 'row',
@@ -668,14 +558,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.positive,
     borderColor: colors.positive,
   },
-  checkboxText: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
-  },
-  checkboxTextPaid: {
-    color: colors.accentText,
-  },
   paymentInfo: {
     flex: 1,
   },
@@ -710,119 +592,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 30,
   },
-  adjustToggleButtonText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
   adjustPanel: {
     borderTopColor: colors.border,
     borderTopWidth: 1,
     gap: 8,
     padding: 10,
   },
-  adjustFieldRow: {
-    alignItems: 'center',
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  adjustModeButton: {
-    alignItems: 'center',
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
-  },
-  adjustModeButtonInactive: {
-    backgroundColor: colors.surfaceMuted,
-  },
-  adjustModeButtonText: {
-    ...typography.button,
-    letterSpacing: 0,
-  },
-  adjustInput: {
-    color: colors.textPrimary,
-    flex: 1,
-    letterSpacing: 0,
-    paddingHorizontal: 12,
-    textAlign: 'center',
-    ...typography.input,
-  },
-  adjustActions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  adjustCancelButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 12,
-  },
-  adjustCancelButtonText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  adjustConfirmButton: {
-    alignItems: 'center',
-    borderRadius: 12,
-    flex: 2,
-    flexDirection: 'row',
-    gap: 6,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 12,
-  },
-  adjustConfirmText: {
-    color: colors.accentText,
-    letterSpacing: 0,
-    ...typography.button,
-  },
   emptyText: {
     color: colors.textSecondary,
     marginTop: 12,
     ...typography.body,
-  },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 12,
-    maxWidth: 360,
-    padding: 16,
-    width: '100%',
-  },
-  modalTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
-  },
-  modalInput: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    minHeight: 38,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    ...typography.input,
   },
   modalFieldLabel: {
     color: colors.textSecondary,
@@ -840,39 +619,8 @@ const styles = StyleSheet.create({
   modalFieldValue: {
     flex: 2,
   },
-  modalActions: {
-    flexDirection: 'row',
-    gap: 8,
-    justifyContent: 'flex-end',
-  },
-  modalCancelButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    justifyContent: 'center',
-    minHeight: 42,
-    minWidth: 96,
-    paddingHorizontal: 12,
-  },
-  modalCancelButtonText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
   modalSaveButton: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: 12,
-    justifyContent: 'center',
-    minHeight: 42,
+    ...modalFormStyles.confirmButton,
     minWidth: 96,
-    paddingHorizontal: 12,
-  },
-  modalSaveButtonText: {
-    color: colors.accentText,
-    letterSpacing: 0,
-    ...typography.button,
   },
 });

@@ -13,9 +13,11 @@ import {
 import { getCategoryColor } from '../../lib/categoryColors';
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { editorStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 import { AccountItem, Category } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
+import { ModalShell } from '../common/ModalShell';
 
 type AccountEditorProps = {
   accountItems: AccountItem[];
@@ -325,35 +327,35 @@ function DueDayModal({
   visible: boolean;
 }) {
   return (
-    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalCard}>
-          <Text style={styles.modalTitle}>Dia do vencimento</Text>
-          <View style={styles.dayGrid}>
-            {ALL_DAYS.map((day) => {
-              const isSelected = String(day) === currentValue;
-              return (
-                <Pressable
-                  key={day}
-                  onPress={() => onSelectDay(String(day))}
-                  style={[styles.dayButton, isSelected && styles.dayButtonSelected]}
-                >
-                  <Text
-                    style={[
-                      styles.dayButtonText,
-                      isSelected && styles.dayButtonTextSelected,
-                    ]}
-                  >
-                    {day}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-          <ActionButton label="Cancelar" onPress={onClose} />
-        </View>
+    <ModalShell
+      cardStyle={styles.dueDayModalCard}
+      onRequestClose={onClose}
+      title="Dia do vencimento"
+      visible={visible}
+    >
+      <View style={styles.dayGrid}>
+        {ALL_DAYS.map((day) => {
+          const isSelected = String(day) === currentValue;
+          return (
+            <Pressable
+              key={day}
+              onPress={() => onSelectDay(String(day))}
+              style={[styles.dayButton, isSelected && styles.dayButtonSelected]}
+            >
+              <Text
+                style={[
+                  styles.dayButtonText,
+                  isSelected && styles.dayButtonTextSelected,
+                ]}
+              >
+                {day}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
-    </Modal>
+      <ActionButton label="Cancelar" onPress={onClose} />
+    </ModalShell>
   );
 }
 
@@ -362,50 +364,14 @@ function getCategoryName(categories: Category[], categoryId: string) {
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
+  ...panelStyles,
+  ...editorStyles,
   panelHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: 10,
     justifyContent: 'space-between',
     marginBottom: 8,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
-  },
-  emptyText: {
-    color: colors.textSecondary,
-    marginTop: 10,
-    ...typography.body,
-  },
-  listSection: {
-    marginBottom: 10,
-    marginTop: 12,
-  },
-  listItem: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-  },
-  compactRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-    minHeight: 44,
-    paddingVertical: 8,
-  },
-  itemName: {
-    color: colors.textPrimary,
-    flex: 1,
-    letterSpacing: 0,
-    ...typography.body,
   },
   badgesRow: {
     alignItems: 'center',
@@ -438,28 +404,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  expandedContent: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    gap: 8,
-    paddingBottom: 10,
-    paddingTop: 10,
-  },
   editMetaRow: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: 8,
-  },
-  input: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    minHeight: 44,
-    paddingHorizontal: 12,
-    ...typography.inputCompact,
   },
   nameInput: {
     flex: 1,
@@ -488,27 +436,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.button,
   },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 12,
+  dueDayModalCard: {
     maxWidth: 380,
-    padding: 16,
-    width: '100%',
-  },
-  modalTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
   },
   dayGrid: {
     flexDirection: 'row',
@@ -555,48 +484,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     ...typography.button,
   },
-  createToggle: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    minHeight: 44,
-    paddingHorizontal: 14,
-  },
-  createToggleOpen: {
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomWidth: 0,
-  },
-  createToggleText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.body,
-  },
-  createToggleIcon: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
-  },
-  createForm: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderWidth: 1,
-    gap: 8,
-    padding: 12,
-  },
   createRow: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: 8,
-  },
-  createInput: {
-    flex: 1,
   },
   categoryPickerButton: {
     alignItems: 'center',

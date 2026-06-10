@@ -4,6 +4,7 @@ import { ActionButton } from '../common/ActionButton';
 import { CategoryMonthTotal, ProjectionMonth } from '../../lib/financeCalculations';
 import { formatMonthLabel, maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
+import { panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 import { CategoryTotalsList } from './CategoryTotalsList';
 
@@ -51,13 +52,7 @@ export function MonthDetailsPanel({
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
+  ...panelStyles,
   panelHeader: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -66,11 +61,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
   },
   sectionHint: {
     color: colors.textSecondary,

@@ -176,9 +176,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.caption,
   },
-  chevron: {
-    marginLeft: 8,
-  },
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.72)',
     flex: 1,
@@ -255,8 +252,5 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.caption,
-  },
-  check: {
-    marginLeft: 8,
   },
 });

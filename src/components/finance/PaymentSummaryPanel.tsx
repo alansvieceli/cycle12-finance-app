@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
+import { panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 
 type PaymentSummaryPanelProps = {
@@ -65,18 +66,7 @@ export function PaymentSummaryPanel({
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
-  },
+  ...panelStyles,
   kpiRow: {
     flexDirection: 'row',
     gap: 10,
@@ -127,10 +117,5 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.bodySmall,
-  },
-  emptyText: {
-    color: colors.textSecondary,
-    marginTop: 10,
-    ...typography.body,
   },
 });

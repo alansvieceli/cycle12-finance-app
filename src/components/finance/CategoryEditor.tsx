@@ -1,20 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ActionButton } from '../common/ActionButton';
+import { ModalShell } from '../common/ModalShell';
 import { getCategoryColor, suggestCategoryColor } from '../../lib/categoryColors';
 import { Category, CategoryPropagation } from '../../types/finance';
 import { sortCategories } from '../../lib/sorting';
 import { chartPalette, colors } from '../../theme/colors';
+import { editorStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 
 const propagationOptions: { label: string; value: CategoryPropagation }[] = [
@@ -410,26 +404,26 @@ function PropagationModal({
   visible: boolean;
 }) {
   return (
-    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalCard}>
-          <Text style={styles.modalTitle}>Propagação</Text>
-          {propagationOptions.map((option) => (
-            <Pressable
-              key={option.value}
-              onPress={() => onChangeValue(option.value)}
-              style={styles.modalOption}
-            >
-              <Text style={styles.modalOptionTitle}>{option.label}</Text>
-              <Text style={styles.modalOptionDescription}>
-                {getPropagationDescription(option.value)}
-              </Text>
-            </Pressable>
-          ))}
-          <ActionButton label="Cancelar" onPress={onClose} />
-        </View>
-      </View>
-    </Modal>
+    <ModalShell
+      cardStyle={styles.pickerModalCard}
+      onRequestClose={onClose}
+      title="Propagação"
+      visible={visible}
+    >
+      {propagationOptions.map((option) => (
+        <Pressable
+          key={option.value}
+          onPress={() => onChangeValue(option.value)}
+          style={styles.modalOption}
+        >
+          <Text style={styles.modalOptionTitle}>{option.label}</Text>
+          <Text style={styles.modalOptionDescription}>
+            {getPropagationDescription(option.value)}
+          </Text>
+        </Pressable>
+      ))}
+      <ActionButton label="Cancelar" onPress={onClose} />
+    </ModalShell>
   );
 }
 
@@ -484,42 +478,42 @@ function MonthYearModal({
   }, [value, visible]);
 
   return (
-    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalCard}>
-          <Text style={styles.modalTitle}>Encerrar parcelas em</Text>
-          <View style={styles.yearSelector}>
-            <Pressable
-              onPress={() => setSelectedYear((currentYear) => currentYear - 1)}
-              style={styles.yearButton}
-            >
-              <Ionicons color={colors.textPrimary} name="chevron-back" size={20} />
-            </Pressable>
-            <Text style={styles.yearText}>{selectedYear}</Text>
-            <Pressable
-              onPress={() => setSelectedYear((currentYear) => currentYear + 1)}
-              style={styles.yearButton}
-            >
-              <Ionicons color={colors.textPrimary} name="chevron-forward" size={20} />
-            </Pressable>
-          </View>
-          <View style={styles.monthGrid}>
-            {monthOptions.map((monthLabel, index) => (
-              <Pressable
-                key={monthLabel}
-                onPress={() =>
-                  onChangeValue(formatInstallmentDate(selectedYear, index + 1))
-                }
-                style={styles.monthButton}
-              >
-                <Text style={styles.monthButtonText}>{monthLabel}</Text>
-              </Pressable>
-            ))}
-          </View>
-          <ActionButton label="Cancelar" onPress={onClose} />
-        </View>
+    <ModalShell
+      cardStyle={styles.pickerModalCard}
+      onRequestClose={onClose}
+      title="Encerrar parcelas em"
+      visible={visible}
+    >
+      <View style={styles.yearSelector}>
+        <Pressable
+          onPress={() => setSelectedYear((currentYear) => currentYear - 1)}
+          style={styles.yearButton}
+        >
+          <Ionicons color={colors.textPrimary} name="chevron-back" size={20} />
+        </Pressable>
+        <Text style={styles.yearText}>{selectedYear}</Text>
+        <Pressable
+          onPress={() => setSelectedYear((currentYear) => currentYear + 1)}
+          style={styles.yearButton}
+        >
+          <Ionicons color={colors.textPrimary} name="chevron-forward" size={20} />
+        </Pressable>
       </View>
-    </Modal>
+      <View style={styles.monthGrid}>
+        {monthOptions.map((monthLabel, index) => (
+          <Pressable
+            key={monthLabel}
+            onPress={() =>
+              onChangeValue(formatInstallmentDate(selectedYear, index + 1))
+            }
+            style={styles.monthButton}
+          >
+            <Text style={styles.monthButtonText}>{monthLabel}</Text>
+          </Pressable>
+        ))}
+      </View>
+      <ActionButton label="Cancelar" onPress={onClose} />
+    </ModalShell>
   );
 }
 
@@ -605,77 +599,49 @@ function SortOrderModal({
   const options = Array.from({ length: maxOrder }, (_, i) => i + 1);
 
   return (
-    <Modal animationType="fade" onRequestClose={onClose} transparent visible={visible}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalCard}>
-          <Text style={styles.modalTitle}>Posição na lista</Text>
-          <View style={styles.orderGrid}>
-            {options.map((order) => {
-              const isSelected = String(order) === currentValue;
-              return (
-                <Pressable
-                  key={order}
-                  onPress={() => onChangeValue(String(order))}
-                  style={[styles.orderButton, isSelected && styles.orderButtonSelected]}
-                >
-                  <Text
-                    style={[
-                      styles.orderButtonText,
-                      isSelected && styles.orderButtonTextSelected,
-                    ]}
-                  >
-                    {order}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-          <ActionButton label="Cancelar" onPress={onClose} />
-        </View>
+    <ModalShell
+      cardStyle={styles.pickerModalCard}
+      onRequestClose={onClose}
+      title="Posição na lista"
+      visible={visible}
+    >
+      <View style={styles.orderGrid}>
+        {options.map((order) => {
+          const isSelected = String(order) === currentValue;
+          return (
+            <Pressable
+              key={order}
+              onPress={() => onChangeValue(String(order))}
+              style={[styles.orderButton, isSelected && styles.orderButtonSelected]}
+            >
+              <Text
+                style={[
+                  styles.orderButtonText,
+                  isSelected && styles.orderButtonTextSelected,
+                ]}
+              >
+                {order}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
-    </Modal>
+      <ActionButton label="Cancelar" onPress={onClose} />
+    </ModalShell>
   );
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
+  ...panelStyles,
+  ...editorStyles,
   sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
+    ...panelStyles.sectionTitle,
     marginBottom: 8,
-    ...typography.sectionTitle,
-  },
-  listSection: {
-    marginBottom: 10,
-    marginTop: 12,
-  },
-  listItem: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-  },
-  compactRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-    minHeight: 44,
-    paddingVertical: 8,
   },
   categoryDot: {
     borderRadius: 5,
     height: 10,
     width: 10,
-  },
-  itemName: {
-    color: colors.textPrimary,
-    flex: 1,
-    letterSpacing: 0,
-    ...typography.body,
   },
   badgesRow: {
     alignItems: 'center',
@@ -699,18 +665,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.caption,
   },
-  expandChevron: {
-    color: colors.textSecondary,
-    fontSize: 22,
-    lineHeight: 26,
-  },
-  expandedContent: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    gap: 8,
-    paddingBottom: 10,
-    paddingTop: 10,
-  },
   editFieldsRow: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -730,17 +684,6 @@ const styles = StyleSheet.create({
   colorSwatchSelected: {
     borderColor: colors.textPrimary,
     borderWidth: 2.5,
-  },
-  input: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    minHeight: 44,
-    paddingHorizontal: 12,
-    ...typography.inputCompact,
   },
   nameInput: {
     flex: 1,
@@ -776,41 +719,6 @@ const styles = StyleSheet.create({
   },
   orderButtonTextSelected: {
     color: colors.accentText,
-  },
-  createToggle: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    minHeight: 44,
-    paddingHorizontal: 14,
-  },
-  createToggleOpen: {
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomWidth: 0,
-  },
-  createToggleText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.body,
-  },
-  createToggleIcon: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
-  },
-  createForm: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderWidth: 1,
-    gap: 8,
-    padding: 12,
   },
   createRow: {
     alignItems: 'center',
@@ -849,27 +757,9 @@ const styles = StyleSheet.create({
   monthSelectorButton: {
     minWidth: 142,
   },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
+  pickerModalCard: {
     gap: 10,
     maxWidth: 380,
-    padding: 16,
-    width: '100%',
-  },
-  modalTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
   },
   modalOption: {
     backgroundColor: colors.surfaceMuted,
@@ -904,11 +794,6 @@ const styles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     width: 44,
-  },
-  yearButtonText: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.screenTitle,
   },
   yearText: {
     color: colors.textPrimary,

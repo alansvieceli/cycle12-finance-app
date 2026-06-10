@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import {
   Alert,
-  Modal,
   Pressable,
   StyleSheet,
   Switch,
@@ -13,6 +12,7 @@ import {
 
 import { ActionButton } from '../components/common/ActionButton';
 import { CurrencyInput } from '../components/common/CurrencyInput';
+import { ModalShell } from '../components/common/ModalShell';
 import { DataManagementPanel } from '../components/finance/DataManagementPanel';
 import { AppLockState } from '../hooks/useAppLock';
 import { useFinanceState } from '../hooks/useFinanceState';
@@ -219,91 +219,77 @@ export function SettingsScreen({
         />
       </View>
 
-      <Modal
-        animationType="fade"
+      <ModalShell
+        cardStyle={styles.pickerModalCard}
+        closeOnOverlayPress
         onRequestClose={() => setIsMonthCountPickerOpen(false)}
-        transparent
+        title="Meses no Resumo e Gráficos"
         visible={isMonthCountPickerOpen}
       >
-        <Pressable
-          onPress={() => setIsMonthCountPickerOpen(false)}
-          style={styles.modalOverlay}
-        >
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Meses no Resumo e Gráficos</Text>
-            <View style={styles.monthCountGrid}>
-              {MONTH_COUNT_OPTIONS.map((n) => {
-                const isSelected = financeState.settings.summaryVisibleMonthCount === n;
-                return (
-                  <Pressable
-                    key={n}
-                    onPress={() => {
-                      actions.updateSummaryVisibleMonthCount(String(n));
-                      setIsMonthCountPickerOpen(false);
-                    }}
-                    style={[
-                      styles.monthCountOption,
-                      isSelected && styles.monthCountOptionActive,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.monthCountOptionText,
-                        isSelected && styles.monthCountOptionTextActive,
-                      ]}
-                    >
-                      {n}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
-        </Pressable>
-      </Modal>
+        <View style={styles.monthCountGrid}>
+          {MONTH_COUNT_OPTIONS.map((n) => {
+            const isSelected = financeState.settings.summaryVisibleMonthCount === n;
+            return (
+              <Pressable
+                key={n}
+                onPress={() => {
+                  actions.updateSummaryVisibleMonthCount(String(n));
+                  setIsMonthCountPickerOpen(false);
+                }}
+                style={[
+                  styles.monthCountOption,
+                  isSelected && styles.monthCountOptionActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.monthCountOptionText,
+                    isSelected && styles.monthCountOptionTextActive,
+                  ]}
+                >
+                  {n}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ModalShell>
 
-      <Modal
-        animationType="fade"
+      <ModalShell
+        cardStyle={styles.pickerModalCard}
+        closeOnOverlayPress
         onRequestClose={() => setIsSecurityTimeoutPickerOpen(false)}
-        transparent
+        title="Bloquear após"
         visible={isSecurityTimeoutPickerOpen}
       >
-        <Pressable
-          onPress={() => setIsSecurityTimeoutPickerOpen(false)}
-          style={styles.modalOverlay}
-        >
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Bloquear após</Text>
-            <View style={styles.monthCountGrid}>
-              {APP_LOCK_TIMEOUT_OPTIONS.map((timeoutMinutes) => {
-                const isSelected = appLock.timeoutMinutes === timeoutMinutes;
-                return (
-                  <Pressable
-                    key={timeoutMinutes}
-                    onPress={() => {
-                      void appLock.setTimeoutMinutes(timeoutMinutes);
-                      setIsSecurityTimeoutPickerOpen(false);
-                    }}
-                    style={[
-                      styles.monthCountOption,
-                      isSelected && styles.monthCountOptionActive,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.monthCountOptionText,
-                        isSelected && styles.monthCountOptionTextActive,
-                      ]}
-                    >
-                      {timeoutMinutes} min
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
-        </Pressable>
-      </Modal>
+        <View style={styles.monthCountGrid}>
+          {APP_LOCK_TIMEOUT_OPTIONS.map((timeoutMinutes) => {
+            const isSelected = appLock.timeoutMinutes === timeoutMinutes;
+            return (
+              <Pressable
+                key={timeoutMinutes}
+                onPress={() => {
+                  void appLock.setTimeoutMinutes(timeoutMinutes);
+                  setIsSecurityTimeoutPickerOpen(false);
+                }}
+                style={[
+                  styles.monthCountOption,
+                  isSelected && styles.monthCountOptionActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.monthCountOptionText,
+                    isSelected && styles.monthCountOptionTextActive,
+                  ]}
+                >
+                  {timeoutMinutes} min
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ModalShell>
     </View>
   );
 }
@@ -433,27 +419,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 12,
+  pickerModalCard: {
     maxWidth: 320,
-    padding: 16,
-    width: '100%',
-  },
-  modalTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
   },
   monthCountGrid: {
     flexDirection: 'row',

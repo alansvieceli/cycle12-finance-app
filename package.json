@@ -47,6 +47,7 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "typecheck": "tsc --noEmit",
+    "dup": "npx --yes jscpd src --min-tokens 50 --threshold 5",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --runInBand",

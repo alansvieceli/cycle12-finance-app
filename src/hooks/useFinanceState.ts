@@ -147,24 +147,25 @@ export function useFinanceState() {
     }));
   }
 
-  function updateCommitmentWarningThreshold(value: string) {
+  function updateCommitmentThreshold(
+    settingKey: 'commitmentWarningThreshold' | 'commitmentDangerThreshold',
+    value: string,
+  ) {
     const parsed = parseInt(value.replace(/\D/g, ''), 10);
     const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
 
     setFinanceState((currentState) => ({
       ...currentState,
-      settings: { ...currentState.settings, commitmentWarningThreshold: clamped },
+      settings: { ...currentState.settings, [settingKey]: clamped },
     }));
   }
 
-  function updateCommitmentDangerThreshold(value: string) {
-    const parsed = parseInt(value.replace(/\D/g, ''), 10);
-    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+  function updateCommitmentWarningThreshold(value: string) {
+    updateCommitmentThreshold('commitmentWarningThreshold', value);
+  }
 
-    setFinanceState((currentState) => ({
-      ...currentState,
-      settings: { ...currentState.settings, commitmentDangerThreshold: clamped },
-    }));
+  function updateCommitmentDangerThreshold(value: string) {
+    updateCommitmentThreshold('commitmentDangerThreshold', value);
   }
 
   function replaceFinanceState(nextState: FinanceState) {

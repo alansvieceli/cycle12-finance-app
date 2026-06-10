@@ -6,53 +6,10 @@ import {
   saveFinanceState,
 } from './financeStorage';
 import { buildResetFinanceState, normalizeFinanceState } from '../lib/financeBackup';
+import { buildSampleFinanceState } from '../lib/financeStateFixtures';
 import { FinanceState, emptyFinanceState } from '../types/finance';
 
-const sampleState: FinanceState = {
-  accountItems: [
-    {
-      categoryId: 'category-fixed',
-      dueDay: 10,
-      id: 'account-rent',
-      name: 'Aluguel',
-      sortOrder: 0,
-    },
-  ],
-  categories: [
-    {
-      id: 'category-fixed',
-      name: 'Fixos',
-      propagation: 'zero',
-      sortOrder: 0,
-    },
-  ],
-  monthHistory: [],
-  monthlyValues: [
-    {
-      accountItemId: 'account-rent',
-      amount: 1200,
-      month: 6,
-      year: 2026,
-    },
-  ],
-  paymentStatuses: [
-    {
-      accountItemId: 'account-rent',
-      isPaid: true,
-      month: 6,
-      year: 2026,
-    },
-  ],
-  settings: {
-    commitmentDangerThreshold: 80,
-    commitmentWarningThreshold: 60,
-    currentMonthExtraBalance: 250,
-    monthlySalary: 5000,
-    summaryVisibleMonthCount: 6,
-    windowStartMonth: 6,
-    windowStartYear: 2026,
-  },
-};
+const sampleState = buildSampleFinanceState({ summaryVisibleMonthCount: 6 });
 
 describe('financeStorage', () => {
   beforeEach(async () => {

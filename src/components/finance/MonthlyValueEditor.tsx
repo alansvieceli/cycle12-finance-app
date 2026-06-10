@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import { ProjectionMonth } from '../../lib/financeCalculations';
@@ -10,16 +10,16 @@ import {
   maskCurrency,
 } from '../../lib/formatters';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
-import {
-  calculateAdjustedMonthlyValue,
-  MonthlyValueAdjustmentOperation,
-} from '../../lib/monthlyValueAdjustments';
+import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
+import { modalFormStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
 import { AccountItem, Category, MonthNumber, MonthlyValue } from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
+import { ModalShell } from '../common/ModalShell';
 import { SelectField } from '../common/SelectField';
+import { AdjustmentPanel } from './AdjustmentPanel';
 
 const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', {
   month: 'short',
@@ -201,36 +201,31 @@ export function MonthlyValueEditor({
             </Text>
           </View>
 
-          <Modal
-            animationType="fade"
+          <ModalShell
+            cardStyle={styles.adjustModalCard}
             onRequestClose={closeAdjustModal}
-            transparent
             visible={Boolean(activeAdjustmentMonth)}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalCard}>
-                {activeAdjustmentMonth ? (
-                  <AdjustPanel
-                    accountItemId={selectedAccountItem.id}
-                    adjustmentAmount={adjustmentAmount}
-                    adjustmentMode={adjustmentMode}
-                    installmentsInput={installmentsInput}
-                    monthlyValues={monthlyValues}
-                    onCancel={closeAdjustModal}
-                    onConfirm={() => confirmAdjustment(activeAdjustmentMonth)}
-                    onInputChange={setAdjustmentAmount}
-                    onInstallmentsChange={(v) =>
-                      setInstallmentsInput(sanitizeInstallmentsInput(v))
-                    }
-                    onSwitchMode={switchAdjustmentMode}
-                    projectionMonth={activeAdjustmentMonth}
-                    projectionMonths={projectionMonths}
-                    valuesHidden={valuesHidden}
-                  />
-                ) : null}
-              </View>
-            </View>
-          </Modal>
+            {activeAdjustmentMonth ? (
+              <AdjustPanel
+                accountItemId={selectedAccountItem.id}
+                adjustmentAmount={adjustmentAmount}
+                adjustmentMode={adjustmentMode}
+                installmentsInput={installmentsInput}
+                monthlyValues={monthlyValues}
+                onCancel={closeAdjustModal}
+                onConfirm={() => confirmAdjustment(activeAdjustmentMonth)}
+                onInputChange={setAdjustmentAmount}
+                onInstallmentsChange={(v) =>
+                  setInstallmentsInput(sanitizeInstallmentsInput(v))
+                }
+                onSwitchMode={switchAdjustmentMode}
+                projectionMonth={activeAdjustmentMonth}
+                projectionMonths={projectionMonths}
+                valuesHidden={valuesHidden}
+              />
+            ) : null}
+          </ModalShell>
         </>
       ) : (
         <Text style={styles.emptyText}>
@@ -272,7 +267,6 @@ function AdjustPanel({
   projectionMonths,
   valuesHidden,
 }: AdjustPanelProps) {
-  const activeColor = adjustmentMode === 'add' ? colors.accent : colors.negative;
   const currentAmount = getMonthlyValueAmount(
     monthlyValues,
     accountItemId,
@@ -300,104 +294,41 @@ function AdjustPanel({
         {`Ajustar — ${formatMonthLabel(projectionMonth.year, projectionMonth.month)}`}
       </Text>
 
-      <View style={[styles.adjustFieldRow, { borderColor: activeColor }]}>
-        <Pressable
-          onPress={() => onSwitchMode('add')}
-          style={[
-            styles.adjustModeButton,
-            adjustmentMode === 'add'
-              ? { backgroundColor: colors.accent }
-              : styles.adjustModeButtonInactive,
-          ]}
-        >
-          <Text
-            style={[
-              styles.adjustModeButtonText,
-              adjustmentMode === 'add'
-                ? { color: colors.accentText }
-                : { color: colors.textSecondary },
-            ]}
-          >
-            +
-          </Text>
-        </Pressable>
-
-        <EditableAmountInput
-          autoFocus
-          immediate
-          onChangeValue={onInputChange}
-          style={styles.adjustInput}
-          value={adjustmentAmount}
-        />
-
-        <Pressable
-          onPress={() => onSwitchMode('subtract')}
-          style={[
-            styles.adjustModeButton,
-            adjustmentMode === 'subtract'
-              ? { backgroundColor: colors.negative }
-              : styles.adjustModeButtonInactive,
-          ]}
-        >
-          <Text
-            style={[
-              styles.adjustModeButtonText,
-              adjustmentMode === 'subtract'
-                ? { color: colors.accentText }
-                : { color: colors.textSecondary },
-            ]}
-          >
-            −
-          </Text>
-        </Pressable>
-      </View>
-
-      {adjustmentMode === 'add' ? (
-        <>
-          <View style={styles.installmentsRow}>
-            <Text style={styles.installmentsLabel}>Parcelas</Text>
-            <TextInput
-              keyboardType="number-pad"
-              onChangeText={onInstallmentsChange}
-              placeholder="1"
-              placeholderTextColor={colors.textSecondary}
-              style={[styles.input, styles.installmentsInput]}
-              value={installmentsInput}
-            />
-          </View>
-          {shouldShowInstallmentSummary ? (
-            <Text style={styles.installmentSummary}>
-              {formatInstallmentSummary(
-                adjustmentAmount,
-                parsedInstallments,
-                affectedInstallmentMonths,
-              )}
-            </Text>
-          ) : null}
-        </>
-      ) : null}
-
-      <View style={styles.adjustActions}>
-        <Pressable onPress={onCancel} style={styles.adjustCancelButton}>
-          <Text style={styles.adjustCancelButtonText}>Cancelar</Text>
-        </Pressable>
-        <Pressable
-          onPress={onConfirm}
-          style={[styles.adjustConfirmButton, { backgroundColor: activeColor }]}
-        >
-          <Text style={styles.adjustConfirmText}>Novo total</Text>
-          <Text style={styles.adjustConfirmText}>
-            {maskCurrency(
-              calculateAdjustedMonthlyValue(
-                currentAmount,
-                adjustmentAmount,
-                adjustmentMode,
-              ),
-              valuesHidden,
-            )}
-          </Text>
-        </Pressable>
-      </View>
+      <AdjustmentPanel
+        adjustmentAmount={adjustmentAmount}
+        adjustmentMode={adjustmentMode}
+        currentAmount={currentAmount}
+        onCancel={onCancel}
+        onChangeAmount={onInputChange}
+        onConfirm={onConfirm}
+        onSwitchMode={onSwitchMode}
+        valuesHidden={valuesHidden}
+      >
+        {adjustmentMode === 'add' ? (
+          <>
+            <View style={styles.installmentsRow}>
+              <Text style={styles.installmentsLabel}>Parcelas</Text>
+              <TextInput
+                keyboardType="number-pad"
+                onChangeText={onInstallmentsChange}
+                placeholder="1"
+                placeholderTextColor={colors.textSecondary}
+                style={[styles.input, styles.installmentsInput]}
+                value={installmentsInput}
+              />
+            </View>
+            {shouldShowInstallmentSummary ? (
+              <Text style={styles.installmentSummary}>
+                {formatInstallmentSummary(
+                  adjustmentAmount,
+                  parsedInstallments,
+                  affectedInstallmentMonths,
+                )}
+              </Text>
+            ) : null}
+          </>
+        ) : null}
+      </AdjustmentPanel>
     </View>
   );
 }
@@ -454,18 +385,12 @@ function formatInstallmentSummary(
 }
 
 const styles = StyleSheet.create({
+  emptyText: panelStyles.emptyText,
+  input: modalFormStyles.input,
+  sectionTitle: panelStyles.sectionTitle,
   panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
+    ...panelStyles.panel,
     gap: 14,
-    padding: 16,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
   },
   monthValueList: {
     borderColor: colors.border,
@@ -515,18 +440,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
   },
-  input: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    minHeight: 38,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    ...typography.input,
-  },
   monthValueInput: {
     textAlign: 'right',
     width: 106,
@@ -565,20 +478,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.amountSmall,
   },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
-    maxWidth: 360,
-    width: '100%',
+  adjustModalCard: {
+    gap: 0,
+    padding: 0,
   },
   adjustPanelContent: {
     gap: 12,
@@ -588,35 +490,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.cardTitle,
-  },
-  adjustFieldRow: {
-    alignItems: 'center',
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  adjustModeButton: {
-    alignItems: 'center',
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
-  },
-  adjustModeButtonInactive: {
-    backgroundColor: colors.surfaceMuted,
-  },
-  adjustModeButtonText: {
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  adjustInput: {
-    color: colors.textPrimary,
-    flex: 1,
-    letterSpacing: 0,
-    paddingHorizontal: 12,
-    textAlign: 'center',
-    ...typography.input,
   },
   installmentsRow: {
     alignItems: 'center',
@@ -638,45 +511,5 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.bodySmall,
-  },
-  adjustActions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  adjustCancelButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 12,
-  },
-  adjustCancelButtonText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  adjustConfirmButton: {
-    alignItems: 'center',
-    borderRadius: 12,
-    flex: 2,
-    flexDirection: 'row',
-    gap: 6,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 12,
-  },
-  adjustConfirmText: {
-    color: colors.accentText,
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  emptyText: {
-    color: colors.textSecondary,
-    marginTop: 10,
-    ...typography.body,
   },
 });

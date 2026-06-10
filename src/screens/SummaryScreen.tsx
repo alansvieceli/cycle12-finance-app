@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fragment, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { ModalShell } from '../components/common/ModalShell';
 
 import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
@@ -22,6 +24,7 @@ import { EditableAmountInput } from '../components/common/EditableAmountInput';
 import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
+import { modalFormStyles } from '../theme/sharedStyles';
 import { typography } from '../theme/typography';
 import { FinanceState } from '../types/finance';
 
@@ -360,55 +363,47 @@ export function SummaryScreen({
                 </View>
               </Pressable>
 
-              <Modal
-                animationType="fade"
+              <ModalShell
+                closeOnOverlayPress
                 onRequestClose={() => setIsExtraModalOpen(false)}
-                transparent
+                title="Adicionar extra do mês"
                 visible={isExtraModalOpen}
               >
-                <Pressable
-                  onPress={() => setIsExtraModalOpen(false)}
-                  style={styles.modalOverlay}
-                >
-                  <Pressable style={styles.modalCard}>
-                    <Text style={styles.modalTitle}>Adicionar extra do mês</Text>
-                    <EditableAmountInput
-                      autoFocus
-                      immediate
-                      onChangeValue={setExtraAmount}
-                      style={styles.modalInput}
-                      value={extraAmount}
-                    />
-                    <View style={styles.modalActions}>
-                      <Pressable
-                        onPress={() => setIsExtraModalOpen(false)}
-                        style={styles.modalCancelButton}
-                      >
-                        <Text style={styles.modalCancelButtonText}>Cancelar</Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={() => {
-                          if (extraAmount > 0) {
-                            onAddExtra(extraAmount);
-                          }
-                          setIsExtraModalOpen(false);
-                        }}
-                        style={styles.modalConfirmButton}
-                      >
-                        <Text style={styles.modalConfirmButtonText}>
-                          {valuesHidden
-                            ? 'Nova extra ••••'
-                            : `Nova extra ${maskCurrency(
-                                financeState.settings.currentMonthExtraBalance +
-                                  extraAmount,
-                                false,
-                              )}`}
-                        </Text>
-                      </Pressable>
-                    </View>
+                <EditableAmountInput
+                  autoFocus
+                  immediate
+                  onChangeValue={setExtraAmount}
+                  style={styles.modalInput}
+                  value={extraAmount}
+                />
+                <View style={styles.modalActions}>
+                  <Pressable
+                    onPress={() => setIsExtraModalOpen(false)}
+                    style={styles.modalCancelButton}
+                  >
+                    <Text style={styles.modalCancelButtonText}>Cancelar</Text>
                   </Pressable>
-                </Pressable>
-              </Modal>
+                  <Pressable
+                    onPress={() => {
+                      if (extraAmount > 0) {
+                        onAddExtra(extraAmount);
+                      }
+                      setIsExtraModalOpen(false);
+                    }}
+                    style={styles.modalConfirmButton}
+                  >
+                    <Text style={styles.modalConfirmButtonText}>
+                      {valuesHidden
+                        ? 'Nova extra ••••'
+                        : `Nova extra ${maskCurrency(
+                            financeState.settings.currentMonthExtraBalance +
+                              extraAmount,
+                            false,
+                          )}`}
+                    </Text>
+                  </Pressable>
+                </View>
+              </ModalShell>
             </>
           ) : activeView === 'other' ? (
             <>
@@ -544,6 +539,10 @@ function KpiCard({
 }
 
 const styles = StyleSheet.create({
+  modalActions: modalFormStyles.actions,
+  modalCancelButton: modalFormStyles.cancelButton,
+  modalCancelButtonText: modalFormStyles.cancelButtonText,
+  modalConfirmButtonText: modalFormStyles.confirmButtonText,
   heroCard: {
     backgroundColor: colors.background,
     gap: 14,
@@ -603,75 +602,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 32,
   },
-  modalOverlay: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 12,
-    maxWidth: 360,
-    padding: 16,
-    width: '100%',
-  },
-  modalTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.cardTitle,
-  },
   modalInput: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    minHeight: 38,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    ...modalFormStyles.input,
     textAlign: 'center',
-    ...typography.input,
-  },
-  modalActions: {
-    flexDirection: 'row',
-    gap: 8,
-    justifyContent: 'flex-end',
-  },
-  modalCancelButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
-    justifyContent: 'center',
-    minHeight: 42,
-    minWidth: 96,
-    paddingHorizontal: 12,
-  },
-  modalCancelButtonText: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
   },
   modalConfirmButton: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: 12,
+    ...modalFormStyles.confirmButton,
     flex: 1,
-    justifyContent: 'center',
-    minHeight: 42,
-    paddingHorizontal: 12,
-  },
-  modalConfirmButtonText: {
-    color: colors.accentText,
-    letterSpacing: 0,
-    ...typography.button,
   },
   incomeRow: {
     alignItems: 'center',

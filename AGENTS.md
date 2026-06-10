@@ -24,6 +24,7 @@ Always follow:
 
 - `docs/standards/ai-workflow.md`
 - `docs/standards/app-context-policy.md`
+- `docs/standards/code-duplication-policy.md`
 - `docs/standards/readme-policy.md`
 - `docs/standards/spec-completion-policy.md`
 - `docs/standards/testing-policy.md`

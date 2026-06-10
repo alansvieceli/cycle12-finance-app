@@ -9,6 +9,7 @@ import {
 } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
+import { SummaryValue } from './SummaryValue';
 
 type MonthSummaryCardProps = {
   commitmentDangerThreshold: number;
@@ -59,12 +60,16 @@ export function MonthSummaryCard({
 
       <View style={styles.summaryGrid}>
         <SummaryValue
+          amountStyle={styles.summaryTileAmount}
           label="Despesas"
+          tileStyle={styles.summaryTile}
           value={maskCurrency(monthlyTotalExpenses, valuesHidden)}
         />
         <SummaryValue
+          amountStyle={styles.summaryTileAmount}
           color={commitmentColor}
           label="Comprometido"
+          tileStyle={styles.summaryTile}
           value={
             salaryCommitmentPercentage === null
               ? '-'
@@ -76,23 +81,6 @@ export function MonthSummaryCard({
       <Pressable onPress={onOpenDetails} style={styles.detailsButton}>
         <Text style={styles.detailsButtonText}>Detalhes</Text>
       </Pressable>
-    </View>
-  );
-}
-
-function SummaryValue({
-  color,
-  label,
-  value,
-}: {
-  color?: string | null;
-  label: string;
-  value: string;
-}) {
-  return (
-    <View style={styles.summaryValue}>
-      <Text style={styles.summaryLabel}>{label}</Text>
-      <Text style={[styles.summaryAmount, color ? { color } : null]}>{value}</Text>
     </View>
   );
 }
@@ -140,23 +128,10 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 16,
   },
-  summaryValue: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 16,
-    flex: 1,
+  summaryTile: {
     minHeight: 68,
-    padding: 12,
   },
-  summaryLabel: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    textTransform: 'uppercase',
-    ...typography.label,
-  },
-  summaryAmount: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    marginTop: 8,
+  summaryTileAmount: {
     ...typography.amountMedium,
   },
   detailsButton: {

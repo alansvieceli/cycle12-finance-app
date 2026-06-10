@@ -6,6 +6,7 @@ import { maskCurrency } from '../../lib/formatters';
 import { toGiftedCategoryDonutData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
+import { ChartPanel } from './ChartPanel';
 
 type CategoryBarChartProps = {
   data: CategoryChartPoint[];
@@ -28,108 +29,67 @@ export function CategoryBarChart({
   const donutData = toGiftedCategoryDonutData(data);
 
   return (
-    <View style={styles.panel}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      {data.length > 0 ? (
-        <>
-          <View style={styles.totalBox}>
-            <Text style={styles.totalLabel}>{totalLabel}</Text>
-            <Text
-              style={[
-                styles.totalAmount,
-                totalAmountColor ? { color: totalAmountColor } : null,
-              ]}
-            >
-              {maskCurrency(total, valuesHidden)}
-            </Text>
-          </View>
+    <ChartPanel
+      emptyText={emptyText}
+      hasData={data.length > 0}
+      title={title}
+      totalAmountStyle={totalAmountColor ? { color: totalAmountColor } : undefined}
+      totalLabel={totalLabel}
+      totalText={maskCurrency(total, valuesHidden)}
+    >
+      <View style={styles.donutBox}>
+        <PieChart
+          backgroundColor={colors.surface}
+          centerLabelComponent={() => (
+            <View style={styles.centerLabel}>
+              <Text style={styles.centerLabelText}>Total</Text>
+              <Text
+                style={[
+                  styles.centerLabelAmount,
+                  totalAmountColor ? { color: totalAmountColor } : null,
+                ]}
+              >
+                {maskCurrency(total, valuesHidden)}
+              </Text>
+            </View>
+          )}
+          data={donutData}
+          donut
+          focusOnPress={false}
+          innerCircleColor={colors.surface}
+          innerRadius={54}
+          isAnimated
+          radius={86}
+          sectionAutoFocus={false}
+          showText={false}
+          strokeColor={colors.surface}
+          strokeWidth={2}
+        />
+      </View>
 
-          <View style={styles.donutBox}>
-            <PieChart
-              backgroundColor={colors.surface}
-              centerLabelComponent={() => (
-                <View style={styles.centerLabel}>
-                  <Text style={styles.centerLabelText}>Total</Text>
-                  <Text
-                    style={[
-                      styles.centerLabelAmount,
-                      totalAmountColor ? { color: totalAmountColor } : null,
-                    ]}
-                  >
-                    {maskCurrency(total, valuesHidden)}
-                  </Text>
-                </View>
-              )}
-              data={donutData}
-              donut
-              focusOnPress={false}
-              innerCircleColor={colors.surface}
-              innerRadius={54}
-              isAnimated
-              radius={86}
-              sectionAutoFocus={false}
-              showText={false}
-              strokeColor={colors.surface}
-              strokeWidth={2}
-            />
-          </View>
+      <View style={styles.legendList}>
+        {donutData.map((point) => {
+          const share = total > 0 ? point.value / total : 0;
 
-          <View style={styles.legendList}>
-            {donutData.map((point) => {
-              const share = total > 0 ? point.value / total : 0;
-
-              return (
-                <View key={point.categoryId} style={styles.legendRow}>
-                  <View
-                    style={[styles.legendSwatch, { backgroundColor: point.color }]}
-                  />
-                  <Text numberOfLines={1} style={styles.categoryName}>
-                    {point.label}
-                  </Text>
-                  <Text style={styles.amount}>
-                    {maskCurrency(point.value, valuesHidden)}
-                  </Text>
-                  <Text style={styles.share}>{Math.round(share * 100)}%</Text>
-                </View>
-              );
-            })}
-          </View>
-        </>
-      ) : (
-        <Text style={styles.emptyText}>{emptyText}</Text>
-      )}
-    </View>
+          return (
+            <View key={point.categoryId} style={styles.legendRow}>
+              <View style={[styles.legendSwatch, { backgroundColor: point.color }]} />
+              <Text numberOfLines={1} style={styles.categoryName}>
+                {point.label}
+              </Text>
+              <Text style={styles.amount}>
+                {maskCurrency(point.value, valuesHidden)}
+              </Text>
+              <Text style={styles.share}>{Math.round(share * 100)}%</Text>
+            </View>
+          );
+        })}
+      </View>
+    </ChartPanel>
   );
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 16,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    ...typography.sectionTitle,
-  },
-  totalBox: {
-    marginTop: 14,
-    minHeight: 64,
-  },
-  totalLabel: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.bodySmall,
-  },
-  totalAmount: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    marginTop: 8,
-    ...typography.amountMedium,
-  },
   donutBox: {
     alignItems: 'center',
     marginTop: 16,
@@ -185,10 +145,5 @@ const styles = StyleSheet.create({
     minWidth: 38,
     textAlign: 'right',
     ...typography.bodySmall,
-  },
-  emptyText: {
-    color: colors.textSecondary,
-    marginTop: 10,
-    ...typography.body,
   },
 });
