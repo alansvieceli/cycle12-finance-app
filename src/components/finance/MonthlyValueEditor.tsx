@@ -10,7 +10,6 @@ import {
   maskCurrency,
 } from '../../lib/formatters';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
-import { parseCurrencyInput } from '../../lib/inputParsers';
 import {
   calculateAdjustedMonthlyValue,
   MonthlyValueAdjustmentOperation,
@@ -33,12 +32,12 @@ type MonthlyValueEditorProps = {
   onChangeMonthlyValue: (
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    amount: string,
+    amount: number,
   ) => void;
   onAdjustMonthlyValue: (
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    adjustmentInput: string,
+    adjustmentAmount: number,
     operation: MonthlyValueAdjustmentOperation,
     installments?: number,
   ) => void;
@@ -62,14 +61,14 @@ export function MonthlyValueEditor({
   const [activeAdjustmentMonthKey, setActiveAdjustmentMonthKey] = useState<
     string | null
   >(null);
-  const [adjustmentInput, setAdjustmentInput] = useState('');
+  const [adjustmentAmount, setAdjustmentAmount] = useState(0);
   const [adjustmentMode, setAdjustmentMode] =
     useState<MonthlyValueAdjustmentOperation>('add');
   const [installmentsInput, setInstallmentsInput] = useState('1');
 
   function openAdjustModal(projectionMonth: ProjectionMonth) {
     setActiveAdjustmentMonthKey(projectionMonth.key);
-    setAdjustmentInput('');
+    setAdjustmentAmount(0);
     setAdjustmentMode('add');
     setInstallmentsInput('1');
   }
@@ -80,7 +79,7 @@ export function MonthlyValueEditor({
 
   function switchAdjustmentMode(mode: MonthlyValueAdjustmentOperation) {
     setAdjustmentMode(mode);
-    setAdjustmentInput('');
+    setAdjustmentAmount(0);
     setInstallmentsInput('1');
   }
 
@@ -89,7 +88,7 @@ export function MonthlyValueEditor({
     onAdjustMonthlyValue(
       selectedAccountItem.id,
       projectionMonth,
-      adjustmentInput,
+      adjustmentAmount,
       adjustmentMode,
       adjustmentMode === 'add' ? parseInstallmentsInput(installmentsInput) : undefined,
     );
@@ -213,13 +212,13 @@ export function MonthlyValueEditor({
                 {activeAdjustmentMonth ? (
                   <AdjustPanel
                     accountItemId={selectedAccountItem.id}
-                    adjustmentInput={adjustmentInput}
+                    adjustmentAmount={adjustmentAmount}
                     adjustmentMode={adjustmentMode}
                     installmentsInput={installmentsInput}
                     monthlyValues={monthlyValues}
                     onCancel={closeAdjustModal}
                     onConfirm={() => confirmAdjustment(activeAdjustmentMonth)}
-                    onInputChange={setAdjustmentInput}
+                    onInputChange={setAdjustmentAmount}
                     onInstallmentsChange={(v) =>
                       setInstallmentsInput(sanitizeInstallmentsInput(v))
                     }
@@ -244,13 +243,13 @@ export function MonthlyValueEditor({
 
 type AdjustPanelProps = {
   accountItemId: string;
-  adjustmentInput: string;
+  adjustmentAmount: number;
   adjustmentMode: MonthlyValueAdjustmentOperation;
   installmentsInput: string;
   monthlyValues: MonthlyValue[];
   onCancel: () => void;
   onConfirm: () => void;
-  onInputChange: (value: string) => void;
+  onInputChange: (value: number) => void;
   onInstallmentsChange: (value: string) => void;
   onSwitchMode: (mode: MonthlyValueAdjustmentOperation) => void;
   projectionMonth: ProjectionMonth;
@@ -260,7 +259,7 @@ type AdjustPanelProps = {
 
 function AdjustPanel({
   accountItemId,
-  adjustmentInput,
+  adjustmentAmount,
   adjustmentMode,
   installmentsInput,
   monthlyValues,
@@ -323,14 +322,12 @@ function AdjustPanel({
           </Text>
         </Pressable>
 
-        <TextInput
+        <EditableAmountInput
           autoFocus
-          keyboardType="decimal-pad"
-          onChangeText={onInputChange}
-          placeholder="0,00"
-          placeholderTextColor={colors.textSecondary}
+          immediate
+          onChangeValue={onInputChange}
           style={styles.adjustInput}
-          value={adjustmentInput}
+          value={adjustmentAmount}
         />
 
         <Pressable
@@ -371,7 +368,7 @@ function AdjustPanel({
           {shouldShowInstallmentSummary ? (
             <Text style={styles.installmentSummary}>
               {formatInstallmentSummary(
-                adjustmentInput,
+                adjustmentAmount,
                 parsedInstallments,
                 affectedInstallmentMonths,
               )}
@@ -393,7 +390,7 @@ function AdjustPanel({
             {maskCurrency(
               calculateAdjustedMonthlyValue(
                 currentAmount,
-                adjustmentInput,
+                adjustmentAmount,
                 adjustmentMode,
               ),
               valuesHidden,
@@ -439,11 +436,11 @@ function parseInstallmentsInput(value: string) {
 }
 
 function formatInstallmentSummary(
-  adjustmentInput: string,
+  adjustmentAmount: number,
   installments: number,
   affectedMonths: { year: number; month: MonthNumber }[],
 ) {
-  const formattedAmount = currencyFormatter.format(parseCurrencyInput(adjustmentInput));
+  const formattedAmount = currencyFormatter.format(adjustmentAmount);
   const monthLabels = affectedMonths
     .map(({ month, year }) =>
       shortMonthFormatter

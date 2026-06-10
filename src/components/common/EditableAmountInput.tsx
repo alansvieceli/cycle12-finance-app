@@ -1,54 +1,117 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleProp, TextInput, TextStyle } from 'react-native';
+import CurrencyInput from 'react-native-currency-input';
 
-import { formatEditableAmount } from '../../lib/formatters';
-import { parseCurrencyInput } from '../../lib/inputParsers';
 import { colors } from '../../theme/colors';
 
+const CHANGE_DEBOUNCE_MS = 250;
+const MAX_AMOUNT = 999_999_999.99;
+
 type EditableAmountInputProps = {
-  onChangeValue: (value: string) => void;
+  autoFocus?: boolean;
+  /** Emit on every keystroke instead of debounced. Use when a confirm button reads the value right away. */
+  immediate?: boolean;
+  onChangeValue: (value: number) => void;
   placeholder?: string;
   style?: StyleProp<TextStyle>;
   value: number;
   valuesHidden?: boolean;
 };
 
+// zero maps to null so the field renders empty and the gray "0,00"
+// placeholder shows through; the first typed digit starts the mask fresh
+function draftFromAmount(amount: number) {
+  return Number.isFinite(amount) && amount > 0 ? amount : null;
+}
+
 export function EditableAmountInput({
+  autoFocus,
+  immediate = false,
   onChangeValue,
   placeholder = '0,00',
   style,
   value,
   valuesHidden = false,
 }: EditableAmountInputProps) {
-  const [draftValue, setDraftValue] = useState(formatEditableAmount(value));
+  const [draftValue, setDraftValue] = useState<number | null>(draftFromAmount(value));
   const [isFocused, setIsFocused] = useState(false);
+  const pendingEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingAmount = useRef<number | null>(null);
+  const emitValue = useRef(onChangeValue);
 
   useEffect(() => {
-    if (!isFocused) {
-      setDraftValue(formatEditableAmount(value));
+    emitValue.current = onChangeValue;
+  }, [onChangeValue]);
+
+  function flushPendingEmit() {
+    if (pendingEmitTimer.current) {
+      clearTimeout(pendingEmitTimer.current);
+      pendingEmitTimer.current = null;
+    }
+
+    if (pendingAmount.current !== null) {
+      const amount = pendingAmount.current;
+      pendingAmount.current = null;
+      emitValue.current(amount);
+    }
+  }
+
+  // flush on unmount so a value typed right before navigating away is not lost
+  useEffect(() => flushPendingEmit, []);
+
+  useEffect(() => {
+    if (!isFocused && pendingAmount.current === null) {
+      setDraftValue(draftFromAmount(value));
     }
   }, [isFocused, value]);
 
-  function handleChangeText(nextValue: string) {
+  function handleChangeValue(nextValue: number | null) {
     setDraftValue(nextValue);
-    onChangeValue(nextValue);
+    pendingAmount.current = nextValue ?? 0;
+
+    if (immediate) {
+      flushPendingEmit();
+      return;
+    }
+
+    if (pendingEmitTimer.current) {
+      clearTimeout(pendingEmitTimer.current);
+    }
+
+    pendingEmitTimer.current = setTimeout(flushPendingEmit, CHANGE_DEBOUNCE_MS);
   }
 
-  function handleBlur() {
-    setIsFocused(false);
-    setDraftValue(formatEditableAmount(parseCurrencyInput(draftValue)));
+  if (valuesHidden && !isFocused) {
+    return (
+      <TextInput
+        caretHidden
+        keyboardType="number-pad"
+        onFocus={() => setIsFocused(true)}
+        style={style}
+        value="• • •"
+      />
+    );
   }
 
   return (
-    <TextInput
-      keyboardType="decimal-pad"
-      onBlur={handleBlur}
-      onChangeText={handleChangeText}
+    <CurrencyInput
+      autoFocus={autoFocus || (valuesHidden && isFocused)}
+      delimiter="."
+      keyboardType="number-pad"
+      maxValue={MAX_AMOUNT}
+      minValue={0}
+      onBlur={() => {
+        setIsFocused(false);
+        flushPendingEmit();
+      }}
+      onChangeValue={handleChangeValue}
       onFocus={() => setIsFocused(true)}
       placeholder={placeholder}
       placeholderTextColor={colors.textSecondary}
+      precision={2}
+      separator=","
       style={style}
-      value={valuesHidden && !isFocused ? '• • •' : draftValue}
+      value={draftValue}
     />
   );
 }

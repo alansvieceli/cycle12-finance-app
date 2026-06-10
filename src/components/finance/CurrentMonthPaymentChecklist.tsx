@@ -10,7 +10,7 @@ import {
   ProjectionMonth,
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
-import { parseCurrencyInput, parseDueDay } from '../../lib/inputParsers';
+import { parseDueDay } from '../../lib/inputParsers';
 import {
   calculateAdjustedMonthlyValue,
   MonthlyValueAdjustmentOperation,
@@ -25,6 +25,7 @@ import {
   MonthlyValue,
 } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
+import { EditableAmountInput } from '../common/EditableAmountInput';
 import { SelectField } from '../common/SelectField';
 
 const shortMonthFormatter = new Intl.DateTimeFormat('pt-BR', { month: 'short' });
@@ -42,7 +43,7 @@ type CurrentMonthPaymentChecklistProps = {
   onAdjustMonthlyValue: (
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    adjustmentInput: string,
+    adjustmentAmount: number,
     operation: MonthlyValueAdjustmentOperation,
   ) => void;
   onCreateAccountItem: (
@@ -88,13 +89,13 @@ export function CurrentMonthPaymentChecklist({
   const [newName, setNewName] = useState('');
   const [newCategoryId, setNewCategoryId] = useState('');
   const [newDueDay, setNewDueDay] = useState('');
-  const [newAmount, setNewAmount] = useState('');
+  const [newAmount, setNewAmount] = useState(0);
 
   // Adjustment panel state
   const [expandedAccountItemId, setExpandedAccountItemId] = useState<string | null>(
     null,
   );
-  const [adjustmentInput, setAdjustmentInput] = useState('');
+  const [adjustmentAmount, setAdjustmentAmount] = useState(0);
   const [adjustmentMode, setAdjustmentMode] =
     useState<MonthlyValueAdjustmentOperation>('add');
 
@@ -103,7 +104,7 @@ export function CurrentMonthPaymentChecklist({
     setNewName('');
     setNewCategoryId(firstCategoryId);
     setNewDueDay(String(new Date().getDate()));
-    setNewAmount('');
+    setNewAmount(0);
     setIsAddModalOpen(true);
   }
 
@@ -122,7 +123,7 @@ export function CurrentMonthPaymentChecklist({
       categoryId,
       parseDueDay(newDueDay),
       projectionMonth,
-      parseCurrencyInput(newAmount),
+      newAmount,
     );
     setIsAddModalOpen(false);
   }
@@ -132,7 +133,7 @@ export function CurrentMonthPaymentChecklist({
       setExpandedAccountItemId(null);
     } else {
       setExpandedAccountItemId(accountItemId);
-      setAdjustmentInput('');
+      setAdjustmentAmount(0);
       setAdjustmentMode('add');
     }
   }
@@ -143,14 +144,14 @@ export function CurrentMonthPaymentChecklist({
 
   function switchAdjustmentMode(mode: MonthlyValueAdjustmentOperation) {
     setAdjustmentMode(mode);
-    setAdjustmentInput('');
+    setAdjustmentAmount(0);
   }
 
   function confirmAdjustment(accountItemId: string) {
     onAdjustMonthlyValue(
       accountItemId,
       projectionMonth,
-      adjustmentInput,
+      adjustmentAmount,
       adjustmentMode,
     );
     collapseAdjustPanel();
@@ -347,13 +348,12 @@ export function CurrentMonthPaymentChecklist({
                         </Text>
                       </Pressable>
 
-                      <TextInput
-                        keyboardType="decimal-pad"
-                        onChangeText={setAdjustmentInput}
-                        placeholder="0,00"
-                        placeholderTextColor={colors.textSecondary}
+                      <EditableAmountInput
+                        autoFocus
+                        immediate
+                        onChangeValue={setAdjustmentAmount}
                         style={styles.adjustInput}
-                        value={adjustmentInput}
+                        value={adjustmentAmount}
                       />
 
                       <Pressable
@@ -398,7 +398,7 @@ export function CurrentMonthPaymentChecklist({
                           {maskCurrency(
                             calculateAdjustedMonthlyValue(
                               amount,
-                              adjustmentInput,
+                              adjustmentAmount,
                               adjustmentMode,
                             ),
                             valuesHidden,
@@ -464,11 +464,9 @@ export function CurrentMonthPaymentChecklist({
                 <Text style={styles.modalFieldLabel}>
                   {`Valor (${formatPaymentMonthLabel(projectionMonth.year, projectionMonth.month)})`}
                 </Text>
-                <TextInput
-                  keyboardType="decimal-pad"
-                  onChangeText={setNewAmount}
-                  placeholder="0,00"
-                  placeholderTextColor={colors.textSecondary}
+                <EditableAmountInput
+                  immediate
+                  onChangeValue={setNewAmount}
                   style={styles.modalInput}
                   value={newAmount}
                 />

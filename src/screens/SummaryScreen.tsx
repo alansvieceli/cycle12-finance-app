@@ -1,6 +1,6 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fragment, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
@@ -18,7 +18,7 @@ import {
 } from '../lib/financeCalculations';
 import { resolveCommitmentColor } from '../lib/commitmentColor';
 import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/formatters';
-import { parseCurrencyInput } from '../lib/inputParsers';
+import { EditableAmountInput } from '../components/common/EditableAmountInput';
 import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { colors } from '../theme/colors';
@@ -47,7 +47,7 @@ export function SummaryScreen({
   );
   const [activeView, setActiveView] = useState<ActiveView>('current');
   const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
-  const [extraInput, setExtraInput] = useState('');
+  const [extraAmount, setExtraAmount] = useState(0);
   const [expandedHistoryKey, setExpandedHistoryKey] = useState<string | null>(null);
   const sortedCategories = sortCategories(financeState.categories);
   const categoryNamesById = Object.fromEntries(
@@ -242,7 +242,7 @@ export function SummaryScreen({
                   </Text>
                   <Pressable
                     onPress={() => {
-                      setExtraInput('');
+                      setExtraAmount(0);
                       setIsExtraModalOpen(true);
                     }}
                     style={styles.addExtraButton}
@@ -372,14 +372,12 @@ export function SummaryScreen({
                 >
                   <Pressable style={styles.modalCard}>
                     <Text style={styles.modalTitle}>Adicionar extra do mês</Text>
-                    <TextInput
+                    <EditableAmountInput
                       autoFocus
-                      keyboardType="decimal-pad"
-                      onChangeText={setExtraInput}
-                      placeholder="0,00"
-                      placeholderTextColor={colors.textSecondary}
+                      immediate
+                      onChangeValue={setExtraAmount}
                       style={styles.modalInput}
-                      value={extraInput}
+                      value={extraAmount}
                     />
                     <View style={styles.modalActions}>
                       <Pressable
@@ -390,9 +388,8 @@ export function SummaryScreen({
                       </Pressable>
                       <Pressable
                         onPress={() => {
-                          const amount = parseCurrencyInput(extraInput);
-                          if (amount > 0) {
-                            onAddExtra(amount);
+                          if (extraAmount > 0) {
+                            onAddExtra(extraAmount);
                           }
                           setIsExtraModalOpen(false);
                         }}
@@ -403,7 +400,7 @@ export function SummaryScreen({
                             ? 'Nova extra ••••'
                             : `Nova extra ${maskCurrency(
                                 financeState.settings.currentMonthExtraBalance +
-                                  parseCurrencyInput(extraInput),
+                                  extraAmount,
                                 false,
                               )}`}
                         </Text>
@@ -638,6 +635,7 @@ const styles = StyleSheet.create({
     minHeight: 38,
     paddingHorizontal: 12,
     paddingVertical: 6,
+    textAlign: 'center',
     ...typography.input,
   },
   modalActions: {

@@ -4,7 +4,6 @@ import { createId } from '../lib/ids';
 import { suggestCategoryColor } from '../lib/categoryColors';
 import {
   clampVisibleMonthCount,
-  parseCurrencyInput,
   parseDueDay,
   parseSortOrder,
 } from '../lib/inputParsers';
@@ -101,22 +100,22 @@ export function useFinanceState() {
     });
   }, [financeState, hasLoadedStoredState]);
 
-  function updateMonthlySalary(value: string) {
+  function updateMonthlySalary(value: number) {
     setFinanceState((currentState) => ({
       ...currentState,
       settings: {
         ...currentState.settings,
-        monthlySalary: parseCurrencyInput(value),
+        monthlySalary: value,
       },
     }));
   }
 
-  function updateCurrentMonthExtraBalance(value: string) {
+  function updateCurrentMonthExtraBalance(value: number) {
     setFinanceState((currentState) => ({
       ...currentState,
       settings: {
         ...currentState.settings,
-        currentMonthExtraBalance: parseCurrencyInput(value),
+        currentMonthExtraBalance: value,
       },
     }));
   }
@@ -446,15 +445,15 @@ export function useFinanceState() {
   function updateMonthlyValue(
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    amount: string,
+    amount: number,
   ) {
-    setMonthlyValueAmount(accountItemId, projectionMonth, parseCurrencyInput(amount));
+    setMonthlyValueAmount(accountItemId, projectionMonth, amount);
   }
 
   function adjustMonthlyValue(
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-    adjustmentInput: string,
+    adjustmentAmount: number,
     operation: MonthlyValueAdjustmentOperation,
     installments = 1,
   ) {
@@ -482,7 +481,7 @@ export function useFinanceState() {
               monthlyValues,
               accountItemId,
               targetMonth,
-              adjustmentInput,
+              adjustmentAmount,
               operation,
             ),
           currentState.monthlyValues,
@@ -690,7 +689,7 @@ function adjustMonthlyValueAmount(
   monthlyValues: MonthlyValue[],
   accountItemId: string,
   projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-  adjustmentInput: string,
+  adjustmentAmount: number,
   operation: MonthlyValueAdjustmentOperation,
 ) {
   const existingValue = monthlyValues.find(
@@ -701,7 +700,7 @@ function adjustMonthlyValueAmount(
   );
   const nextAmount = calculateAdjustedMonthlyValue(
     existingValue?.amount ?? 0,
-    adjustmentInput,
+    adjustmentAmount,
     operation,
   );
 

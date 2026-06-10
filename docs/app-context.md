@@ -98,7 +98,7 @@ It focuses on:
 
 - selecting an account item.
 - viewing the 12-month planning window.
-- editing full monthly values directly via an inline input.
+- editing full monthly values directly via an inline masked currency input.
 - applying partial monthly adjustments via a `±` button on each month row, which opens a modal with add or subtract modes.
 - applying addition adjustments across multiple consecutive months (installments) when the add mode is selected.
 
@@ -162,6 +162,8 @@ The app calculates:
 - chart-ready finance summaries.
 
 Credit card bills are treated as manually editable monthly totals. The app does not connect to banks, cards, accounts, or external financial APIs.
+
+All monetary input fields use a cash-register style mask: digits enter from the right as cents (`9`, `4`, `1` → `9,41`) and the display is always formatted in `pt-BR` (`9.412,34`). The user never types comma or thousand separators; backspace removes the rightmost digit. This applies to Planejar (inline values and the `±` modal), Pagamentos (new account value and the `±` adjustment), the Resumo quick-add extra modal, and the salary and extra balance fields in Ajustes. Amounts are capped at `999.999.999,99` and cannot be negative.
 
 ## Local Data and Backups
 

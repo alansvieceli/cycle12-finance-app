@@ -1,21 +1,21 @@
-import { parseCurrencyInput } from './inputParsers';
-
 export type MonthlyValueAdjustmentOperation = 'add' | 'subtract';
 
 export function calculateAdjustedMonthlyValue(
   currentAmount: number,
-  adjustmentInput: string,
+  adjustmentAmount: number,
   operation: MonthlyValueAdjustmentOperation,
 ) {
   const safeCurrentAmount =
     typeof currentAmount === 'number' && Number.isFinite(currentAmount)
       ? currentAmount
       : 0;
-  const adjustmentAmount = Math.max(0, parseCurrencyInput(adjustmentInput));
+  const safeAdjustmentAmount = Number.isFinite(adjustmentAmount)
+    ? Math.max(0, adjustmentAmount)
+    : 0;
   const nextAmount =
     operation === 'add'
-      ? safeCurrentAmount + adjustmentAmount
-      : safeCurrentAmount - adjustmentAmount;
+      ? safeCurrentAmount + safeAdjustmentAmount
+      : safeCurrentAmount - safeAdjustmentAmount;
 
   if (!Number.isFinite(nextAmount)) {
     return 0;

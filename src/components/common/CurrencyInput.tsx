@@ -6,7 +6,7 @@ import { EditableAmountInput } from './EditableAmountInput';
 
 type CurrencyInputProps = {
   label: string;
-  onChangeValue: (value: string) => void;
+  onChangeValue: (value: number) => void;
   value: number;
   valuesHidden?: boolean;
 };
