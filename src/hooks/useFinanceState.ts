@@ -14,7 +14,12 @@ import {
 } from '../lib/sorting';
 import { advanceWindow, getNextWindowStart } from '../lib/windowAdvance';
 import { normalizeFinanceState } from '../lib/financeBackup';
-import { loadFinanceState, saveFinanceState } from '../storage/financeStorage';
+import {
+  loadFinanceState,
+  loadSelectedPlanningAccountId,
+  saveFinanceState,
+  saveSelectedPlanningAccountId,
+} from '../storage/financeStorage';
 import {
   AccountItem,
   FinanceState,
@@ -69,10 +74,19 @@ export function useFinanceState() {
         );
 
         setFinanceState(advancedState);
-        setSelectedAccountItemId(
-          sortAccountItems(advancedState.accountItems, advancedState.categories)[0]
-            ?.id ?? '',
+
+        const sortedAccounts = sortAccountItems(
+          advancedState.accountItems,
+          advancedState.categories,
         );
+        const storedSelectedAccountId = await loadSelectedPlanningAccountId();
+        const restoredAccountId = sortedAccounts.some(
+          (accountItem) => accountItem.id === storedSelectedAccountId,
+        )
+          ? storedSelectedAccountId
+          : null;
+
+        setSelectedAccountItemId(restoredAccountId ?? sortedAccounts[0]?.id ?? '');
         setNewAccountCategoryId(sortCategories(advancedState.categories)[0]?.id ?? '');
       } catch {
         // load failure is silent — app starts empty
@@ -99,6 +113,16 @@ export function useFinanceState() {
       // save failure is silent
     });
   }, [financeState, hasLoadedStoredState]);
+
+  useEffect(() => {
+    if (!hasLoadedStoredState || !selectedAccountItemId) {
+      return;
+    }
+
+    saveSelectedPlanningAccountId(selectedAccountItemId).catch(() => {
+      // save failure is silent
+    });
+  }, [selectedAccountItemId, hasLoadedStoredState]);
 
   function updateMonthlySalary(value: number) {
     setFinanceState((currentState) => ({
