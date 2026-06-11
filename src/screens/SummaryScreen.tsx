@@ -25,6 +25,7 @@ import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/form
 import { EditableAmountInput } from '../components/common/EditableAmountInput';
 import { getCategoryColor } from '../lib/categoryColors';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
+import { computeCategoryAverages, computeTotalTrend } from '../lib/spendingTrends';
 import { colors } from '../theme/colors';
 import { modalFormStyles } from '../theme/sharedStyles';
 import { typography } from '../theme/typography';
@@ -149,6 +150,34 @@ export function SummaryScreen({
   const salaryDistribution = currentProjectionMonth
     ? buildSalaryDistribution(financeState, currentProjectionMonth)
     : null;
+  const totalTrend = computeTotalTrend(
+    financeState.monthHistory,
+    currentMonthlyTotalExpenses,
+  );
+  const historyHasEnoughData = financeState.monthHistory.length >= 2;
+  const historyAverageTotal = totalTrend.average;
+  const historyCategoryAverages = computeCategoryAverages(financeState.monthHistory);
+  const trendLineText = (() => {
+    if (!totalTrend.hasEnoughData) {
+      return 'Sem histórico suficiente para comparar.';
+    }
+    if (totalTrend.direction === 'average') {
+      return '◦ na média';
+    }
+    const arrow = totalTrend.direction === 'above' ? '▲' : '▼';
+    const directionLabel =
+      totalTrend.direction === 'above' ? 'acima da média' : 'abaixo da média';
+    const sign = totalTrend.direction === 'above' ? '+' : '-';
+    const percent = percentageFormatter.format(Math.abs(totalTrend.deltaRatio ?? 0));
+    const amount = maskCurrency(Math.abs(totalTrend.deltaAmount), valuesHidden);
+    return `${arrow} ${percent} ${directionLabel} · ${sign}${amount}`;
+  })();
+  const trendLineColor =
+    totalTrend.direction === 'below'
+      ? colors.positive
+      : totalTrend.direction === 'above'
+        ? colors.negativeText
+        : colors.textSecondary;
 
   const daysUntilNextDue = (() => {
     if (!nextDueAccount?.dueDay || !currentProjectionMonth) return null;
@@ -284,6 +313,9 @@ export function SummaryScreen({
                     ]}
                   />
                 </View>
+                <Text style={[styles.trendLine, { color: trendLineColor }]}>
+                  {trendLineText}
+                </Text>
               </View>
 
               {salaryDistribution ? (
@@ -311,9 +343,7 @@ export function SummaryScreen({
                 <KpiCard
                   color={colors.commitmentMedium}
                   label="Próximo venc."
-                  value={
-                    nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : 'Nenhum pendente'
-                  }
+                  value={nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : 'N/A'}
                   detail={
                     nextDueAccount
                       ? [nextDueAccount.name, nextDueAccountCategoryName]
@@ -482,22 +512,31 @@ export function SummaryScreen({
                   </Text>
                 </View>
               ) : (
-                financeState.monthHistory.map((entry) => {
-                  const key = `${entry.year}-${entry.month}`;
-                  return (
-                    <HistoryCard
-                      key={key}
-                      categories={sortedCategories}
-                      entry={entry}
-                      isExpanded={expandedHistoryKey === key}
-                      onToggle={() =>
-                        setExpandedHistoryKey((prev) => (prev === key ? null : key))
-                      }
-                      settings={financeState.settings}
-                      valuesHidden={valuesHidden}
-                    />
-                  );
-                })
+                <>
+                  {historyHasEnoughData ? (
+                    <Text style={styles.trendLine}>
+                      Média mensal: {maskCurrency(historyAverageTotal, valuesHidden)}
+                    </Text>
+                  ) : null}
+                  {financeState.monthHistory.map((entry) => {
+                    const key = `${entry.year}-${entry.month}`;
+                    return (
+                      <HistoryCard
+                        key={key}
+                        categories={sortedCategories}
+                        categoryAverages={historyCategoryAverages}
+                        entry={entry}
+                        hasEnoughHistory={historyHasEnoughData}
+                        isExpanded={expandedHistoryKey === key}
+                        onToggle={() =>
+                          setExpandedHistoryKey((prev) => (prev === key ? null : key))
+                        }
+                        settings={financeState.settings}
+                        valuesHidden={valuesHidden}
+                      />
+                    );
+                  })}
+                </>
               )}
             </>
           )}
@@ -609,6 +648,12 @@ const styles = StyleSheet.create({
   modalConfirmButton: {
     ...modalFormStyles.confirmButton,
     flex: 1,
+  },
+  trendLine: {
+    color: colors.info,
+    letterSpacing: 0,
+    marginTop: 8,
+    ...typography.label,
   },
   incomeRow: {
     alignItems: 'center',

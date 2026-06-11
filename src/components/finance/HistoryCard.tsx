@@ -8,13 +8,16 @@ import {
   maskCurrency,
   percentageFormatter,
 } from '../../lib/formatters';
+import { CategoryAverage, categoryVariation } from '../../lib/spendingTrends';
 import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
 
 type HistoryCardProps = {
   categories: Pick<Category, 'id' | 'sortOrder'>[];
+  categoryAverages: CategoryAverage[];
   entry: MonthHistoryEntry;
+  hasEnoughHistory: boolean;
   isExpanded: boolean;
   onToggle: () => void;
   settings: Pick<
@@ -24,11 +27,28 @@ type HistoryCardProps = {
   valuesHidden: boolean;
 };
 
+function variationColor(direction: ReturnType<typeof categoryVariation>['direction']) {
+  if (direction === 'below') return colors.positive;
+  if (direction === 'above') return colors.negativeText;
+  return colors.textSecondary;
+}
+
+function formatVariationText(
+  direction: ReturnType<typeof categoryVariation>['direction'],
+  ratio: number | null,
+): string {
+  if (direction === 'average') return 'na média';
+  const sign = direction === 'above' ? '+' : '-';
+  return `${sign}${percentageFormatter.format(Math.abs(ratio ?? 0))}`;
+}
+
 type DetailTab = 'categories' | 'accounts';
 
 export function HistoryCard({
   categories,
+  categoryAverages,
   entry,
+  hasEnoughHistory,
   isExpanded,
   onToggle,
   settings,
@@ -146,23 +166,43 @@ export function HistoryCard({
           </View>
 
           {activeTab === 'categories'
-            ? sortedCategories.map((category, index) => (
-                <View key={category.id} style={styles.row}>
-                  <View
-                    style={[
-                      styles.categoryDot,
-                      {
-                        backgroundColor:
-                          category.color ?? chartPalette[index % chartPalette.length],
-                      },
-                    ]}
-                  />
-                  <Text style={styles.rowName}>{category.name}</Text>
-                  <Text style={styles.rowAmount}>
-                    {maskCurrency(category.total, valuesHidden)}
-                  </Text>
-                </View>
-              ))
+            ? sortedCategories.map((category, index) => {
+                const average = categoryAverages.find(
+                  (a) => a.categoryId === category.id,
+                );
+                const variation =
+                  hasEnoughHistory && average
+                    ? categoryVariation(category.total, average.average)
+                    : null;
+
+                return (
+                  <View key={category.id} style={styles.row}>
+                    <View
+                      style={[
+                        styles.categoryDot,
+                        {
+                          backgroundColor:
+                            category.color ?? chartPalette[index % chartPalette.length],
+                        },
+                      ]}
+                    />
+                    <Text style={styles.rowName}>{category.name}</Text>
+                    {variation ? (
+                      <Text
+                        style={[
+                          styles.rowVariation,
+                          { color: variationColor(variation.direction) },
+                        ]}
+                      >
+                        {formatVariationText(variation.direction, variation.ratio)}
+                      </Text>
+                    ) : null}
+                    <Text style={styles.rowAmount}>
+                      {maskCurrency(category.total, valuesHidden)}
+                    </Text>
+                  </View>
+                );
+              })
             : (() => {
                 const categoryMap = new Map(entry.categories.map((c) => [c.id, c]));
                 const categoryIndexMap = new Map(
@@ -320,6 +360,9 @@ const styles = StyleSheet.create({
   rowAmount: {
     color: colors.textPrimary,
     ...typography.body,
+  },
+  rowVariation: {
+    ...typography.label,
   },
   groupHeaderRow: {
     alignItems: 'center',

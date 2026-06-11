@@ -1,6 +1,6 @@
 # Plan 035 - Spending Trends and Averages
 
-Status: Pending
+Status: Done
 
 ## Spec
 
