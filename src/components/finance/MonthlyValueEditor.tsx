@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import { ProjectionMonth } from '../../lib/financeCalculations';
@@ -272,6 +272,8 @@ function AdjustPanel({
     accountItemId,
     projectionMonth,
   );
+  const monthIndex = projectionMonths.findIndex((pm) => pm.key === projectionMonth.key);
+  const maxInstallments = projectionMonths.length - Math.max(monthIndex, 0);
   const parsedInstallments = parseInstallmentsInput(installmentsInput);
   const affectedInstallmentMonths =
     adjustmentMode === 'add' && projectionMonths[0]
@@ -306,17 +308,18 @@ function AdjustPanel({
       >
         {adjustmentMode === 'add' ? (
           <>
-            <View style={styles.installmentsRow}>
-              <Text style={styles.installmentsLabel}>Parcelas</Text>
-              <TextInput
-                keyboardType="number-pad"
-                onChangeText={onInstallmentsChange}
-                placeholder="1"
-                placeholderTextColor={colors.textSecondary}
-                style={[styles.input, styles.installmentsInput]}
-                value={installmentsInput}
-              />
-            </View>
+            <SelectField
+              fieldLabel="Parcelas"
+              onChange={onInstallmentsChange}
+              options={Array.from({ length: maxInstallments }, (_, i) => {
+                const installments = i + 1;
+                return {
+                  id: String(installments),
+                  label: installments === 1 ? '1 mês' : `${installments} meses`,
+                };
+              })}
+              value={String(parsedInstallments)}
+            />
             {shouldShowInstallmentSummary ? (
               <Text style={styles.installmentSummary}>
                 {formatInstallmentSummary(
@@ -490,22 +493,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.cardTitle,
-  },
-  installmentsRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 10,
-    justifyContent: 'space-between',
-  },
-  installmentsLabel: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.button,
-  },
-  installmentsInput: {
-    minHeight: 44,
-    textAlign: 'center',
-    width: 78,
   },
   installmentSummary: {
     color: colors.textSecondary,
