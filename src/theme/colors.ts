@@ -19,7 +19,7 @@ export const colors = {
 };
 
 export const chartPalette = [
-  '#FF6B1A', // orange
+  '#9B59B6', // purple
   '#32D078', // green
   '#FFC845', // yellow
   '#FF5D6C', // red

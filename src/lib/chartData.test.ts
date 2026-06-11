@@ -135,7 +135,7 @@ describe('chart data helpers', () => {
     expect(
       buildCurrentMonthCategoryChartData(financeState, projectionMonths[0]),
     ).toEqual([
-      { categoryId: 'cards', color: '#FF6B1A', label: 'Cartões', value: 1000 },
+      { categoryId: 'cards', color: '#9B59B6', label: 'Cartões', value: 1000 },
       { categoryId: 'home', color: '#32D078', label: 'Casa', value: 250 },
     ]);
   });
