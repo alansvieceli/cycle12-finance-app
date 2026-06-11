@@ -419,33 +419,13 @@ export function useFinanceState() {
     }));
   }
 
-  function cycleAccountCategory(accountItemId: string) {
-    setFinanceState((currentState) => {
-      const categories = sortCategories(currentState.categories);
-
-      if (categories.length === 0) {
-        return currentState;
-      }
-
-      return {
-        ...currentState,
-        accountItems: currentState.accountItems.map((accountItem) => {
-          if (accountItem.id !== accountItemId) {
-            return accountItem;
-          }
-
-          const categoryIndex = categories.findIndex(
-            (category) => category.id === accountItem.categoryId,
-          );
-          const nextCategory = categories[(categoryIndex + 1) % categories.length];
-
-          return {
-            ...accountItem,
-            categoryId: nextCategory.id,
-          };
-        }),
-      };
-    });
+  function setAccountCategory(accountItemId: string, categoryId: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      accountItems: currentState.accountItems.map((accountItem) =>
+        accountItem.id === accountItemId ? { ...accountItem, categoryId } : accountItem,
+      ),
+    }));
   }
 
   function deleteAccountItem(accountItemId: string) {
@@ -627,9 +607,9 @@ export function useFinanceState() {
       createAccountItem,
       createAccountItemAndSetValue,
       createCategory,
-      cycleAccountCategory,
       deleteAccountItem,
       deleteCategory,
+      setAccountCategory,
       setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,

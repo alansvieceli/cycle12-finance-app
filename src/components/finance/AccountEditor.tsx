@@ -32,7 +32,7 @@ type AccountEditorProps = {
   onChangeNewAccountName: (name: string) => void;
   onClose?: () => void;
   onCreateAccountItem: () => void;
-  onCycleAccountCategory: (accountItemId: string) => void;
+  onChangeAccountCategoryId: (accountItemId: string, categoryId: string) => void;
   onDeleteAccountItem: (accountItemId: string) => void;
 };
 
@@ -49,12 +49,13 @@ export function AccountEditor({
   onChangeNewAccountName,
   onClose,
   onCreateAccountItem,
-  onCycleAccountCategory,
+  onChangeAccountCategoryId,
   onDeleteAccountItem,
 }: AccountEditorProps) {
   const [expandedAccountId, setExpandedAccountId] = useState<string>();
   const [isCreateOpen, setIsCreateOpen] = useState(accountItems.length === 0);
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false);
+  const [editingCategoryAccountId, setEditingCategoryAccountId] = useState<string>();
   const [activeDueDayId, setActiveDueDayId] = useState<string>();
   const sortedCategories = sortCategories(categories);
   const selectedNewAccountCategoryId =
@@ -193,12 +194,17 @@ export function AccountEditor({
                         />
                         <View style={styles.editMetaRow}>
                           <Pressable
-                            onPress={() => onCycleAccountCategory(accountItem.id)}
-                            style={styles.categoryButton}
+                            onPress={() => setEditingCategoryAccountId(accountItem.id)}
+                            style={[styles.categoryPickerButton, styles.categoryButton]}
                           >
-                            <Text style={styles.categoryButtonText}>
-                              ← {categoryName} →
+                            <Text style={styles.categoryPickerText} numberOfLines={1}>
+                              {categoryName}
                             </Text>
+                            <Ionicons
+                              color={colors.textSecondary}
+                              name="chevron-down"
+                              size={20}
+                            />
                           </Pressable>
                           <DueDayButton
                             isActive={activeDueDayId === accountItem.id}
@@ -241,48 +247,66 @@ export function AccountEditor({
       />
       <Modal
         animationType="slide"
-        onRequestClose={() => setIsCategoryPickerOpen(false)}
+        onRequestClose={() => {
+          setIsCategoryPickerOpen(false);
+          setEditingCategoryAccountId(undefined);
+        }}
         transparent
-        visible={isCategoryPickerOpen}
+        visible={isCategoryPickerOpen || Boolean(editingCategoryAccountId)}
       >
         <Pressable
-          onPress={() => setIsCategoryPickerOpen(false)}
+          onPress={() => {
+            setIsCategoryPickerOpen(false);
+            setEditingCategoryAccountId(undefined);
+          }}
           style={styles.bottomSheetOverlay}
         >
           <Pressable style={styles.bottomSheet}>
             <Text style={styles.bottomSheetTitle}>Categoria</Text>
-            {sortedCategories.map((category) => (
-              <Pressable
-                key={category.id}
-                onPress={() => {
-                  onChangeNewAccountCategoryId(category.id);
-                  setIsCategoryPickerOpen(false);
-                }}
-                style={[
-                  styles.bottomSheetOption,
-                  selectedNewAccountCategoryId === category.id
-                    ? styles.bottomSheetOptionActive
-                    : null,
-                ]}
-              >
-                <View
+            {sortedCategories.map((category) => {
+              const selectedCategoryId = editingCategoryAccountId
+                ? accountItems.find((a) => a.id === editingCategoryAccountId)
+                    ?.categoryId
+                : selectedNewAccountCategoryId;
+
+              return (
+                <Pressable
+                  key={category.id}
+                  onPress={() => {
+                    if (editingCategoryAccountId) {
+                      onChangeAccountCategoryId(editingCategoryAccountId, category.id);
+                      setEditingCategoryAccountId(undefined);
+                    } else {
+                      onChangeNewAccountCategoryId(category.id);
+                      setIsCategoryPickerOpen(false);
+                    }
+                  }}
                   style={[
-                    styles.categoryDot,
-                    { backgroundColor: getCategoryColor(category.id, categories) },
-                  ]}
-                />
-                <Text
-                  style={[
-                    styles.bottomSheetOptionText,
-                    selectedNewAccountCategoryId === category.id
-                      ? styles.bottomSheetOptionTextActive
+                    styles.bottomSheetOption,
+                    selectedCategoryId === category.id
+                      ? styles.bottomSheetOptionActive
                       : null,
                   ]}
                 >
-                  {category.name}
-                </Text>
-              </Pressable>
-            ))}
+                  <View
+                    style={[
+                      styles.categoryDot,
+                      { backgroundColor: getCategoryColor(category.id, categories) },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.bottomSheetOptionText,
+                      selectedCategoryId === category.id
+                        ? styles.bottomSheetOptionTextActive
+                        : null,
+                    ]}
+                  >
+                    {category.name}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </Pressable>
         </Pressable>
       </Modal>
@@ -468,21 +492,7 @@ const styles = StyleSheet.create({
     color: colors.accentText,
   },
   categoryButton: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: 12,
-    borderWidth: 1,
     flex: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: 10,
-  },
-  categoryButtonText: {
-    color: colors.textPrimary,
-    letterSpacing: 0,
-    textAlign: 'center',
-    ...typography.button,
   },
   createRow: {
     alignItems: 'center',

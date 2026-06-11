@@ -86,7 +86,7 @@ export function AccountsScreen({ finance }: AccountsScreenProps) {
           onChangeNewAccountDueDay={actions.setNewAccountDueDay}
           onChangeNewAccountName={actions.setNewAccountName}
           onCreateAccountItem={actions.createAccountItem}
-          onCycleAccountCategory={actions.cycleAccountCategory}
+          onChangeAccountCategoryId={actions.setAccountCategory}
           onDeleteAccountItem={actions.deleteAccountItem}
         />
       )}
