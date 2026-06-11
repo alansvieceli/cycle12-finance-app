@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -6,8 +6,11 @@ import { AppLockOverlay } from './components/common/AppLockOverlay';
 import { TabBar, TabItem } from './components/common/TabBar';
 import { CurrentMonthPaymentChecklist } from './components/finance/CurrentMonthPaymentChecklist';
 import { createProjectionMonths } from './lib/financeCalculations';
+import { Notifications } from './lib/notifications';
+import { syncReminders } from './lib/syncReminders';
 import { useAppLock } from './hooks/useAppLock';
 import { useFinanceState } from './hooks/useFinanceState';
+import { useReminders } from './hooks/useReminders';
 import { AccountsScreen } from './screens/AccountsScreen';
 import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
@@ -29,6 +32,7 @@ const tabs: TabItem<AppTab>[] = [
 export function FinanceApp() {
   const finance = useFinanceState();
   const appLock = useAppLock();
+  const reminders = useReminders();
   const [activeTab, setActiveTab] = useState<AppTab>('summary');
   const [isPaymentViewOpen, setIsPaymentViewOpen] = useState(false);
   const [valuesHidden, setValuesHidden] = useState(false);
@@ -53,6 +57,44 @@ export function FinanceApp() {
   const currentProjectionMonth =
     projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
     projectionMonths[0];
+
+  useEffect(() => {
+    if (reminders.isInitializing) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    async function sync() {
+      const { status } = await Notifications.getPermissionsAsync();
+
+      if (isCancelled) {
+        return;
+      }
+
+      await syncReminders(
+        finance.financeState.accountItems,
+        finance.financeState.monthlyValues,
+        finance.financeState.paymentStatuses,
+        reminders.settings,
+        status === 'granted',
+      );
+    }
+
+    void sync();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [
+    reminders.isInitializing,
+    reminders.settings,
+    finance.financeState.accountItems,
+    finance.financeState.monthlyValues,
+    finance.financeState.paymentStatuses,
+    finance.financeState.settings.windowStartMonth,
+    finance.financeState.settings.windowStartYear,
+  ]);
 
   function changeTab(tab: AppTab) {
     setActiveTab(tab);
@@ -132,6 +174,7 @@ export function FinanceApp() {
           <SettingsScreen
             appLock={appLock}
             finance={finance}
+            reminders={reminders}
             valuesHidden={valuesHidden}
           />
         ) : null}

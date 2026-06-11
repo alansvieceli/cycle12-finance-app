@@ -16,8 +16,10 @@ import { ModalShell } from '../components/common/ModalShell';
 import { DataManagementPanel } from '../components/finance/DataManagementPanel';
 import { AppLockState } from '../hooks/useAppLock';
 import { useFinanceState } from '../hooks/useFinanceState';
+import { RemindersState } from '../hooks/useReminders';
 import { APP_LOCK_TIMEOUT_OPTIONS } from '../lib/appLock';
 import { createProjectionMonths } from '../lib/financeCalculations';
+import { REMINDER_DAYS_BEFORE_OPTIONS } from '../lib/reminders';
 import { formatMonthLabel } from '../lib/formatters';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
@@ -25,20 +27,35 @@ import { typography } from '../theme/typography';
 type SettingsScreenProps = {
   appLock: AppLockState;
   finance: ReturnType<typeof useFinanceState>;
+  reminders: RemindersState;
   valuesHidden: boolean;
 };
 
 const MONTH_COUNT_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const HOUR_OPTIONS = Array.from({ length: 24 }, (_, hour) => hour);
+const MINUTE_OPTIONS = [0, 15, 30, 45];
+
+function formatReminderDaysBefore(daysBefore: number): string {
+  if (daysBefore === 0) {
+    return 'no dia';
+  }
+
+  return daysBefore === 1 ? '1 dia antes' : `${daysBefore} dias antes`;
+}
 
 export function SettingsScreen({
   appLock,
   finance,
+  reminders,
   valuesHidden,
 }: SettingsScreenProps) {
   const { actions, financeState } = finance;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
   const [isSecurityTimeoutPickerOpen, setIsSecurityTimeoutPickerOpen] = useState(false);
+  const [isReminderDaysPickerOpen, setIsReminderDaysPickerOpen] = useState(false);
+  const [isReminderHourPickerOpen, setIsReminderHourPickerOpen] = useState(false);
+  const [isReminderMinutePickerOpen, setIsReminderMinutePickerOpen] = useState(false);
   const projectionMonths = createProjectionMonths(
     new Date(
       financeState.settings.windowStartYear,
@@ -92,6 +109,19 @@ export function SettingsScreen({
     Alert.alert(
       'Bloqueio não ativado',
       'A autenticação não foi concluída. O bloqueio continua desligado.',
+    );
+  }
+
+  async function handleToggleReminders(nextValue: boolean) {
+    const result = await reminders.setEnabled(nextValue);
+
+    if (result.success) {
+      return;
+    }
+
+    Alert.alert(
+      'Permissão de notificação negada',
+      'Para receber lembretes de vencimento, permita notificações para o Cycle12 Finance nas configurações do aparelho.',
     );
   }
 
@@ -212,6 +242,62 @@ export function SettingsScreen({
       </View>
 
       <View style={styles.card}>
+        <Text style={styles.cardTitle}>Lembretes</Text>
+        <View style={styles.settingRow}>
+          <Text style={styles.inputLabel}>Lembrar vencimentos:</Text>
+          <Switch
+            onValueChange={handleToggleReminders}
+            thumbColor={
+              reminders.settings.enabled ? colors.accent : colors.textSecondary
+            }
+            trackColor={{
+              false: colors.surfaceMuted,
+              true: colors.accent,
+            }}
+            value={reminders.settings.enabled}
+          />
+        </View>
+        {reminders.settings.enabled ? (
+          <>
+            <View style={styles.settingRow}>
+              <Text style={styles.inputLabel}>Avisar com antecedência:</Text>
+              <Pressable
+                onPress={() => setIsReminderDaysPickerOpen(true)}
+                style={styles.comboButton}
+              >
+                <Text style={styles.comboButtonText}>
+                  {formatReminderDaysBefore(reminders.settings.daysBefore)}
+                </Text>
+                <Ionicons color={colors.textSecondary} name="chevron-down" size={16} />
+              </Pressable>
+            </View>
+            <View style={styles.settingRow}>
+              <Text style={styles.inputLabel}>Horário do lembrete:</Text>
+              <Pressable
+                onPress={() => setIsReminderHourPickerOpen(true)}
+                style={styles.comboButton}
+              >
+                <Text style={styles.comboButtonText}>
+                  {String(reminders.settings.hour).padStart(2, '0')}
+                </Text>
+                <Ionicons color={colors.textSecondary} name="chevron-down" size={16} />
+              </Pressable>
+              <Text style={styles.comboSeparator}>:</Text>
+              <Pressable
+                onPress={() => setIsReminderMinutePickerOpen(true)}
+                style={styles.comboButton}
+              >
+                <Text style={styles.comboButtonText}>
+                  {String(reminders.settings.minute).padStart(2, '0')}
+                </Text>
+                <Ionicons color={colors.textSecondary} name="chevron-down" size={16} />
+              </Pressable>
+            </View>
+          </>
+        ) : null}
+      </View>
+
+      <View style={styles.card}>
         <Text style={styles.cardTitle}>Dados</Text>
         <ActionButton
           label="Backup e restauração"
@@ -284,6 +370,110 @@ export function SettingsScreen({
                   ]}
                 >
                   {timeoutMinutes} min
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ModalShell>
+      <ModalShell
+        cardStyle={styles.pickerModalCard}
+        closeOnOverlayPress
+        onRequestClose={() => setIsReminderDaysPickerOpen(false)}
+        title="Avisar com antecedência"
+        visible={isReminderDaysPickerOpen}
+      >
+        <View style={styles.monthCountGrid}>
+          {REMINDER_DAYS_BEFORE_OPTIONS.map((daysBefore) => {
+            const isSelected = reminders.settings.daysBefore === daysBefore;
+            return (
+              <Pressable
+                key={daysBefore}
+                onPress={() => {
+                  void reminders.setDaysBefore(daysBefore);
+                  setIsReminderDaysPickerOpen(false);
+                }}
+                style={[
+                  styles.monthCountOption,
+                  isSelected && styles.monthCountOptionActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.monthCountOptionText,
+                    isSelected && styles.monthCountOptionTextActive,
+                  ]}
+                >
+                  {formatReminderDaysBefore(daysBefore)}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ModalShell>
+
+      <ModalShell
+        cardStyle={styles.pickerModalCard}
+        closeOnOverlayPress
+        onRequestClose={() => setIsReminderHourPickerOpen(false)}
+        title="Hora do lembrete"
+        visible={isReminderHourPickerOpen}
+      >
+        <View style={styles.monthCountGrid}>
+          {HOUR_OPTIONS.map((hour) => {
+            const isSelected = reminders.settings.hour === hour;
+            return (
+              <Pressable
+                key={hour}
+                onPress={() => {
+                  void reminders.setTime(hour, reminders.settings.minute);
+                  setIsReminderHourPickerOpen(false);
+                }}
+                style={[styles.hourOption, isSelected && styles.monthCountOptionActive]}
+              >
+                <Text
+                  style={[
+                    styles.monthCountOptionText,
+                    isSelected && styles.monthCountOptionTextActive,
+                  ]}
+                >
+                  {String(hour).padStart(2, '0')}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </ModalShell>
+
+      <ModalShell
+        cardStyle={styles.pickerModalCard}
+        closeOnOverlayPress
+        onRequestClose={() => setIsReminderMinutePickerOpen(false)}
+        title="Minuto do lembrete"
+        visible={isReminderMinutePickerOpen}
+      >
+        <View style={styles.monthCountGrid}>
+          {MINUTE_OPTIONS.map((minute) => {
+            const isSelected = reminders.settings.minute === minute;
+            return (
+              <Pressable
+                key={minute}
+                onPress={() => {
+                  void reminders.setTime(reminders.settings.hour, minute);
+                  setIsReminderMinutePickerOpen(false);
+                }}
+                style={[
+                  styles.monthCountOption,
+                  isSelected && styles.monthCountOptionActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.monthCountOptionText,
+                    isSelected && styles.monthCountOptionTextActive,
+                  ]}
+                >
+                  {String(minute).padStart(2, '0')}
                 </Text>
               </Pressable>
             );
@@ -398,6 +588,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     ...typography.button,
   },
+  comboSeparator: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.button,
+  },
   hint: {
     color: colors.textSecondary,
     letterSpacing: 0,
@@ -434,6 +629,17 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     flexBasis: '17%',
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  hourOption: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexBasis: '21%',
     flexGrow: 1,
     justifyContent: 'center',
     minHeight: 44,

@@ -45,6 +45,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Treats credit card bills as manually editable monthly totals.
 - Uses the Cycle12 Finance `12` logo for the Android launcher icon and native splash screen.
 - Offers optional biometric app lock from Ajustes, disabled by default.
+- Offers optional local due-date reminder notifications from Ajustes, disabled by default.
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
@@ -77,6 +78,7 @@ Important project rules live in:
 - AsyncStorage for local device persistence
 - Expo File System, Document Picker, Sharing, and Crypto for local `.c12f` backup and restore
 - Expo Local Authentication and Blur for optional biometric app lock
+- Expo Notifications for optional local due-date reminders
 - Expo Splash Screen for native loading screen branding
 - React Native Gifted Charts for finance visualizations
 - Jest/Expo and React Native Testing Library for tests

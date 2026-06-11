@@ -1,6 +1,6 @@
 # Plan 034 - Due Date Reminders
 
-Status: Pending
+Status: Done
 
 ## Spec
 

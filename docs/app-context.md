@@ -129,10 +129,13 @@ It includes:
 - 12-month window advance behavior.
 - backup, restore, and reset data management.
 - optional biometric app lock controls in the `Segurança` section.
+- optional due-date reminder controls in the `Lembretes` section.
 
 Destructive actions, such as reset, should remain explicit and require confirmation.
 
 The `Segurança` section lets the user enable `Bloquear com biometria` and choose `Bloquear após` timeout options. The feature is disabled by default. Enabling it requires enrolled biometrics and successful device authentication.
+
+The `Lembretes` section lets the user enable `Lembrar vencimentos`, disabled by default. Enabling it requests OS notification permission; if denied, the toggle stays off and a hint explains permission must be granted in system settings. When enabled, the user picks `Avisar com antecedência` (0-7 days before the due date) and a reminder time (hour and minute).
 
 ## Secondary Views
 
@@ -170,7 +173,7 @@ All monetary input fields use a cash-register style mask: digits enter from the 
 
 All finance data is stored locally on the device through AsyncStorage.
 
-Optional app-lock settings are also stored locally, but they are not part of the `.c12f` finance backup payload.
+Optional app-lock settings and reminder settings are also stored locally, but they are not part of the `.c12f` finance backup payload.
 
 Backup and restore behavior:
 
@@ -199,6 +202,24 @@ This is not an account system and does not add a custom in-app PIN.
 
 Uninstalling the app can remove local data from the device.
 
+## Due Date Reminders
+
+The app can optionally send local notifications about upcoming account due dates.
+
+Behavior:
+
+- disabled by default.
+- configured in `Ajustes` under `Lembretes`.
+- enabling requests OS notification permission; denial keeps the feature off and shows a hint to grant permission in system settings.
+- the user configures `daysBefore` (0-7, "no dia" to "7 dias antes") and a reminder time (hour and minute).
+- when fired, a notification summarizes that day's pending accounts: `N conta(s) vencem em até X dia(s) — R$ Y pendente`, counting unpaid current-window account items with a value due within the configured window, and `Y` is their pending total.
+- no notification is shown for days with no qualifying accounts.
+- paid accounts and accounts with no value for the month never appear in reminders.
+- scheduling is bounded to a rolling 14-day horizon and re-synced on app start, on settings change, on relevant finance data changes (accounts, due days, monthly values, payment statuses), and when the planning window advances.
+- notification amounts always show real values; the `valuesHidden` eye toggle is session-only and does not affect OS notifications.
+
+This is fully local (`expo-notifications`); no backend, account, or notification history is added.
+
 ## Branding
 
 The app is identified as `Cycle12 Finance`.
@@ -215,6 +236,7 @@ Current branding uses:
 - AsyncStorage for local persistence.
 - Expo File System, Document Picker, Sharing, and Crypto for local backup/restore.
 - Expo Local Authentication and Blur for optional app lock.
+- Expo Notifications for optional local due-date reminders.
 - Expo Splash Screen for native loading branding.
 - React Native Gifted Charts for chart rendering.
 - Jest/Expo with React Native Testing Library for tests.
