@@ -73,6 +73,7 @@ It shows:
 - compact monthly summaries.
 - a shortcut to current-month payment tracking.
 - a "+" button on the balance panel for quickly adding an extra amount to the current month income.
+- a "Alocação do salário" panel showing how the current month's available income is distributed across categories, with a leftover/over-budget indicator and an expandable per-category breakdown.
 - past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown.
 
 `Resumo` should stay mostly read-only. It can open secondary views, but it should not become the main place for editing categories, accounts, or monthly values.

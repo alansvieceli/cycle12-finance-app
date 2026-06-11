@@ -7,6 +7,8 @@ import { ModalShell } from '../components/common/ModalShell';
 import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
 import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
+import { SalaryDistributionPanel } from '../components/finance/SalaryDistributionPanel';
+import { buildSalaryDistribution } from '../lib/salaryDistribution';
 import {
   calculateAvailableIncome,
   calculateCategoryTotals,
@@ -135,11 +137,6 @@ export function SummaryScreen({
       )
     : [];
   const commitmentProgress = Math.min(Math.max(currentCommitmentPercentage ?? 0, 0), 1);
-  const isCommitmentOverLimit =
-    currentCommitmentPercentage !== null &&
-    (currentCommitmentPercentage >= 1 ||
-      currentCommitmentPercentage >=
-        financeState.settings.commitmentDangerThreshold / 100);
   const commitmentColor =
     resolveCommitmentColor(
       currentCommitmentPercentage,
@@ -149,6 +146,9 @@ export function SummaryScreen({
   const currentAvailableIncome = currentProjectionMonth
     ? calculateAvailableIncome(financeState.settings, currentProjectionMonth)
     : 0;
+  const salaryDistribution = currentProjectionMonth
+    ? buildSalaryDistribution(financeState, currentProjectionMonth)
+    : null;
 
   const daysUntilNextDue = (() => {
     if (!nextDueAccount?.dueDay || !currentProjectionMonth) return null;
@@ -284,14 +284,14 @@ export function SummaryScreen({
                     ]}
                   />
                 </View>
-                <Text style={styles.statusHint}>
-                  {currentCommitmentPercentage === null
-                    ? 'Configure o salário para ver o comprometimento.'
-                    : isCommitmentOverLimit
-                      ? 'Acima do limite. Revise cartão e empréstimos.'
-                      : 'Dentro dos limites configurados.'}
-                </Text>
               </View>
+
+              {salaryDistribution ? (
+                <SalaryDistributionPanel
+                  distribution={salaryDistribution}
+                  valuesHidden={valuesHidden}
+                />
+              ) : null}
 
               <View style={styles.kpiGrid}>
                 <KpiCard
@@ -650,6 +650,7 @@ const styles = StyleSheet.create({
   kicker: {
     color: colors.textSecondary,
     letterSpacing: 0,
+    textTransform: 'uppercase',
     ...typography.label,
   },
   projectedBalance: {
@@ -691,12 +692,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.negative,
     borderRadius: 999,
     height: '100%',
-  },
-  statusHint: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    marginTop: 10,
-    ...typography.bodySmall,
   },
   kpiGrid: {
     flexDirection: 'row',
