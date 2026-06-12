@@ -192,6 +192,16 @@ export function useFinanceState() {
     updateCommitmentThreshold('commitmentDangerThreshold', value);
   }
 
+  function updateCommitmentGoal(value: string) {
+    const parsed = parseInt(value.replace(/\D/g, ''), 10);
+    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      settings: { ...currentState.settings, commitmentGoal: clamped },
+    }));
+  }
+
   function replaceFinanceState(nextState: FinanceState) {
     const currentDate = new Date();
     const normalizedState = advanceWindow(
@@ -626,6 +636,7 @@ export function useFinanceState() {
       updateAccountDueDay,
       updateAccountName,
       updateCommitmentDangerThreshold,
+      updateCommitmentGoal,
       updateCommitmentWarningThreshold,
       updateCurrentMonthExtraBalance,
       updateCategoryColor,

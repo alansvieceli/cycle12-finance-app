@@ -38,6 +38,7 @@ const financeState: FinanceState = {
     summaryVisibleMonthCount: 2,
     commitmentWarningThreshold: 80,
     commitmentDangerThreshold: 90,
+    commitmentGoal: 70,
     windowStartMonth: 6,
     windowStartYear: 2026,
   },

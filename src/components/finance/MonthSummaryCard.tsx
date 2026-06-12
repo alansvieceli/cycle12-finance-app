@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { resolveCommitmentColor } from '../../lib/commitmentColor';
+import { resolveGoalStatus } from '../../lib/commitmentGoal';
 import { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   formatMonthLabel,
@@ -9,10 +10,12 @@ import {
 } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
+import { GoalTag } from './GoalTag';
 import { SummaryValue } from './SummaryValue';
 
 type MonthSummaryCardProps = {
   commitmentDangerThreshold: number;
+  commitmentGoal: number;
   commitmentWarningThreshold: number;
   monthlyTotalExpenses: number;
   onOpenDetails: () => void;
@@ -24,6 +27,7 @@ type MonthSummaryCardProps = {
 
 export function MonthSummaryCard({
   commitmentDangerThreshold,
+  commitmentGoal,
   commitmentWarningThreshold,
   monthlyTotalExpenses,
   onOpenDetails,
@@ -36,6 +40,10 @@ export function MonthSummaryCard({
     salaryCommitmentPercentage,
     commitmentWarningThreshold,
     commitmentDangerThreshold,
+  );
+  const goalStatus = resolveGoalStatus(
+    salaryCommitmentPercentage,
+    commitmentGoal / 100,
   );
   return (
     <View style={styles.monthCard}>
@@ -76,6 +84,10 @@ export function MonthSummaryCard({
               : percentageFormatter.format(salaryCommitmentPercentage)
           }
         />
+      </View>
+
+      <View style={styles.goalTagRow}>
+        <GoalTag status={goalStatus} />
       </View>
 
       <Pressable onPress={onOpenDetails} style={styles.detailsButton}>
@@ -133,6 +145,9 @@ const styles = StyleSheet.create({
   },
   summaryTileAmount: {
     ...typography.amountMedium,
+  },
+  goalTagRow: {
+    marginTop: 10,
   },
   detailsButton: {
     alignItems: 'center',

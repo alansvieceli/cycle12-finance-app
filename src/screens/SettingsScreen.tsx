@@ -158,9 +158,9 @@ export function SettingsScreen({
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Comprometimento</Text>
         <Text style={styles.hint}>Use 0 a 100. Deixe 0 para desativar.</Text>
-        <View style={styles.thresholdPair}>
+        <View style={styles.thresholdRow}>
           <View style={styles.thresholdItem}>
-            <Text style={styles.inputLabel}>Alerta:</Text>
+            <Text style={styles.thresholdLabel}>Alerta</Text>
             <ThresholdInput
               onChangeValue={actions.updateCommitmentWarningThreshold}
               placeholder="80"
@@ -168,11 +168,19 @@ export function SettingsScreen({
             />
           </View>
           <View style={styles.thresholdItem}>
-            <Text style={styles.inputLabel}>Perigo:</Text>
+            <Text style={styles.thresholdLabel}>Perigo</Text>
             <ThresholdInput
               onChangeValue={actions.updateCommitmentDangerThreshold}
               placeholder="90"
               value={financeState.settings.commitmentDangerThreshold}
+            />
+          </View>
+          <View style={styles.thresholdItem}>
+            <Text style={styles.thresholdLabel}>Meta</Text>
+            <ThresholdInput
+              onChangeValue={actions.updateCommitmentGoal}
+              placeholder="70"
+              value={financeState.settings.commitmentGoal}
             />
           </View>
         </View>
@@ -563,8 +571,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0,
     minHeight: 38,
-    minWidth: 72,
-    maxWidth: 88,
+    width: '100%',
     paddingHorizontal: 12,
     paddingVertical: 6,
     textAlign: 'center',
@@ -604,15 +611,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     ...typography.amountSmall,
   },
-  thresholdPair: {
+  thresholdRow: {
     flexDirection: 'row',
     gap: 12,
   },
   thresholdItem: {
     alignItems: 'center',
     flex: 1,
-    flexDirection: 'row',
-    gap: 8,
+    gap: 6,
+  },
+  thresholdLabel: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    textAlign: 'center',
+    ...typography.bodySmall,
   },
   pickerModalCard: {
     maxWidth: 320,

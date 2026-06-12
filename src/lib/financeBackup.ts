@@ -377,6 +377,10 @@ function validateSettings(value: unknown): FinanceSettings {
       value.commitmentWarningThreshold,
       'Alerta de comprometimento inválido.',
     ),
+    commitmentGoal: validatePercent(
+      value.commitmentGoal,
+      'Meta de comprometimento inválida.',
+    ),
     currentMonthExtraBalance: validateNumber(
       value.currentMonthExtraBalance,
       'Extra do mês atual inválido.',

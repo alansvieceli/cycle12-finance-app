@@ -61,6 +61,7 @@ const baseState: FinanceState = {
   ],
   settings: {
     commitmentDangerThreshold: 90,
+    commitmentGoal: 70,
     commitmentWarningThreshold: 80,
     currentMonthExtraBalance: 0,
     monthlySalary: 3000,

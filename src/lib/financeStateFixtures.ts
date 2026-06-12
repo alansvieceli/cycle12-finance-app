@@ -42,6 +42,7 @@ export function buildSampleFinanceState(
     settings: {
       commitmentDangerThreshold: 80,
       commitmentWarningThreshold: 60,
+      commitmentGoal: 70,
       currentMonthExtraBalance: 250,
       monthlySalary: 5000,
       summaryVisibleMonthCount: 12,

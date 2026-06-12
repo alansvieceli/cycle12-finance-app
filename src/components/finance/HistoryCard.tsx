@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { resolveCommitmentColor } from '../../lib/commitmentColor';
+import { resolveGoalStatus } from '../../lib/commitmentGoal';
 import {
   formatMonthLabel,
   maskCurrency,
@@ -12,6 +13,7 @@ import { CategoryAverage, categoryVariation } from '../../lib/spendingTrends';
 import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
+import { GoalTag } from './GoalTag';
 
 type HistoryCardProps = {
   categories: Pick<Category, 'id' | 'sortOrder'>[];
@@ -22,7 +24,7 @@ type HistoryCardProps = {
   onToggle: () => void;
   settings: Pick<
     FinanceSettings,
-    'commitmentWarningThreshold' | 'commitmentDangerThreshold'
+    'commitmentWarningThreshold' | 'commitmentDangerThreshold' | 'commitmentGoal'
   >;
   valuesHidden: boolean;
 };
@@ -64,6 +66,8 @@ export function HistoryCard({
       settings.commitmentDangerThreshold,
     ) ?? colors.commitmentLow;
   const progressWidthPercent = Math.min(ratio * 100, 100);
+  const goalRatio = entry.totalIncome > 0 ? ratio : null;
+  const goalStatus = resolveGoalStatus(goalRatio, settings.commitmentGoal / 100);
 
   const liveSortOrderById = new Map(categories.map((c) => [c.id, c.sortOrder]));
   const resolveSortOrder = (id: string, snapshotOrder?: number) =>
@@ -126,6 +130,10 @@ export function HistoryCard({
         <Text style={[styles.progressLabel, { color: commitmentColor }]}>
           {percentageFormatter.format(ratio)}
         </Text>
+      </View>
+
+      <View style={styles.goalTagRow}>
+        <GoalTag status={goalStatus} />
       </View>
 
       {isExpanded ? (
@@ -291,6 +299,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 10,
+  },
+  goalTagRow: {
+    marginTop: 8,
   },
   progressTrack: {
     backgroundColor: colors.surfaceMuted,

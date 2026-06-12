@@ -98,6 +98,7 @@ describe('financeBackup', () => {
       settings: {
         commitmentDangerThreshold: 90,
         commitmentWarningThreshold: 70,
+        commitmentGoal: 70,
         currentMonthExtraBalance: 0,
         monthlySalary: 0,
         summaryVisibleMonthCount: 12,
@@ -137,6 +138,7 @@ const validData = {
   settings: {
     commitmentDangerThreshold: 80,
     commitmentWarningThreshold: 60,
+    commitmentGoal: 70,
     currentMonthExtraBalance: 0,
     monthlySalary: 5000,
     summaryVisibleMonthCount: 12,
@@ -304,6 +306,30 @@ describe('validateFinanceState — field errors', () => {
         testHash,
       ),
     ).rejects.toThrow('Perigo de comprometimento inválido');
+  });
+
+  it('rejects commitment goal above 100', async () => {
+    await expect(
+      parseAndValidateBackupContent(
+        buildEnvelopeJson({
+          ...validData,
+          settings: { ...validData.settings, commitmentGoal: 101 },
+        }),
+        testHash,
+      ),
+    ).rejects.toThrow('Meta de comprometimento inválida');
+  });
+
+  it('rejects commitment goal below 0', async () => {
+    await expect(
+      parseAndValidateBackupContent(
+        buildEnvelopeJson({
+          ...validData,
+          settings: { ...validData.settings, commitmentGoal: -1 },
+        }),
+        testHash,
+      ),
+    ).rejects.toThrow('Meta de comprometimento inválida');
   });
 
   it('rejects summaryVisibleMonthCount out of range', async () => {

@@ -100,6 +100,7 @@ describe('finance calculations', () => {
       summaryVisibleMonthCount: 12,
       commitmentWarningThreshold: 80,
       commitmentDangerThreshold: 90,
+      commitmentGoal: 70,
       windowStartMonth: 6,
       windowStartYear: 2026,
     };
@@ -132,6 +133,7 @@ describe('finance calculations', () => {
       summaryVisibleMonthCount: 12,
       commitmentWarningThreshold: 80,
       commitmentDangerThreshold: 90,
+      commitmentGoal: 70,
       windowStartMonth: 6,
       windowStartYear: 2026,
     };

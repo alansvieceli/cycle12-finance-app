@@ -21,6 +21,8 @@ import {
   ProjectionMonth,
 } from '../lib/financeCalculations';
 import { resolveCommitmentColor } from '../lib/commitmentColor';
+import { resolveGoalStatus } from '../lib/commitmentGoal';
+import { GoalTag } from '../components/finance/GoalTag';
 import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/formatters';
 import { EditableAmountInput } from '../components/common/EditableAmountInput';
 import { getCategoryColor } from '../lib/categoryColors';
@@ -144,6 +146,11 @@ export function SummaryScreen({
       financeState.settings.commitmentWarningThreshold,
       financeState.settings.commitmentDangerThreshold,
     ) ?? colors.commitmentLow;
+  const commitmentGoal = financeState.settings.commitmentGoal;
+  const currentGoalStatus = resolveGoalStatus(
+    currentCommitmentPercentage,
+    commitmentGoal / 100,
+  );
   const currentAvailableIncome = currentProjectionMonth
     ? calculateAvailableIncome(financeState.settings, currentProjectionMonth)
     : 0;
@@ -312,10 +319,21 @@ export function SummaryScreen({
                       },
                     ]}
                   />
+                  {commitmentGoal > 0 ? (
+                    <View
+                      style={[
+                        styles.goalMarker,
+                        { left: `${Math.min(Math.max(commitmentGoal, 0), 100)}%` },
+                      ]}
+                    />
+                  ) : null}
                 </View>
                 <Text style={[styles.trendLine, { color: trendLineColor }]}>
                   {trendLineText}
                 </Text>
+                <View style={styles.goalTagRow}>
+                  <GoalTag status={currentGoalStatus} />
+                </View>
               </View>
 
               {salaryDistribution ? (
@@ -468,6 +486,7 @@ export function SummaryScreen({
                       commitmentDangerThreshold={
                         financeState.settings.commitmentDangerThreshold
                       }
+                      commitmentGoal={financeState.settings.commitmentGoal}
                       commitmentWarningThreshold={
                         financeState.settings.commitmentWarningThreshold
                       }
@@ -655,6 +674,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     ...typography.label,
   },
+  goalTagRow: {
+    marginTop: 10,
+  },
   incomeRow: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -731,12 +753,21 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     height: 10,
     marginTop: 12,
-    overflow: 'hidden',
+    position: 'relative',
   },
   progressFill: {
     backgroundColor: colors.negative,
     borderRadius: 999,
     height: '100%',
+    overflow: 'hidden',
+  },
+  goalMarker: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 1,
+    bottom: -4,
+    position: 'absolute',
+    top: -4,
+    width: 2,
   },
   kpiGrid: {
     flexDirection: 'row',

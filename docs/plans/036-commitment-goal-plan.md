@@ -1,6 +1,6 @@
 # Plan 036 - Commitment Goal
 
-Status: Pending
+Status: Done
 
 ## Spec
 

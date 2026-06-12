@@ -93,6 +93,7 @@ export function ChartsScreen({
       <MonthlyCommitmentList
         data={buildMonthlyCommitmentChartData(financeState, projectionMonths)}
         emptyText="Configure salário e valores mensais para visualizar comprometimento."
+        goal={financeState.settings.commitmentGoal}
         title="Comprometimento por mês"
       />
 

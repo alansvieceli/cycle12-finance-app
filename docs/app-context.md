@@ -70,12 +70,13 @@ It shows:
 - projected balance.
 - salary commitment percentage and progress.
 - monthly expense, paid, pending, and next due information when available.
-- compact monthly summaries.
+- compact monthly summaries (Projeção), each showing the commitment goal status tag for that month (when a goal is configured).
 - a shortcut to current-month payment tracking.
 - a "+" button on the balance panel for quickly adding an extra amount to the current month income.
 - a "Alocação do salário" panel showing how the current month's available income is distributed across categories, with a leftover/over-budget indicator and an expandable per-category breakdown.
 - a trend line comparing the current month's total expenses to the historical average (from the saved month history), with a direction arrow, percentage, and amount delta in a neutral informational color; shows an insufficient-data message when fewer than 2 history entries exist.
-- past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown. When 2+ history entries exist, an overall average monthly spend summary is shown, and each expanded card's "Categorias" tab shows each category's variation versus its own historical average.
+- a commitment goal indicator: when a `Meta de comprometimento` is configured (0-100%, default 70%, 0 = disabled), the current-month commitment bar shows a thin neutral vertical marker at the goal position, and a fixed-width colored status tag (`dentro da meta` / `quase na meta` / `acima da meta`) appears below the trend line, based on how the month's commitment ratio compares to the goal. This is separate from the existing alert-threshold color semaphore, which is unchanged.
+- past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown. When 2+ history entries exist, an overall average monthly spend summary is shown, and each expanded card's "Categorias" tab shows each category's variation versus its own historical average. Each card also shows the commitment goal status tag for that month (when a goal is configured).
 
 `Resumo` should stay mostly read-only. It can open secondary views, but it should not become the main place for editing categories, accounts, or monthly values.
 
@@ -85,7 +86,7 @@ It shows:
 
 It shows chart-based summaries such as:
 
-- per-month income commitment.
+- per-month income commitment. When a commitment goal is configured, the "Comprometimento por mês" chart also shows a single vertical neutral meta line across each bar at the goal position, plus a bottom legend (`meta NN%`).
 - paid vs pending information for the current month.
 - current-month category distribution.
 - positive and negative monthly balance comparisons.
@@ -127,6 +128,7 @@ It includes:
 - current month extra balance.
 - visible month count.
 - commitment warning and danger thresholds.
+- commitment goal (`Meta de comprometimento`, 0-100%, default 70%, 0 = disabled), used to show goal-status indicators in Resumo, Projeção, Histórico, and the "Comprometimento por mês" chart. Does not change the alert-threshold color semaphore.
 - 12-month window advance behavior.
 - backup, restore, and reset data management.
 - optional biometric app lock controls in the `Segurança` section.

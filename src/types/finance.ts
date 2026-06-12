@@ -8,6 +8,7 @@ export type FinanceSettings = {
   summaryVisibleMonthCount: number;
   commitmentWarningThreshold: number;
   commitmentDangerThreshold: number;
+  commitmentGoal: number;
   windowStartYear: number;
   windowStartMonth: MonthNumber;
 };
@@ -82,6 +83,7 @@ export function createDefaultFinanceSettings(date = new Date()): FinanceSettings
     windowStartMonth: (date.getMonth() + 1) as MonthNumber,
     commitmentWarningThreshold: 70,
     commitmentDangerThreshold: 90,
+    commitmentGoal: 70,
   };
 }
 
