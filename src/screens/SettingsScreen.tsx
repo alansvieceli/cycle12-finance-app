@@ -663,6 +663,7 @@ const styles = StyleSheet.create({
   monthCountOptionText: {
     color: colors.textPrimary,
     letterSpacing: 0,
+    textAlign: 'center',
     ...typography.button,
   },
   monthCountOptionTextActive: {
