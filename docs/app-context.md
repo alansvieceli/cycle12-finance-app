@@ -215,6 +215,7 @@ Behavior:
 - disabled by default.
 - configured in `Ajustes` under `Lembretes`.
 - enabling requests OS notification permission; denial keeps the feature off and shows a hint to grant permission in system settings.
+- on Android, notifications use a branded monochrome `12` small icon configured through `expo-notifications`.
 - the user configures `daysBefore` (0-7, "no dia" to "7 dias antes") and a reminder time (hour and minute).
 - when fired, a notification summarizes that day's pending accounts: `N conta(s) vencem em até X dia(s) — R$ Y pendente`, counting unpaid current-window account items with a value due within the configured window, and `Y` is their pending total.
 - no notification is shown for days with no qualifying accounts.
@@ -232,6 +233,7 @@ Current branding uses:
 
 - a dark premium finance UI theme with orange accents.
 - the Cycle12 `12` logo for Android launcher icon and native splash screen.
+- a white transparent Cycle12 `12` notification icon for Android notification tray branding.
 
 ## Technical Stack
 

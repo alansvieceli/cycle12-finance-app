@@ -38,6 +38,14 @@
           "faceIDPermission": "Permitir que o Cycle12 Finance use o Face ID para desbloquear o app."
         }
       ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#FF5A1F",
+          "defaultChannel": "default"
+        }
+      ],
       "./plugins/with-android-centered-splash",
       "expo-sharing"
     ]

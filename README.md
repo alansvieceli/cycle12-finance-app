@@ -47,6 +47,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Uses the Cycle12 Finance `12` logo for the Android launcher icon and native splash screen.
 - Offers optional biometric app lock from Ajustes, disabled by default.
 - Offers optional local due-date reminder notifications from Ajustes, disabled by default.
+- Uses a branded monochrome Cycle12 notification icon for Android reminders.
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
