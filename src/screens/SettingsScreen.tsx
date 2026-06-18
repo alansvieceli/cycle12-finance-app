@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
 import {
   Alert,
@@ -50,6 +51,7 @@ export function SettingsScreen({
   valuesHidden,
 }: SettingsScreenProps) {
   const { actions, financeState } = finance;
+  const appVersion = Constants.expoConfig?.version;
   const [isDataManagementOpen, setIsDataManagementOpen] = useState(false);
   const [isMonthCountPickerOpen, setIsMonthCountPickerOpen] = useState(false);
   const [isSecurityTimeoutPickerOpen, setIsSecurityTimeoutPickerOpen] = useState(false);
@@ -312,6 +314,8 @@ export function SettingsScreen({
           onPress={() => setIsDataManagementOpen(true)}
         />
       </View>
+
+      {appVersion ? <Text style={styles.versionFooter}>v{appVersion}</Text> : null}
 
       <ModalShell
         cardStyle={styles.pickerModalCard}
@@ -668,5 +672,12 @@ const styles = StyleSheet.create({
   },
   monthCountOptionTextActive: {
     color: colors.accentText,
+  },
+  versionFooter: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    opacity: 0.7,
+    textAlign: 'center',
+    ...typography.caption,
   },
 });

@@ -133,6 +133,7 @@ It includes:
 - backup, restore, and reset data management.
 - optional biometric app lock controls in the `Segurança` section.
 - optional due-date reminder controls in the `Lembretes` section.
+- app version shown as a discreet footer, read from the Expo app config.
 
 Destructive actions, such as reset, should remain explicit and require confirmation.
 

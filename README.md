@@ -14,7 +14,7 @@ The main areas are:
 - `Gráficos`: read-only charts for commitment, paid vs pending totals, category distribution, and monthly balance trends.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
 - `Contas`: category and account management.
-- `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, and reset.
+- `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
 
 For deeper project and agent context, read `docs/app-context.md`.
 
@@ -33,6 +33,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Contas, and Ajustes.
 - Keeps planning focused on monthly values, with category and account management available from the dedicated Contas tab.
 - Combines finance settings and local data actions in Ajustes.
+- Shows the current app version in the Ajustes footer.
 - Lets the user select a category while creating an account.
 - Tracks current-month paid/unpaid status manually for each account item.
 - Opens current-month payment tracking from the Resumo payment shortcut.
@@ -79,7 +80,7 @@ Important project rules live in:
 - Expo File System, Document Picker, Sharing, and Crypto for local `.c12f` backup and restore
 - Expo Local Authentication and Blur for optional biometric app lock
 - Expo Notifications for optional local due-date reminders
-- Expo Splash Screen for native loading screen branding
+- Expo Asset and Expo Splash Screen for bundled assets and native loading screen branding
 - React Native Gifted Charts for finance visualizations
 - Jest/Expo and React Native Testing Library for tests
 
@@ -113,7 +114,7 @@ Expo CLI can be used through `npx`, so no global install is required.
 npm install
 ```
 
-The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, Expo Local Authentication and Blur for optional app lock, `expo-splash-screen` for native loading screen branding, React Native Gifted Charts for chart rendering, and Jest/Expo with React Native Testing Library for tests.
+The app uses `@react-native-async-storage/async-storage` for local device storage, Expo file/document/sharing/crypto modules for `.c12f` backup files, Expo Local Authentication and Blur for optional app lock, Expo Asset and Splash Screen for bundled assets and native loading screen branding, React Native Gifted Charts for chart rendering, and Jest/Expo with React Native Testing Library for tests.
 
 Finance data is stored only on the device. There is no backend, account, or cloud sync.
 
