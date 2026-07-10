@@ -10,6 +10,7 @@ import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 import { SalaryDistributionPanel } from '../components/finance/SalaryDistributionPanel';
 import { buildSalaryDistribution } from '../lib/salaryDistribution';
 import {
+  calculateAccountBalance,
   calculateAvailableIncome,
   calculateCategoryTotals,
   calculateIncomeCommitmentPercentage,
@@ -116,9 +117,6 @@ export function SummaryScreen({
           ) > 0,
       )
     : undefined;
-  const nextDueAccountCategoryName = nextDueAccount
-    ? categoryNamesById[nextDueAccount.categoryId]
-    : undefined;
   const currentMonthPayableAccounts = currentProjectionMonth
     ? financeState.accountItems.filter(
         (accountItem) =>
@@ -154,6 +152,10 @@ export function SummaryScreen({
   const currentAvailableIncome = currentProjectionMonth
     ? calculateAvailableIncome(financeState.settings, currentProjectionMonth)
     : 0;
+  const currentAccountBalance = calculateAccountBalance(
+    currentAvailableIncome,
+    paymentSummary.totalPaid,
+  );
   const salaryDistribution = currentProjectionMonth
     ? buildSalaryDistribution(financeState, currentProjectionMonth)
     : null;
@@ -359,25 +361,10 @@ export function SummaryScreen({
                   value={maskCurrency(paymentSummary.totalPaid, valuesHidden)}
                 />
                 <KpiCard
-                  color={colors.commitmentMedium}
-                  label="Próximo venc."
-                  value={nextDueAccount ? `Dia ${nextDueAccount.dueDay}` : 'N/A'}
-                  detail={
-                    nextDueAccount
-                      ? [nextDueAccount.name, nextDueAccountCategoryName]
-                          .filter(Boolean)
-                          .join(' - ')
-                      : undefined
-                  }
-                  subvalue={
-                    daysUntilNextDue === null
-                      ? undefined
-                      : daysUntilNextDue === 0
-                        ? 'hoje'
-                        : daysUntilNextDue < 0
-                          ? `${Math.abs(daysUntilNextDue)}d atrás`
-                          : `em ${daysUntilNextDue}d`
-                  }
+                  borderColor={colors.info}
+                  color={colors.info}
+                  label="Saldo em conta"
+                  value={maskCurrency(currentAccountBalance, valuesHidden)}
                 />
               </View>
 
@@ -404,6 +391,18 @@ export function SummaryScreen({
                         ]}
                       />
                     </View>
+                  ) : null}
+                  {nextDueAccount ? (
+                    <Text style={styles.paymentShortcutNextDue}>
+                      Próximo: dia {nextDueAccount.dueDay} · {nextDueAccount.name}
+                      {daysUntilNextDue === null
+                        ? ''
+                        : daysUntilNextDue === 0
+                          ? ' · hoje'
+                          : daysUntilNextDue < 0
+                            ? ` · ${Math.abs(daysUntilNextDue)}d atrás`
+                            : ` · em ${daysUntilNextDue}d`}
+                    </Text>
                   ) : null}
                 </View>
                 <View style={styles.paymentShortcutButton}>
@@ -566,12 +565,14 @@ export function SummaryScreen({
 }
 
 function KpiCard({
+  borderColor,
   color,
   detail,
   label,
   subvalue,
   value,
 }: {
+  borderColor?: string;
   color?: string;
   detail?: string;
   label: string;
@@ -579,7 +580,7 @@ function KpiCard({
   value: string;
 }) {
   return (
-    <View style={styles.kpiCard}>
+    <View style={[styles.kpiCard, borderColor ? { borderColor } : null]}>
       <Text style={styles.kpiLabel}>{label}</Text>
       <View style={styles.kpiValueRow}>
         <Text style={[styles.kpiValue, color ? { color } : null]}>{value}</Text>
@@ -849,6 +850,12 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     marginTop: 5,
+    ...typography.bodySmall,
+  },
+  paymentShortcutNextDue: {
+    color: colors.commitmentMedium,
+    letterSpacing: 0,
+    marginTop: 8,
     ...typography.bodySmall,
   },
   paymentShortcutButton: {

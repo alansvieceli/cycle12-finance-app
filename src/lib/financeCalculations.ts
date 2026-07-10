@@ -143,6 +143,13 @@ export function calculateSurplusOrShortfall(
   return availableIncome - monthlyTotalExpenses;
 }
 
+export function calculateAccountBalance(
+  availableIncome: number,
+  totalPaid: number,
+): number {
+  return availableIncome - totalPaid;
+}
+
 export function calculatePaymentSummary(
   accountItems: AccountItem[],
   monthlyValues: MonthlyValue[],

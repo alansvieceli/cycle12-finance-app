@@ -1,4 +1,5 @@
 import {
+  calculateAccountBalance,
   calculateCategoryTotal,
   calculateCategoryTotals,
   calculateIncomeCommitmentPercentage,
@@ -145,6 +146,12 @@ describe('finance calculations', () => {
     expect(calculateSurplusOrShortfall(settings, 3200, { isCurrentMonth: false })).toBe(
       -200,
     );
+  });
+
+  it('calculates the account balance as available income minus total paid', () => {
+    expect(calculateAccountBalance(5000, 1800)).toBe(3200);
+    expect(calculateAccountBalance(1800, 1800)).toBe(0);
+    expect(calculateAccountBalance(1000, 1800)).toBe(-800);
   });
 
   it('calculates paid and pending totals for a month', () => {

@@ -1,6 +1,6 @@
 # Task 038-01 - Add Account Balance Helper
 
-Status: Not started
+Status: Done (commit pending confirmation)
 
 ## Spec
 
@@ -21,7 +21,7 @@ Add a pure `calculateAccountBalance` helper (`Recebido − Pago`) to `financeCal
 
 ## Steps
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add to `src/lib/financeCalculations.test.ts`, inside the existing `describe('finance calculations', ...)` block, right after the `'includes extra balance only for the current month surplus calculation'` test (currently ending around line 148):
 
@@ -49,12 +49,12 @@ import {
 } from './financeCalculations';
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx jest financeCalculations -t "calculates the account balance"`
 Expected: FAIL — `calculateAccountBalance` is not exported / not defined.
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 In `src/lib/financeCalculations.ts`, insert this new function right after `calculateSurplusOrShortfall` (which ends at line 144) and before `calculatePaymentSummary` (which starts at line 146):
 
@@ -67,7 +67,7 @@ export function calculateAccountBalance(
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npx jest financeCalculations -t "calculates the account balance"`
 Expected: PASS

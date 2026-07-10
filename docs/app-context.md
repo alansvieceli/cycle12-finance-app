@@ -69,7 +69,7 @@ It shows:
 
 - projected balance.
 - salary commitment percentage and progress.
-- monthly expense, paid, pending, and next due information when available.
+- monthly expense, paid, pending, an account-balance reconciliation value ("Saldo em conta" = received minus paid, for comparing against the real bank balance), and next due information (shown inside the payment shortcut card) when available.
 - compact monthly summaries (Projeção), each showing the commitment goal status tag for that month (when a goal is configured).
 - a shortcut to current-month payment tracking.
 - a "+" button on the balance panel for quickly adding an extra amount to the current month income.

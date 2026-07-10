@@ -1,6 +1,6 @@
 # Task 038-03 - Update Docs and Validate
 
-Status: Not started
+Status: Done (commit pending confirmation)
 
 ## Spec
 
@@ -20,7 +20,7 @@ Update `docs/app-context.md` to describe the new `Saldo em conta` KPI, per the a
 
 ## Steps
 
-- [ ] **Step 1: Update the Resumo section**
+- [x] **Step 1: Update the Resumo section**
 
 In `docs/app-context.md`, under `### Resumo`, find this bullet:
 
@@ -34,7 +34,7 @@ Replace it with:
 - monthly expense, paid, pending, an account-balance reconciliation value ("Saldo em conta" = received minus paid, for comparing against the real bank balance), and next due information (shown inside the payment shortcut card) when available.
 ```
 
-- [ ] **Step 2: Run the full validation gate**
+- [x] **Step 2: Run the full validation gate**
 
 ```bash
 npm run check && npm run test:coverage

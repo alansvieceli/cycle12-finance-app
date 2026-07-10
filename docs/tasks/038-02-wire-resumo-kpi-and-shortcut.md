@@ -1,6 +1,6 @@
 # Task 038-02 - Wire Resumo KPI and Shortcut Card
 
-Status: Not started
+Status: Done (commit pending confirmation; visual check on emulator still to be confirmed by user)
 
 ## Spec
 
@@ -20,7 +20,7 @@ Replace the `Próximo venc.` KPI card with a `Saldo em conta` KPI card (`Recebid
 
 ## Steps
 
-- [ ] **Step 1: Import the new helper**
+- [x] **Step 1: Import the new helper**
 
 In `src/screens/SummaryScreen.tsx`, add `calculateAccountBalance` to the existing import from `'../lib/financeCalculations'` (keep alphabetical order):
 
@@ -39,7 +39,7 @@ import {
 } from '../lib/financeCalculations';
 ```
 
-- [ ] **Step 2: Remove the now-unused `nextDueAccountCategoryName`**
+- [x] **Step 2: Remove the now-unused `nextDueAccountCategoryName`**
 
 Delete this block (it was only used by the KPI card's `detail` prop, which this task removes):
 
@@ -49,7 +49,7 @@ const nextDueAccountCategoryName = nextDueAccount
   : undefined;
 ```
 
-- [ ] **Step 3: Compute `currentAccountBalance`**
+- [x] **Step 3: Compute `currentAccountBalance`**
 
 Right after the `currentAvailableIncome` declaration:
 
@@ -68,7 +68,7 @@ const currentAccountBalance = calculateAccountBalance(
 );
 ```
 
-- [ ] **Step 4: Add a `borderColor` prop to `KpiCard`**
+- [x] **Step 4: Add a `borderColor` prop to `KpiCard`**
 
 Replace the `KpiCard` function definition:
 
@@ -114,7 +114,7 @@ function KpiCard({
 
 (the rest of the function body is unchanged).
 
-- [ ] **Step 5: Replace the `Próximo venc.` card with `Saldo em conta`**
+- [x] **Step 5: Replace the `Próximo venc.` card with `Saldo em conta`**
 
 Replace this block:
 
@@ -151,7 +151,7 @@ with:
 />
 ```
 
-- [ ] **Step 6: Move the next-due line into the payment shortcut card**
+- [x] **Step 6: Move the next-due line into the payment shortcut card**
 
 In the `paymentShortcut` block, add a conditional `Text` right after the progress-track `View` (still inside `styles.paymentShortcutLeft`):
 
@@ -191,7 +191,7 @@ In the `paymentShortcut` block, add a conditional `Text` right after the progres
 }
 ```
 
-- [ ] **Step 7: Add the `paymentShortcutNextDue` style**
+- [x] **Step 7: Add the `paymentShortcutNextDue` style**
 
 Right after `paymentShortcutHint` in the `StyleSheet.create` call:
 
@@ -210,7 +210,7 @@ Right after `paymentShortcutHint` in the `StyleSheet.create` call:
   },
 ```
 
-- [ ] **Step 8: Typecheck and lint**
+- [x] **Step 8: Typecheck and lint**
 
 Run: `npx tsc --noEmit`
 Expected: no errors (confirms no unused variables and correct prop types).
