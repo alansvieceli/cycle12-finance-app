@@ -8,14 +8,14 @@ Before marking a spec as complete, run the full quality gate:
 npm run lint
 npm run format:check
 npm run typecheck
-npm test
 npm run test:coverage
+npm run knip
 ```
 
 Or in a single command:
 
 ```bash
-npm run check && npm run test:coverage
+npm run check
 ```
 
 ## Coverage Threshold
@@ -35,4 +35,5 @@ If any check fails, the spec is not complete. Fix all errors before marking done
 - Format failures must be fixed with `npm run format`.
 - TypeScript errors block completion.
 - Test failures block completion.
+- Knip findings block completion unless they are documented as intentional configuration exceptions.
 - Coverage below 80% in `src/lib/` requires additional tests.

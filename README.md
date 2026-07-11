@@ -138,7 +138,7 @@ npm run android
 
 ## Code Quality
 
-The project uses Expo-compatible ESLint, Prettier, strict TypeScript, Jest with `jest-expo`, React Native Testing Library, Husky, and lint-staged.
+The project uses Biome for linting and formatting, Knip for unused code and dependency checks, strict TypeScript, Jest with `jest-expo`, React Native Testing Library, Husky, and lint-staged.
 
 Run lint:
 
@@ -170,13 +170,19 @@ Run TypeScript validation:
 npm run typecheck
 ```
 
+Check for unused files, exports, and dependencies:
+
+```bash
+npm run knip
+```
+
 Run the complete local quality check:
 
 ```bash
 npm run check
 ```
 
-Pre-commit hooks run `lint-staged` on staged files only. The hook formats staged JSON/Markdown/code files and runs ESLint fixes on staged JavaScript/TypeScript files. It intentionally does not run builds or full test suites.
+Pre-commit hooks run `lint-staged` on staged files only. Biome checks and safely fixes supported staged code and JSON files. The hook intentionally does not run builds, Knip, or full test suites.
 
 ## Test
 
