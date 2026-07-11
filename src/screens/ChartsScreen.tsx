@@ -14,10 +14,10 @@ import {
   calculatePaymentSummary,
   getMonthlyValueAmount,
   isAccountItemPaid,
-  ProjectionMonth,
+  type ProjectionMonth,
 } from '../lib/financeCalculations';
 import { colors } from '../theme/colors';
-import { FinanceState } from '../types/finance';
+import type { FinanceState } from '../types/finance';
 
 type ChartsScreenProps = {
   financeState: FinanceState;

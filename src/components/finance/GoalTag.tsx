@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import {
   GOAL_STATUS_LABELS,
-  GoalStatus,
+  type GoalStatus,
   resolveGoalStatusColor,
 } from '../../lib/commitmentGoal';
 import { typography } from '../../theme/typography';

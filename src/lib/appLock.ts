@@ -10,7 +10,7 @@ export const DEFAULT_APP_LOCK_SETTINGS: AppLockSettings = {
   timeoutMinutes: 3,
 };
 
-export function isValidAppLockTimeout(
+function isValidAppLockTimeout(
   timeoutMinutes: number,
 ): timeoutMinutes is (typeof APP_LOCK_TIMEOUT_OPTIONS)[number] {
   return APP_LOCK_TIMEOUT_OPTIONS.includes(

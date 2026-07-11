@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import {
   Modal,
   Pressable,
-  StyleProp,
+  type StyleProp,
   StyleSheet,
   Text,
   View,
-  ViewStyle,
+  type ViewStyle,
 } from 'react-native';
 
 import { colors } from '../../theme/colors';

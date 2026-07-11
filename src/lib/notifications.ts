@@ -5,7 +5,7 @@ import Constants, { ExecutionEnvironment } from 'expo-constants';
 // Expo Go). Local notifications still work in a dev/standalone build, so we
 // only load the real module outside of Expo Go and fall back to a no-op
 // stub there.
-export const isNotificationsAvailable =
+const isNotificationsAvailable =
   Constants.executionEnvironment !== ExecutionEnvironment.StoreClient;
 
 type NotificationsModule = typeof import('expo-notifications');

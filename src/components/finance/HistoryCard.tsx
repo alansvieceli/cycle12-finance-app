@@ -9,10 +9,10 @@ import {
   maskCurrency,
   percentageFormatter,
 } from '../../lib/formatters';
-import { CategoryAverage, categoryVariation } from '../../lib/spendingTrends';
+import { type CategoryAverage, categoryVariation } from '../../lib/spendingTrends';
 import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
-import { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
+import type { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
 import { GoalTag } from './GoalTag';
 
 type HistoryCardProps = {

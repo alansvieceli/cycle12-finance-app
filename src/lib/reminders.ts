@@ -1,4 +1,4 @@
-import {
+import type {
   AccountItem,
   MonthlyPaymentStatus,
   MonthlyValue,
@@ -24,7 +24,7 @@ export const DEFAULT_REMINDER_SETTINGS: ReminderSettings = {
 
 const REMINDER_HORIZON_DAYS = 14;
 
-export function isValidReminderDaysBefore(
+function isValidReminderDaysBefore(
   daysBefore: number,
 ): daysBefore is (typeof REMINDER_DAYS_BEFORE_OPTIONS)[number] {
   return REMINDER_DAYS_BEFORE_OPTIONS.includes(

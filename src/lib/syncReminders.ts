@@ -1,6 +1,6 @@
+import type { AccountItem, MonthlyPaymentStatus, MonthlyValue } from '../types/finance';
 import { Notifications } from './notifications';
-import { AccountItem, MonthlyPaymentStatus, MonthlyValue } from '../types/finance';
-import { buildDueReminders, ReminderSettings } from './reminders';
+import { buildDueReminders, type ReminderSettings } from './reminders';
 
 export async function syncReminders(
   accountItems: AccountItem[],

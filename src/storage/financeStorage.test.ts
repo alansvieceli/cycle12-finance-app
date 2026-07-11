@@ -1,13 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { buildResetFinanceState, normalizeFinanceState } from '../lib/financeBackup';
+import { buildSampleFinanceState } from '../lib/financeStateFixtures';
+import { emptyFinanceState, type FinanceState } from '../types/finance';
 import {
   clearFinanceState,
   loadFinanceState,
   saveFinanceState,
 } from './financeStorage';
-import { buildResetFinanceState, normalizeFinanceState } from '../lib/financeBackup';
-import { buildSampleFinanceState } from '../lib/financeStateFixtures';
-import { FinanceState, emptyFinanceState } from '../types/finance';
 
 const sampleState = buildSampleFinanceState({ summaryVisibleMonthCount: 6 });
 

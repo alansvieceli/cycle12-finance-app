@@ -15,6 +15,7 @@ const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
   month: 'short',
 });
 
+/** @internal */
 export function formatEditableAmount(value: number) {
   if (!Number.isFinite(value) || value === 0) {
     return '';

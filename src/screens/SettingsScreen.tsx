@@ -15,13 +15,13 @@ import { ActionButton } from '../components/common/ActionButton';
 import { CurrencyInput } from '../components/common/CurrencyInput';
 import { ModalShell } from '../components/common/ModalShell';
 import { DataManagementPanel } from '../components/finance/DataManagementPanel';
-import { AppLockState } from '../hooks/useAppLock';
-import { useFinanceState } from '../hooks/useFinanceState';
-import { RemindersState } from '../hooks/useReminders';
+import type { AppLockState } from '../hooks/useAppLock';
+import type { useFinanceState } from '../hooks/useFinanceState';
+import type { RemindersState } from '../hooks/useReminders';
 import { APP_LOCK_TIMEOUT_OPTIONS } from '../lib/appLock';
 import { createProjectionMonths } from '../lib/financeCalculations';
-import { REMINDER_DAYS_BEFORE_OPTIONS } from '../lib/reminders';
 import { formatMonthLabel } from '../lib/formatters';
+import { REMINDER_DAYS_BEFORE_OPTIONS } from '../lib/reminders';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 

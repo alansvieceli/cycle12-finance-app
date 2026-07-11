@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { resolveCommitmentColor } from '../../lib/commitmentColor';
 import { resolveGoalStatus } from '../../lib/commitmentGoal';
-import { ProjectionMonth } from '../../lib/financeCalculations';
+import type { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   formatMonthLabel,
   maskCurrency,

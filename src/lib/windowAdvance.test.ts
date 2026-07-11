@@ -1,5 +1,5 @@
+import type { FinanceState } from '../types/finance';
 import { advanceWindow, shouldAdvanceWindow } from './windowAdvance';
-import { FinanceState } from '../types/finance';
 
 const baseState: FinanceState = {
   accountItems: [

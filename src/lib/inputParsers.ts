@@ -1,3 +1,4 @@
+/** @internal */
 export function parseCurrencyInput(value: string) {
   const normalizedValue = value
     .replace(/[^\d,.-]/g, '')

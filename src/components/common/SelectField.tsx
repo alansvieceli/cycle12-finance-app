@@ -5,7 +5,7 @@ import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
-export type SelectOption = {
+type SelectOption = {
   id: string;
   label: string;
   sublabel?: string;

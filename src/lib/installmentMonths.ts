@@ -1,4 +1,4 @@
-import { MonthNumber } from '../types/finance';
+import type { MonthNumber } from '../types/finance';
 
 type InstallmentMonth = {
   year: number;

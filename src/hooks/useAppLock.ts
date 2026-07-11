@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState, AppStateStatus } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 
 import {
-  AppLockSettings,
+  type AppLockSettings,
   DEFAULT_APP_LOCK_SETTINGS,
   shouldLockAfterBackground,
 } from '../lib/appLock';

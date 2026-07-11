@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { buildResetFinanceState, normalizeFinanceState } from '../lib/financeBackup';
-import { FinanceState, emptyFinanceState } from '../types/finance';
+import { emptyFinanceState, type FinanceState } from '../types/finance';
 
 const FINANCE_STATE_STORAGE_KEY = '@cycle12-finance-app/finance-state/v2';
 const SELECTED_PLANNING_ACCOUNT_STORAGE_KEY =
@@ -24,6 +24,7 @@ export async function saveFinanceState(financeState: FinanceState): Promise<void
   await AsyncStorage.setItem(FINANCE_STATE_STORAGE_KEY, JSON.stringify(financeState));
 }
 
+/** @internal */
 export async function clearFinanceState(): Promise<void> {
   await AsyncStorage.removeItem(FINANCE_STATE_STORAGE_KEY);
 }

@@ -1,5 +1,5 @@
 import { colors } from '../theme/colors';
-import { CategoryChartPoint, MonthlyChartPoint } from './chartData';
+import type { CategoryChartPoint, MonthlyChartPoint } from './chartData';
 
 export type GiftedBarPoint = {
   disablePress: boolean;

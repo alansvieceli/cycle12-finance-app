@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { DEFAULT_APP_LOCK_SETTINGS } from '../lib/appLock';
 import {
   clearAppLockSettings,
   loadAppLockSettings,
   saveAppLockSettings,
 } from './appLockStorage';
-import { DEFAULT_APP_LOCK_SETTINGS } from '../lib/appLock';
 
 describe('appLockStorage', () => {
   beforeEach(async () => {

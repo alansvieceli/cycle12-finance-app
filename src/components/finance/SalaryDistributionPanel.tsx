@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { maskCurrency } from '../../lib/formatters';
-import { SalaryDistribution } from '../../lib/salaryDistribution';
+import type { SalaryDistribution } from '../../lib/salaryDistribution';
 import { colors } from '../../theme/colors';
 import { panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';

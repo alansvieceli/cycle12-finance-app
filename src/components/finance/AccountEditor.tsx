@@ -15,7 +15,7 @@ import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { editorStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
-import { AccountItem, Category } from '../../types/finance';
+import type { AccountItem, Category } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 import { ModalShell } from '../common/ModalShell';
 

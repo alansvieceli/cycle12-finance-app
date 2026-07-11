@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
+import type { ReactNode } from 'react';
+import { type StyleProp, StyleSheet, Text, type TextStyle, View } from 'react-native';
 
 import { colors } from '../../theme/colors';
 import { panelStyles } from '../../theme/sharedStyles';

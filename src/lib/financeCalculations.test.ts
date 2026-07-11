@@ -1,3 +1,9 @@
+import type {
+  AccountItem,
+  Category,
+  FinanceSettings,
+  MonthlyValue,
+} from '../types/finance';
 import {
   calculateAccountBalance,
   calculateCategoryTotal,
@@ -9,7 +15,6 @@ import {
   calculateSurplusOrShortfall,
   createProjectionMonths,
 } from './financeCalculations';
-import { AccountItem, Category, FinanceSettings, MonthlyValue } from '../types/finance';
 
 const categories: Category[] = [
   {

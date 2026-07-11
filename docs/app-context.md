@@ -246,7 +246,7 @@ Current branding uses:
 - Expo Splash Screen for native loading branding.
 - React Native Gifted Charts for chart rendering.
 - Jest/Expo with React Native Testing Library for tests.
-- Biome for linting and formatting, and Knip for unused code and dependency analysis.
+- Biome recommended React/project rules for strict linting, formatting, and import organization; Knip validates both the complete workspace and strict production-only code/dependencies.
 
 ## Project Constraints
 

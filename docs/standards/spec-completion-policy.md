@@ -10,6 +10,7 @@ npm run format:check
 npm run typecheck
 npm run test:coverage
 npm run knip
+npm run knip:production
 ```
 
 Or in a single command:
@@ -31,7 +32,7 @@ The `src/lib/` coverage must remain above **80% statements**. If new business lo
 
 If any check fails, the spec is not complete. Fix all errors before marking done:
 
-- Lint errors block completion. Warnings are allowed but should be reviewed.
+- Biome errors and warnings block completion.
 - Format failures must be fixed with `npm run format`.
 - TypeScript errors block completion.
 - Test failures block completion.

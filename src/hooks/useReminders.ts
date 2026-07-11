@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { Notifications } from '../lib/notifications';
-import { DEFAULT_REMINDER_SETTINGS, ReminderSettings } from '../lib/reminders';
+import { DEFAULT_REMINDER_SETTINGS, type ReminderSettings } from '../lib/reminders';
 import {
   loadReminderSettings,
   saveReminderSettings,

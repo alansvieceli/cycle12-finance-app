@@ -3,19 +3,24 @@ import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
-import { ProjectionMonth } from '../../lib/financeCalculations';
+import type { ProjectionMonth } from '../../lib/financeCalculations';
 import {
   currencyFormatter,
   formatMonthLabel,
   maskCurrency,
 } from '../../lib/formatters';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
-import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
+import type { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { modalFormStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
-import { AccountItem, Category, MonthNumber, MonthlyValue } from '../../types/finance';
+import type {
+  AccountItem,
+  Category,
+  MonthlyValue,
+  MonthNumber,
+} from '../../types/finance';
 import { EditableAmountInput } from '../common/EditableAmountInput';
 import { ModalShell } from '../common/ModalShell';
 import { SelectField } from '../common/SelectField';

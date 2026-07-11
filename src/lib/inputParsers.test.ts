@@ -1,10 +1,10 @@
+import { createId } from './ids';
 import {
   clampVisibleMonthCount,
   parseCurrencyInput,
   parseDueDay,
   parseSortOrder,
 } from './inputParsers';
-import { createId } from './ids';
 
 describe('input parsers', () => {
   it('parses Brazilian currency-like input', () => {

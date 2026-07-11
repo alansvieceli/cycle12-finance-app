@@ -1,38 +1,36 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Fragment, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-
+import { EditableAmountInput } from '../components/common/EditableAmountInput';
 import { ModalShell } from '../components/common/ModalShell';
-
+import { GoalTag } from '../components/finance/GoalTag';
 import { HistoryCard } from '../components/finance/HistoryCard';
 import { MonthDetailsPanel } from '../components/finance/MonthDetailsPanel';
 import { MonthSummaryCard } from '../components/finance/MonthSummaryCard';
 import { SalaryDistributionPanel } from '../components/finance/SalaryDistributionPanel';
-import { buildSalaryDistribution } from '../lib/salaryDistribution';
+import { getCategoryColor } from '../lib/categoryColors';
+import { resolveCommitmentColor } from '../lib/commitmentColor';
+import { resolveGoalStatus } from '../lib/commitmentGoal';
 import {
   calculateAccountBalance,
   calculateAvailableIncome,
   calculateCategoryTotals,
   calculateIncomeCommitmentPercentage,
-  calculatePaymentSummary,
   calculateMonthlyTotalExpenses,
+  calculatePaymentSummary,
   calculateSurplusOrShortfall,
   getMonthlyValueAmount,
   isAccountItemPaid,
-  ProjectionMonth,
+  type ProjectionMonth,
 } from '../lib/financeCalculations';
-import { resolveCommitmentColor } from '../lib/commitmentColor';
-import { resolveGoalStatus } from '../lib/commitmentGoal';
-import { GoalTag } from '../components/finance/GoalTag';
 import { formatMonthLabel, maskCurrency, percentageFormatter } from '../lib/formatters';
-import { EditableAmountInput } from '../components/common/EditableAmountInput';
-import { getCategoryColor } from '../lib/categoryColors';
+import { buildSalaryDistribution } from '../lib/salaryDistribution';
 import { sortAccountItemsByDueDay, sortCategories } from '../lib/sorting';
 import { computeCategoryAverages, computeTotalTrend } from '../lib/spendingTrends';
 import { colors } from '../theme/colors';
 import { modalFormStyles } from '../theme/sharedStyles';
 import { typography } from '../theme/typography';
-import { FinanceState } from '../types/finance';
+import type { FinanceState } from '../types/finance';
 
 type ActiveView = 'current' | 'other' | 'history';
 
@@ -522,42 +520,38 @@ export function SummaryScreen({
                 );
               })}
             </>
+          ) : financeState.monthHistory.length === 0 ? (
+            <View style={styles.emptyHistory}>
+              <Text style={styles.emptyHistoryText}>
+                Nenhum mês registrado ainda. O histórico é salvo automaticamente quando
+                o mês avança.
+              </Text>
+            </View>
           ) : (
             <>
-              {financeState.monthHistory.length === 0 ? (
-                <View style={styles.emptyHistory}>
-                  <Text style={styles.emptyHistoryText}>
-                    Nenhum mês registrado ainda. O histórico é salvo automaticamente
-                    quando o mês avança.
-                  </Text>
-                </View>
-              ) : (
-                <>
-                  {historyHasEnoughData ? (
-                    <Text style={styles.trendLine}>
-                      Média mensal: {maskCurrency(historyAverageTotal, valuesHidden)}
-                    </Text>
-                  ) : null}
-                  {financeState.monthHistory.map((entry) => {
-                    const key = `${entry.year}-${entry.month}`;
-                    return (
-                      <HistoryCard
-                        key={key}
-                        categories={sortedCategories}
-                        categoryAverages={historyCategoryAverages}
-                        entry={entry}
-                        hasEnoughHistory={historyHasEnoughData}
-                        isExpanded={expandedHistoryKey === key}
-                        onToggle={() =>
-                          setExpandedHistoryKey((prev) => (prev === key ? null : key))
-                        }
-                        settings={financeState.settings}
-                        valuesHidden={valuesHidden}
-                      />
-                    );
-                  })}
-                </>
-              )}
+              {historyHasEnoughData ? (
+                <Text style={styles.trendLine}>
+                  Média mensal: {maskCurrency(historyAverageTotal, valuesHidden)}
+                </Text>
+              ) : null}
+              {financeState.monthHistory.map((entry) => {
+                const key = `${entry.year}-${entry.month}`;
+                return (
+                  <HistoryCard
+                    key={key}
+                    categories={sortedCategories}
+                    categoryAverages={historyCategoryAverages}
+                    entry={entry}
+                    hasEnoughHistory={historyHasEnoughData}
+                    isExpanded={expandedHistoryKey === key}
+                    onToggle={() =>
+                      setExpandedHistoryKey((prev) => (prev === key ? null : key))
+                    }
+                    settings={financeState.settings}
+                    valuesHidden={valuesHidden}
+                  />
+                );
+              })}
             </>
           )}
         </View>

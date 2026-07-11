@@ -1,4 +1,4 @@
-import { FinanceState } from '../types/finance';
+import type { FinanceState } from '../types/finance';
 
 /** Builds the canonical sample finance state used by storage and backup tests. */
 export function buildSampleFinanceState(

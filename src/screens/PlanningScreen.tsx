@@ -1,6 +1,6 @@
 import { MonthlyValueEditor } from '../components/finance/MonthlyValueEditor';
-import { useFinanceState } from '../hooks/useFinanceState';
-import { ProjectionMonth } from '../lib/financeCalculations';
+import type { useFinanceState } from '../hooks/useFinanceState';
+import type { ProjectionMonth } from '../lib/financeCalculations';
 
 type PlanningScreenProps = {
   finance: ReturnType<typeof useFinanceState>;

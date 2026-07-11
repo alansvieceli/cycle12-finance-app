@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react';
-
-import { createId } from '../lib/ids';
 import { suggestCategoryColor } from '../lib/categoryColors';
+import { normalizeFinanceState } from '../lib/financeBackup';
+import type { ProjectionMonth } from '../lib/financeCalculations';
+import { createId } from '../lib/ids';
 import {
   clampVisibleMonthCount,
   parseDueDay,
   parseSortOrder,
 } from '../lib/inputParsers';
+import { buildInstallmentMonths } from '../lib/installmentMonths';
+import {
+  calculateAdjustedMonthlyValue,
+  type MonthlyValueAdjustmentOperation,
+} from '../lib/monthlyValueAdjustments';
 import {
   sortAccountItems,
   sortCategories,
   suggestNextCategorySortOrder,
 } from '../lib/sorting';
 import { advanceWindow, getNextWindowStart } from '../lib/windowAdvance';
-import { normalizeFinanceState } from '../lib/financeBackup';
 import {
   loadFinanceState,
   loadSelectedPlanningAccountId,
@@ -21,17 +26,11 @@ import {
   saveSelectedPlanningAccountId,
 } from '../storage/financeStorage';
 import {
-  AccountItem,
-  FinanceState,
-  MonthlyValue,
+  type AccountItem,
   emptyFinanceState,
+  type FinanceState,
+  type MonthlyValue,
 } from '../types/finance';
-import { ProjectionMonth } from '../lib/financeCalculations';
-import {
-  MonthlyValueAdjustmentOperation,
-  calculateAdjustedMonthlyValue,
-} from '../lib/monthlyValueAdjustments';
-import { buildInstallmentMonths } from '../lib/installmentMonths';
 
 export function useFinanceState() {
   const [financeState, setFinanceState] = useState(emptyFinanceState);
@@ -176,7 +175,7 @@ export function useFinanceState() {
     value: string,
   ) {
     const parsed = parseInt(value.replace(/\D/g, ''), 10);
-    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+    const clamped = Number.isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
 
     setFinanceState((currentState) => ({
       ...currentState,
@@ -194,7 +193,7 @@ export function useFinanceState() {
 
   function updateCommitmentGoal(value: string) {
     const parsed = parseInt(value.replace(/\D/g, ''), 10);
-    const clamped = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+    const clamped = Number.isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
 
     setFinanceState((currentState) => ({
       ...currentState,
@@ -664,6 +663,7 @@ export function useFinanceState() {
   };
 }
 
+/** @internal */
 export function buildAccountItemWithValueState(
   currentState: FinanceState,
   accountItemId: string,

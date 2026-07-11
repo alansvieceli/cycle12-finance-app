@@ -1,7 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["plugins/*.js"],
-  "ignoreFiles": ["src/components/common/EyeIcon.tsx"],
-  "ignoreDependencies": ["expo-asset", "expo-blur", "expo-system-ui", "expo-updates"],
-  "ignoreExportsUsedInFile": true
+  "entry": ["plugins/*.js!"],
+  "project": [
+    "**/*.{js,jsx,ts,tsx}!",
+    "!jest.setup.ts!",
+    "!src/lib/financeStateFixtures.ts!"
+  ],
+  "ignoreDependencies": ["expo-system-ui", "expo-updates"]
 }

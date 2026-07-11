@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { StyleProp, TextInput, TextStyle } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { type StyleProp, TextInput, type TextStyle } from 'react-native';
 import CurrencyInput from 'react-native-currency-input';
 
 import { colors } from '../../theme/colors';
@@ -43,7 +43,7 @@ export function EditableAmountInput({
     emitValue.current = onChangeValue;
   }, [onChangeValue]);
 
-  function flushPendingEmit() {
+  const flushPendingEmit = useCallback(() => {
     if (pendingEmitTimer.current) {
       clearTimeout(pendingEmitTimer.current);
       pendingEmitTimer.current = null;
@@ -54,10 +54,10 @@ export function EditableAmountInput({
       pendingAmount.current = null;
       emitValue.current(amount);
     }
-  }
+  }, []);
 
   // flush on unmount so a value typed right before navigating away is not lost
-  useEffect(() => flushPendingEmit, []);
+  useEffect(() => flushPendingEmit, [flushPendingEmit]);
 
   useEffect(() => {
     if (!isFocused && pendingAmount.current === null) {

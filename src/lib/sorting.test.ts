@@ -1,5 +1,5 @@
+import type { AccountItem, Category } from '../types/finance';
 import { sortAccountItems, sortAccountItemsByDueDay, sortCategories } from './sorting';
-import { AccountItem, Category } from '../types/finance';
 
 describe('sorting helpers', () => {
   it('sorts categories by sort order and name', () => {

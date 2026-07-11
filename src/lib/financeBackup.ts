@@ -1,16 +1,16 @@
-import { clampVisibleMonthCount } from './inputParsers';
 import {
-  AccountItem,
-  Category,
-  CategoryPropagation,
-  FinanceSettings,
-  FinanceState,
-  MonthHistoryEntry,
-  MonthNumber,
-  MonthlyPaymentStatus,
-  MonthlyValue,
+  type AccountItem,
+  type Category,
+  type CategoryPropagation,
   createDefaultFinanceSettings,
+  type FinanceSettings,
+  type FinanceState,
+  type MonthHistoryEntry,
+  type MonthlyPaymentStatus,
+  type MonthlyValue,
+  type MonthNumber,
 } from '../types/finance';
+import { clampVisibleMonthCount } from './inputParsers';
 
 export function normalizeFinanceState(financeState: FinanceState): FinanceState {
   return {
@@ -83,9 +83,10 @@ function normalizeMonth(
     : defaultSettings.windowStartMonth;
 }
 
-export const BACKUP_FORMAT = 'cycle12-finance-backup';
+const BACKUP_FORMAT = 'cycle12-finance-backup';
+/** @internal */
 export const BACKUP_FORMAT_VERSION = 1;
-export const BACKUP_STORAGE_VERSION = 2;
+const BACKUP_STORAGE_VERSION = 2;
 export const BACKUP_FILE_EXTENSION = '.c12f';
 
 const BACKUP_HASH_ALGORITHM = 'SHA-256';
@@ -194,6 +195,7 @@ export async function parseAndValidateBackupContent(
   return validateFinanceState(envelope.data);
 }
 
+/** @internal */
 export function canonicalStringify(value: unknown): string {
   return JSON.stringify(sortCanonicalValue(value));
 }

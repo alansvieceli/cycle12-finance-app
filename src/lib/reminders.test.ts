@@ -1,9 +1,9 @@
+import type { AccountItem, MonthlyPaymentStatus, MonthlyValue } from '../types/finance';
 import {
   buildDueReminders,
   DEFAULT_REMINDER_SETTINGS,
-  ReminderSettings,
+  type ReminderSettings,
 } from './reminders';
-import { AccountItem, MonthlyPaymentStatus, MonthlyValue } from '../types/finance';
 
 const accountItems: AccountItem[] = [
   { id: 'rent', categoryId: 'cat', name: 'Aluguel', dueDay: 10, sortOrder: 0 },

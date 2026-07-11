@@ -1,17 +1,17 @@
+import { colors } from '../theme/colors';
+import type { FinanceState } from '../types/finance';
+import { getCategoryColor } from './categoryColors';
+import { resolveCommitmentColor } from './commitmentColor';
 import {
+  type CategoryMonthTotal,
   calculateCategoryTotals,
   calculateIncomeCommitmentPercentage,
   calculateMonthlyTotalExpenses,
   calculateSurplusOrShortfall,
-  CategoryMonthTotal,
-  ProjectionMonth,
+  type ProjectionMonth,
 } from './financeCalculations';
 import { formatMonthLabel } from './formatters';
-import { getCategoryColor } from './categoryColors';
-import { resolveCommitmentColor } from './commitmentColor';
 import { sortCategories } from './sorting';
-import { colors } from '../theme/colors';
-import { FinanceState } from '../types/finance';
 
 export type MonthlyChartPoint = {
   key: string;
@@ -33,6 +33,7 @@ export type CommitmentChartPoint = {
   color: string;
 };
 
+/** @internal */
 export function buildMonthlyExpenseChartData(
   financeState: FinanceState,
   projectionMonths: ProjectionMonth[],

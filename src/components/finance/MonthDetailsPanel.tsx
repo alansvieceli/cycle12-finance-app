@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
-
-import { ActionButton } from '../common/ActionButton';
-import { CategoryMonthTotal, ProjectionMonth } from '../../lib/financeCalculations';
+import type {
+  CategoryMonthTotal,
+  ProjectionMonth,
+} from '../../lib/financeCalculations';
 import { formatMonthLabel, maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
+import { ActionButton } from '../common/ActionButton';
 import { CategoryTotalsList } from './CategoryTotalsList';
 
 type MonthDetailsPanelProps = {

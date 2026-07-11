@@ -1,22 +1,21 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-
-import { Ionicons } from '@expo/vector-icons';
 import { getCategoryColor } from '../../lib/categoryColors';
 import {
   calculatePaymentSummary,
   getMonthlyValueAmount,
   isAccountItemPaid,
-  ProjectionMonth,
+  type ProjectionMonth,
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
 import { parseDueDay } from '../../lib/inputParsers';
-import { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
+import type { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItemsByDueDay, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { modalFormStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
-import {
+import type {
   AccountItem,
   Category,
   MonthlyPaymentStatus,

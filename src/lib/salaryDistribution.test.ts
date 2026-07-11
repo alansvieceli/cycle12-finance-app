@@ -1,6 +1,6 @@
+import type { FinanceState } from '../types/finance';
+import type { ProjectionMonth } from './financeCalculations';
 import { buildSalaryDistribution } from './salaryDistribution';
-import { ProjectionMonth } from './financeCalculations';
-import { FinanceState } from '../types/finance';
 
 const projectionMonths: ProjectionMonth[] = [
   { isCurrentMonth: true, key: '2026-06', month: 6, year: 2026 },

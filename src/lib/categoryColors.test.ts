@@ -1,5 +1,5 @@
 import { chartPalette } from '../theme/colors';
-import { Category } from '../types/finance';
+import type { Category } from '../types/finance';
 import { getCategoryColor, suggestCategoryColor } from './categoryColors';
 
 function makeCategory(id: string, overrides?: Partial<Category>): Category {

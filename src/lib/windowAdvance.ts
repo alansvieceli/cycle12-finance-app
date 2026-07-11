@@ -1,10 +1,10 @@
-import {
+import type {
   AccountItem,
   Category,
   FinanceState,
   MonthHistoryEntry,
-  MonthNumber,
   MonthlyValue,
+  MonthNumber,
 } from '../types/finance';
 
 type MonthReference = {
@@ -14,6 +14,7 @@ type MonthReference = {
 
 const WINDOW_MONTH_COUNT = 12;
 
+/** @internal */
 export function shouldAdvanceWindow(
   windowStartYear: number,
   windowStartMonth: MonthNumber,

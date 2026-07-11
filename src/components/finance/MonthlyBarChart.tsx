@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { BarChart, LineChart } from 'react-native-gifted-charts';
 
-import { MonthlyChartPoint } from '../../lib/chartData';
+import type { MonthlyChartPoint } from '../../lib/chartData';
 import { maskCurrency } from '../../lib/formatters';
 import {
   toGiftedBalanceBarData,

@@ -1,4 +1,4 @@
-import { AccountItem, Category } from '../types/finance';
+import type { AccountItem, Category } from '../types/finance';
 
 export function sortCategories(categories: Category[]): Category[] {
   return categories.slice().sort(compareCategories);
@@ -43,7 +43,7 @@ export function suggestNextCategorySortOrder(categories: Category[]): number {
   return n;
 }
 
-export function compareCategories(firstCategory: Category, secondCategory: Category) {
+function compareCategories(firstCategory: Category, secondCategory: Category) {
   return compareCategoryValues(firstCategory, secondCategory);
 }
 

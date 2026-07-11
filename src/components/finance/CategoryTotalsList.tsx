@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { CategoryMonthTotal } from '../../lib/financeCalculations';
+import type { CategoryMonthTotal } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';

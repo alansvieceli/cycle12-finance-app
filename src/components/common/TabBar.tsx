@@ -1,6 +1,6 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';

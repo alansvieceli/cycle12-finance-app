@@ -1,4 +1,4 @@
-import { MonthHistoryEntry } from '../types/finance';
+import type { MonthHistoryEntry } from '../types/finance';
 
 const NEUTRAL_BAND_RATIO = 0.02;
 

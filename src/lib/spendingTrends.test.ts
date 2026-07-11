@@ -1,9 +1,9 @@
+import type { MonthHistoryEntry } from '../types/finance';
 import {
   categoryVariation,
   computeCategoryAverages,
   computeTotalTrend,
 } from './spendingTrends';
-import { MonthHistoryEntry } from '../types/finance';
 
 function buildEntry(
   totalExpenses: number,

@@ -18,14 +18,12 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "project": "recommended",
+      "react": "recommended"
+    },
     "rules": {
-      "preset": "none",
-      "correctness": {
-        "noUnusedImports": "warn",
-        "noUnusedVariables": "warn",
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
-      }
+      "preset": "recommended"
     }
   },
   "javascript": {
@@ -36,6 +34,11 @@
     }
   },
   "assist": {
-    "enabled": false
+    "enabled": true,
+    "actions": {
+      "source": {
+        "recommended": true
+      }
+    }
   }
 }

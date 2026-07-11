@@ -1,6 +1,6 @@
 const { withDangerousMod } = require('@expo/config-plugins');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const CENTERED_SPLASH_DRAWABLE = `<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:drawable="@color/splashscreen_background"/>

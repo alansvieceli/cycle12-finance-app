@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
-  AppLockSettings,
+  type AppLockSettings,
   DEFAULT_APP_LOCK_SETTINGS,
   normalizeAppLockSettings,
 } from '../lib/appLock';
@@ -25,6 +25,7 @@ export async function saveAppLockSettings(settings: AppLockSettings): Promise<vo
   );
 }
 
+/** @internal */
 export async function clearAppLockSettings(): Promise<void> {
   await AsyncStorage.removeItem(APP_LOCK_SETTINGS_STORAGE_KEY);
 }

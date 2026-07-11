@@ -1,5 +1,5 @@
 import { chartPalette } from '../theme/colors';
-import { Category } from '../types/finance';
+import type { Category } from '../types/finance';
 import { sortCategories } from './sorting';
 
 export function getCategoryColor(categoryId: string, categories: Category[]): string {

@@ -1,6 +1,7 @@
+import type { FinanceState, MonthNumber } from '../types/finance';
 import {
   BACKUP_FORMAT_VERSION,
-  BackupEnvelope,
+  type BackupEnvelope,
   buildResetFinanceState,
   canonicalStringify,
   createBackupEnvelope,
@@ -8,7 +9,6 @@ import {
   serializeBackupEnvelope,
 } from './financeBackup';
 import { buildSampleFinanceState } from './financeStateFixtures';
-import { FinanceState, MonthNumber } from '../types/finance';
 
 const sampleState = buildSampleFinanceState();
 

@@ -1,5 +1,5 @@
-import { resolveCommitmentColor } from './commitmentColor';
 import { colors } from '../theme/colors';
+import { resolveCommitmentColor } from './commitmentColor';
 
 describe('resolveCommitmentColor', () => {
   it('returns null when commitment is null', () => {

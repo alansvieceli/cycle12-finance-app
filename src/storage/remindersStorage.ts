@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   DEFAULT_REMINDER_SETTINGS,
   normalizeReminderSettings,
-  ReminderSettings,
+  type ReminderSettings,
 } from '../lib/reminders';
 
 const REMINDER_SETTINGS_STORAGE_KEY = '@cycle12-finance-app/reminders/v1';

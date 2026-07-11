@@ -1,15 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-
-import { ActionButton } from '../common/ActionButton';
-import { ModalShell } from '../common/ModalShell';
 import { getCategoryColor, suggestCategoryColor } from '../../lib/categoryColors';
-import { Category, CategoryPropagation } from '../../types/finance';
 import { sortCategories } from '../../lib/sorting';
 import { chartPalette, colors } from '../../theme/colors';
 import { editorStyles, panelStyles } from '../../theme/sharedStyles';
 import { typography } from '../../theme/typography';
+import type { Category, CategoryPropagation } from '../../types/finance';
+import { ActionButton } from '../common/ActionButton';
+import { ModalShell } from '../common/ModalShell';
 
 const propagationOptions: { label: string; value: CategoryPropagation }[] = [
   { label: 'Fixo', value: 'fixed' },

@@ -15,7 +15,7 @@ import {
 } from '../../lib/financeBackup';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
-import { FinanceState } from '../../types/finance';
+import type { FinanceState } from '../../types/finance';
 import { ActionButton } from '../common/ActionButton';
 
 type DataManagementPanelProps = {

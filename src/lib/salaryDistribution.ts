@@ -1,16 +1,16 @@
+import type { FinanceState } from '../types/finance';
+import { getCategoryColor } from './categoryColors';
 import {
   calculateAvailableIncome,
   calculateCategoryTotals,
   calculateMonthlyTotalExpenses,
-  ProjectionMonth,
+  type ProjectionMonth,
 } from './financeCalculations';
-import { getCategoryColor } from './categoryColors';
 import { sortCategories } from './sorting';
-import { FinanceState } from '../types/finance';
 
 const TAIL_SHARE_THRESHOLD = 0.08;
 
-export type SalaryDistributionSegment = {
+type SalaryDistributionSegment = {
   categoryId: string;
   color: string;
   label: string;

@@ -1,10 +1,10 @@
-import {
+import type {
   AccountItem,
   Category,
   FinanceSettings,
-  MonthNumber,
   MonthlyPaymentStatus,
   MonthlyValue,
+  MonthNumber,
 } from '../types/finance';
 
 export type ProjectionMonth = {
@@ -46,6 +46,7 @@ export function createProjectionMonths(
   });
 }
 
+/** @internal */
 export function calculateCategoryTotal(
   categoryId: string,
   accountItems: AccountItem[],
@@ -99,6 +100,7 @@ export function calculateMonthlyTotalExpenses(
   ).reduce((total, categoryTotal) => total + categoryTotal.total, 0);
 }
 
+/** @internal */
 export function calculateSalaryCommitmentPercentage(
   monthlyTotalExpenses: number,
   monthlySalary: number,
@@ -156,33 +158,23 @@ export function calculatePaymentSummary(
   paymentStatuses: MonthlyPaymentStatus[],
   projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
 ): PaymentSummary {
-  return accountItems.reduce<PaymentSummary>(
-    (summary, accountItem) => {
-      const amount = getMonthlyValueAmount(
-        monthlyValues,
-        accountItem.id,
-        projectionMonth,
-      );
-      const isPaid = isAccountItemPaid(
-        paymentStatuses,
-        accountItem.id,
-        projectionMonth,
-      );
+  const summary: PaymentSummary = { totalPaid: 0, totalPending: 0 };
 
-      if (isPaid) {
-        return {
-          ...summary,
-          totalPaid: summary.totalPaid + amount,
-        };
-      }
+  for (const accountItem of accountItems) {
+    const amount = getMonthlyValueAmount(
+      monthlyValues,
+      accountItem.id,
+      projectionMonth,
+    );
 
-      return {
-        ...summary,
-        totalPending: summary.totalPending + amount,
-      };
-    },
-    { totalPaid: 0, totalPending: 0 },
-  );
+    if (isAccountItemPaid(paymentStatuses, accountItem.id, projectionMonth)) {
+      summary.totalPaid += amount;
+    } else {
+      summary.totalPending += amount;
+    }
+  }
+
+  return summary;
 }
 
 export function getMonthlyValueAmount(

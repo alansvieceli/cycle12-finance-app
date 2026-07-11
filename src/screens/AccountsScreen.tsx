@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AccountEditor } from '../components/finance/AccountEditor';
 import { CategoryEditor } from '../components/finance/CategoryEditor';
-import { useFinanceState } from '../hooks/useFinanceState';
+import type { useFinanceState } from '../hooks/useFinanceState';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 

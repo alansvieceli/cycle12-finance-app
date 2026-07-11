@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 
-import { CategoryChartPoint } from '../../lib/chartData';
+import type { CategoryChartPoint } from '../../lib/chartData';
 import { maskCurrency } from '../../lib/formatters';
 import { toGiftedCategoryDonutData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';

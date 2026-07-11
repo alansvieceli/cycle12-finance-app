@@ -1,5 +1,5 @@
-import { buildAccountItemWithValueState } from './useFinanceState';
 import { emptyFinanceState } from '../types/finance';
+import { buildAccountItemWithValueState } from './useFinanceState';
 
 const baseState = {
   ...emptyFinanceState,

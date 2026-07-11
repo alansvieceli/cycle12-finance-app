@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { maskCurrency } from '../../lib/formatters';
 import {
   calculateAdjustedMonthlyValue,
-  MonthlyValueAdjustmentOperation,
+  type MonthlyValueAdjustmentOperation,
 } from '../../lib/monthlyValueAdjustments';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';

@@ -1,16 +1,15 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-
-import { Ionicons } from '@expo/vector-icons';
 import { AppLockOverlay } from './components/common/AppLockOverlay';
-import { TabBar, TabItem } from './components/common/TabBar';
+import { TabBar, type TabItem } from './components/common/TabBar';
 import { CurrentMonthPaymentChecklist } from './components/finance/CurrentMonthPaymentChecklist';
-import { createProjectionMonths } from './lib/financeCalculations';
-import { Notifications } from './lib/notifications';
-import { syncReminders } from './lib/syncReminders';
 import { useAppLock } from './hooks/useAppLock';
 import { useFinanceState } from './hooks/useFinanceState';
 import { useReminders } from './hooks/useReminders';
+import { createProjectionMonths } from './lib/financeCalculations';
+import { Notifications } from './lib/notifications';
+import { syncReminders } from './lib/syncReminders';
 import { AccountsScreen } from './screens/AccountsScreen';
 import { ChartsScreen } from './screens/ChartsScreen';
 import { PlanningScreen } from './screens/PlanningScreen';
@@ -58,6 +57,8 @@ export function FinanceApp() {
     projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
     projectionMonths[0];
 
+  // Window changes must resync reminders even when the finance arrays keep their references.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: window start is an intentional trigger
   useEffect(() => {
     if (reminders.isInitializing) {
       return;

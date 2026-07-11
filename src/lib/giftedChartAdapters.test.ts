@@ -1,9 +1,9 @@
+import { colors } from '../theme/colors';
 import {
   toGiftedBalanceBarData,
   toGiftedCategoryDonutData,
   toGiftedExpenseLineData,
 } from './giftedChartAdapters';
-import { colors } from '../theme/colors';
 
 describe('gifted chart adapters', () => {
   it('maps balance values to positive and negative bar colors', () => {

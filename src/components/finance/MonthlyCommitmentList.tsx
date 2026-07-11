@@ -1,6 +1,6 @@
-import { DimensionValue, StyleSheet, Text, View } from 'react-native';
+import { type DimensionValue, StyleSheet, Text, View } from 'react-native';
 
-import { CommitmentChartPoint } from '../../lib/chartData';
+import type { CommitmentChartPoint } from '../../lib/chartData';
 import { percentageFormatter } from '../../lib/formatters';
 import { colors } from '../../theme/colors';
 import { panelStyles } from '../../theme/sharedStyles';

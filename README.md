@@ -152,6 +152,12 @@ Fix lint issues when possible:
 npm run lint:fix
 ```
 
+Apply all safe Biome formatting, lint, and import-organization fixes:
+
+```bash
+npm run fix
+```
+
 Format files:
 
 ```bash
@@ -176,13 +182,21 @@ Check for unused files, exports, and dependencies:
 npm run knip
 ```
 
+Check only shipped code and production dependencies in strict mode:
+
+```bash
+npm run knip:production
+```
+
+Knip intentionally ignores `expo-system-ui` and `expo-updates` because the Expo plugin extracts them implicitly from `app.json`; neither package is directly imported by this app.
+
 Run the complete local quality check:
 
 ```bash
 npm run check
 ```
 
-Pre-commit hooks run `lint-staged` on staged files only. Biome checks and safely fixes supported staged code and JSON files. The hook intentionally does not run builds, Knip, or full test suites.
+Pre-commit hooks run `lint-staged` on staged files only. Biome checks, formats, and organizes imports in supported staged code and JSON files using safe fixes. The hook intentionally does not run builds, Knip, or full test suites.
 
 ## Test
 
