@@ -35,7 +35,7 @@ export function calculateAccountBalance(
 ## UI Wiring (038-02)
 
 - `SummaryScreen.tsx` computes `currentAccountBalance = calculateAccountBalance(currentAvailableIncome, paymentSummary.totalPaid)`.
-- The KPI grid's 4th card changes from `Próximo venc.` to `Saldo em conta`, value = `maskCurrency(currentAccountBalance, valuesHidden)`, color always `colors.info` regardless of sign, with a matching `colors.info` border to visually distinguish the card (per approved mockup).
+- The KPI grid's 4th card changes from `Próximo venc.` to `Saldo em conta`, value = `maskCurrency(currentAccountBalance, valuesHidden)`. Its value and border use `colors.info` when zero or positive and `colors.negativeText` when negative.
 - `KpiCard` gains an optional `borderColor` prop used only by this card; all other `KpiCard` usages keep the default border color.
 - The next-due-account line (`Próximo: dia {dueDay} · {name}` + relative day label) moves into `paymentShortcutLeft`, below the progress bar, rendered only when `nextDueAccount` exists — no fallback text when it doesn't.
 - No changes to `PaymentSummaryPanel.tsx` (the `Pagamentos` screen) — out of scope per spec.

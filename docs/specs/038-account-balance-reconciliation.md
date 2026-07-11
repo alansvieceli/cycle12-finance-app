@@ -13,7 +13,7 @@ The `Resumo` balance panel already shows **Recebido** (`calculateAvailableIncome
 - Do not add any new setting, stored field, or backup shape change. This is a purely derived, read-only value.
 - Do not change `calculateSurplusOrShortfall`, `calculatePaymentSummary`, or any existing KPI (`Despesas`, `Pendente`, `Pago`).
 - Do not surface this value in Projeção, Histórico, Gráficos, or the `Pagamentos` secondary screen. Current-month `Resumo` only.
-- Do not color the value based on sign (no red/negative treatment if `Pago` exceeds `Recebido`). Always the same neutral accent color.
+- Do not add new balance states beyond the existing color feedback.
 
 ## UX Behavior
 
@@ -22,8 +22,8 @@ The `Resumo` balance panel already shows **Recebido** (`calculateAvailableIncome
 - The 2x2 KPI grid changes from `Despesas / Pendente / Pago / Próximo venc.` to `Despesas / Pendente / Pago / Saldo em conta`.
 - **Saldo em conta** = `Recebido − Pago` (`currentAvailableIncome - paymentSummary.totalPaid`).
 - Value uses the existing `maskCurrency` formatting and respects the `valuesHidden` toggle, like every other monetary value on the screen.
-- Value color is always `colors.info` (the app's existing neutral/info blue), regardless of whether the result is positive or negative.
-- The card gets a subtle border in `colors.info` to visually distinguish it from the other three KPI cards (per approved mockup).
+- Value and border use `colors.info` (the app's existing neutral/info blue) when the balance is zero or positive.
+- Value and border use `colors.negativeText` when the balance is negative, signaling that paid expenses exceeded received income.
 
 ### Resumo — "Pagamentos do mês" shortcut card
 
@@ -42,7 +42,7 @@ The `Resumo` balance panel already shows **Recebido** (`calculateAvailableIncome
     return availableIncome - totalPaid;
   }
   ```
-- In `SummaryScreen.tsx`, compute `currentAccountBalance = calculateAccountBalance(currentAvailableIncome, paymentSummary.totalPaid)` and pass it to a `KpiCard` in place of the current `Próximo venc.` card. Force its color via a fixed prop/style (not derived from sign).
+- In `SummaryScreen.tsx`, compute `currentAccountBalance = calculateAccountBalance(currentAvailableIncome, paymentSummary.totalPaid)` and pass it to a `KpiCard` in place of the current `Próximo venc.` card. Derive the card color from whether that balance is negative.
 - Move the `nextDueAccount` / `nextDueAccountCategoryName` / `daysUntilNextDue` rendering out of the KPI grid and into the `paymentShortcut` block (`styles.paymentShortcut`), as a new `Text` line, conditionally rendered.
 - No changes to `PaymentSummaryPanel.tsx` (used by the `Pagamentos` screen) — out of scope.
 - Update `docs/app-context.md` (`Resumo` section) to mention the new "Saldo em conta" KPI and the relocated next-due line, per the app-context update policy.
@@ -57,7 +57,7 @@ Unit tests for `calculateAccountBalance` in `financeCalculations.test.ts`:
 
 ## Acceptance Criteria
 
-- `Resumo` (current month) shows a **Saldo em conta** KPI card equal to `Recebido − Pago`, formatted with `maskCurrency`, hidden by the existing eye toggle, always in `colors.info` regardless of sign.
+- `Resumo` (current month) shows a **Saldo em conta** KPI card equal to `Recebido − Pago`, formatted with `maskCurrency` and hidden by the existing eye toggle. Its value and border are blue when zero or positive and red when negative.
 - The KPI grid no longer shows a `Próximo venc.` card.
 - The `Pagamentos do mês` shortcut card shows the next-due-account line (day, name, relative day label) when a next-due account exists, and shows nothing extra when it doesn't.
 - No other screen or stored data changes.

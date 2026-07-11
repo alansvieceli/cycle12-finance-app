@@ -12,7 +12,7 @@ Status: Done (commit pending confirmation; visual check on emulator still to be 
 
 ## Goal
 
-Replace the `Próximo venc.` KPI card with a `Saldo em conta` KPI card (`Recebido − Pago`, always `colors.info`), and move the next-due-account info into the `Pagamentos do mês` shortcut card below it.
+Replace the `Próximo venc.` KPI card with a `Saldo em conta` KPI card (`Recebido − Pago`; blue when zero or positive, red when negative), and move the next-due-account info into the `Pagamentos do mês` shortcut card below it.
 
 ## Files
 
@@ -66,6 +66,8 @@ const currentAccountBalance = calculateAccountBalance(
   currentAvailableIncome,
   paymentSummary.totalPaid,
 );
+const currentAccountBalanceColor =
+  currentAccountBalance < 0 ? colors.negativeText : colors.info;
 ```
 
 - [x] **Step 4: Add a `borderColor` prop to `KpiCard`**
@@ -144,8 +146,8 @@ with:
 
 ```tsx
 <KpiCard
-  borderColor={colors.info}
-  color={colors.info}
+  borderColor={currentAccountBalanceColor}
+  color={currentAccountBalanceColor}
   label="Saldo em conta"
   value={maskCurrency(currentAccountBalance, valuesHidden)}
 />
@@ -236,7 +238,7 @@ git commit -m "feat: add saldo em conta kpi and relocate next due info"
 ## Acceptance Criteria
 
 - The KPI grid shows `Despesas`, `Pendente`, `Pago`, `Saldo em conta` (no more `Próximo venc.`).
-- `Saldo em conta` value equals `calculateAccountBalance(currentAvailableIncome, paymentSummary.totalPaid)`, formatted with `maskCurrency`, respecting `valuesHidden`, always rendered in `colors.info` with a `colors.info` border.
+- `Saldo em conta` value equals `calculateAccountBalance(currentAvailableIncome, paymentSummary.totalPaid)`, formatted with `maskCurrency` and respecting `valuesHidden`; its value and border use `colors.info` when zero or positive and `colors.negativeText` when negative.
 - The `Pagamentos do mês` shortcut card shows `Próximo: dia {dueDay} · {name}` plus the relative day label, only when `nextDueAccount` exists; nothing extra renders when it doesn't.
 - No unused variables remain (`nextDueAccountCategoryName` removed).
 - `npx tsc --noEmit` and `npm run lint` pass.

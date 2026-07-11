@@ -156,6 +156,8 @@ export function SummaryScreen({
     currentAvailableIncome,
     paymentSummary.totalPaid,
   );
+  const currentAccountBalanceColor =
+    currentAccountBalance < 0 ? colors.negativeText : colors.info;
   const salaryDistribution = currentProjectionMonth
     ? buildSalaryDistribution(financeState, currentProjectionMonth)
     : null;
@@ -361,8 +363,8 @@ export function SummaryScreen({
                   value={maskCurrency(paymentSummary.totalPaid, valuesHidden)}
                 />
                 <KpiCard
-                  borderColor={colors.info}
-                  color={colors.info}
+                  borderColor={currentAccountBalanceColor}
+                  color={currentAccountBalanceColor}
                   label="Saldo em conta"
                   value={maskCurrency(currentAccountBalance, valuesHidden)}
                 />
