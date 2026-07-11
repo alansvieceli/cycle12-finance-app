@@ -198,6 +198,8 @@ npm run check
 
 Pre-commit hooks run `lint-staged` on staged files only. Biome checks, formats, and organizes imports in supported staged code and JSON files using safe fixes. The hook intentionally does not run builds, Knip, or full test suites.
 
+Commit messages are validated by Husky's `commit-msg` hook and must use `type: message`. Accepted types are `feat`, `fix`, `docs`, `test`, `build`, `perf`, `style`, `refactor`, `chore`, `ci`, `raw`, `cleanup`, and `remove`.
+
 ## Test
 
 ```bash
