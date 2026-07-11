@@ -73,3 +73,16 @@ coverage/
 
 # Android Profiling
 *.hprof
+
+# gerenciado pelo kav-cli
+/.kav/prompts/
+/.kav/agents/
+/.claude/commands/
+/.claude/agents/
+/.cursor/commands/
+/.cursor/agents/
+/.agents/skills/
+/.codex/agents/
+
+#graphify-out
+graphify-out/cache

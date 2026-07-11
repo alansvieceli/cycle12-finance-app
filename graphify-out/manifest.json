@@ -1,0 +1,1892 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1780710626.4340322,
+    "ast_hash": "89daacef63c050bcf4401fd6f166a090",
+    "semantic_hash": "89daacef63c050bcf4401fd6f166a090"
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1783724805.7156122,
+    "ast_hash": "0d8e5d6c405144e2e266589ea0e213b2",
+    "semantic_hash": "0d8e5d6c405144e2e266589ea0e213b2"
+  },
+  ".husky/_/applypatch-msg": {
+    "mtime": 1781745419.637147,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/commit-msg": {
+    "mtime": 1781745419.635137,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/h": {
+    "mtime": 1780662096.4837005,
+    "ast_hash": "15239a01c5554e56ff745570fb583a91",
+    "semantic_hash": "15239a01c5554e56ff745570fb583a91"
+  },
+  ".husky/_/husky.sh": {
+    "mtime": 1781745419.6451561,
+    "ast_hash": "13871d2ab13e8423790ecb2c01c78c18",
+    "semantic_hash": "13871d2ab13e8423790ecb2c01c78c18"
+  },
+  ".husky/_/post-applypatch": {
+    "mtime": 1781745419.6391568,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/post-checkout": {
+    "mtime": 1781745419.6431546,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/post-commit": {
+    "mtime": 1781745419.6361465,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/post-merge": {
+    "mtime": 1781745419.6441553,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/post-rewrite": {
+    "mtime": 1781745419.6431546,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-applypatch": {
+    "mtime": 1781745419.6381557,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-auto-gc": {
+    "mtime": 1781745419.6451561,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-commit": {
+    "mtime": 1781745419.6336296,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-merge-commit": {
+    "mtime": 1781745419.6336296,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-push": {
+    "mtime": 1781745419.6441553,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/pre-rebase": {
+    "mtime": 1781745419.6391568,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  ".husky/_/prepare-commit-msg": {
+    "mtime": 1781745419.635137,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": "0b71c2e7d39daa010985d529f1320b37"
+  },
+  "App.tsx": {
+    "mtime": 1781212578.307775,
+    "ast_hash": "aa6a61885647061e89433318dfc26128",
+    "semantic_hash": "aa6a61885647061e89433318dfc26128"
+  },
+  "app.json": {
+    "mtime": 1781747006.0780125,
+    "ast_hash": "9bad182d510b74f7be470fc8e48d0e7f",
+    "semantic_hash": "9bad182d510b74f7be470fc8e48d0e7f"
+  },
+  "eslint.config.js": {
+    "mtime": 1780662470.1772342,
+    "ast_hash": "d7369de5a7f69ad7d68c85ccee23c432",
+    "semantic_hash": "d7369de5a7f69ad7d68c85ccee23c432"
+  },
+  "index.ts": {
+    "mtime": 1780601351.8039682,
+    "ast_hash": "33caa6d28d87fc7e637c033d0d7124b1",
+    "semantic_hash": "33caa6d28d87fc7e637c033d0d7124b1"
+  },
+  "jest.config.js": {
+    "mtime": 1780857580.6574154,
+    "ast_hash": "999a695fbbca1ed742826ac5bde4bd1d",
+    "semantic_hash": "999a695fbbca1ed742826ac5bde4bd1d"
+  },
+  "jest.setup.ts": {
+    "mtime": 1780662609.1676428,
+    "ast_hash": "56d0e6bb27059d389ef0ea8cfae64577",
+    "semantic_hash": "56d0e6bb27059d389ef0ea8cfae64577"
+  },
+  "package.json": {
+    "mtime": 1781745463.6101086,
+    "ast_hash": "16fb2cc3563d312a29af1c2b261bad6e",
+    "semantic_hash": "16fb2cc3563d312a29af1c2b261bad6e"
+  },
+  "plugins/with-android-centered-splash.js": {
+    "mtime": 1780630461.5234733,
+    "ast_hash": "c93be6e183800eeca904430af1550078",
+    "semantic_hash": "c93be6e183800eeca904430af1550078"
+  },
+  "src/FinanceApp.tsx": {
+    "mtime": 1781212602.9096894,
+    "ast_hash": "724ac31a8c418997ca38e02349da0830",
+    "semantic_hash": "724ac31a8c418997ca38e02349da0830"
+  },
+  "src/components/common/ActionButton.test.tsx": {
+    "mtime": 1780662297.681119,
+    "ast_hash": "dbdd802426b40a27a9a7f180b8b6130a",
+    "semantic_hash": "dbdd802426b40a27a9a7f180b8b6130a"
+  },
+  "src/components/common/ActionButton.tsx": {
+    "mtime": 1780968045.6848655,
+    "ast_hash": "e81282b9af32264d8e79e32006b7a2fc",
+    "semantic_hash": "e81282b9af32264d8e79e32006b7a2fc"
+  },
+  "src/components/common/AppLockOverlay.tsx": {
+    "mtime": 1781558849.541641,
+    "ast_hash": "83112fdaebc178a3c8143ca8cf155de3",
+    "semantic_hash": "83112fdaebc178a3c8143ca8cf155de3"
+  },
+  "src/components/common/CurrencyInput.tsx": {
+    "mtime": 1781129946.5784895,
+    "ast_hash": "6a4266bb6f8168ed374dcb1a52f22097",
+    "semantic_hash": "6a4266bb6f8168ed374dcb1a52f22097"
+  },
+  "src/components/common/EditableAmountInput.tsx": {
+    "mtime": 1781129966.1314075,
+    "ast_hash": "9c2e090837fe16130b3d1d9b45b07405",
+    "semantic_hash": "9c2e090837fe16130b3d1d9b45b07405"
+  },
+  "src/components/common/EyeIcon.tsx": {
+    "mtime": 1780767747.0813384,
+    "ast_hash": "33bc6ad4d9acbc476eeeaa0c5c68bb94",
+    "semantic_hash": "33bc6ad4d9acbc476eeeaa0c5c68bb94"
+  },
+  "src/components/common/ModalShell.tsx": {
+    "mtime": 1781133326.9695442,
+    "ast_hash": "73d1dd4cd392935ba84174aba94c8ac1",
+    "semantic_hash": "73d1dd4cd392935ba84174aba94c8ac1"
+  },
+  "src/components/common/SelectField.tsx": {
+    "mtime": 1781133411.8232813,
+    "ast_hash": "fafda3d9e0b6cb7e0b231770cd7765fc",
+    "semantic_hash": "fafda3d9e0b6cb7e0b231770cd7765fc"
+  },
+  "src/components/common/TabBar.tsx": {
+    "mtime": 1781192964.7445152,
+    "ast_hash": "7d766fee75da7e3fc2fac8f0eac24179",
+    "semantic_hash": "7d766fee75da7e3fc2fac8f0eac24179"
+  },
+  "src/components/finance/AccountEditor.tsx": {
+    "mtime": 1781218433.502692,
+    "ast_hash": "c93bbf63d8fe6b8dd0acb2140ca7cdf7",
+    "semantic_hash": "c93bbf63d8fe6b8dd0acb2140ca7cdf7"
+  },
+  "src/components/finance/AdjustmentPanel.tsx": {
+    "mtime": 1781131051.2213023,
+    "ast_hash": "8c8163b109a9b8540a62daf8aaaf33d3",
+    "semantic_hash": "8c8163b109a9b8540a62daf8aaaf33d3"
+  },
+  "src/components/finance/CategoryBarChart.tsx": {
+    "mtime": 1781131370.3845806,
+    "ast_hash": "c588609d2beb5bc81e8e7cd3553e1277",
+    "semantic_hash": "c588609d2beb5bc81e8e7cd3553e1277"
+  },
+  "src/components/finance/CategoryEditor.tsx": {
+    "mtime": 1781217630.4395719,
+    "ast_hash": "caf204a1c1fc316ec882c50dcff4677f",
+    "semantic_hash": "caf204a1c1fc316ec882c50dcff4677f"
+  },
+  "src/components/finance/CategoryTotalsList.tsx": {
+    "mtime": 1780767307.3211772,
+    "ast_hash": "e7b56ab186c1d8075802e61c3087bd63",
+    "semantic_hash": "e7b56ab186c1d8075802e61c3087bd63"
+  },
+  "src/components/finance/ChartPanel.tsx": {
+    "mtime": 1781133125.464372,
+    "ast_hash": "8adb77524a519f9ca5fe91b3b33f0fb4",
+    "semantic_hash": "8adb77524a519f9ca5fe91b3b33f0fb4"
+  },
+  "src/components/finance/CurrentMonthPaymentChecklist.tsx": {
+    "mtime": 1781133326.9695442,
+    "ast_hash": "ff201f7630c51a1e6b1e48e9f7602327",
+    "semantic_hash": "ff201f7630c51a1e6b1e48e9f7602327"
+  },
+  "src/components/finance/DataManagementPanel.tsx": {
+    "mtime": 1780968046.0650544,
+    "ast_hash": "30e10d9bb966782c2908673a2756de12",
+    "semantic_hash": "30e10d9bb966782c2908673a2756de12"
+  },
+  "src/components/finance/GoalTag.tsx": {
+    "mtime": 1781222743.5981424,
+    "ast_hash": "c5890f214d85b9452b7a4739b7a49ccf",
+    "semantic_hash": "c5890f214d85b9452b7a4739b7a49ccf"
+  },
+  "src/components/finance/HistoryCard.tsx": {
+    "mtime": 1781222462.8808625,
+    "ast_hash": "c871d064abedd108651541e7f5b36104",
+    "semantic_hash": "c871d064abedd108651541e7f5b36104"
+  },
+  "src/components/finance/MonthDetailsPanel.tsx": {
+    "mtime": 1781133133.6115642,
+    "ast_hash": "d3be173022c9d3e57786ecf4e1dba992",
+    "semantic_hash": "d3be173022c9d3e57786ecf4e1dba992"
+  },
+  "src/components/finance/MonthSummaryCard.tsx": {
+    "mtime": 1781222743.6601565,
+    "ast_hash": "d014b4446633525ba085e4a825b24979",
+    "semantic_hash": "d014b4446633525ba085e4a825b24979"
+  },
+  "src/components/finance/MonthlyBarChart.tsx": {
+    "mtime": 1781131398.0272543,
+    "ast_hash": "7f56233bb5cc4d47f66399eae6f73d1e",
+    "semantic_hash": "7f56233bb5cc4d47f66399eae6f73d1e"
+  },
+  "src/components/finance/MonthlyCommitmentList.tsx": {
+    "mtime": 1781223427.008549,
+    "ast_hash": "f4bbb044f9b8cd2c4a15822efb815be8",
+    "semantic_hash": "f4bbb044f9b8cd2c4a15822efb815be8"
+  },
+  "src/components/finance/MonthlyValueEditor.tsx": {
+    "mtime": 1781193454.61381,
+    "ast_hash": "056c3b9d2e2279e38812ee4429eedfa6",
+    "semantic_hash": "056c3b9d2e2279e38812ee4429eedfa6"
+  },
+  "src/components/finance/PaymentSummaryPanel.tsx": {
+    "mtime": 1781133128.2600355,
+    "ast_hash": "9a324dcff221f5ecf7f9553677f809b8",
+    "semantic_hash": "9a324dcff221f5ecf7f9553677f809b8"
+  },
+  "src/components/finance/SalaryDistributionPanel.tsx": {
+    "mtime": 1781210546.1751223,
+    "ast_hash": "9f65de57b6525775976bcc295e412edc",
+    "semantic_hash": "9f65de57b6525775976bcc295e412edc"
+  },
+  "src/components/finance/SummaryValue.tsx": {
+    "mtime": 1781131899.0518124,
+    "ast_hash": "e1c2984f399f738334c43ed1488c72e3",
+    "semantic_hash": "e1c2984f399f738334c43ed1488c72e3"
+  },
+  "src/hooks/useAppLock.ts": {
+    "mtime": 1780765503.526587,
+    "ast_hash": "72397c00a7682dccff4d7593110148fe",
+    "semantic_hash": "72397c00a7682dccff4d7593110148fe"
+  },
+  "src/hooks/useFinanceState.test.ts": {
+    "mtime": 1780797862.4346035,
+    "ast_hash": "cfc37534f1f91e05a92e0c28ee176366",
+    "semantic_hash": "cfc37534f1f91e05a92e0c28ee176366"
+  },
+  "src/hooks/useFinanceState.ts": {
+    "mtime": 1781222609.4568994,
+    "ast_hash": "c8307144d1b10ec48292f9422a774bee",
+    "semantic_hash": "c8307144d1b10ec48292f9422a774bee"
+  },
+  "src/hooks/useReminders.ts": {
+    "mtime": 1781212593.3517764,
+    "ast_hash": "c38a87dfc8ca9e55b4c66717fd9fa36f",
+    "semantic_hash": "c38a87dfc8ca9e55b4c66717fd9fa36f"
+  },
+  "src/lib/appLock.test.ts": {
+    "mtime": 1780765503.4764545,
+    "ast_hash": "32da8aa8de47abed4e58e09cb5ea68df",
+    "semantic_hash": "32da8aa8de47abed4e58e09cb5ea68df"
+  },
+  "src/lib/appLock.ts": {
+    "mtime": 1780765503.4599047,
+    "ast_hash": "00f9f128b8d55447c05b702e314a9981",
+    "semantic_hash": "00f9f128b8d55447c05b702e314a9981"
+  },
+  "src/lib/backupCrypto.ts": {
+    "mtime": 1780628577.1469536,
+    "ast_hash": "4d301add157785e0fdc9548abdfcd542",
+    "semantic_hash": "4d301add157785e0fdc9548abdfcd542"
+  },
+  "src/lib/categoryColors.test.ts": {
+    "mtime": 1780768045.5405161,
+    "ast_hash": "48c2feb6d8d36c559f74e9466c5dfb6c",
+    "semantic_hash": "48c2feb6d8d36c559f74e9466c5dfb6c"
+  },
+  "src/lib/categoryColors.ts": {
+    "mtime": 1780712047.0976665,
+    "ast_hash": "b9423ed3ef57ad57c6e1f3c755d638bb",
+    "semantic_hash": "b9423ed3ef57ad57c6e1f3c755d638bb"
+  },
+  "src/lib/chartData.test.ts": {
+    "mtime": 1781222124.5397604,
+    "ast_hash": "0eea1a7fa5520fcde1b9241d40cb2a2d",
+    "semantic_hash": "0eea1a7fa5520fcde1b9241d40cb2a2d"
+  },
+  "src/lib/chartData.ts": {
+    "mtime": 1780713917.7698963,
+    "ast_hash": "b4ab95ba7b1f0074fd4aeffa5483c881",
+    "semantic_hash": "b4ab95ba7b1f0074fd4aeffa5483c881"
+  },
+  "src/lib/commitmentColor.test.ts": {
+    "mtime": 1780662323.558288,
+    "ast_hash": "da8f47f927dff244bdc407c975951359",
+    "semantic_hash": "da8f47f927dff244bdc407c975951359"
+  },
+  "src/lib/commitmentColor.ts": {
+    "mtime": 1780626399.171969,
+    "ast_hash": "a6367d3bc8922cdc1fe2e4c99d21f99e",
+    "semantic_hash": "a6367d3bc8922cdc1fe2e4c99d21f99e"
+  },
+  "src/lib/commitmentGoal.test.ts": {
+    "mtime": 1781222209.3929522,
+    "ast_hash": "35d91d1f8cb94085495928462d73efad",
+    "semantic_hash": "35d91d1f8cb94085495928462d73efad"
+  },
+  "src/lib/commitmentGoal.ts": {
+    "mtime": 1781222202.228272,
+    "ast_hash": "5981bd596587abb2686db1fd717013a3",
+    "semantic_hash": "5981bd596587abb2686db1fd717013a3"
+  },
+  "src/lib/financeBackup.test.ts": {
+    "mtime": 1781222071.6567059,
+    "ast_hash": "d3efe01a93ce056ea6435a5dbcd60e08",
+    "semantic_hash": "d3efe01a93ce056ea6435a5dbcd60e08"
+  },
+  "src/lib/financeBackup.ts": {
+    "mtime": 1781222027.8553586,
+    "ast_hash": "27a9b0e79d4be09ae267cfae6b948457",
+    "semantic_hash": "27a9b0e79d4be09ae267cfae6b948457"
+  },
+  "src/lib/financeCalculations.test.ts": {
+    "mtime": 1783725891.837818,
+    "ast_hash": "e6b29e9675acf4d3a1184315b2e3af74",
+    "semantic_hash": "e6b29e9675acf4d3a1184315b2e3af74"
+  },
+  "src/lib/financeCalculations.ts": {
+    "mtime": 1783725950.796468,
+    "ast_hash": "52b69c29bfbb50cdafe8585a175a731a",
+    "semantic_hash": "52b69c29bfbb50cdafe8585a175a731a"
+  },
+  "src/lib/financeStateFixtures.ts": {
+    "mtime": 1781222114.2764177,
+    "ast_hash": "f1f879acd4930ec9c7915dcc44bab430",
+    "semantic_hash": "f1f879acd4930ec9c7915dcc44bab430"
+  },
+  "src/lib/formatters.test.ts": {
+    "mtime": 1780858294.216725,
+    "ast_hash": "1ff798c8e5cc9725cf2b810232c24762",
+    "semantic_hash": "1ff798c8e5cc9725cf2b810232c24762"
+  },
+  "src/lib/formatters.ts": {
+    "mtime": 1780858434.1760554,
+    "ast_hash": "1d890f5ea2392c9864fb5d688bb5bfb6",
+    "semantic_hash": "1d890f5ea2392c9864fb5d688bb5bfb6"
+  },
+  "src/lib/giftedChartAdapters.test.ts": {
+    "mtime": 1780712313.2551908,
+    "ast_hash": "8e16ce6cc480c1b7c0f933224c98081a",
+    "semantic_hash": "8e16ce6cc480c1b7c0f933224c98081a"
+  },
+  "src/lib/giftedChartAdapters.ts": {
+    "mtime": 1780712066.5989413,
+    "ast_hash": "ca47cc1882c009e8f4ef1cb79b203401",
+    "semantic_hash": "ca47cc1882c009e8f4ef1cb79b203401"
+  },
+  "src/lib/ids.ts": {
+    "mtime": 1780607730.6835053,
+    "ast_hash": "363270ba92147e7da4009ba0d7422c2d",
+    "semantic_hash": "363270ba92147e7da4009ba0d7422c2d"
+  },
+  "src/lib/inputParsers.test.ts": {
+    "mtime": 1780662297.3937519,
+    "ast_hash": "dc0fbc3cffa84fd7bb43831455389bbc",
+    "semantic_hash": "dc0fbc3cffa84fd7bb43831455389bbc"
+  },
+  "src/lib/inputParsers.ts": {
+    "mtime": 1780612880.5230753,
+    "ast_hash": "1bf907ce21a5311e1e312bd2429bd22d",
+    "semantic_hash": "1bf907ce21a5311e1e312bd2429bd22d"
+  },
+  "src/lib/installmentMonths.test.ts": {
+    "mtime": 1780672385.0730648,
+    "ast_hash": "4281e2d4984d18909fcc9057a8c4ce5a",
+    "semantic_hash": "4281e2d4984d18909fcc9057a8c4ce5a"
+  },
+  "src/lib/installmentMonths.ts": {
+    "mtime": 1780672384.9826412,
+    "ast_hash": "36fcec5682c421bdf067214425e2dc19",
+    "semantic_hash": "36fcec5682c421bdf067214425e2dc19"
+  },
+  "src/lib/monthlyValueAdjustments.test.ts": {
+    "mtime": 1781129946.5951192,
+    "ast_hash": "f070df442694769789a3463563d40ee1",
+    "semantic_hash": "f070df442694769789a3463563d40ee1"
+  },
+  "src/lib/monthlyValueAdjustments.ts": {
+    "mtime": 1781129946.5981169,
+    "ast_hash": "445e74fa1fbee570b1b072cc4b7357e9",
+    "semantic_hash": "445e74fa1fbee570b1b072cc4b7357e9"
+  },
+  "src/lib/notifications.ts": {
+    "mtime": 1781212714.847306,
+    "ast_hash": "9ba2a3c4853681d2950ac877fe5eafa1",
+    "semantic_hash": "9ba2a3c4853681d2950ac877fe5eafa1"
+  },
+  "src/lib/reminders.test.ts": {
+    "mtime": 1781211412.3746438,
+    "ast_hash": "6495200715b126cfef3325ef99ca6463",
+    "semantic_hash": "6495200715b126cfef3325ef99ca6463"
+  },
+  "src/lib/reminders.ts": {
+    "mtime": 1781211412.4078505,
+    "ast_hash": "3f339597dea41b5ec386efd646bb109b",
+    "semantic_hash": "3f339597dea41b5ec386efd646bb109b"
+  },
+  "src/lib/salaryDistribution.test.ts": {
+    "mtime": 1781222148.7673047,
+    "ast_hash": "f8a287965d5ea12f69769f153afe0d02",
+    "semantic_hash": "f8a287965d5ea12f69769f153afe0d02"
+  },
+  "src/lib/salaryDistribution.ts": {
+    "mtime": 1781205424.2359085,
+    "ast_hash": "3129899062661a0a6ec00ba50ece50f0",
+    "semantic_hash": "3129899062661a0a6ec00ba50ece50f0"
+  },
+  "src/lib/sorting.test.ts": {
+    "mtime": 1780670294.8594842,
+    "ast_hash": "c95dea3836d300a5253756fff4608295",
+    "semantic_hash": "c95dea3836d300a5253756fff4608295"
+  },
+  "src/lib/sorting.ts": {
+    "mtime": 1780854293.0058854,
+    "ast_hash": "467cec2ca3ac974d558a37f67e20a7c9",
+    "semantic_hash": "467cec2ca3ac974d558a37f67e20a7c9"
+  },
+  "src/lib/spendingTrends.test.ts": {
+    "mtime": 1781217259.4147017,
+    "ast_hash": "0201968bcf7b3441a9c50cf77daf298f",
+    "semantic_hash": "0201968bcf7b3441a9c50cf77daf298f"
+  },
+  "src/lib/spendingTrends.ts": {
+    "mtime": 1781215852.9424703,
+    "ast_hash": "4c1d819b0106a31c10292aef7bbebfc6",
+    "semantic_hash": "4c1d819b0106a31c10292aef7bbebfc6"
+  },
+  "src/lib/syncReminders.ts": {
+    "mtime": 1781212586.6312408,
+    "ast_hash": "ecaa049f18a457b9f4ce3675efac031e",
+    "semantic_hash": "ecaa049f18a457b9f4ce3675efac031e"
+  },
+  "src/lib/windowAdvance.test.ts": {
+    "mtime": 1781222148.8130558,
+    "ast_hash": "1677189c0f5e44997a7e35fd38deb5ea",
+    "semantic_hash": "1677189c0f5e44997a7e35fd38deb5ea"
+  },
+  "src/lib/windowAdvance.ts": {
+    "mtime": 1780856684.956337,
+    "ast_hash": "be97428b726dbe54cd45681d577c06f0",
+    "semantic_hash": "be97428b726dbe54cd45681d577c06f0"
+  },
+  "src/screens/AccountsScreen.tsx": {
+    "mtime": 1781217823.8810666,
+    "ast_hash": "c8845de3da5a89356c0f804159748f0d",
+    "semantic_hash": "c8845de3da5a89356c0f804159748f0d"
+  },
+  "src/screens/ChartsScreen.tsx": {
+    "mtime": 1781222543.7384,
+    "ast_hash": "4e5e73d9ea23bffe7c637ab7240d4beb",
+    "semantic_hash": "4e5e73d9ea23bffe7c637ab7240d4beb"
+  },
+  "src/screens/PlanningScreen.tsx": {
+    "mtime": 1780930513.5935204,
+    "ast_hash": "bc82e2bffbabc7975419c87b66bd723e",
+    "semantic_hash": "bc82e2bffbabc7975419c87b66bd723e"
+  },
+  "src/screens/SettingsScreen.tsx": {
+    "mtime": 1781745300.3766303,
+    "ast_hash": "5519332e92085046eb65dcdb4af6ddf1",
+    "semantic_hash": "5519332e92085046eb65dcdb4af6ddf1"
+  },
+  "src/screens/SummaryScreen.tsx": {
+    "mtime": 1783726558.8195271,
+    "ast_hash": "c4009f1aca89bae6c1348b177a6afe29",
+    "semantic_hash": "c4009f1aca89bae6c1348b177a6afe29"
+  },
+  "src/storage/appLockStorage.test.ts": {
+    "mtime": 1780765503.5005102,
+    "ast_hash": "9d02e00dce8d0d03c482f40302438d7d",
+    "semantic_hash": "9d02e00dce8d0d03c482f40302438d7d"
+  },
+  "src/storage/appLockStorage.ts": {
+    "mtime": 1780765503.4869866,
+    "ast_hash": "88d7057d7178826a33063c479366e3a3",
+    "semantic_hash": "88d7057d7178826a33063c479366e3a3"
+  },
+  "src/storage/financeStorage.test.ts": {
+    "mtime": 1781133056.9802153,
+    "ast_hash": "fa4cab1c0aaf8929606a03367bd4dca1",
+    "semantic_hash": "fa4cab1c0aaf8929606a03367bd4dca1"
+  },
+  "src/storage/financeStorage.ts": {
+    "mtime": 1781192573.8291373,
+    "ast_hash": "8f2b9ab07e304a1d38fa834ff364cc69",
+    "semantic_hash": "8f2b9ab07e304a1d38fa834ff364cc69"
+  },
+  "src/storage/remindersStorage.ts": {
+    "mtime": 1781211077.7142732,
+    "ast_hash": "83c11faa3017483eaa84a776576b31dc",
+    "semantic_hash": "83c11faa3017483eaa84a776576b31dc"
+  },
+  "src/theme/colors.ts": {
+    "mtime": 1781217621.8043492,
+    "ast_hash": "d9db3a29e79039f895675d9923d22a84",
+    "semantic_hash": "d9db3a29e79039f895675d9923d22a84"
+  },
+  "src/theme/sharedStyles.ts": {
+    "mtime": 1781131895.0856814,
+    "ast_hash": "7d9ec39cf3679dd55fee72dc09252bfe",
+    "semantic_hash": "7d9ec39cf3679dd55fee72dc09252bfe"
+  },
+  "src/theme/typography.ts": {
+    "mtime": 1780708460.7929642,
+    "ast_hash": "84afe9b39205297e992713773e1b9674",
+    "semantic_hash": "84afe9b39205297e992713773e1b9674"
+  },
+  "src/types/finance.ts": {
+    "mtime": 1781222013.7329657,
+    "ast_hash": "0aeab3ef14b523ab2603ae584824e534",
+    "semantic_hash": "0aeab3ef14b523ab2603ae584824e534"
+  },
+  "tsconfig.json": {
+    "mtime": 1780662195.4405684,
+    "ast_hash": "633186ded8aff91c680ce3d65a937e43",
+    "semantic_hash": "633186ded8aff91c680ce3d65a937e43"
+  },
+  "AGENTS.md": {
+    "mtime": 1781130316.1480026,
+    "ast_hash": "ace997eb4d8a85e1ac1ae5dd32ab4a9a",
+    "semantic_hash": "ace997eb4d8a85e1ac1ae5dd32ab4a9a"
+  },
+  "CLAUDE.md": {
+    "mtime": 1780763918.8214593,
+    "ast_hash": "5ea11905184aac374e0fc704a137d507",
+    "semantic_hash": "5ea11905184aac374e0fc704a137d507"
+  },
+  "README.md": {
+    "mtime": 1781747006.4665167,
+    "ast_hash": "79d9a62c610543024a0b9b0c24c04968",
+    "semantic_hash": "79d9a62c610543024a0b9b0c24c04968"
+  },
+  "docs/app-context.md": {
+    "mtime": 1783726709.1291265,
+    "ast_hash": "2b9969d4a503f385b94c5ff25dc747b9",
+    "semantic_hash": "2b9969d4a503f385b94c5ff25dc747b9"
+  },
+  "docs/plans/001-bootstrap-expo-project-plan.md": {
+    "mtime": 1780662321.5949874,
+    "ast_hash": "0ad06d3e9a47f8263dbe4c644e58a55c",
+    "semantic_hash": "0ad06d3e9a47f8263dbe4c644e58a55c"
+  },
+  "docs/plans/002-local-finance-projection-plan.md": {
+    "mtime": 1780662321.6108663,
+    "ast_hash": "b74edd902982d019df842b2dca10c501",
+    "semantic_hash": "b74edd902982d019df842b2dca10c501"
+  },
+  "docs/plans/003-tabbed-finance-workflow-plan.md": {
+    "mtime": 1780662321.6301525,
+    "ast_hash": "52fcecf9cc8de3b779e3308a406cc6ac",
+    "semantic_hash": "52fcecf9cc8de3b779e3308a406cc6ac"
+  },
+  "docs/plans/004-react-native-architecture-refactor-plan.md": {
+    "mtime": 1780662321.646773,
+    "ast_hash": "918b26a3740ba0734b6110204312d9e0",
+    "semantic_hash": "918b26a3740ba0734b6110204312d9e0"
+  },
+  "docs/plans/005-test-coverage-and-quality-metrics-plan.md": {
+    "mtime": 1780662321.6666558,
+    "ast_hash": "be78209e9f8f81bde7b9a1510ee2504d",
+    "semantic_hash": "be78209e9f8f81bde7b9a1510ee2504d"
+  },
+  "docs/plans/006-summary-visibility-and-payment-status-plan.md": {
+    "mtime": 1780662321.6783307,
+    "ast_hash": "e15d818afe669185fe082f58af1c559e",
+    "semantic_hash": "e15d818afe669185fe082f58af1c559e"
+  },
+  "docs/plans/007-sorting-and-compact-management-panels-plan.md": {
+    "mtime": 1780662321.6943882,
+    "ast_hash": "5df51289d11fbf45134ab03317192f9e",
+    "semantic_hash": "5df51289d11fbf45134ab03317192f9e"
+  },
+  "docs/plans/008-finance-charts-tab-plan.md": {
+    "mtime": 1780662321.700748,
+    "ast_hash": "2f38b3cf38e0e1e475045b073fbe2c1d",
+    "semantic_hash": "2f38b3cf38e0e1e475045b073fbe2c1d"
+  },
+  "docs/plans/009-commitment-color-thresholds-plan.md": {
+    "mtime": 1780662321.7261505,
+    "ast_hash": "2f847a2c1d9a455c5357d1137975a8de",
+    "semantic_hash": "2f847a2c1d9a455c5357d1137975a8de"
+  },
+  "docs/plans/010-dark-finance-theme-plan.md": {
+    "mtime": 1780662321.7261505,
+    "ast_hash": "6ca59d6b461809e0b9ce7c4938ad2f50",
+    "semantic_hash": "6ca59d6b461809e0b9ce7c4938ad2f50"
+  },
+  "docs/plans/011-gifted-charts-visual-upgrade-plan.md": {
+    "mtime": 1780662321.742209,
+    "ast_hash": "e2133389de3653298de5ac67d472ce47",
+    "semantic_hash": "e2133389de3653298de5ac67d472ce47"
+  },
+  "docs/plans/012-settings-tab-label-plan.md": {
+    "mtime": 1780662321.757933,
+    "ast_hash": "989d64665fc025f3c674f651cac6a84f",
+    "semantic_hash": "989d64665fc025f3c674f651cac6a84f"
+  },
+  "docs/plans/013-splash-screen-branding-plan.md": {
+    "mtime": 1780662321.7648973,
+    "ast_hash": "66ce779225370782dd36637b21565df6",
+    "semantic_hash": "66ce779225370782dd36637b21565df6"
+  },
+  "docs/plans/014-data-backup-restore-reset-plan.md": {
+    "mtime": 1780628885.1875086,
+    "ast_hash": "833d025e8e6da6c29bcbe53c881faa73",
+    "semantic_hash": "833d025e8e6da6c29bcbe53c881faa73"
+  },
+  "docs/plans/015-monthly-value-adjustments-plan.md": {
+    "mtime": 1780660647.2491646,
+    "ast_hash": "8456907a97212fad1aa1bb6fb3c382b0",
+    "semantic_hash": "8456907a97212fad1aa1bb6fb3c382b0"
+  },
+  "docs/plans/016-code-quality-tooling-plan.md": {
+    "mtime": 1780662767.8237746,
+    "ast_hash": "3ad2c9cef1a8fe4d3c96aa049a3be018",
+    "semantic_hash": "3ad2c9cef1a8fe4d3c96aa049a3be018"
+  },
+  "docs/plans/018-rolling-window-and-category-propagation-plan.md": {
+    "mtime": 1780671399.267656,
+    "ast_hash": "56fd35ad2cc75649eb5530a1cba20570",
+    "semantic_hash": "56fd35ad2cc75649eb5530a1cba20570"
+  },
+  "docs/plans/019-installment-value-entry-plan.md": {
+    "mtime": 1780672346.9846404,
+    "ast_hash": "390aa99c0fe65eccbe1229794400c159",
+    "semantic_hash": "390aa99c0fe65eccbe1229794400c159"
+  },
+  "docs/plans/020-app-lock-plan.md": {
+    "mtime": 1780764747.3998673,
+    "ast_hash": "3733fc93ad8beab0f0339875ef00945a",
+    "semantic_hash": "3733fc93ad8beab0f0339875ef00945a"
+  },
+  "docs/plans/021-figma-layout-refresh-plan.md": {
+    "mtime": 1780679535.4825168,
+    "ast_hash": "c5eb435f644f2d8a08304e50838d813f",
+    "semantic_hash": "c5eb435f644f2d8a08304e50838d813f"
+  },
+  "docs/plans/022-typography-standardization-plan.md": {
+    "mtime": 1780707880.9374113,
+    "ast_hash": "c4b284f37ad4e6460c8a1f1b8f46790a",
+    "semantic_hash": "c4b284f37ad4e6460c8a1f1b8f46790a"
+  },
+  "docs/plans/023-app-icon-and-splash-alignment-plan.md": {
+    "mtime": 1780761324.5545726,
+    "ast_hash": "3e7d974d9e8893c3074e2d26d5f13a35",
+    "semantic_hash": "3e7d974d9e8893c3074e2d26d5f13a35"
+  },
+  "docs/plans/024-app-context-documentation-plan.md": {
+    "mtime": 1780764031.3223433,
+    "ast_hash": "51f541e667541a7dec9f7092fba36cf8",
+    "semantic_hash": "51f541e667541a7dec9f7092fba36cf8"
+  },
+  "docs/plans/025-hide-values-toggle-plan.md": {
+    "mtime": 1780767036.685054,
+    "ast_hash": "05516ae4be4775410b8b073fb3bf74fb",
+    "semantic_hash": "05516ae4be4775410b8b073fb3bf74fb"
+  },
+  "docs/plans/026-add-account-from-payments-plan.md": {
+    "mtime": 1780799575.322232,
+    "ast_hash": "f5fe1c28d50f2d4ecf96f565959cfe83",
+    "semantic_hash": "f5fe1c28d50f2d4ecf96f565959cfe83"
+  },
+  "docs/plans/029-adjust-account-value-from-payments-plan.md": {
+    "mtime": 1780804294.9681752,
+    "ast_hash": "7c0b9ae8611aa0956a3ecf70702f826c",
+    "semantic_hash": "7c0b9ae8611aa0956a3ecf70702f826c"
+  },
+  "docs/plans/030-month-history-plan.md": {
+    "mtime": 1780852582.6700325,
+    "ast_hash": "3023b403e020cf585e005f86bd2c724b",
+    "semantic_hash": "3023b403e020cf585e005f86bd2c724b"
+  },
+  "docs/plans/031-quick-add-extra-balance-plan.md": {
+    "mtime": 1780857975.303563,
+    "ast_hash": "4b071f8c0912e06f95ec63676d19aee6",
+    "semantic_hash": "4b071f8c0912e06f95ec63676d19aee6"
+  },
+  "docs/plans/032-currency-input-mask-plan.md": {
+    "mtime": 1781129946.5501971,
+    "ast_hash": "f1d16bd21d3a7253a2b766ab0a1360fd",
+    "semantic_hash": "f1d16bd21d3a7253a2b766ab0a1360fd"
+  },
+  "docs/plans/033-salary-distribution-panel-plan.md": {
+    "mtime": 1781205694.464057,
+    "ast_hash": "4ff8442170444406d6791e9ac0efdccb",
+    "semantic_hash": "4ff8442170444406d6791e9ac0efdccb"
+  },
+  "docs/plans/034-due-date-reminders-plan.md": {
+    "mtime": 1781212666.0209656,
+    "ast_hash": "212368b1f9500c10e450b4503174fc5c",
+    "semantic_hash": "212368b1f9500c10e450b4503174fc5c"
+  },
+  "docs/plans/035-spending-trends-and-averages-plan.md": {
+    "mtime": 1781217353.0469294,
+    "ast_hash": "caaabd1e81a3121ae7d68dec2b9d0f4a",
+    "semantic_hash": "caaabd1e81a3121ae7d68dec2b9d0f4a"
+  },
+  "docs/plans/036-commitment-goal-plan.md": {
+    "mtime": 1781222780.9575999,
+    "ast_hash": "7d5087aa6b5f6bba04075cc61ac6701e",
+    "semantic_hash": "7d5087aa6b5f6bba04075cc61ac6701e"
+  },
+  "docs/plans/037-android-notification-icon-plan.md": {
+    "mtime": 1781747005.6553783,
+    "ast_hash": "45ef84bc5eab22072154a5214f8dae6f",
+    "semantic_hash": "45ef84bc5eab22072154a5214f8dae6f"
+  },
+  "docs/plans/038-account-balance-reconciliation-plan.md": {
+    "mtime": 1783726899.7258174,
+    "ast_hash": "b7954eb735578fe480968d6663e8f7e9",
+    "semantic_hash": "b7954eb735578fe480968d6663e8f7e9"
+  },
+  "docs/quality/coverage-baseline.md": {
+    "mtime": 1780672576.218685,
+    "ast_hash": "d2cd343a2d469ce53d0b1b965ef2c565",
+    "semantic_hash": "d2cd343a2d469ce53d0b1b965ef2c565"
+  },
+  "docs/specs/001-bootstrap-expo-project.md": {
+    "mtime": 1780662321.8288403,
+    "ast_hash": "f9aca3e5ec32247ed056125fff038bee",
+    "semantic_hash": "f9aca3e5ec32247ed056125fff038bee"
+  },
+  "docs/specs/002-local-finance-projection.md": {
+    "mtime": 1780604329.2001507,
+    "ast_hash": "48ad135b652328f92fab4613e3140ee8",
+    "semantic_hash": "48ad135b652328f92fab4613e3140ee8"
+  },
+  "docs/specs/003-tabbed-finance-workflow.md": {
+    "mtime": 1780606861.5517864,
+    "ast_hash": "6a95689787d2e31e2259a90ca5bf169c",
+    "semantic_hash": "6a95689787d2e31e2259a90ca5bf169c"
+  },
+  "docs/specs/004-react-native-architecture-refactor.md": {
+    "mtime": 1780607439.3825796,
+    "ast_hash": "d46f58daa5ccf07ca49328efb9341413",
+    "semantic_hash": "d46f58daa5ccf07ca49328efb9341413"
+  },
+  "docs/specs/005-test-coverage-and-quality-metrics.md": {
+    "mtime": 1780608582.16476,
+    "ast_hash": "fdb56d7d25c6bc5595048be91a28e32e",
+    "semantic_hash": "fdb56d7d25c6bc5595048be91a28e32e"
+  },
+  "docs/specs/006-summary-visibility-and-payment-status.md": {
+    "mtime": 1780610123.6914954,
+    "ast_hash": "93540a5b3ad3daee355b25ca947e4337",
+    "semantic_hash": "93540a5b3ad3daee355b25ca947e4337"
+  },
+  "docs/specs/007-sorting-and-compact-management-panels.md": {
+    "mtime": 1780623765.6241071,
+    "ast_hash": "f5f6522beeaac8b3cd7265185a97877a",
+    "semantic_hash": "f5f6522beeaac8b3cd7265185a97877a"
+  },
+  "docs/specs/008-finance-charts-tab.md": {
+    "mtime": 1780614600.681112,
+    "ast_hash": "e93764b7a0661f37ebbc65b06104f716",
+    "semantic_hash": "e93764b7a0661f37ebbc65b06104f716"
+  },
+  "docs/specs/009-commitment-color-thresholds.md": {
+    "mtime": 1780662322.046486,
+    "ast_hash": "ac8378adfebb1f8a8ada850c8c8d6dea",
+    "semantic_hash": "ac8378adfebb1f8a8ada850c8c8d6dea"
+  },
+  "docs/specs/010-dark-finance-theme.md": {
+    "mtime": 1780662322.0791676,
+    "ast_hash": "c954883b39d4642f438d88d9f8398b34",
+    "semantic_hash": "c954883b39d4642f438d88d9f8398b34"
+  },
+  "docs/specs/011-gifted-charts-visual-upgrade.md": {
+    "mtime": 1780662322.106303,
+    "ast_hash": "39c177d53bc61ed80137947b7082bfa8",
+    "semantic_hash": "39c177d53bc61ed80137947b7082bfa8"
+  },
+  "docs/specs/012-settings-tab-label.md": {
+    "mtime": 1780624843.4945698,
+    "ast_hash": "40eb12d3ec79ea43ec2b7814ef82049f",
+    "semantic_hash": "40eb12d3ec79ea43ec2b7814ef82049f"
+  },
+  "docs/specs/013-splash-screen-branding.md": {
+    "mtime": 1780625838.1170275,
+    "ast_hash": "041609002a19f5fd6acfb08ddd2ff58d",
+    "semantic_hash": "041609002a19f5fd6acfb08ddd2ff58d"
+  },
+  "docs/specs/014-data-backup-restore-reset.md": {
+    "mtime": 1780628937.3185844,
+    "ast_hash": "60786baafab9b443ac2272c4d8fb9e15",
+    "semantic_hash": "60786baafab9b443ac2272c4d8fb9e15"
+  },
+  "docs/specs/015-monthly-value-adjustments.md": {
+    "mtime": 1780629911.0512185,
+    "ast_hash": "f4b1ae5a314859d3caa1575524e25663",
+    "semantic_hash": "f4b1ae5a314859d3caa1575524e25663"
+  },
+  "docs/specs/016-code-quality-tooling.md": {
+    "mtime": 1780662011.1113224,
+    "ast_hash": "bbad72361a1799a49e9cc8bc45ee1c52",
+    "semantic_hash": "bbad72361a1799a49e9cc8bc45ee1c52"
+  },
+  "docs/specs/017-google-play-readiness.md": {
+    "mtime": 1780665707.1692069,
+    "ast_hash": "aa3762c0c6a3e5bbff43db0cb16d58f3",
+    "semantic_hash": "aa3762c0c6a3e5bbff43db0cb16d58f3"
+  },
+  "docs/specs/018-rolling-window-and-category-propagation.md": {
+    "mtime": 1780671372.6320012,
+    "ast_hash": "be99a8ee3ae65e8a09bbafbf520ed6cc",
+    "semantic_hash": "be99a8ee3ae65e8a09bbafbf520ed6cc"
+  },
+  "docs/specs/019-installment-value-entry.md": {
+    "mtime": 1780670539.6957936,
+    "ast_hash": "a6faee67ca00ad26f11a733cec0d42b9",
+    "semantic_hash": "a6faee67ca00ad26f11a733cec0d42b9"
+  },
+  "docs/specs/020-app-lock.md": {
+    "mtime": 1780764736.3689263,
+    "ast_hash": "859c73e4d76eb1ad367f7ecb67e08cd8",
+    "semantic_hash": "859c73e4d76eb1ad367f7ecb67e08cd8"
+  },
+  "docs/specs/021-figma-layout-refresh.md": {
+    "mtime": 1780706400.7767959,
+    "ast_hash": "958af57d82d45bda18bf512aa00a83a0",
+    "semantic_hash": "958af57d82d45bda18bf512aa00a83a0"
+  },
+  "docs/specs/022-typography-standardization.md": {
+    "mtime": 1780708460.8820662,
+    "ast_hash": "52f69f2ab59d0df02223faa1257ef5ed",
+    "semantic_hash": "52f69f2ab59d0df02223faa1257ef5ed"
+  },
+  "docs/specs/023-app-icon-and-splash-alignment.md": {
+    "mtime": 1780761324.4708638,
+    "ast_hash": "173990b79d88bf1a386882a6f98fd0e8",
+    "semantic_hash": "173990b79d88bf1a386882a6f98fd0e8"
+  },
+  "docs/specs/024-app-context-documentation.md": {
+    "mtime": 1780764031.3403726,
+    "ast_hash": "b940af38aa69490ed96079e190a52e3a",
+    "semantic_hash": "b940af38aa69490ed96079e190a52e3a"
+  },
+  "docs/specs/025-hide-values-toggle.md": {
+    "mtime": 1780766978.045869,
+    "ast_hash": "80997fa4e850e407161d898740f94748",
+    "semantic_hash": "80997fa4e850e407161d898740f94748"
+  },
+  "docs/specs/026-add-account-from-payments.md": {
+    "mtime": 1780799653.3061943,
+    "ast_hash": "a42095ac5523e33c693ebf6403090055",
+    "semantic_hash": "a42095ac5523e33c693ebf6403090055"
+  },
+  "docs/specs/027-god-hook-refactor.md": {
+    "mtime": 1780800743.9399903,
+    "ast_hash": "f261258ca66c3da659b184ea77b2da02",
+    "semantic_hash": "f261258ca66c3da659b184ea77b2da02"
+  },
+  "docs/specs/028-safe-area-insets.md": {
+    "mtime": 1780800755.7594671,
+    "ast_hash": "a3285f296adcf6219d0ab674169ab280",
+    "semantic_hash": "a3285f296adcf6219d0ab674169ab280"
+  },
+  "docs/specs/029-adjust-account-value-from-payments.md": {
+    "mtime": 1780803985.5206783,
+    "ast_hash": "f94b49152b3b024309ed7f1da7d8a8f0",
+    "semantic_hash": "f94b49152b3b024309ed7f1da7d8a8f0"
+  },
+  "docs/specs/030-month-history.md": {
+    "mtime": 1780852582.7491307,
+    "ast_hash": "7c5d9dd97c8df666d6ac89370942b54f",
+    "semantic_hash": "7c5d9dd97c8df666d6ac89370942b54f"
+  },
+  "docs/specs/031-quick-add-extra-balance.md": {
+    "mtime": 1780857988.730319,
+    "ast_hash": "f441fb3ac6ce422cc555f805d37f9558",
+    "semantic_hash": "f441fb3ac6ce422cc555f805d37f9558"
+  },
+  "docs/specs/032-currency-input-mask.md": {
+    "mtime": 1781130061.1357515,
+    "ast_hash": "769150b633341629acbb7234da13976d",
+    "semantic_hash": "769150b633341629acbb7234da13976d"
+  },
+  "docs/specs/033-salary-distribution-panel.md": {
+    "mtime": 1781198471.237352,
+    "ast_hash": "797e34eb565d672de0ca615e7b9c5219",
+    "semantic_hash": "797e34eb565d672de0ca615e7b9c5219"
+  },
+  "docs/specs/034-due-date-reminders.md": {
+    "mtime": 1781198471.2614763,
+    "ast_hash": "8d5010ed38b58e51cf10e230abf8d51d",
+    "semantic_hash": "8d5010ed38b58e51cf10e230abf8d51d"
+  },
+  "docs/specs/035-spending-trends-and-averages.md": {
+    "mtime": 1781198471.2861936,
+    "ast_hash": "fe7fdde361d66cade9c3456c5c4f25cf",
+    "semantic_hash": "fe7fdde361d66cade9c3456c5c4f25cf"
+  },
+  "docs/specs/036-commitment-goal.md": {
+    "mtime": 1781197328.8868272,
+    "ast_hash": "6ca1d94ff870170dbdb4ada74d1ebbf0",
+    "semantic_hash": "6ca1d94ff870170dbdb4ada74d1ebbf0"
+  },
+  "docs/specs/037-android-notification-icon.md": {
+    "mtime": 1781747005.5515764,
+    "ast_hash": "a5343d390adfaac0ae3a764013fc2c0f",
+    "semantic_hash": "a5343d390adfaac0ae3a764013fc2c0f"
+  },
+  "docs/specs/038-account-balance-reconciliation.md": {
+    "mtime": 1783725278.4840822,
+    "ast_hash": "d200184d6f34c9c14219547814318708",
+    "semantic_hash": "d200184d6f34c9c14219547814318708"
+  },
+  "docs/standards/ai-workflow.md": {
+    "mtime": 1780802303.8839235,
+    "ast_hash": "1dc1a86eff876779fdb7aaba8f64abfe",
+    "semantic_hash": "1dc1a86eff876779fdb7aaba8f64abfe"
+  },
+  "docs/standards/app-context-policy.md": {
+    "mtime": 1780764031.3535237,
+    "ast_hash": "caf14933f67d763ecef01b2fc10bf05b",
+    "semantic_hash": "caf14933f67d763ecef01b2fc10bf05b"
+  },
+  "docs/standards/code-duplication-policy.md": {
+    "mtime": 1781133592.5333676,
+    "ast_hash": "1f44966b91250a2716c0cf4d136e29d7",
+    "semantic_hash": "1f44966b91250a2716c0cf4d136e29d7"
+  },
+  "docs/standards/readme-policy.md": {
+    "mtime": 1780607351.6217473,
+    "ast_hash": "95d50232888e1f9ef36a7e758fa04735",
+    "semantic_hash": "95d50232888e1f9ef36a7e758fa04735"
+  },
+  "docs/standards/spec-completion-policy.md": {
+    "mtime": 1780799824.2669897,
+    "ast_hash": "6df4612ccb65ae38da287002f13a881e",
+    "semantic_hash": "6df4612ccb65ae38da287002f13a881e"
+  },
+  "docs/standards/testing-policy.md": {
+    "mtime": 1780587370.054221,
+    "ast_hash": "3f0067a1f78999bf7ed7677fce62fcac",
+    "semantic_hash": "3f0067a1f78999bf7ed7677fce62fcac"
+  },
+  "docs/standards/ui-copy-policy.md": {
+    "mtime": 1780682069.066001,
+    "ast_hash": "30f2b0f38c45c06e77717408fa32f766",
+    "semantic_hash": "30f2b0f38c45c06e77717408fa32f766"
+  },
+  "docs/superpowers/plans/2026-06-08-planejar-adjust-panel-inline.md": {
+    "mtime": 1780936162.5746565,
+    "ast_hash": "af9d20d5a26913820ddcf6a5bdeb1ede",
+    "semantic_hash": "af9d20d5a26913820ddcf6a5bdeb1ede"
+  },
+  "docs/superpowers/specs/2026-06-06-payments-add-account-design.md": {
+    "mtime": 1780798713.2914238,
+    "ast_hash": "0c36eda5a55bfd4c1670ac04d47a4631",
+    "semantic_hash": "0c36eda5a55bfd4c1670ac04d47a4631"
+  },
+  "docs/superpowers/specs/2026-06-08-planejar-adjust-panel-inline.md": {
+    "mtime": 1780936162.605207,
+    "ast_hash": "5b87bfe17747353a3840223bcbb6c578",
+    "semantic_hash": "5b87bfe17747353a3840223bcbb6c578"
+  },
+  "docs/tasks/001-01-create-expo-project.md": {
+    "mtime": 1780587698.458649,
+    "ast_hash": "0ed09a07b489cee6aece132c07617c87",
+    "semantic_hash": "0ed09a07b489cee6aece132c07617c87"
+  },
+  "docs/tasks/001-02-create-home-screen.md": {
+    "mtime": 1780587706.5237901,
+    "ast_hash": "7d102f0f892e03a8a4be0d3417c83915",
+    "semantic_hash": "7d102f0f892e03a8a4be0d3417c83915"
+  },
+  "docs/tasks/001-03-update-readme.md": {
+    "mtime": 1780587709.0644493,
+    "ast_hash": "f78970f1945866fd69b4fe00a8201671",
+    "semantic_hash": "f78970f1945866fd69b4fe00a8201671"
+  },
+  "docs/tasks/001-04-validate.md": {
+    "mtime": 1780587711.2312875,
+    "ast_hash": "376fc88024e72ad56883b5e50e8d1781",
+    "semantic_hash": "376fc88024e72ad56883b5e50e8d1781"
+  },
+  "docs/tasks/002-01-add-local-storage-foundation.md": {
+    "mtime": 1780604495.5003393,
+    "ast_hash": "07587d54518f0769cb33606c44ccd0c7",
+    "semantic_hash": "07587d54518f0769cb33606c44ccd0c7"
+  },
+  "docs/tasks/002-02-add-finance-calculations.md": {
+    "mtime": 1780604495.5896933,
+    "ast_hash": "991dc4173c175dd7a6e12425c5260cc6",
+    "semantic_hash": "991dc4173c175dd7a6e12425c5260cc6"
+  },
+  "docs/tasks/002-03-build-projection-overview.md": {
+    "mtime": 1780604495.6933615,
+    "ast_hash": "9f017b837f6fbe297d99c55f42777713",
+    "semantic_hash": "9f017b837f6fbe297d99c55f42777713"
+  },
+  "docs/tasks/002-04-build-settings-editor.md": {
+    "mtime": 1780604495.7848604,
+    "ast_hash": "0e231e562f450be9526cefa999ccab6b",
+    "semantic_hash": "0e231e562f450be9526cefa999ccab6b"
+  },
+  "docs/tasks/002-05-build-category-account-editor.md": {
+    "mtime": 1780604495.8781617,
+    "ast_hash": "6c628efd632c97bbd64de18cf6ab4d34",
+    "semantic_hash": "6c628efd632c97bbd64de18cf6ab4d34"
+  },
+  "docs/tasks/002-06-build-monthly-value-editor.md": {
+    "mtime": 1780604495.961886,
+    "ast_hash": "3a17e8f061b5a988d2e1edc9d4a56795",
+    "semantic_hash": "3a17e8f061b5a988d2e1edc9d4a56795"
+  },
+  "docs/tasks/002-07-persist-and-load-finance-data.md": {
+    "mtime": 1780604496.0474148,
+    "ast_hash": "76262936f0440b76ecb7efc52ae3fe96",
+    "semantic_hash": "76262936f0440b76ecb7efc52ae3fe96"
+  },
+  "docs/tasks/002-08-update-docs-and-validate.md": {
+    "mtime": 1780604496.1347444,
+    "ast_hash": "c8c951ff624ad605b8a9c91c073cbe24",
+    "semantic_hash": "c8c951ff624ad605b8a9c91c073cbe24"
+  },
+  "docs/tasks/003-01-add-visible-month-setting.md": {
+    "mtime": 1780606861.7229147,
+    "ast_hash": "d7f24760eda06544c2eb5eaeb711985f",
+    "semantic_hash": "d7f24760eda06544c2eb5eaeb711985f"
+  },
+  "docs/tasks/003-02-add-tab-shell.md": {
+    "mtime": 1780606861.8090885,
+    "ast_hash": "d8e8bfaf914f343ba6744dbc26b5f274",
+    "semantic_hash": "d8e8bfaf914f343ba6744dbc26b5f274"
+  },
+  "docs/tasks/003-03-refine-summary-tab.md": {
+    "mtime": 1780606861.8962693,
+    "ast_hash": "3fe4005aa9ea64fdbb48e85a5d0801be",
+    "semantic_hash": "3fe4005aa9ea64fdbb48e85a5d0801be"
+  },
+  "docs/tasks/003-04-refine-planning-tab.md": {
+    "mtime": 1780606861.9811609,
+    "ast_hash": "546b3a34057b50a139b42e6bda8b4200",
+    "semantic_hash": "546b3a34057b50a139b42e6bda8b4200"
+  },
+  "docs/tasks/003-05-refine-categories-and-settings-tabs.md": {
+    "mtime": 1780606862.067996,
+    "ast_hash": "942f307a031893ee0623efde22ff759a",
+    "semantic_hash": "942f307a031893ee0623efde22ff759a"
+  },
+  "docs/tasks/003-06-update-docs-and-validate.md": {
+    "mtime": 1780606862.154407,
+    "ast_hash": "09b476a4e6c8f2bc6ee0cba92c91df0f",
+    "semantic_hash": "09b476a4e6c8f2bc6ee0cba92c91df0f"
+  },
+  "docs/tasks/003-07-allow-comma-decimal-currency-input.md": {
+    "mtime": 1780609657.850726,
+    "ast_hash": "b30578350e885e3bea2f60f0df40dc4a",
+    "semantic_hash": "b30578350e885e3bea2f60f0df40dc4a"
+  },
+  "docs/tasks/004-01-extract-formatting-and-input-utils.md": {
+    "mtime": 1780607637.9843562,
+    "ast_hash": "619afe0efd49e981cd2e948b675ca2f7",
+    "semantic_hash": "619afe0efd49e981cd2e948b675ca2f7"
+  },
+  "docs/tasks/004-02-extract-finance-state-hook.md": {
+    "mtime": 1780607638.06943,
+    "ast_hash": "fbc298b3151518759ac9af2e3048e867",
+    "semantic_hash": "fbc298b3151518759ac9af2e3048e867"
+  },
+  "docs/tasks/004-03-extract-common-components.md": {
+    "mtime": 1780607638.1589801,
+    "ast_hash": "f62b521122ee174df5941b286b319404",
+    "semantic_hash": "f62b521122ee174df5941b286b319404"
+  },
+  "docs/tasks/004-04-extract-finance-components.md": {
+    "mtime": 1780607638.2465756,
+    "ast_hash": "6eef55f2cc67d764a81fc852938fcf01",
+    "semantic_hash": "6eef55f2cc67d764a81fc852938fcf01"
+  },
+  "docs/tasks/004-05-extract-screens-and-app-shell.md": {
+    "mtime": 1780607638.3290117,
+    "ast_hash": "d401284dc9dbb5bf99b074e5034f8b99",
+    "semantic_hash": "d401284dc9dbb5bf99b074e5034f8b99"
+  },
+  "docs/tasks/004-06-update-docs-and-validate.md": {
+    "mtime": 1780607638.4153187,
+    "ast_hash": "f72f037bdf175dd39393617023516e46",
+    "semantic_hash": "f72f037bdf175dd39393617023516e46"
+  },
+  "docs/tasks/005-01-configure-vitest-coverage.md": {
+    "mtime": 1780608700.2226107,
+    "ast_hash": "f96678a4455d716633207a704bde15f2",
+    "semantic_hash": "f96678a4455d716633207a704bde15f2"
+  },
+  "docs/tasks/005-02-record-coverage-baseline.md": {
+    "mtime": 1780608700.3423944,
+    "ast_hash": "f0c95f826eea5a3f34d10e6c469336f6",
+    "semantic_hash": "f0c95f826eea5a3f34d10e6c469336f6"
+  },
+  "docs/tasks/005-03-update-docs-and-validate.md": {
+    "mtime": 1780608700.4497397,
+    "ast_hash": "dde2e4ef231033960f5661feb53b3e1e",
+    "semantic_hash": "dde2e4ef231033960f5661feb53b3e1e"
+  },
+  "docs/tasks/005-04-test-formatters.md": {
+    "mtime": 1780609128.9826415,
+    "ast_hash": "2ad60ce4c2f4a0397e50c681b1c0e992",
+    "semantic_hash": "2ad60ce4c2f4a0397e50c681b1c0e992"
+  },
+  "docs/tasks/006-01-add-plan-and-tasks.md": {
+    "mtime": 1780662322.611778,
+    "ast_hash": "1bd0d2ecfcc5e7f920f716afe327a938",
+    "semantic_hash": "1bd0d2ecfcc5e7f920f716afe327a938"
+  },
+  "docs/tasks/006-02-expose-visible-month-setting.md": {
+    "mtime": 1780610801.463745,
+    "ast_hash": "28041f39d25c5f06bfea89fed6d65ab0",
+    "semantic_hash": "28041f39d25c5f06bfea89fed6d65ab0"
+  },
+  "docs/tasks/006-03-add-payment-status-model.md": {
+    "mtime": 1780662322.6460805,
+    "ast_hash": "f0f502c0c122c637cfaf511102640649",
+    "semantic_hash": "f0f502c0c122c637cfaf511102640649"
+  },
+  "docs/tasks/006-04-add-current-month-payment-checklist.md": {
+    "mtime": 1780704666.0510209,
+    "ast_hash": "60f4912bfb5a3ca0129e9b782a2f98cc",
+    "semantic_hash": "60f4912bfb5a3ca0129e9b782a2f98cc"
+  },
+  "docs/tasks/006-05-update-docs-and-validate.md": {
+    "mtime": 1780610240.4333503,
+    "ast_hash": "c480fda6694257e8c99429aafb36a557",
+    "semantic_hash": "c480fda6694257e8c99429aafb36a557"
+  },
+  "docs/tasks/007-01-add-plan-and-tasks.md": {
+    "mtime": 1780662322.6778703,
+    "ast_hash": "8924698044f01ac73e5b1f40ba1c4d18",
+    "semantic_hash": "8924698044f01ac73e5b1f40ba1c4d18"
+  },
+  "docs/tasks/007-02-add-sorting-helpers.md": {
+    "mtime": 1780613811.0294552,
+    "ast_hash": "f667de43a6b3215005491efea473afb6",
+    "semantic_hash": "f667de43a6b3215005491efea473afb6"
+  },
+  "docs/tasks/007-03-refine-planning-management-panel.md": {
+    "mtime": 1780623766.921275,
+    "ast_hash": "cec59087024e77a28620014720ca7848",
+    "semantic_hash": "cec59087024e77a28620014720ca7848"
+  },
+  "docs/tasks/007-04-refine-summary-details-panel.md": {
+    "mtime": 1780623604.6788561,
+    "ast_hash": "ae864253b2ed95f6ad30895353dd0df3",
+    "semantic_hash": "ae864253b2ed95f6ad30895353dd0df3"
+  },
+  "docs/tasks/007-05-update-current-month-commitment.md": {
+    "mtime": 1780662322.7205234,
+    "ast_hash": "e80a3d3d5d15e2ad41f08fdc7779ad79",
+    "semantic_hash": "e80a3d3d5d15e2ad41f08fdc7779ad79"
+  },
+  "docs/tasks/007-06-update-docs-and-validate.md": {
+    "mtime": 1780612027.9355178,
+    "ast_hash": "15120b059e022df115d3c32560781f48",
+    "semantic_hash": "15120b059e022df115d3c32560781f48"
+  },
+  "docs/tasks/008-01-add-plan-and-tasks.md": {
+    "mtime": 1780662322.7448585,
+    "ast_hash": "fa4d94f82cf4d795dc9baab65ff08d6f",
+    "semantic_hash": "fa4d94f82cf4d795dc9baab65ff08d6f"
+  },
+  "docs/tasks/008-02-add-chart-data-helpers.md": {
+    "mtime": 1780662322.7520738,
+    "ast_hash": "0a3ba53fe37183cc102700a3b4c5087b",
+    "semantic_hash": "0a3ba53fe37183cc102700a3b4c5087b"
+  },
+  "docs/tasks/008-03-add-chart-components.md": {
+    "mtime": 1780614606.8162982,
+    "ast_hash": "e8f533b4859e767dcc573ea3139b707d",
+    "semantic_hash": "e8f533b4859e767dcc573ea3139b707d"
+  },
+  "docs/tasks/008-04-add-charts-screen-and-tab.md": {
+    "mtime": 1780662322.7765317,
+    "ast_hash": "541a6ec2c497216e7bc9d68ed3973f06",
+    "semantic_hash": "541a6ec2c497216e7bc9d68ed3973f06"
+  },
+  "docs/tasks/008-05-update-docs-and-validate.md": {
+    "mtime": 1780614163.6374722,
+    "ast_hash": "5c60cd1d7f793e867bbfc1a61d715693",
+    "semantic_hash": "5c60cd1d7f793e867bbfc1a61d715693"
+  },
+  "docs/tasks/009-01-add-plan-and-tasks.md": {
+    "mtime": 1780615276.614812,
+    "ast_hash": "bc7bbce8760a792ce8e11f67fcf919c9",
+    "semantic_hash": "bc7bbce8760a792ce8e11f67fcf919c9"
+  },
+  "docs/tasks/009-02-update-data-model.md": {
+    "mtime": 1780615287.0269065,
+    "ast_hash": "b7d22b594b1df3b19d5a96c024c5f1ae",
+    "semantic_hash": "b7d22b594b1df3b19d5a96c024c5f1ae"
+  },
+  "docs/tasks/009-03-add-commitment-color-helper.md": {
+    "mtime": 1780615298.441148,
+    "ast_hash": "bf16361a48107faef68e37bee00cbe02",
+    "semantic_hash": "bf16361a48107faef68e37bee00cbe02"
+  },
+  "docs/tasks/009-04-update-settings-screen.md": {
+    "mtime": 1780615311.5230718,
+    "ast_hash": "d3b028caac873c4d198e442c479de3e1",
+    "semantic_hash": "d3b028caac873c4d198e442c479de3e1"
+  },
+  "docs/tasks/009-05-update-summary-color.md": {
+    "mtime": 1780615324.1531587,
+    "ast_hash": "1aa0af7a7476324e0b8ed8936a1fff02",
+    "semantic_hash": "1aa0af7a7476324e0b8ed8936a1fff02"
+  },
+  "docs/tasks/009-06-update-docs-and-validate.md": {
+    "mtime": 1780615333.4035573,
+    "ast_hash": "2167d454ccd6b6a11d07bf0befee9583",
+    "semantic_hash": "2167d454ccd6b6a11d07bf0befee9583"
+  },
+  "docs/tasks/010-01-apply-dark-finance-theme.md": {
+    "mtime": 1780626174.2521656,
+    "ast_hash": "37650b758053c19ce71440b583f75121",
+    "semantic_hash": "37650b758053c19ce71440b583f75121"
+  },
+  "docs/tasks/011-01-add-gifted-charts-dependencies.md": {
+    "mtime": 1780626839.5297203,
+    "ast_hash": "9333c975590affaa2f9ef1b711905249",
+    "semantic_hash": "9333c975590affaa2f9ef1b711905249"
+  },
+  "docs/tasks/011-02-add-gifted-chart-adapters.md": {
+    "mtime": 1780626839.630058,
+    "ast_hash": "4361031e14eaa078ffcc592a66107373",
+    "semantic_hash": "4361031e14eaa078ffcc592a66107373"
+  },
+  "docs/tasks/011-03-replace-chart-components.md": {
+    "mtime": 1780627744.3062482,
+    "ast_hash": "dacff7c315d29b19c32b567e35d00798",
+    "semantic_hash": "dacff7c315d29b19c32b567e35d00798"
+  },
+  "docs/tasks/011-04-update-docs-and-validate.md": {
+    "mtime": 1780626839.8302653,
+    "ast_hash": "9568140b49d9ed9e7b80ca64378e6ca9",
+    "semantic_hash": "9568140b49d9ed9e7b80ca64378e6ca9"
+  },
+  "docs/tasks/012-01-rename-settings-tab-label.md": {
+    "mtime": 1780624878.0976217,
+    "ast_hash": "0f8abc291eb5c706dba207248ab6c0d6",
+    "semantic_hash": "0f8abc291eb5c706dba207248ab6c0d6"
+  },
+  "docs/tasks/013-01-configure-splash-screen-branding.md": {
+    "mtime": 1780625838.2060826,
+    "ast_hash": "762a80fb7d844c49b9d56e225e656964",
+    "semantic_hash": "762a80fb7d844c49b9d56e225e656964"
+  },
+  "docs/tasks/014-01-add-backup-file-dependencies.md": {
+    "mtime": 1780628776.5932293,
+    "ast_hash": "2b03b2aaa700e59e4920f9779eb586eb",
+    "semantic_hash": "2b03b2aaa700e59e4920f9779eb586eb"
+  },
+  "docs/tasks/014-02-add-backup-validation-helpers.md": {
+    "mtime": 1780628776.6945531,
+    "ast_hash": "85668e28c765b2700ab97eecee56449f",
+    "semantic_hash": "85668e28c765b2700ab97eecee56449f"
+  },
+  "docs/tasks/014-03-add-finance-state-replace-action.md": {
+    "mtime": 1780628776.79117,
+    "ast_hash": "b7d639e22fc0e16d743f487d12c0263c",
+    "semantic_hash": "b7d639e22fc0e16d743f487d12c0263c"
+  },
+  "docs/tasks/014-04-add-data-management-ui.md": {
+    "mtime": 1780628937.4507399,
+    "ast_hash": "92118133acf88ee5db45ebd145114fc7",
+    "semantic_hash": "92118133acf88ee5db45ebd145114fc7"
+  },
+  "docs/tasks/014-05-update-docs-and-validate.md": {
+    "mtime": 1780628776.9816127,
+    "ast_hash": "93a4d1cf6244077d2e4ffa650adcbe0e",
+    "semantic_hash": "93a4d1cf6244077d2e4ffa650adcbe0e"
+  },
+  "docs/tasks/015-01-add-adjustment-helper.md": {
+    "mtime": 1780660099.1920376,
+    "ast_hash": "b730423d1ba8c36ceed98bb32448d398",
+    "semantic_hash": "b730423d1ba8c36ceed98bb32448d398"
+  },
+  "docs/tasks/015-02-add-finance-state-adjustment-action.md": {
+    "mtime": 1780660125.399377,
+    "ast_hash": "ba395fdeb1688977362d2b2dadbaba4e",
+    "semantic_hash": "ba395fdeb1688977362d2b2dadbaba4e"
+  },
+  "docs/tasks/015-03-add-monthly-adjustment-ui.md": {
+    "mtime": 1780660174.5442965,
+    "ast_hash": "e168f2c01a1be8b9ead01af6c1d615b5",
+    "semantic_hash": "e168f2c01a1be8b9ead01af6c1d615b5"
+  },
+  "docs/tasks/015-04-update-docs-and-validate.md": {
+    "mtime": 1780660552.1117504,
+    "ast_hash": "9f2a7a8416c4dfbd57cd79481ecc136f",
+    "semantic_hash": "9f2a7a8416c4dfbd57cd79481ecc136f"
+  },
+  "docs/tasks/016-01-add-quality-tooling.md": {
+    "mtime": 1780662196.307877,
+    "ast_hash": "a8fc45f7b7b4682d6d2a7b49d5413c23",
+    "semantic_hash": "a8fc45f7b7b4682d6d2a7b49d5413c23"
+  },
+  "docs/tasks/016-02-configure-jest-rntl.md": {
+    "mtime": 1780662297.7928145,
+    "ast_hash": "5e1acd8660495866210783d14ffc234e",
+    "semantic_hash": "5e1acd8660495866210783d14ffc234e"
+  },
+  "docs/tasks/016-03-add-git-hooks.md": {
+    "mtime": 1780662312.3453388,
+    "ast_hash": "989bb567142ec823bab38f32ccf8f4ea",
+    "semantic_hash": "989bb567142ec823bab38f32ccf8f4ea"
+  },
+  "docs/tasks/016-04-update-docs-and-validate.md": {
+    "mtime": 1780662729.690166,
+    "ast_hash": "63109e75695834422f921317b740627b",
+    "semantic_hash": "63109e75695834422f921317b740627b"
+  },
+  "docs/tasks/018-01-update-finance-model-and-migration.md": {
+    "mtime": 1780670069.435958,
+    "ast_hash": "4d49e10ffb9ee6bdd950f7f3cfd8639a",
+    "semantic_hash": "4d49e10ffb9ee6bdd950f7f3cfd8639a"
+  },
+  "docs/tasks/018-02-add-window-advance-helper.md": {
+    "mtime": 1780670128.638797,
+    "ast_hash": "c3b107cf7329115cf0447b507b564ef8",
+    "semantic_hash": "c3b107cf7329115cf0447b507b564ef8"
+  },
+  "docs/tasks/018-03-wire-window-advance-state.md": {
+    "mtime": 1780670166.7120876,
+    "ast_hash": "1bb5b35350a1407c99d10c2d766b00a9",
+    "semantic_hash": "1bb5b35350a1407c99d10c2d766b00a9"
+  },
+  "docs/tasks/018-04-update-category-and-settings-ui.md": {
+    "mtime": 1780670231.152482,
+    "ast_hash": "c326e95550ff6a4cc9141c662df67584",
+    "semantic_hash": "c326e95550ff6a4cc9141c662df67584"
+  },
+  "docs/tasks/018-05-update-docs-and-validate.md": {
+    "mtime": 1780670510.7448938,
+    "ast_hash": "d52ef7123abef6f1af3f06376644d4bc",
+    "semantic_hash": "d52ef7123abef6f1af3f06376644d4bc"
+  },
+  "docs/tasks/019-01-add-installment-months-helper.md": {
+    "mtime": 1780672409.209226,
+    "ast_hash": "63e03e1f5f4599878619685ee3a5893f",
+    "semantic_hash": "63e03e1f5f4599878619685ee3a5893f"
+  },
+  "docs/tasks/019-02-wire-installment-adjustments.md": {
+    "mtime": 1780672522.0523531,
+    "ast_hash": "ddf3f49350edfaf17209cf75efd16861",
+    "semantic_hash": "ddf3f49350edfaf17209cf75efd16861"
+  },
+  "docs/tasks/019-03-update-adjustment-ui.md": {
+    "mtime": 1780672522.1390383,
+    "ast_hash": "ff9f58b6215a9cc83e37632cc3bdd4fe",
+    "semantic_hash": "ff9f58b6215a9cc83e37632cc3bdd4fe"
+  },
+  "docs/tasks/019-04-update-docs-and-validate.md": {
+    "mtime": 1780672576.3186357,
+    "ast_hash": "d30f656f62e60a5eec28e39dcb2217a2",
+    "semantic_hash": "d30f656f62e60a5eec28e39dcb2217a2"
+  },
+  "docs/tasks/020-01-install-app-lock-dependencies.md": {
+    "mtime": 1780765489.6600266,
+    "ast_hash": "430b2b85b677a4cb4cb4398b03f0a43e",
+    "semantic_hash": "430b2b85b677a4cb4cb4398b03f0a43e"
+  },
+  "docs/tasks/020-02-add-app-lock-storage-and-helpers.md": {
+    "mtime": 1780765489.7644875,
+    "ast_hash": "3417e9f9d7cccc4697800db7e56436dd",
+    "semantic_hash": "3417e9f9d7cccc4697800db7e56436dd"
+  },
+  "docs/tasks/020-03-add-app-lock-hook.md": {
+    "mtime": 1780765489.8610282,
+    "ast_hash": "f2a2423a24e9ccc4f3ddc4d64fc1cf2c",
+    "semantic_hash": "f2a2423a24e9ccc4f3ddc4d64fc1cf2c"
+  },
+  "docs/tasks/020-04-add-app-lock-overlay.md": {
+    "mtime": 1780765489.967644,
+    "ast_hash": "3f5fb1699c5c7a6dc78cac8ec31bdc13",
+    "semantic_hash": "3f5fb1699c5c7a6dc78cac8ec31bdc13"
+  },
+  "docs/tasks/020-05-add-security-settings-ui.md": {
+    "mtime": 1780765490.0693188,
+    "ast_hash": "f2a485f2ff1f748f45160853e89876b0",
+    "semantic_hash": "f2a485f2ff1f748f45160853e89876b0"
+  },
+  "docs/tasks/020-06-update-docs-and-validate.md": {
+    "mtime": 1780765594.4932418,
+    "ast_hash": "37a16d80c1d5cef706acb0f20803a006",
+    "semantic_hash": "37a16d80c1d5cef706acb0f20803a006"
+  },
+  "docs/tasks/021-01-add-figma-layout-refresh-docs.md": {
+    "mtime": 1780679535.5782287,
+    "ast_hash": "6f84d0ccc79263db84a3960c089719e9",
+    "semantic_hash": "6f84d0ccc79263db84a3960c089719e9"
+  },
+  "docs/tasks/021-02-update-theme-and-shell.md": {
+    "mtime": 1780679535.6655135,
+    "ast_hash": "feed4ed61a64f6e4837336f7b1f1fd7c",
+    "semantic_hash": "feed4ed61a64f6e4837336f7b1f1fd7c"
+  },
+  "docs/tasks/021-03-reorganize-screens.md": {
+    "mtime": 1780706400.9054115,
+    "ast_hash": "e23d80a691c5e0d0d2aa942995e66e29",
+    "semantic_hash": "e23d80a691c5e0d0d2aa942995e66e29"
+  },
+  "docs/tasks/021-04-refine-figma-layouts.md": {
+    "mtime": 1780708611.5542595,
+    "ast_hash": "1e952cbe545c3c3bbb6022f67fc71a65",
+    "semantic_hash": "1e952cbe545c3c3bbb6022f67fc71a65"
+  },
+  "docs/tasks/021-05-update-docs-and-validate.md": {
+    "mtime": 1780679535.948431,
+    "ast_hash": "26c31b2b06ccfa93bb5696faf27c4bc5",
+    "semantic_hash": "26c31b2b06ccfa93bb5696faf27c4bc5"
+  },
+  "docs/tasks/022-01-add-typography-docs.md": {
+    "mtime": 1780707881.2367432,
+    "ast_hash": "93f1acc9de653fa8644a6356e5b69f5b",
+    "semantic_hash": "93f1acc9de653fa8644a6356e5b69f5b"
+  },
+  "docs/tasks/022-03-migrate-shared-and-shell-typography.md": {
+    "mtime": 1780707881.427865,
+    "ast_hash": "015acbfc7d0f907c4fe9dd4c6f9a6cae",
+    "semantic_hash": "015acbfc7d0f907c4fe9dd4c6f9a6cae"
+  },
+  "docs/tasks/022-04-migrate-finance-typography.md": {
+    "mtime": 1780708460.9689636,
+    "ast_hash": "3c1a7a3dac613328bc561580cc09b093",
+    "semantic_hash": "3c1a7a3dac613328bc561580cc09b093"
+  },
+  "docs/tasks/022-05-validate-typography-standardization.md": {
+    "mtime": 1780708180.1550817,
+    "ast_hash": "48fafdaa4ae03d25448418d19d12bb4e",
+    "semantic_hash": "48fafdaa4ae03d25448418d19d12bb4e"
+  },
+  "docs/tasks/023-01-confirm-icon-direction.md": {
+    "mtime": 1780762047.58872,
+    "ast_hash": "ba684c5c6823f393697dacfe3ef523cc",
+    "semantic_hash": "ba684c5c6823f393697dacfe3ef523cc"
+  },
+  "docs/tasks/023-02-generate-standard-icon-assets.md": {
+    "mtime": 1780762047.6753385,
+    "ast_hash": "712c6f9707d6506c084904a39e6cb308",
+    "semantic_hash": "712c6f9707d6506c084904a39e6cb308"
+  },
+  "docs/tasks/023-03-update-expo-branding-config.md": {
+    "mtime": 1780762047.7608037,
+    "ast_hash": "ab8c44e74e0d51dc4b8467d975ef8ac8",
+    "semantic_hash": "ab8c44e74e0d51dc4b8467d975ef8ac8"
+  },
+  "docs/tasks/023-04-align-android-native-resources.md": {
+    "mtime": 1780762047.8460472,
+    "ast_hash": "60f324cbd076d08b24309a75d426bf2b",
+    "semantic_hash": "60f324cbd076d08b24309a75d426bf2b"
+  },
+  "docs/tasks/023-05-validate-icon-and-splash.md": {
+    "mtime": 1780763605.3170104,
+    "ast_hash": "de75eef1c7883f03f557104b9f900be5",
+    "semantic_hash": "de75eef1c7883f03f557104b9f900be5"
+  },
+  "docs/tasks/024-01-add-app-context-docs.md": {
+    "mtime": 1780763984.8924475,
+    "ast_hash": "914acb45b684654cbeafe82530fead45",
+    "semantic_hash": "914acb45b684654cbeafe82530fead45"
+  },
+  "docs/tasks/024-02-update-human-readme-context.md": {
+    "mtime": 1780763984.9788122,
+    "ast_hash": "f13995f84fe1ffff1a4c8527fa2a5adb",
+    "semantic_hash": "f13995f84fe1ffff1a4c8527fa2a5adb"
+  },
+  "docs/tasks/024-03-add-app-context-standard.md": {
+    "mtime": 1780763985.0665193,
+    "ast_hash": "1c87c6cbfc0823025843ed4ca97624a2",
+    "semantic_hash": "1c87c6cbfc0823025843ed4ca97624a2"
+  },
+  "docs/tasks/024-04-validate-app-context-docs.md": {
+    "mtime": 1780764053.0475955,
+    "ast_hash": "a6ff9f6e741e9b40fe5ba19f144cdead",
+    "semantic_hash": "a6ff9f6e741e9b40fe5ba19f144cdead"
+  },
+  "docs/tasks/025-01-add-eye-icon-component.md": {
+    "mtime": 1780767044.1127949,
+    "ast_hash": "dcdc1f812ce3da1e9afa7a4ef416e3ba",
+    "semantic_hash": "dcdc1f812ce3da1e9afa7a4ef416e3ba"
+  },
+  "docs/tasks/025-02-add-mask-currency-helper.md": {
+    "mtime": 1780767049.7540007,
+    "ast_hash": "99b22c5ca3f459ba66b11c601651eac6",
+    "semantic_hash": "99b22c5ca3f459ba66b11c601651eac6"
+  },
+  "docs/tasks/025-03-wire-values-hidden-state.md": {
+    "mtime": 1780767060.531945,
+    "ast_hash": "b55c470c90e19fba6b4f4f21118b29e3",
+    "semantic_hash": "b55c470c90e19fba6b4f4f21118b29e3"
+  },
+  "docs/tasks/025-04-mask-display-values.md": {
+    "mtime": 1780768430.854337,
+    "ast_hash": "0851d4f804676db0a4534cba520a47e7",
+    "semantic_hash": "0851d4f804676db0a4534cba520a47e7"
+  },
+  "docs/tasks/025-05-mask-editable-input.md": {
+    "mtime": 1780768430.8779354,
+    "ast_hash": "56e8fc9ffab07301f35a5d8fd96850da",
+    "semantic_hash": "56e8fc9ffab07301f35a5d8fd96850da"
+  },
+  "docs/tasks/025-06-update-docs-and-validate.md": {
+    "mtime": 1780767089.0329175,
+    "ast_hash": "80f4f2641236fdfed1d0f85e5ca52029",
+    "semantic_hash": "80f4f2641236fdfed1d0f85e5ca52029"
+  },
+  "docs/tasks/026-01-add-state-helper-and-action.md": {
+    "mtime": 1780799585.0352032,
+    "ast_hash": "7c169a64922ee688a78d01fd72513462",
+    "semantic_hash": "7c169a64922ee688a78d01fd72513462"
+  },
+  "docs/tasks/026-02-redesign-payments-header.md": {
+    "mtime": 1780799592.035471,
+    "ast_hash": "1965b8b5e0f954ba1265bf544bab39ab",
+    "semantic_hash": "1965b8b5e0f954ba1265bf544bab39ab"
+  },
+  "docs/tasks/026-03-add-creation-modal.md": {
+    "mtime": 1780799600.2280893,
+    "ast_hash": "5a4db5ed60d7d45c09bcd354718db66f",
+    "semantic_hash": "5a4db5ed60d7d45c09bcd354718db66f"
+  },
+  "docs/tasks/026-04-wire-finance-app.md": {
+    "mtime": 1780799603.3655431,
+    "ast_hash": "bbc4987401cc622ec8fbd9e97e0959e4",
+    "semantic_hash": "bbc4987401cc622ec8fbd9e97e0959e4"
+  },
+  "docs/tasks/026-05-update-docs-and-validate.md": {
+    "mtime": 1780799607.0646913,
+    "ast_hash": "fe1f03c25c0939a9a568c814518e4560",
+    "semantic_hash": "fe1f03c25c0939a9a568c814518e4560"
+  },
+  "docs/tasks/029-01-add-adjustment-ui-to-payment-checklist.md": {
+    "mtime": 1780803525.7339218,
+    "ast_hash": "9261dede13798b003e1b27053f71c5e2",
+    "semantic_hash": "9261dede13798b003e1b27053f71c5e2"
+  },
+  "docs/tasks/029-02-wire-adjust-action-in-parent.md": {
+    "mtime": 1780803532.496587,
+    "ast_hash": "0b71175978b4435d9789ac072b775537",
+    "semantic_hash": "0b71175978b4435d9789ac072b775537"
+  },
+  "docs/tasks/029-03-update-docs-and-validate.md": {
+    "mtime": 1780804293.8795624,
+    "ast_hash": "80ff2b55a084e7b80fcf15551cbe4386",
+    "semantic_hash": "80ff2b55a084e7b80fcf15551cbe4386"
+  },
+  "docs/tasks/030-01-update-data-model.md": {
+    "mtime": 1780852582.8045788,
+    "ast_hash": "f30ebcabae0dd508c7f9b082a24ba35d",
+    "semantic_hash": "f30ebcabae0dd508c7f9b082a24ba35d"
+  },
+  "docs/tasks/030-02-add-history-capture.md": {
+    "mtime": 1780852582.878112,
+    "ast_hash": "7b00aaa94ff552915b6a3d13f8af170e",
+    "semantic_hash": "7b00aaa94ff552915b6a3d13f8af170e"
+  },
+  "docs/tasks/030-03-update-backup-validation.md": {
+    "mtime": 1780852582.908991,
+    "ast_hash": "b2f6317fd567e96c0ecc595b70b0af62",
+    "semantic_hash": "b2f6317fd567e96c0ecc595b70b0af62"
+  },
+  "docs/tasks/030-04-add-history-card-component.md": {
+    "mtime": 1780852582.9611528,
+    "ast_hash": "5ee4394cdf5a3b30d6acb34ceb4ea722",
+    "semantic_hash": "5ee4394cdf5a3b30d6acb34ceb4ea722"
+  },
+  "docs/tasks/030-05-add-historico-pill-to-resumo.md": {
+    "mtime": 1780852582.9904904,
+    "ast_hash": "def95ec081b9088fe20fc78712b98157",
+    "semantic_hash": "def95ec081b9088fe20fc78712b98157"
+  },
+  "docs/tasks/030-06-update-docs-and-validate.md": {
+    "mtime": 1780850897.9762897,
+    "ast_hash": "f32524418238660787cab6684db56123",
+    "semantic_hash": "f32524418238660787cab6684db56123"
+  },
+  "docs/tasks/031-01-reset-and-add-action.md": {
+    "mtime": 1780857972.6648192,
+    "ast_hash": "605049f517e9a6194699a817aa9b4f70",
+    "semantic_hash": "605049f517e9a6194699a817aa9b4f70"
+  },
+  "docs/tasks/031-02-add-button-and-modal-to-resumo.md": {
+    "mtime": 1780857973.8056633,
+    "ast_hash": "e02f01f180591f2761ad8d70c4ce4100",
+    "semantic_hash": "e02f01f180591f2761ad8d70c4ce4100"
+  },
+  "docs/tasks/031-03-update-docs-and-validate.md": {
+    "mtime": 1780857974.6963663,
+    "ast_hash": "e4967109f52903f879528e8be0e2eec7",
+    "semantic_hash": "e4967109f52903f879528e8be0e2eec7"
+  },
+  "docs/tasks/032-01-add-currency-mask-helpers.md": {
+    "mtime": 1781129946.5537448,
+    "ast_hash": "d1a62a40d7195ec079db137d1fe45263",
+    "semantic_hash": "d1a62a40d7195ec079db137d1fe45263"
+  },
+  "docs/tasks/032-02-rework-editable-amount-input.md": {
+    "mtime": 1781129946.5557454,
+    "ast_hash": "4a0fd7279610cec554b651ceb6d1a5ee",
+    "semantic_hash": "4a0fd7279610cec554b651ceb6d1a5ee"
+  },
+  "docs/tasks/032-03-migrate-monetary-fields.md": {
+    "mtime": 1781129946.5577464,
+    "ast_hash": "d19659ecaffe51efbcae3bb12b7bf0a1",
+    "semantic_hash": "d19659ecaffe51efbcae3bb12b7bf0a1"
+  },
+  "docs/tasks/032-04-update-docs-and-validate.md": {
+    "mtime": 1781129946.5597475,
+    "ast_hash": "fbe5c9aa318ece7622f493bd97eb949e",
+    "semantic_hash": "fbe5c9aa318ece7622f493bd97eb949e"
+  },
+  "docs/tasks/033-01-add-salary-distribution-builder.md": {
+    "mtime": 1781205669.784919,
+    "ast_hash": "3f441e4b254ffce68f99b763ee9c2819",
+    "semantic_hash": "3f441e4b254ffce68f99b763ee9c2819"
+  },
+  "docs/tasks/033-02-add-salary-distribution-panel.md": {
+    "mtime": 1781205669.844131,
+    "ast_hash": "706fcfd60ea4c06b11989b77b39ee130",
+    "semantic_hash": "706fcfd60ea4c06b11989b77b39ee130"
+  },
+  "docs/tasks/033-03-wire-panel-into-summary.md": {
+    "mtime": 1781205669.8678417,
+    "ast_hash": "94bbc16cb64eef24d9144493d08b5dad",
+    "semantic_hash": "94bbc16cb64eef24d9144493d08b5dad"
+  },
+  "docs/tasks/033-04-update-docs-and-validate.md": {
+    "mtime": 1781205669.8864226,
+    "ast_hash": "e8cb55ebd48e0340dd7e5da557a6e899",
+    "semantic_hash": "e8cb55ebd48e0340dd7e5da557a6e899"
+  },
+  "docs/tasks/034-01-add-notifications-dependency.md": {
+    "mtime": 1781212665.8376117,
+    "ast_hash": "fe046f29d25106512a5c07d2d2e8bf50",
+    "semantic_hash": "fe046f29d25106512a5c07d2d2e8bf50"
+  },
+  "docs/tasks/034-02-add-reminder-settings-storage.md": {
+    "mtime": 1781212665.877388,
+    "ast_hash": "ff914d697ede83a6f24acf4f26a9fef5",
+    "semantic_hash": "ff914d697ede83a6f24acf4f26a9fef5"
+  },
+  "docs/tasks/034-03-add-build-due-reminders.md": {
+    "mtime": 1781212665.9119563,
+    "ast_hash": "fa70111e19799098e18908345efd974c",
+    "semantic_hash": "fa70111e19799098e18908345efd974c"
+  },
+  "docs/tasks/034-04-add-sync-reminders.md": {
+    "mtime": 1781212665.9335024,
+    "ast_hash": "5001767e2437aec7b525fb327c404b35",
+    "semantic_hash": "5001767e2437aec7b525fb327c404b35"
+  },
+  "docs/tasks/034-05-add-reminders-hook-and-section.md": {
+    "mtime": 1781212665.9687705,
+    "ast_hash": "a5083f59ceaf6bfcd54d46b4084854b7",
+    "semantic_hash": "a5083f59ceaf6bfcd54d46b4084854b7"
+  },
+  "docs/tasks/034-06-wire-sync-triggers.md": {
+    "mtime": 1781212665.9818182,
+    "ast_hash": "13800586914e265c9d05546bf0ca24b4",
+    "semantic_hash": "13800586914e265c9d05546bf0ca24b4"
+  },
+  "docs/tasks/034-07-update-docs-and-validate.md": {
+    "mtime": 1781212665.9928613,
+    "ast_hash": "dd330abb7dc67f7a8ed0a017943f6115",
+    "semantic_hash": "dd330abb7dc67f7a8ed0a017943f6115"
+  },
+  "docs/tasks/035-01-add-spending-trends-helpers.md": {
+    "mtime": 1781217352.709773,
+    "ast_hash": "a46ce30bd32e055fff3c415d41d8048b",
+    "semantic_hash": "a46ce30bd32e055fff3c415d41d8048b"
+  },
+  "docs/tasks/035-02-add-resumo-trend-line.md": {
+    "mtime": 1781217352.8066254,
+    "ast_hash": "7bb454253840be5fa915cbc78aa0f105",
+    "semantic_hash": "7bb454253840be5fa915cbc78aa0f105"
+  },
+  "docs/tasks/035-03-add-history-variation.md": {
+    "mtime": 1781217352.8933437,
+    "ast_hash": "f354a407f26537ee317e1b019c99d941",
+    "semantic_hash": "f354a407f26537ee317e1b019c99d941"
+  },
+  "docs/tasks/035-04-update-docs-and-validate.md": {
+    "mtime": 1781217352.973329,
+    "ast_hash": "faaf20a2d94f3c9eb036a5a9a6dc44e7",
+    "semantic_hash": "faaf20a2d94f3c9eb036a5a9a6dc44e7"
+  },
+  "docs/tasks/036-01-add-commitment-goal-setting.md": {
+    "mtime": 1781222780.7054846,
+    "ast_hash": "9f61a7ba03e69ca9eaff96f3f6b2abb0",
+    "semantic_hash": "9f61a7ba03e69ca9eaff96f3f6b2abb0"
+  },
+  "docs/tasks/036-02-add-goal-status-helper.md": {
+    "mtime": 1781222780.7408504,
+    "ast_hash": "29c1cb4a9e0ddf879d8b37b19eada300",
+    "semantic_hash": "29c1cb4a9e0ddf879d8b37b19eada300"
+  },
+  "docs/tasks/036-03-add-goal-tag-component.md": {
+    "mtime": 1781222780.7794447,
+    "ast_hash": "483f76fbba6835414e64ee52dd3c3086",
+    "semantic_hash": "483f76fbba6835414e64ee52dd3c3086"
+  },
+  "docs/tasks/036-04-wire-resumo-projecao-historico.md": {
+    "mtime": 1781222780.816894,
+    "ast_hash": "834b053c6ac5d0a6fa819cbc6414f740",
+    "semantic_hash": "834b053c6ac5d0a6fa819cbc6414f740"
+  },
+  "docs/tasks/036-05-wire-charts-meta-line.md": {
+    "mtime": 1781222780.8506215,
+    "ast_hash": "fdbdc899975933ff5e2caf2f513f4802",
+    "semantic_hash": "fdbdc899975933ff5e2caf2f513f4802"
+  },
+  "docs/tasks/036-06-add-ajustes-goal-field.md": {
+    "mtime": 1781222780.8845148,
+    "ast_hash": "6922b6153e6afd2ff12d4978a3765028",
+    "semantic_hash": "6922b6153e6afd2ff12d4978a3765028"
+  },
+  "docs/tasks/036-07-update-docs-and-validate.md": {
+    "mtime": 1781222780.9223003,
+    "ast_hash": "eb48b6bd551fc40518cd15fd5fb8a924",
+    "semantic_hash": "eb48b6bd551fc40518cd15fd5fb8a924"
+  },
+  "docs/tasks/037-01-add-notification-icon-assets.md": {
+    "mtime": 1781747217.039481,
+    "ast_hash": "132aec08a148f8dad64f4248e9382522",
+    "semantic_hash": "132aec08a148f8dad64f4248e9382522"
+  },
+  "docs/tasks/037-02-configure-notification-icon.md": {
+    "mtime": 1781747217.1657147,
+    "ast_hash": "63bb516d5aa80d896bcc4357ffb0709e",
+    "semantic_hash": "63bb516d5aa80d896bcc4357ffb0709e"
+  },
+  "docs/tasks/037-03-update-docs-and-validate.md": {
+    "mtime": 1781747295.5904107,
+    "ast_hash": "41b526087bf1c97c9f46d69fe4122e51",
+    "semantic_hash": "41b526087bf1c97c9f46d69fe4122e51"
+  },
+  "docs/tasks/038-01-add-account-balance-helper.md": {
+    "mtime": 1783726515.6150813,
+    "ast_hash": "a07ec2a49b3b83c12c994501e4a769b3",
+    "semantic_hash": "a07ec2a49b3b83c12c994501e4a769b3"
+  },
+  "docs/tasks/038-02-wire-resumo-kpi-and-shortcut.md": {
+    "mtime": 1783726799.3831308,
+    "ast_hash": "228e2636b3b1d853463a59ab7925ba7b",
+    "semantic_hash": "228e2636b3b1d853463a59ab7925ba7b"
+  },
+  "docs/tasks/038-03-update-docs-and-validate.md": {
+    "mtime": 1783726895.5412598,
+    "ast_hash": "0164d7a270b85e60afeb7590b5702014",
+    "semantic_hash": "0164d7a270b85e60afeb7590b5702014"
+  },
+  "assets/adaptive-icon-foreground.png": {
+    "mtime": 1780761475.7541554,
+    "ast_hash": "ebc51bc5ab9217a913a81c9761b053c9",
+    "semantic_hash": "ebc51bc5ab9217a913a81c9761b053c9"
+  },
+  "assets/app-icon.png": {
+    "mtime": 1780761475.7154844,
+    "ast_hash": "cdc0eb16d7151c22f9ced507b52e37cd",
+    "semantic_hash": "cdc0eb16d7151c22f9ced507b52e37cd"
+  },
+  "assets/eye-closed.svg": {
+    "mtime": 1780766664.9593754,
+    "ast_hash": "7cd112bce69bba0d6814b4825ee28717",
+    "semantic_hash": "7cd112bce69bba0d6814b4825ee28717"
+  },
+  "assets/eye-open.svg": {
+    "mtime": 1780681928.0,
+    "ast_hash": "a11147a2e5c2c12f1f943aceaf120e99",
+    "semantic_hash": "a11147a2e5c2c12f1f943aceaf120e99"
+  },
+  "assets/favicon.png": {
+    "mtime": 1780601351.7789724,
+    "ast_hash": "d9f444efbdfbe7931aa93beada07318a",
+    "semantic_hash": "d9f444efbdfbe7931aa93beada07318a"
+  },
+  "assets/logo-header.png": {
+    "mtime": 1780682204.0,
+    "ast_hash": "b6b6f316df567388987c6010573da77e",
+    "semantic_hash": "b6b6f316df567388987c6010573da77e"
+  },
+  "assets/notification-icon.png": {
+    "mtime": 1781747050.2577467,
+    "ast_hash": "042962da2d75c75541d21594d00a27c4",
+    "semantic_hash": "042962da2d75c75541d21594d00a27c4"
+  },
+  "assets/splash-logo.png": {
+    "mtime": 1780761475.7837777,
+    "ast_hash": "85d73c8f6546a2d68cb1c6d1771560fd",
+    "semantic_hash": "85d73c8f6546a2d68cb1c6d1771560fd"
+  },
+  "screens/v1/categorias-o1.png": {
+    "mtime": 1780664376.3488512,
+    "ast_hash": "3bb4ec2c4877aac990d2fda49f468d49",
+    "semantic_hash": "3bb4ec2c4877aac990d2fda49f468d49"
+  },
+  "screens/v1/configuracoes-o1.png": {
+    "mtime": 1780664390.9045143,
+    "ast_hash": "bc4ab2ef202c31b7ab0fbc83984d1181",
+    "semantic_hash": "bc4ab2ef202c31b7ab0fbc83984d1181"
+  },
+  "screens/v1/configuracoes-o2.png": {
+    "mtime": 1780664406.0632415,
+    "ast_hash": "4e7355b6547e1f881bb1f4f20f912fc1",
+    "semantic_hash": "4e7355b6547e1f881bb1f4f20f912fc1"
+  },
+  "screens/v1/graficos-o1.png": {
+    "mtime": 1780664276.2350514,
+    "ast_hash": "6bca517df40650ceeef41c5bf88aa3d2",
+    "semantic_hash": "6bca517df40650ceeef41c5bf88aa3d2"
+  },
+  "screens/v1/graficos-o2.1.png": {
+    "mtime": 1780664315.5763571,
+    "ast_hash": "42d015c940b678a5b60a0ee0907b78b1",
+    "semantic_hash": "42d015c940b678a5b60a0ee0907b78b1"
+  },
+  "screens/v1/graficos-o2.png": {
+    "mtime": 1780664290.5888314,
+    "ast_hash": "e5106b3fe93e85f435cec4a8c09926aa",
+    "semantic_hash": "e5106b3fe93e85f435cec4a8c09926aa"
+  },
+  "screens/v1/graficos-o3.png": {
+    "mtime": 1780664302.720635,
+    "ast_hash": "8db85ef199ffcbad050607039e1320d6",
+    "semantic_hash": "8db85ef199ffcbad050607039e1320d6"
+  },
+  "screens/v1/planejamento-o1.png": {
+    "mtime": 1780664335.5961838,
+    "ast_hash": "813d1c5bfd639473eab20d804ec1b0d0",
+    "semantic_hash": "813d1c5bfd639473eab20d804ec1b0d0"
+  },
+  "screens/v1/planejamento-o2.png": {
+    "mtime": 1780664347.0437574,
+    "ast_hash": "fa3eb42d622e8c7bdbad0e6ba4735b82",
+    "semantic_hash": "fa3eb42d622e8c7bdbad0e6ba4735b82"
+  },
+  "screens/v1/resumo-o1.png": {
+    "mtime": 1780664247.8012025,
+    "ast_hash": "9557fd14d625332cb787b5092bb11a72",
+    "semantic_hash": "9557fd14d625332cb787b5092bb11a72"
+  },
+  "screens/v1/resumo-o2.png": {
+    "mtime": 1780664260.3216016,
+    "ast_hash": "8a599ac59006eb212388eaf54548be5b",
+    "semantic_hash": "8a599ac59006eb212388eaf54548be5b"
+  }
+}
