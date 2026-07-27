@@ -23,6 +23,8 @@ export function PlanningScreen({
       onAdjustMonthlyValue={actions.adjustMonthlyValue}
       onChangeMonthlyValue={actions.updateMonthlyValue}
       onSelectAccountItem={actions.setSelectedAccountItemId}
+      onToggleReview={actions.toggleMonthlyReviewStatus}
+      paymentStatuses={financeState.paymentStatuses}
       projectionMonths={projectionMonths}
       selectedAccountItem={selectedAccountItem}
       valuesHidden={valuesHidden}

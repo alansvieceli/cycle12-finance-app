@@ -10,6 +10,7 @@ type SelectOption = {
   label: string;
   sublabel?: string;
   color?: string;
+  marked?: boolean;
 };
 
 type SelectFieldProps = {
@@ -86,6 +87,15 @@ export function SelectField({
                     style={[styles.item, isActive ? styles.itemActive : null]}
                   >
                     <View style={styles.itemLeft}>
+                      {option.marked ? (
+                        <View style={styles.itemMark}>
+                          <Ionicons
+                            color={colors.accentText}
+                            name="checkmark"
+                            size={12}
+                          />
+                        </View>
+                      ) : null}
                       {option.sublabel ? (
                         <View style={styles.itemLabelGroup}>
                           <Text
@@ -241,6 +251,14 @@ const styles = StyleSheet.create({
   },
   itemLabelGroup: {
     flex: 1,
+  },
+  itemMark: {
+    alignItems: 'center',
+    backgroundColor: colors.info,
+    borderRadius: 6,
+    height: 18,
+    justifyContent: 'center',
+    width: 18,
   },
   itemSublabelRow: {
     alignItems: 'center',

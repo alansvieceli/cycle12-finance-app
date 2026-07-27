@@ -6,6 +6,7 @@ import { getCategoryColor } from '../../lib/categoryColors';
 import {
   getCategoryName,
   getMonthlyValueAmount,
+  isAccountItemReviewed,
   type ProjectionMonth,
 } from '../../lib/financeCalculations';
 import {
@@ -22,6 +23,7 @@ import { typography } from '../../theme/typography';
 import type {
   AccountItem,
   Category,
+  MonthlyPaymentStatus,
   MonthlyValue,
   MonthNumber,
 } from '../../types/finance';
@@ -51,6 +53,11 @@ type MonthlyValueEditorProps = {
     installments?: number,
   ) => void;
   onSelectAccountItem: (accountItemId: string) => void;
+  onToggleReview: (
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  ) => void;
+  paymentStatuses: MonthlyPaymentStatus[];
   projectionMonths: ProjectionMonth[];
   selectedAccountItem?: AccountItem;
   valuesHidden?: boolean;
@@ -63,6 +70,8 @@ export function MonthlyValueEditor({
   onAdjustMonthlyValue,
   onChangeMonthlyValue,
   onSelectAccountItem,
+  onToggleReview,
+  paymentStatuses,
   projectionMonths,
   selectedAccountItem,
   valuesHidden = false,
@@ -117,22 +126,72 @@ export function MonthlyValueEditor({
     );
   }, [monthlyValues, projectionMonths, selectedAccountItem]);
 
+  const currentProjectionMonth =
+    projectionMonths.find((projectionMonth) => projectionMonth.isCurrentMonth) ??
+    projectionMonths[0];
+  const isSelectedAccountReviewed = Boolean(
+    selectedAccountItem &&
+      currentProjectionMonth &&
+      isAccountItemReviewed(
+        paymentStatuses,
+        selectedAccountItem.id,
+        currentProjectionMonth,
+      ),
+  );
+
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>Planejamento mensal</Text>
       {selectedAccountItem ? (
         <>
-          <SelectField
-            fieldLabel="Conta"
-            onChange={onSelectAccountItem}
-            options={sortAccountItems(accountItems, categories).map((accountItem) => ({
-              id: accountItem.id,
-              label: accountItem.name,
-              sublabel: getCategoryName(categories, accountItem.categoryId),
-              color: getCategoryColor(accountItem.categoryId, categories),
-            }))}
-            value={selectedAccountItem.id}
-          />
+          <View style={styles.accountRow}>
+            <View style={styles.accountSelect}>
+              <SelectField
+                fieldLabel="Conta"
+                onChange={onSelectAccountItem}
+                options={sortAccountItems(accountItems, categories).map(
+                  (accountItem) => ({
+                    id: accountItem.id,
+                    label: accountItem.name,
+                    sublabel: getCategoryName(categories, accountItem.categoryId),
+                    color: getCategoryColor(accountItem.categoryId, categories),
+                    marked: currentProjectionMonth
+                      ? isAccountItemReviewed(
+                          paymentStatuses,
+                          accountItem.id,
+                          currentProjectionMonth,
+                        )
+                      : false,
+                  }),
+                )}
+                value={selectedAccountItem.id}
+              />
+            </View>
+            {currentProjectionMonth ? (
+              <Pressable
+                accessibilityLabel={
+                  isSelectedAccountReviewed
+                    ? 'Desmarcar conta revisada'
+                    : 'Marcar conta como revisada'
+                }
+                onPress={() =>
+                  onToggleReview(selectedAccountItem.id, currentProjectionMonth)
+                }
+                style={[
+                  styles.reviewButton,
+                  isSelectedAccountReviewed ? styles.reviewButtonActive : null,
+                ]}
+              >
+                <Ionicons
+                  color={
+                    isSelectedAccountReviewed ? colors.accentText : colors.textSecondary
+                  }
+                  name="checkmark"
+                  size={20}
+                />
+              </Pressable>
+            ) : null}
+          </View>
 
           <View style={styles.monthValueList}>
             {projectionMonths.map((projectionMonth, index) => {
@@ -367,6 +426,28 @@ const styles = StyleSheet.create({
   panel: {
     ...panelStyles.panel,
     gap: 14,
+  },
+  accountRow: {
+    alignItems: 'stretch',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  accountSelect: {
+    flex: 1,
+  },
+  reviewButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    width: 44,
+  },
+  reviewButtonActive: {
+    backgroundColor: colors.info,
+    borderColor: colors.info,
   },
   monthValueList: {
     borderColor: colors.border,

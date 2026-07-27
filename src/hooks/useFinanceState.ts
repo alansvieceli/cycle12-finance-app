@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { suggestCategoryColor } from '../lib/categoryColors';
 import { normalizeFinanceState } from '../lib/financeBackup';
-import type { ProjectionMonth } from '../lib/financeCalculations';
+import { type ProjectionMonth, toggleAccountReview } from '../lib/financeCalculations';
 import { createId } from '../lib/ids';
 import {
   clampVisibleMonthCount,
@@ -602,6 +602,20 @@ export function useFinanceState() {
     });
   }
 
+  function toggleMonthlyReviewStatus(
+    accountItemId: string,
+    projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+  ) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      paymentStatuses: toggleAccountReview(
+        currentState.paymentStatuses,
+        accountItemId,
+        projectionMonth,
+      ),
+    }));
+  }
+
   function advanceWindowMonth() {
     setFinanceState((currentState) => {
       const nextWindowStart = getNextWindowStart(currentState);
@@ -632,6 +646,7 @@ export function useFinanceState() {
       advanceWindowMonth,
       replaceFinanceState,
       toggleMonthlyPaymentStatus,
+      toggleMonthlyReviewStatus,
       updateAccountDueDay,
       updateAccountName,
       updateCommitmentDangerThreshold,

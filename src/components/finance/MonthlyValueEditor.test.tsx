@@ -43,6 +43,8 @@ function renderEditor(
     onAdjustMonthlyValue: jest.fn(),
     onChangeMonthlyValue: jest.fn(),
     onSelectAccountItem: jest.fn(),
+    onToggleReview: jest.fn(),
+    paymentStatuses: [],
     projectionMonths,
     selectedAccountItem: accountItems[0],
     ...overrides,
@@ -129,5 +131,32 @@ describe('MonthlyValueEditor', () => {
       'subtract',
       undefined,
     );
+  });
+
+  it('toggles the review mark for the selected account in the current month', () => {
+    const { onToggleReview } = renderEditor();
+
+    fireEvent.press(screen.getByLabelText('Marcar conta como revisada'));
+
+    expect(onToggleReview).toHaveBeenCalledWith(
+      'account-rent',
+      expect.objectContaining({ month: 7, year: 2026 }),
+    );
+  });
+
+  it('shows the reviewed state when the account is already marked', () => {
+    renderEditor({
+      paymentStatuses: [
+        {
+          accountItemId: 'account-rent',
+          isPaid: false,
+          isReviewed: true,
+          month: 7,
+          year: 2026,
+        },
+      ],
+    });
+
+    expect(screen.getByLabelText('Desmarcar conta revisada')).toBeOnTheScreen();
   });
 });
