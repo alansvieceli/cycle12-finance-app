@@ -298,6 +298,14 @@ export function CurrentMonthPaymentChecklist({
                   onPress={() => onTogglePaymentStatus(accountItem.id, projectionMonth)}
                   style={styles.paymentRowTop}
                 >
+                  {/* Review mark — set in Planejar, read-only here. Sits at the row
+                      start so it stays aligned no matter how wide the amount is. */}
+                  <Ionicons
+                    color={isReviewed ? colors.info : colors.borderStrong}
+                    name={isReviewed ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                    size={20}
+                    style={styles.reviewMark}
+                  />
                   <View style={[styles.checkbox, isPaid ? styles.checkboxPaid : null]}>
                     {isPaid ? (
                       <Ionicons color={colors.accentText} name="checkmark" size={16} />
@@ -309,20 +317,6 @@ export function CurrentMonthPaymentChecklist({
                       Dia {accountItem.dueDay} ·{' '}
                       {getCategoryName(categories, accountItem.categoryId)}
                     </Text>
-                  </View>
-                  {/* Review mark — set in Planejar, read-only here */}
-                  <View style={styles.reviewColumn}>
-                    {isReviewed ? (
-                      <View style={styles.reviewMark}>
-                        <Ionicons
-                          color={colors.accentText}
-                          name="checkmark"
-                          size={14}
-                        />
-                      </View>
-                    ) : (
-                      <View style={styles.reviewMarkEmpty} />
-                    )}
                   </View>
                   <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
                     {maskCurrency(amount, valuesHidden)}
@@ -598,27 +592,8 @@ const styles = StyleSheet.create({
   amountPaid: {
     color: colors.positive,
   },
-  reviewColumn: {
-    alignItems: 'center',
-    flexShrink: 0,
-    justifyContent: 'center',
-    width: 24,
-  },
   reviewMark: {
-    alignItems: 'center',
-    backgroundColor: colors.info,
-    borderRadius: 7,
-    height: 24,
-    justifyContent: 'center',
-    width: 24,
-  },
-  reviewMarkEmpty: {
-    borderColor: colors.border,
-    borderRadius: 7,
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    height: 24,
-    width: 24,
+    flexShrink: 0,
   },
   adjustToggleButton: {
     alignItems: 'center',

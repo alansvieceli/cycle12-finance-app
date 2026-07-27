@@ -38,12 +38,14 @@ The mark applies to the current month only — the month with the `Atual` badge,
 
 ### Pagamentos
 
-Each payment row gains a fixed 24px column between the account name block and the amount, so the amounts stay aligned with each other:
+Each payment row starts with the review mark, before the paid checkbox:
 
-- Reviewed: 24x24 rounded square filled with `info`, `checkmark` icon in `accentText`.
-- Not reviewed: 24x24 rounded square with a dashed `border` outline and nothing inside.
+- Reviewed: `checkmark-circle` icon in `info`.
+- Not reviewed: `checkmark-circle-outline` icon in `borderStrong`.
 
-The column is present on every row, reviewed or not, so the eye can scan straight down it and the missing ones read as gaps. It is display-only — no press handler.
+The mark is present on every row, reviewed or not, so the eye can scan straight down it and the missing ones read as gaps. It is display-only — no press handler.
+
+It sits at the row start rather than next to the amount: amounts vary in width, so anything placed against them lands at a different x on every row. Pinned to the row's leading edge, the marks line up exactly. The paid checkbox is a green-filled square and the review mark is a blue circle, so the two neighbours stay distinguishable.
 
 Blue (`info`) instead of green because green already means **paid** on that screen (row border and amount color), and the two states are independent: an account can be paid and not reviewed, or reviewed and not paid.
 
@@ -121,7 +123,7 @@ export function toggleAccountReview(
 
 - In `Planejar`, a 44x44 button beside the account selector toggles the review mark for the selected account in the current month, and shows blue when marked.
 - The account list inside the selector shows the mark on already-reviewed accounts.
-- In `Pagamentos`, every row shows a fixed-width column before the amount: a filled blue mark when reviewed, a dashed empty square when not. It is not tappable.
+- In `Pagamentos`, every row starts with the review mark, before the paid checkbox: a filled blue check circle when reviewed, an outlined one when not. It is not tappable.
 - Marking or unmarking changes no value, no total, no paid/pending state, and no reminder.
 - Editing a monthly value leaves the mark as it is.
 - After the planning window advances, every account reads as not reviewed.
