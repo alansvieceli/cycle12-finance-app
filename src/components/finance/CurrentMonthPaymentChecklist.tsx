@@ -7,6 +7,7 @@ import {
   getCategoryName,
   getMonthlyValueAmount,
   isAccountItemPaid,
+  isAccountItemReviewed,
   type ProjectionMonth,
 } from '../../lib/financeCalculations';
 import { maskCurrency } from '../../lib/formatters';
@@ -276,6 +277,11 @@ export function CurrentMonthPaymentChecklist({
               accountItem.id,
               projectionMonth,
             );
+            const isReviewed = isAccountItemReviewed(
+              paymentStatuses,
+              accountItem.id,
+              projectionMonth,
+            );
             const isExpanded = expandedAccountItemId === accountItem.id;
 
             return (
@@ -303,6 +309,20 @@ export function CurrentMonthPaymentChecklist({
                       Dia {accountItem.dueDay} ·{' '}
                       {getCategoryName(categories, accountItem.categoryId)}
                     </Text>
+                  </View>
+                  {/* Review mark — set in Planejar, read-only here */}
+                  <View style={styles.reviewColumn}>
+                    {isReviewed ? (
+                      <View style={styles.reviewMark}>
+                        <Ionicons
+                          color={colors.accentText}
+                          name="checkmark"
+                          size={14}
+                        />
+                      </View>
+                    ) : (
+                      <View style={styles.reviewMarkEmpty} />
+                    )}
                   </View>
                   <Text style={[styles.amount, isPaid ? styles.amountPaid : null]}>
                     {maskCurrency(amount, valuesHidden)}
@@ -577,6 +597,28 @@ const styles = StyleSheet.create({
   },
   amountPaid: {
     color: colors.positive,
+  },
+  reviewColumn: {
+    alignItems: 'center',
+    flexShrink: 0,
+    justifyContent: 'center',
+    width: 24,
+  },
+  reviewMark: {
+    alignItems: 'center',
+    backgroundColor: colors.info,
+    borderRadius: 7,
+    height: 24,
+    justifyContent: 'center',
+    width: 24,
+  },
+  reviewMarkEmpty: {
+    borderColor: colors.border,
+    borderRadius: 7,
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    height: 24,
+    width: 24,
   },
   adjustToggleButton: {
     alignItems: 'center',
