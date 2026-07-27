@@ -1,6 +1,6 @@
 # Task 044-04 - Show the Review Column in Pagamentos
 
-Status: Pending
+Status: Done
 
 ## Spec
 
@@ -25,7 +25,7 @@ Add the fixed-width, read-only review column to every payment row, between the a
 
 ## Steps
 
-- [ ] **Step 1: Import the helper**
+- [x] **Step 1: Import the helper**
 
 Add `isAccountItemReviewed` to the existing import from `../../lib/financeCalculations`:
 
@@ -40,7 +40,7 @@ import {
 } from '../../lib/financeCalculations';
 ```
 
-- [ ] **Step 2: Read the mark per row**
+- [x] **Step 2: Read the mark per row**
 
 Inside the `filteredAccountItems.map(...)` callback, next to the existing `const isPaid = ...` and `const isExpanded = ...`:
 
@@ -52,7 +52,7 @@ Inside the `filteredAccountItems.map(...)` callback, next to the existing `const
             );
 ```
 
-- [ ] **Step 3: Render the column**
+- [x] **Step 3: Render the column**
 
 Inside the row `Pressable` (`styles.paymentRowTop`), insert this between the `styles.paymentInfo` `View` and the amount `Text`:
 
@@ -74,7 +74,7 @@ Inside the row `Pressable` (`styles.paymentRowTop`), insert this between the `st
 
 The column renders on every row, marked or not, so the amounts stay aligned and the unmarked accounts read as gaps. It has no `onPress`: it sits inside the row `Pressable`, so tapping it toggles paid exactly like tapping the account name does. That is intended — the row keeps one behavior and the mark is changed only in `Planejar`.
 
-- [ ] **Step 4: Add the styles**
+- [x] **Step 4: Add the styles**
 
 In the `StyleSheet.create` block, after `amountPaid`:
 
@@ -105,12 +105,12 @@ In the `StyleSheet.create` block, after `amountPaid`:
 
 Blue (`colors.info`), never green: green already marks the paid row border and the paid amount on this screen, and the two states are independent.
 
-- [ ] **Step 5: Verify nothing else moved**
+- [x] **Step 5: Verify nothing else moved**
 
 Run: `npm run typecheck && npm run lint && npx jest`
 Expected: clean, and the whole suite passes — no existing test asserts this row's layout.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/finance/CurrentMonthPaymentChecklist.tsx

@@ -1,6 +1,6 @@
 # Task 044-05 - Update Docs and Validate
 
-Status: Pending
+Status: Done
 
 ## Spec
 
@@ -21,7 +21,7 @@ Document the review mark in `docs/app-context.md` and `README.md`, then run the 
 
 ## Steps
 
-- [ ] **Step 1: Data concept**
+- [x] **Step 1: Data concept**
 
 In `docs/app-context.md`, under `Core Data Concepts`, replace the payment status line:
 
@@ -29,7 +29,7 @@ In `docs/app-context.md`, under `Core Data Concepts`, replace the payment status
 - Payment status: the monthly status of an account item, holding its manual paid/unpaid state and whether its value was reviewed. Both are scoped to a single month and are discarded when that month leaves the planning window.
 ```
 
-- [ ] **Step 2: Planejar section**
+- [x] **Step 2: Planejar section**
 
 Add to the `Planejar` list, after the adjustment bullets:
 
@@ -37,7 +37,7 @@ Add to the `Planejar` list, after the adjustment bullets:
 - marking the selected account as reviewed for the current month, through a button beside the account selector. Reviewed accounts also show the mark inside the selector list, and every mark clears itself when the planning window advances.
 ```
 
-- [ ] **Step 3: Pagamentos section**
+- [x] **Step 3: Pagamentos section**
 
 Add to the `Pagamentos` list:
 
@@ -45,7 +45,7 @@ Add to the `Pagamentos` list:
 - see which accounts had their current-month value reviewed in `Planejar`, through a read-only mark on each row. The mark uses the informational blue, since green already means paid on this screen.
 ```
 
-- [ ] **Step 4: README behavior list**
+- [x] **Step 4: README behavior list**
 
 Add to the `App Behavior` list in `README.md`, after the adjustment bullets:
 
@@ -53,17 +53,17 @@ Add to the `App Behavior` list in `README.md`, after the adjustment bullets:
 - Lets the user mark an account as reviewed for the current month in Planejar, shows that mark on each row of the Pagamentos screen, and clears every mark when the planning window advances.
 ```
 
-- [ ] **Step 5: Validate**
+- [x] **Step 5: Validate**
 
 Run: `npm run check`
 Expected: Biome CI, typecheck, the full suite with coverage, knip, and knip:production all pass. `src/lib/` statement coverage stays above 80%.
 
-- [ ] **Step 6: Check duplication**
+- [x] **Step 6: Check duplication**
 
 Run: `npm run dup`
 Expected: at or below 5%. Task 044-01 routed the three status lookups through one private finder specifically to keep this clean.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add docs/app-context.md README.md

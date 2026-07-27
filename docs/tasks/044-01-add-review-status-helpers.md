@@ -1,6 +1,6 @@
 # Task 044-01 - Add Review Status Helpers
 
-Status: Pending
+Status: Done
 
 ## Spec
 
@@ -27,7 +27,7 @@ Add the `isReviewed` field to the per-account monthly record and the two pure he
 
 ## Steps
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `src/lib/financeCalculations.test.ts`, add both names to the existing import from `./financeCalculations`, and add these cases inside the existing `describe('finance calculations', ...)` block, after the `'resolves a category name and falls back to a dash'` test:
 
@@ -63,12 +63,12 @@ In `src/lib/financeCalculations.test.ts`, add both names to the existing import 
   });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx jest financeCalculations`
 Expected: FAIL — `isAccountItemReviewed` and `toggleAccountReview` are not exported.
 
-- [ ] **Step 3: Add the optional field**
+- [x] **Step 3: Add the optional field**
 
 In `src/types/finance.ts`, replace the `MonthlyPaymentStatus` type:
 
@@ -83,7 +83,7 @@ export type MonthlyPaymentStatus = {
 };
 ```
 
-- [ ] **Step 4: Add the helpers on a shared finder**
+- [x] **Step 4: Add the helpers on a shared finder**
 
 In `src/lib/financeCalculations.ts`, replace the existing `isAccountItemPaid` with the block below. The private `findMonthlyStatus` exists so the same lookup is not written three times — the duplication policy applies to this file too.
 
@@ -156,17 +156,17 @@ export function toggleAccountReview(
 
 Check the existing `isAccountItemPaid` body before replacing it: it returned `?.isPaid ?? false`. The refactor must keep that exact result, including `false` for a missing record.
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `npx jest financeCalculations`
 Expected: PASS, including the pre-existing paid/summary cases that now go through `findMonthlyStatus`.
 
-- [ ] **Step 6: Typecheck**
+- [x] **Step 6: Typecheck**
 
 Run: `npm run typecheck && npm run lint`
 Expected: clean.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/types/finance.ts src/lib/financeCalculations.ts src/lib/financeCalculations.test.ts

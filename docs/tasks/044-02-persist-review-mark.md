@@ -1,6 +1,6 @@
 # Task 044-02 - Persist the Review Mark
 
-Status: Pending
+Status: Done
 
 ## Spec
 
@@ -27,7 +27,7 @@ Make the mark survive a backup round trip, keep old backups loading, and prove t
 
 ## Steps
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `src/lib/windowAdvance.test.ts`, add this case inside `describe('windowAdvance', ...)`, right after `'drops oldest month values and payment statuses'`. It builds its own state instead of touching `baseState`, because the existing test asserts the exact shape of the `card` record:
 
@@ -106,12 +106,12 @@ In `src/lib/financeBackup.test.ts`, add these two cases inside `describe('financ
 
 `buildEnvelopeJson`, `buildDataWithAccount`, `testHash`, and `sampleState` already exist at the bottom of that file — do not redefine them.
 
-- [ ] **Step 2: Run the tests to verify the backup ones fail**
+- [x] **Step 2: Run the tests to verify the backup ones fail**
 
 Run: `npx jest windowAdvance financeBackup`
 Expected: the `windowAdvance` case PASSES already (the reset is existing behavior — that is the point of the test), and `'preserves the review mark across a backup round trip'` FAILS because validation drops the field.
 
-- [ ] **Step 3: Carry the field through validation**
+- [x] **Step 3: Carry the field through validation**
 
 In `src/lib/financeBackup.ts`, inside `validatePaymentStatuses`, replace the returned object:
 
@@ -127,17 +127,17 @@ In `src/lib/financeBackup.ts`, inside `validatePaymentStatuses`, replace the ret
 
 `undefined` rather than `false` on purpose: `JSON.stringify` drops undefined keys, so storage stays clean, the canonical hash is unchanged for backups without the field, and the existing `expect(restoredState).toEqual(sampleState)` assertion keeps passing (Jest treats an undefined-valued key as absent). Writing `false` would break that test.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npx jest windowAdvance financeBackup`
 Expected: PASS, including the pre-existing `'creates and validates a backup envelope'` round trip.
 
-- [ ] **Step 5: Typecheck**
+- [x] **Step 5: Typecheck**
 
 Run: `npm run typecheck && npm run lint`
 Expected: clean.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/financeBackup.ts src/lib/financeBackup.test.ts src/lib/windowAdvance.test.ts

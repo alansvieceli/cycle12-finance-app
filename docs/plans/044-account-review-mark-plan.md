@@ -8,7 +8,7 @@
 
 **Tech Stack:** React Native + Expo, TypeScript, AsyncStorage, Jest with React Native Testing Library, Biome, Knip.
 
-Status: Planned
+Status: Implemented, checks passing
 
 ## Spec
 

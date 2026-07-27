@@ -1,6 +1,6 @@
 # Task 044-03 - Add the Review Toggle to Planejar
 
-Status: Pending
+Status: Done
 
 ## Spec
 
@@ -29,7 +29,7 @@ Add the action that toggles the mark and the 44x44 button beside the account sel
 
 ## Steps
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `src/components/finance/MonthlyValueEditor.test.tsx`, add the two new props to the defaults inside `renderEditor` (keep the existing keys):
 
@@ -74,12 +74,12 @@ Then add these cases at the end of the `describe('MonthlyValueEditor', ...)` blo
 
 The fixture's window starts at `createProjectionMonths(new Date(2026, 6, 1))`, so the current month is July 2026 — hence `month: 7`.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx jest MonthlyValueEditor`
 Expected: FAIL — no element with the label `Marcar conta como revisada`.
 
-- [ ] **Step 3: Add the hook action**
+- [x] **Step 3: Add the hook action**
 
 In `src/hooks/useFinanceState.ts`, add `toggleAccountReview` to the existing import from `../lib/financeCalculations`, then add this function right after `toggleMonthlyPaymentStatus`:
 
@@ -101,7 +101,7 @@ In `src/hooks/useFinanceState.ts`, add `toggleAccountReview` to the existing imp
 
 Add `toggleMonthlyReviewStatus,` to the returned `actions` object, right after the existing `toggleMonthlyPaymentStatus,` entry.
 
-- [ ] **Step 4: Add the option mark to SelectField**
+- [x] **Step 4: Add the option mark to SelectField**
 
 In `src/components/common/SelectField.tsx`, add the field to `SelectOption`:
 
@@ -146,7 +146,7 @@ Add the style to the `StyleSheet.create` block:
 
 Every other `SelectField` usage passes no `marked`, so nothing else changes.
 
-- [ ] **Step 5: Add the button to MonthlyValueEditor**
+- [x] **Step 5: Add the button to MonthlyValueEditor**
 
 In `src/components/finance/MonthlyValueEditor.tsx`:
 
@@ -261,7 +261,7 @@ Add the styles to the `StyleSheet.create` block:
   },
 ```
 
-- [ ] **Step 6: Wire the screen**
+- [x] **Step 6: Wire the screen**
 
 In `src/screens/PlanningScreen.tsx`, pass the two new props (the component already destructures `actions` and `financeState`):
 
@@ -281,17 +281,17 @@ In `src/screens/PlanningScreen.tsx`, pass the two new props (the component alrea
     />
 ```
 
-- [ ] **Step 7: Run the tests to verify they pass**
+- [x] **Step 7: Run the tests to verify they pass**
 
 Run: `npx jest MonthlyValueEditor`
 Expected: PASS, all seven cases.
 
-- [ ] **Step 8: Typecheck and lint**
+- [x] **Step 8: Typecheck and lint**
 
 Run: `npm run typecheck && npm run lint`
 Expected: clean.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/hooks/useFinanceState.ts src/screens/PlanningScreen.tsx src/components/finance/MonthlyValueEditor.tsx src/components/common/SelectField.tsx src/components/finance/MonthlyValueEditor.test.tsx
