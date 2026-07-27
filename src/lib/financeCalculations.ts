@@ -192,6 +192,10 @@ export function getMonthlyValueAmount(
   );
 }
 
+export function getCategoryName(categories: Category[], categoryId: string): string {
+  return categories.find((category) => category.id === categoryId)?.name ?? '-';
+}
+
 export function isAccountItemPaid(
   paymentStatuses: MonthlyPaymentStatus[],
   accountItemId: string,

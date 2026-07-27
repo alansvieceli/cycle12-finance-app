@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { getCategoryColor } from '../../lib/categoryColors';
 import {
   calculatePaymentSummary,
+  getCategoryName,
   getMonthlyValueAmount,
   isAccountItemPaid,
   type ProjectionMonth,
@@ -219,7 +220,7 @@ export function CurrentMonthPaymentChecklist({
         </Pressable>
         {categories.length === 0 ? (
           <Text style={styles.addButtonHint}>
-            Crie uma categoria em Contas primeiro.
+            Crie uma categoria em Cadastros primeiro.
           </Text>
         ) : null}
       </View>
@@ -406,10 +407,6 @@ export function CurrentMonthPaymentChecklist({
       </ModalShell>
     </View>
   );
-}
-
-function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
 }
 
 function getEmptyText(activeFilter: PaymentStatusFilter) {

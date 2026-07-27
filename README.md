@@ -13,7 +13,7 @@ The main areas are:
 - `Resumo`: current month overview with projected balance, salary commitment, paid/pending information, an account balance indicator that turns red when negative, and access to payment tracking.
 - `Gráficos`: read-only charts for commitment, paid vs pending totals, category distribution, and monthly balance trends.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
-- `Contas`: category and account management.
+- `Cadastros`: category and account management.
 - `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
 
 For deeper project and agent context, read `docs/app-context.md`.
@@ -23,22 +23,22 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Starts empty so the user can fill their own categories, accounts, and values.
 - Shows a rolling 12-month finance projection starting at the current month.
 - Advances the planning window automatically when the calendar month changes.
-- Lets the user choose how many months appear in the summary and charts, from 1 to 12.
+- Lets the user choose how many months appear in the summary and charts, from 3 to 12.
 - Shows a read-only charts tab with a per-month income commitment progress list, a paid vs pending summary for the current month, a current-month category donut chart, and positive/negative monthly balance columns with expandable values.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
-- Supports adding the same adjustment amount across multiple consecutive months from the `±` adjustment modal in Planejar.
+- Supports adding the same adjustment amount across multiple consecutive months from the adjustment modal in Planejar.
 - Keeps category and account lists consistently ordered across planning and summary views.
-- Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Contas, and Ajustes.
-- Keeps planning focused on monthly values, with category and account management available from the dedicated Contas tab.
+- Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Cadastros, and Ajustes.
+- Keeps planning focused on monthly values, with category and account management available from the dedicated Cadastros tab.
 - Combines finance settings and local data actions in Ajustes.
 - Shows the current app version in the Ajustes footer.
 - Lets the user select a category while creating an account.
 - Tracks current-month paid/unpaid status manually for each account item.
 - Opens current-month payment tracking from the Resumo payment shortcut.
 - Lets the user add a new account item with an optional value for the current month directly from the Pagamentos screen, without leaving the payment view.
-- Lets the user adjust (add or subtract) the value of an existing account item directly from the Pagamentos screen using the `±` button on each payment row.
+- Lets the user adjust (add or subtract) the value of an existing account item directly from the Pagamentos screen using the adjustment button on each payment row.
 - Shows compact monthly summaries with category details available on demand.
 - Calculates monthly expenses, income commitment, and surplus or shortfall.
 - Shows the commitment percentage in a configurable warning or danger color when it exceeds user-defined thresholds set in the Configurações tab.
@@ -51,7 +51,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Stores finance data only on the device.
 - Exports local data to a JSON-based `.c12f` backup file.
 - Restores `.c12f` backups only after validating format, version, SHA-256 integrity hash, data shape, and internal references.
-- Can reset local data to the default state: category `Outros`, current 12-month window, 60% warning threshold, and 80% danger threshold.
+- Can reset local data to the default state: category `Outros`, current 12-month window, 70% warning threshold, and 90% danger threshold.
 
 ## Current Workflow
 

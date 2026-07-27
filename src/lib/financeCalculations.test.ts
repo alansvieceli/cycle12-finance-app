@@ -14,6 +14,7 @@ import {
   calculateSalaryCommitmentPercentage,
   calculateSurplusOrShortfall,
   createProjectionMonths,
+  getCategoryName,
 } from './financeCalculations';
 
 const categories: Category[] = [
@@ -157,6 +158,11 @@ describe('finance calculations', () => {
     expect(calculateAccountBalance(5000, 1800)).toBe(3200);
     expect(calculateAccountBalance(1800, 1800)).toBe(0);
     expect(calculateAccountBalance(1000, 1800)).toBe(-800);
+  });
+
+  it('resolves a category name and falls back to a dash', () => {
+    expect(getCategoryName(categories, 'home')).toBe('Casa');
+    expect(getCategoryName(categories, 'missing')).toBe('-');
   });
 
   it('calculates paid and pending totals for a month', () => {

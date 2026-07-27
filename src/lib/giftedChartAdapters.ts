@@ -8,12 +8,6 @@ export type GiftedBarPoint = {
   value: number;
 };
 
-export type GiftedLinePoint = {
-  dataPointColor: string;
-  label: string;
-  value: number;
-};
-
 export type GiftedDonutPoint = {
   categoryId: string;
   color: string;
@@ -25,16 +19,6 @@ export function toGiftedBalanceBarData(points: MonthlyChartPoint[]): GiftedBarPo
   return points.map((point) => ({
     disablePress: true,
     frontColor: point.value < 0 ? colors.negative : colors.positive,
-    label: point.label,
-    value: point.value,
-  }));
-}
-
-export function toGiftedExpenseLineData(
-  points: MonthlyChartPoint[],
-): GiftedLinePoint[] {
-  return points.map((point) => ({
-    dataPointColor: colors.accent,
     label: point.label,
     value: point.value,
   }));

@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { BarChart, LineChart } from 'react-native-gifted-charts';
+import { BarChart } from 'react-native-gifted-charts';
 
 import type { MonthlyChartPoint } from '../../lib/chartData';
 import { maskCurrency } from '../../lib/formatters';
-import {
-  toGiftedBalanceBarData,
-  toGiftedExpenseLineData,
-} from '../../lib/giftedChartAdapters';
+import { toGiftedBalanceBarData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { ChartPanel } from './ChartPanel';
@@ -15,7 +12,6 @@ import { ChartPanel } from './ChartPanel';
 type MonthlyBarChartProps = {
   data: MonthlyChartPoint[];
   emptyText: string;
-  mode?: 'expense' | 'balance';
   title: string;
   totalLabel: string;
   valuesHidden: boolean;
@@ -24,7 +20,6 @@ type MonthlyBarChartProps = {
 export function MonthlyBarChart({
   data,
   emptyText,
-  mode = 'expense',
   title,
   totalLabel,
   valuesHidden,
@@ -32,12 +27,10 @@ export function MonthlyBarChart({
   const [isValueListVisible, setIsValueListVisible] = useState(false);
   const { width } = useWindowDimensions();
   const chartWidth = Math.max(Math.min(width - 64, 360), 240);
-  const maxValue = Math.max(...data.map((point) => Math.abs(point.value)), 0);
   const maxPositiveValue = Math.max(...data.map((point) => point.value), 0);
   const minNegativeValue = Math.min(...data.map((point) => point.value), 0);
   const total = data.reduce((sum, point) => sum + point.value, 0);
   const isNegativeTotal = total < 0;
-  const chartMaxValue = Math.max(maxValue * 1.18, 1);
   const positiveChartMaxValue = Math.max(maxPositiveValue * 1.18, 1);
   const negativeChartMinValue = minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;
   const chartSpacing =
@@ -69,49 +62,24 @@ export function MonthlyBarChart({
       emptyText={emptyText}
       hasData={data.length > 0}
       title={title}
-      totalAmountStyle={
-        mode === 'balance'
-          ? isNegativeTotal
-            ? styles.negativeAmount
-            : styles.positiveAmount
-          : undefined
-      }
+      totalAmountStyle={isNegativeTotal ? styles.negativeAmount : styles.positiveAmount}
       totalLabel={totalLabel}
       totalText={maskCurrency(total, valuesHidden)}
     >
       <View style={styles.chartBox}>
-        {mode === 'balance' ? (
-          <BarChart
-            {...sharedChartProps}
-            barBorderRadius={5}
-            barWidth={22}
-            data={toGiftedBalanceBarData(data)}
-            disablePress
-            frontColor={colors.positive}
-            initialSpacing={18}
-            labelWidth={22}
-            maxValue={positiveChartMaxValue}
-            mostNegativeValue={negativeChartMinValue}
-            noOfSectionsBelowXAxis={data.some((point) => point.value < 0) ? 2 : 0}
-          />
-        ) : (
-          <LineChart
-            {...sharedChartProps}
-            areaChart
-            color={colors.accent}
-            curved
-            data={toGiftedExpenseLineData(data)}
-            dataPointsColor={colors.accent}
-            dataPointsRadius={4}
-            endFillColor={colors.surface}
-            endOpacity={0.08}
-            initialSpacing={16}
-            maxValue={chartMaxValue}
-            startFillColor={colors.accent}
-            startOpacity={0.32}
-            thickness={3}
-          />
-        )}
+        <BarChart
+          {...sharedChartProps}
+          barBorderRadius={5}
+          barWidth={22}
+          data={toGiftedBalanceBarData(data)}
+          disablePress
+          frontColor={colors.positive}
+          initialSpacing={18}
+          labelWidth={22}
+          maxValue={positiveChartMaxValue}
+          mostNegativeValue={negativeChartMinValue}
+          noOfSectionsBelowXAxis={data.some((point) => point.value < 0) ? 2 : 0}
+        />
       </View>
 
       <Pressable
@@ -131,11 +99,7 @@ export function MonthlyBarChart({
               <Text
                 style={[
                   styles.valueAmount,
-                  mode === 'balance'
-                    ? point.value < 0
-                      ? styles.negativeAmount
-                      : styles.positiveAmount
-                    : null,
+                  point.value < 0 ? styles.negativeAmount : styles.positiveAmount,
                 ]}
               >
                 {maskCurrency(point.value, valuesHidden)}

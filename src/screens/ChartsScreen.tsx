@@ -124,7 +124,6 @@ export function ChartsScreen({
       <MonthlyBarChart
         data={buildSurplusShortfallChartData(financeState, projectionMonths)}
         emptyText="Configure meses e valores para visualizar sobra ou falta."
-        mode="balance"
         title="Saldo por mês"
         totalLabel="Total no período"
         valuesHidden={valuesHidden}

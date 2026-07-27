@@ -3,7 +3,11 @@ import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
-import type { ProjectionMonth } from '../../lib/financeCalculations';
+import {
+  getCategoryName,
+  getMonthlyValueAmount,
+  type ProjectionMonth,
+} from '../../lib/financeCalculations';
 import {
   currencyFormatter,
   formatMonthLabel,
@@ -69,13 +73,13 @@ export function MonthlyValueEditor({
   const [adjustmentAmount, setAdjustmentAmount] = useState(0);
   const [adjustmentMode, setAdjustmentMode] =
     useState<MonthlyValueAdjustmentOperation>('add');
-  const [installmentsInput, setInstallmentsInput] = useState('1');
+  const [installments, setInstallments] = useState(1);
 
   function openAdjustModal(projectionMonth: ProjectionMonth) {
     setActiveAdjustmentMonthKey(projectionMonth.key);
     setAdjustmentAmount(0);
     setAdjustmentMode('add');
-    setInstallmentsInput('1');
+    setInstallments(1);
   }
 
   function closeAdjustModal() {
@@ -85,7 +89,7 @@ export function MonthlyValueEditor({
   function switchAdjustmentMode(mode: MonthlyValueAdjustmentOperation) {
     setAdjustmentMode(mode);
     setAdjustmentAmount(0);
-    setInstallmentsInput('1');
+    setInstallments(1);
   }
 
   function confirmAdjustment(projectionMonth: ProjectionMonth) {
@@ -95,7 +99,7 @@ export function MonthlyValueEditor({
       projectionMonth,
       adjustmentAmount,
       adjustmentMode,
-      adjustmentMode === 'add' ? parseInstallmentsInput(installmentsInput) : undefined,
+      adjustmentMode === 'add' ? installments : undefined,
     );
     closeAdjustModal();
   }
@@ -200,7 +204,7 @@ export function MonthlyValueEditor({
           </View>
 
           <View style={styles.annualTotalRow}>
-            <Text style={styles.annualTotalLabel}>Total do ano</Text>
+            <Text style={styles.annualTotalLabel}>Total dos 12 meses</Text>
             <Text style={styles.annualTotalValue}>
               {maskCurrency(annualTotal, valuesHidden)}
             </Text>
@@ -216,14 +220,12 @@ export function MonthlyValueEditor({
                 accountItemId={selectedAccountItem.id}
                 adjustmentAmount={adjustmentAmount}
                 adjustmentMode={adjustmentMode}
-                installmentsInput={installmentsInput}
+                installments={installments}
                 monthlyValues={monthlyValues}
                 onCancel={closeAdjustModal}
                 onConfirm={() => confirmAdjustment(activeAdjustmentMonth)}
                 onInputChange={setAdjustmentAmount}
-                onInstallmentsChange={(v) =>
-                  setInstallmentsInput(sanitizeInstallmentsInput(v))
-                }
+                onInstallmentsChange={setInstallments}
                 onSwitchMode={switchAdjustmentMode}
                 projectionMonth={activeAdjustmentMonth}
                 projectionMonths={projectionMonths}
@@ -245,12 +247,12 @@ type AdjustPanelProps = {
   accountItemId: string;
   adjustmentAmount: number;
   adjustmentMode: MonthlyValueAdjustmentOperation;
-  installmentsInput: string;
+  installments: number;
   monthlyValues: MonthlyValue[];
   onCancel: () => void;
   onConfirm: () => void;
   onInputChange: (value: number) => void;
-  onInstallmentsChange: (value: string) => void;
+  onInstallmentsChange: (value: number) => void;
   onSwitchMode: (mode: MonthlyValueAdjustmentOperation) => void;
   projectionMonth: ProjectionMonth;
   projectionMonths: ProjectionMonth[];
@@ -261,7 +263,7 @@ function AdjustPanel({
   accountItemId,
   adjustmentAmount,
   adjustmentMode,
-  installmentsInput,
+  installments,
   monthlyValues,
   onCancel,
   onConfirm,
@@ -279,20 +281,19 @@ function AdjustPanel({
   );
   const monthIndex = projectionMonths.findIndex((pm) => pm.key === projectionMonth.key);
   const maxInstallments = projectionMonths.length - Math.max(monthIndex, 0);
-  const parsedInstallments = parseInstallmentsInput(installmentsInput);
   const affectedInstallmentMonths =
     adjustmentMode === 'add' && projectionMonths[0]
       ? buildInstallmentMonths(
           projectionMonth.year,
           projectionMonth.month,
-          parsedInstallments,
+          installments,
           projectionMonths[0].year,
           projectionMonths[0].month,
         )
       : [];
   const shouldShowInstallmentSummary =
     adjustmentMode === 'add' &&
-    parsedInstallments > 1 &&
+    installments > 1 &&
     affectedInstallmentMonths.length > 0;
 
   return (
@@ -315,21 +316,21 @@ function AdjustPanel({
           <>
             <SelectField
               fieldLabel="Parcelas"
-              onChange={onInstallmentsChange}
+              onChange={(id) => onInstallmentsChange(Number(id))}
               options={Array.from({ length: maxInstallments }, (_, i) => {
-                const installments = i + 1;
+                const option = i + 1;
                 return {
-                  id: String(installments),
-                  label: installments === 1 ? '1 mês' : `${installments} meses`,
+                  id: String(option),
+                  label: option === 1 ? '1 mês' : `${option} meses`,
                 };
               })}
-              value={String(parsedInstallments)}
+              value={String(installments)}
             />
             {shouldShowInstallmentSummary ? (
               <Text style={styles.installmentSummary}>
                 {formatInstallmentSummary(
                   adjustmentAmount,
-                  parsedInstallments,
+                  installments,
                   affectedInstallmentMonths,
                 )}
               </Text>
@@ -339,39 +340,6 @@ function AdjustPanel({
       </AdjustmentPanel>
     </View>
   );
-}
-
-function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
-}
-
-function getMonthlyValueAmount(
-  monthlyValues: MonthlyValue[],
-  accountItemId: string,
-  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
-) {
-  return (
-    monthlyValues.find(
-      (monthlyValue) =>
-        monthlyValue.accountItemId === accountItemId &&
-        monthlyValue.month === projectionMonth.month &&
-        monthlyValue.year === projectionMonth.year,
-    )?.amount ?? 0
-  );
-}
-
-function sanitizeInstallmentsInput(value: string) {
-  return value.replace(/\D/g, '');
-}
-
-function parseInstallmentsInput(value: string) {
-  const parsedValue = parseInt(sanitizeInstallmentsInput(value), 10);
-
-  if (!Number.isFinite(parsedValue) || parsedValue < 1) {
-    return 1;
-  }
-
-  return parsedValue;
 }
 
 function formatInstallmentSummary(

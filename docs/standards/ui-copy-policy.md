@@ -30,7 +30,7 @@ Exceptions:
 
 - App names and brand names keep their official capitalization, such as `Cycle12 Finance`.
 - Technical acronyms keep their normal capitalization.
-- Navigation tabs may use short labels, such as `Resumo`, `Gráficos`, `Planejar`, `Contas`, and `Ajustes`.
+- Navigation tabs may use short labels, such as `Resumo`, `Gráficos`, `Planejar`, `Cadastros`, and `Ajustes`.
 
 ## Action Labels
 

@@ -138,7 +138,7 @@ export function SettingsScreen({
           valuesHidden={valuesHidden}
         />
         <CurrencyInput
-          label="Renda Extra"
+          label="Renda extra"
           value={financeState.settings.currentMonthExtraBalance}
           onChangeValue={actions.updateCurrentMonthExtraBalance}
           valuesHidden={valuesHidden}
@@ -165,7 +165,7 @@ export function SettingsScreen({
             <Text style={styles.thresholdLabel}>Alerta</Text>
             <ThresholdInput
               onChangeValue={actions.updateCommitmentWarningThreshold}
-              placeholder="80"
+              placeholder="70"
               value={financeState.settings.commitmentWarningThreshold}
             />
           </View>
@@ -189,7 +189,7 @@ export function SettingsScreen({
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Janela Atual</Text>
+        <Text style={styles.cardTitle}>Janela atual</Text>
         <Text
           adjustsFontSizeToFit
           minimumFontScale={0.82}

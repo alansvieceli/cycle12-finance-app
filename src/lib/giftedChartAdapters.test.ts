@@ -2,7 +2,6 @@ import { colors } from '../theme/colors';
 import {
   toGiftedBalanceBarData,
   toGiftedCategoryDonutData,
-  toGiftedExpenseLineData,
 } from './giftedChartAdapters';
 
 describe('gifted chart adapters', () => {
@@ -25,18 +24,6 @@ describe('gifted chart adapters', () => {
         label: 'Jul',
         value: -80,
       },
-    ]);
-  });
-
-  it('maps expense values to line data with accent data points', () => {
-    expect(
-      toGiftedExpenseLineData([
-        { key: '2026-06', label: 'Jun', value: 1000 },
-        { key: '2026-07', label: 'Jul', value: 800 },
-      ]),
-    ).toEqual([
-      { dataPointColor: colors.accent, label: 'Jun', value: 1000 },
-      { dataPointColor: colors.accent, label: 'Jul', value: 800 },
     ]);
   });
 

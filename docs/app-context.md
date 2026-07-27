@@ -43,7 +43,7 @@ The app is for a user who wants to:
 - Current month extra balance: an extra amount that affects the current month projection. Added quickly via the "+" button in the Resumo balance panel or edited directly in Ajustes. Resets to zero automatically when the planning window advances.
 - Payment status: manual paid/unpaid state for current-month account items.
 - Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, and per-category/per-account breakdowns. Up to 12 entries are kept.
-- Visible month count: how many projection months appear in summary and charts, from 1 to 12.
+- Visible month count: how many projection months appear in summary and charts, from 3 to 12 (values loaded from storage or a backup are clamped to 1-12).
 - Rolling window: the app stores and displays 12 projected months starting from the saved current window month.
 - Category propagation rule: defines how values are filled when the 12-month window advances.
 - Backup file: a local `.c12f` JSON-based export with integrity validation.
@@ -56,7 +56,7 @@ The app uses a fixed five-item bottom navigation:
 - `Resumo`
 - `Gráficos`
 - `Planejar`
-- `Contas`
+- `Cadastros`
 - `Ajustes`
 
 ## Tab Responsibilities
@@ -102,19 +102,20 @@ It focuses on:
 - selecting an account item.
 - viewing the 12-month planning window.
 - editing full monthly values directly via an inline masked currency input.
-- applying partial monthly adjustments via a `±` button on each month row, which opens a modal with add or subtract modes.
+- applying partial monthly adjustments via the adjustment button (`Ajustar valor`) on each month row, which opens a modal with add or subtract modes.
 - applying addition adjustments across multiple consecutive months (installments) when the add mode is selected.
+- a `Total dos 12 meses` footer summing the selected account's values across the whole planning window.
 
-Account and category management do not belong in this tab; they live in `Contas`.
+Account and category management do not belong in this tab; they live in `Cadastros`.
 
-### Contas
+### Cadastros
 
-`Contas` is the management area for finance structure.
+`Cadastros` is the management area for finance structure.
 
-It contains internal sections for:
+It contains two internal sections, selected by a segmented control:
 
-- categories.
-- account items.
+- `Categorias`.
+- `Contas` (account items).
 
 It supports creating and editing account items, assigning categories, setting due days, and keeping category/account organization separate from month-by-month planning.
 
@@ -152,7 +153,7 @@ It is used to:
 - view paid and pending totals for the current month.
 - toggle current-month account items between paid and unpaid.
 - add a new account item with a value for the current month.
-- adjust (add or subtract) the value of an existing account item for the current month using the `±` button on each payment row.
+- adjust (add or subtract) the value of an existing account item for the current month using the adjustment button (`Ajustar valor`) on each payment row.
 - return to `Resumo` through a clear back action.
 
 The header displays the current month and year. An `Adicionar conta` button opens a modal for creating an account item. The modal requires an existing category; if none exists, the button is disabled. New accounts created here set a value only for the current month; behavior in subsequent months follows the selected category's propagation rule.
@@ -171,7 +172,7 @@ The app calculates:
 
 Credit card bills are treated as manually editable monthly totals. The app does not connect to banks, cards, accounts, or external financial APIs.
 
-All monetary input fields use a cash-register style mask: digits enter from the right as cents (`9`, `4`, `1` → `9,41`) and the display is always formatted in `pt-BR` (`9.412,34`). The user never types comma or thousand separators; backspace removes the rightmost digit. This applies to Planejar (inline values and the `±` modal), Pagamentos (new account value and the `±` adjustment), the Resumo quick-add extra modal, and the salary and extra balance fields in Ajustes. Amounts are capped at `999.999.999,99` and cannot be negative.
+All monetary input fields use a cash-register style mask: digits enter from the right as cents (`9`, `4`, `1` → `9,41`) and the display is always formatted in `pt-BR` (`9.412,34`). The user never types comma or thousand separators; backspace removes the rightmost digit. This applies to Planejar (inline values and the adjustment modal), Pagamentos (new account value and the adjustment modal), the Resumo quick-add extra modal, and the salary and extra balance fields in Ajustes. Amounts are capped at `999.999.999,99` and cannot be negative.
 
 ## Local Data and Backups
 

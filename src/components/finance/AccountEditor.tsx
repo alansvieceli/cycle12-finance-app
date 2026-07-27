@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
+import { getCategoryName } from '../../lib/financeCalculations';
 import { sortAccountItems, sortCategories } from '../../lib/sorting';
 import { colors } from '../../theme/colors';
 import { editorStyles, panelStyles } from '../../theme/sharedStyles';
@@ -30,7 +31,6 @@ type AccountEditorProps = {
   onChangeNewAccountCategoryId: (categoryId: string) => void;
   onChangeNewAccountDueDay: (dueDay: string) => void;
   onChangeNewAccountName: (name: string) => void;
-  onClose?: () => void;
   onCreateAccountItem: () => void;
   onChangeAccountCategoryId: (accountItemId: string, categoryId: string) => void;
   onDeleteAccountItem: (accountItemId: string) => void;
@@ -47,7 +47,6 @@ export function AccountEditor({
   onChangeNewAccountCategoryId,
   onChangeNewAccountDueDay,
   onChangeNewAccountName,
-  onClose,
   onCreateAccountItem,
   onChangeAccountCategoryId,
   onDeleteAccountItem,
@@ -87,9 +86,6 @@ export function AccountEditor({
     <View style={styles.panel}>
       <View style={styles.panelHeader}>
         <Text style={styles.sectionTitle}>Contas</Text>
-        {onClose ? (
-          <ActionButton icon="arrow-back" label="Voltar" onPress={onClose} />
-        ) : null}
       </View>
 
       {sortedCategories.length === 0 ? (
@@ -381,10 +377,6 @@ function DueDayModal({
       <ActionButton label="Cancelar" onPress={onClose} />
     </ModalShell>
   );
-}
-
-function getCategoryName(categories: Category[], categoryId: string) {
-  return categories.find((category) => category.id === categoryId)?.name ?? '-';
 }
 
 const styles = StyleSheet.create({

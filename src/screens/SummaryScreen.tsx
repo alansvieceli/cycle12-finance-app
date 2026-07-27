@@ -563,16 +563,12 @@ export function SummaryScreen({
 function KpiCard({
   borderColor,
   color,
-  detail,
   label,
-  subvalue,
   value,
 }: {
   borderColor?: string;
   color?: string;
-  detail?: string;
   label: string;
-  subvalue?: string;
   value: string;
 }) {
   return (
@@ -580,15 +576,7 @@ function KpiCard({
       <Text style={styles.kpiLabel}>{label}</Text>
       <View style={styles.kpiValueRow}>
         <Text style={[styles.kpiValue, color ? { color } : null]}>{value}</Text>
-        {subvalue ? (
-          <Text style={[styles.kpiSubvalue, color ? { color } : null]}>{subvalue}</Text>
-        ) : null}
       </View>
-      {detail ? (
-        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.kpiDetail}>
-          {detail}
-        </Text>
-      ) : null}
     </View>
   );
 }
@@ -798,17 +786,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: 0,
     ...typography.amountMedium,
-  },
-  kpiSubvalue: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    ...typography.caption,
-  },
-  kpiDetail: {
-    color: colors.textSecondary,
-    letterSpacing: 0,
-    marginTop: 4,
-    ...typography.caption,
   },
   paymentShortcut: {
     alignItems: 'center',
