@@ -105,6 +105,43 @@ describe('windowAdvance', () => {
     });
   });
 
+  it('drops review marks from the month leaving the window', () => {
+    const stateWithReviews: FinanceState = {
+      ...baseState,
+      paymentStatuses: [
+        {
+          accountItemId: 'rent',
+          isPaid: false,
+          isReviewed: true,
+          month: 6,
+          year: 2026,
+        },
+        {
+          accountItemId: 'card',
+          isPaid: false,
+          isReviewed: true,
+          month: 7,
+          year: 2026,
+        },
+      ],
+    };
+
+    const advancedState = advanceWindow(stateWithReviews, 2026, 7);
+
+    expect(
+      advancedState.paymentStatuses.some(
+        (paymentStatus) => paymentStatus.month === 6 && paymentStatus.year === 2026,
+      ),
+    ).toBe(false);
+    expect(advancedState.paymentStatuses).toContainEqual({
+      accountItemId: 'card',
+      isPaid: false,
+      isReviewed: true,
+      month: 7,
+      year: 2026,
+    });
+  });
+
   it('fills new month with fixed propagation using the last known value', () => {
     const advancedState = advanceWindow(baseState, 2026, 7);
 

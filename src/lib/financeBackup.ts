@@ -525,6 +525,9 @@ function validatePaymentStatuses(
     return {
       accountItemId,
       isPaid: paymentStatus.isPaid,
+      // undefined, not false: JSON.stringify drops it, so storage, the canonical
+      // hash, and the round-trip equality of backups without the field all hold.
+      isReviewed: paymentStatus.isReviewed === true ? true : undefined,
       month: validateMonth(paymentStatus.month),
       year: validateNumber(paymentStatus.year, 'Ano do pagamento inválido.'),
     };

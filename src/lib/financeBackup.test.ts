@@ -28,6 +28,48 @@ describe('financeBackup', () => {
     expect(restoredState).toEqual(sampleState);
   });
 
+  it('preserves the review mark across a backup round trip', async () => {
+    const reviewedState: FinanceState = {
+      ...sampleState,
+      paymentStatuses: [
+        {
+          accountItemId: 'account-rent',
+          isPaid: true,
+          isReviewed: true,
+          month: 6,
+          year: 2026,
+        },
+      ],
+    };
+    const envelope = await createBackupEnvelope(
+      reviewedState,
+      testHash,
+      '2026-06-05T12:00:00.000Z',
+    );
+
+    const restoredState = await parseAndValidateBackupContent(
+      serializeBackupEnvelope(envelope),
+      testHash,
+    );
+
+    expect(restoredState.paymentStatuses[0]?.isReviewed).toBe(true);
+  });
+
+  it('restores a backup without the review field as not reviewed', async () => {
+    const restoredState = await parseAndValidateBackupContent(
+      buildEnvelopeJson(
+        buildDataWithAccount({
+          paymentStatuses: [
+            { accountItemId: 'a1', isPaid: true, month: 6, year: 2026 },
+          ],
+        }),
+      ),
+      testHash,
+    );
+
+    expect(restoredState.paymentStatuses[0]?.isReviewed).toBeUndefined();
+  });
+
   it('rejects invalid JSON content', async () => {
     await expect(parseAndValidateBackupContent('{bad-json', testHash)).rejects.toThrow(
       'JSON válido',
