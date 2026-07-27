@@ -37,11 +37,13 @@ export type MonthlyValue = {
   amount: number;
 };
 
+/** Monthly status of an account: whether it was paid and whether its value was reviewed. */
 export type MonthlyPaymentStatus = {
   accountItemId: string;
   month: MonthNumber;
   year: number;
   isPaid: boolean;
+  isReviewed?: boolean;
 };
 
 export type MonthHistoryEntry = {

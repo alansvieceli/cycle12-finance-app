@@ -196,17 +196,67 @@ export function getCategoryName(categories: Category[], categoryId: string): str
   return categories.find((category) => category.id === categoryId)?.name ?? '-';
 }
 
+function findMonthlyStatus(
+  paymentStatuses: MonthlyPaymentStatus[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): MonthlyPaymentStatus | undefined {
+  return paymentStatuses.find(
+    (paymentStatus) =>
+      paymentStatus.accountItemId === accountItemId &&
+      paymentStatus.month === projectionMonth.month &&
+      paymentStatus.year === projectionMonth.year,
+  );
+}
+
 export function isAccountItemPaid(
   paymentStatuses: MonthlyPaymentStatus[],
   accountItemId: string,
   projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
 ): boolean {
   return (
-    paymentStatuses.find(
-      (paymentStatus) =>
-        paymentStatus.accountItemId === accountItemId &&
-        paymentStatus.month === projectionMonth.month &&
-        paymentStatus.year === projectionMonth.year,
-    )?.isPaid ?? false
+    findMonthlyStatus(paymentStatuses, accountItemId, projectionMonth)?.isPaid ?? false
+  );
+}
+
+export function isAccountItemReviewed(
+  paymentStatuses: MonthlyPaymentStatus[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): boolean {
+  return (
+    findMonthlyStatus(paymentStatuses, accountItemId, projectionMonth)?.isReviewed ??
+    false
+  );
+}
+
+export function toggleAccountReview(
+  paymentStatuses: MonthlyPaymentStatus[],
+  accountItemId: string,
+  projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
+): MonthlyPaymentStatus[] {
+  const existingStatus = findMonthlyStatus(
+    paymentStatuses,
+    accountItemId,
+    projectionMonth,
+  );
+
+  if (!existingStatus) {
+    return [
+      ...paymentStatuses,
+      {
+        accountItemId,
+        isPaid: false,
+        isReviewed: true,
+        month: projectionMonth.month,
+        year: projectionMonth.year,
+      },
+    ];
+  }
+
+  return paymentStatuses.map((paymentStatus) =>
+    paymentStatus === existingStatus
+      ? { ...paymentStatus, isReviewed: !paymentStatus.isReviewed }
+      : paymentStatus,
   );
 }

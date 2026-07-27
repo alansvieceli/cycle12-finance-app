@@ -2,6 +2,7 @@ import type {
   AccountItem,
   Category,
   FinanceSettings,
+  MonthlyPaymentStatus,
   MonthlyValue,
 } from '../types/finance';
 import {
@@ -15,6 +16,8 @@ import {
   calculateSurplusOrShortfall,
   createProjectionMonths,
   getCategoryName,
+  isAccountItemReviewed,
+  toggleAccountReview,
 } from './financeCalculations';
 
 const categories: Category[] = [
@@ -163,6 +166,62 @@ describe('finance calculations', () => {
   it('resolves a category name and falls back to a dash', () => {
     expect(getCategoryName(categories, 'home')).toBe('Casa');
     expect(getCategoryName(categories, 'missing')).toBe('-');
+  });
+
+  it('reads the review mark for the account and month', () => {
+    const paymentStatuses: MonthlyPaymentStatus[] = [
+      {
+        accountItemId: 'nubank',
+        isPaid: false,
+        isReviewed: true,
+        month: 6,
+        year: 2026,
+      },
+      { accountItemId: 'rent', isPaid: true, month: 6, year: 2026 },
+    ];
+
+    expect(
+      isAccountItemReviewed(paymentStatuses, 'nubank', { month: 6, year: 2026 }),
+    ).toBe(true);
+    expect(
+      isAccountItemReviewed(paymentStatuses, 'rent', { month: 6, year: 2026 }),
+    ).toBe(false);
+    expect(
+      isAccountItemReviewed(paymentStatuses, 'nubank', { month: 7, year: 2026 }),
+    ).toBe(false);
+    expect(isAccountItemReviewed([], 'nubank', { month: 6, year: 2026 })).toBe(false);
+  });
+
+  it('creates an unpaid reviewed record when the account has no status yet', () => {
+    expect(toggleAccountReview([], 'nubank', { month: 6, year: 2026 })).toEqual([
+      {
+        accountItemId: 'nubank',
+        isPaid: false,
+        isReviewed: true,
+        month: 6,
+        year: 2026,
+      },
+    ]);
+  });
+
+  it('flips the review mark without touching the paid state or other records', () => {
+    const paymentStatuses: MonthlyPaymentStatus[] = [
+      { accountItemId: 'nubank', isPaid: true, isReviewed: true, month: 6, year: 2026 },
+      { accountItemId: 'rent', isPaid: true, month: 6, year: 2026 },
+    ];
+
+    expect(
+      toggleAccountReview(paymentStatuses, 'nubank', { month: 6, year: 2026 }),
+    ).toEqual([
+      {
+        accountItemId: 'nubank',
+        isPaid: true,
+        isReviewed: false,
+        month: 6,
+        year: 2026,
+      },
+      { accountItemId: 'rent', isPaid: true, month: 6, year: 2026 },
+    ]);
   });
 
   it('calculates paid and pending totals for a month', () => {
