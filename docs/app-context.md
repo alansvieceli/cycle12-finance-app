@@ -41,7 +41,7 @@ The app is for a user who wants to:
 - Monthly value: the editable amount for an account item in a specific projected month.
 - Salary: the fixed monthly income used for commitment and balance calculations.
 - Current month extra balance: an extra amount that affects the current month projection. Added quickly via the "+" button in the Resumo balance panel or edited directly in Ajustes. Resets to zero automatically when the planning window advances.
-- Payment status: manual paid/unpaid state for current-month account items.
+- Payment status: the monthly status of an account item, holding its manual paid/unpaid state and whether its value was reviewed. Both are scoped to a single month and are discarded when that month leaves the planning window.
 - Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, and per-category/per-account breakdowns. Up to 12 entries are kept.
 - Visible month count: how many projection months appear in summary and charts, from 3 to 12 (values loaded from storage or a backup are clamped to 1-12).
 - Rolling window: the app stores and displays 12 projected months starting from the saved current window month.
@@ -105,6 +105,7 @@ It focuses on:
 - applying partial monthly adjustments via the adjustment button (`Ajustar valor`) on each month row, which opens a modal with add or subtract modes.
 - applying addition adjustments across multiple consecutive months (installments) when the add mode is selected.
 - a `Total dos 12 meses` footer summing the selected account's values across the whole planning window.
+- marking the selected account as reviewed for the current month, through a button beside the account selector. Reviewed accounts also show the mark inside the selector list, and every mark clears itself when the planning window advances.
 
 Account and category management do not belong in this tab; they live in `Cadastros`.
 
@@ -154,6 +155,7 @@ It is used to:
 - toggle current-month account items between paid and unpaid.
 - add a new account item with a value for the current month.
 - adjust (add or subtract) the value of an existing account item for the current month using the adjustment button (`Ajustar valor`) on each payment row.
+- see which accounts had their current-month value reviewed in `Planejar`, through a read-only mark on each row. The mark uses the informational blue, since green already means paid on this screen.
 - return to `Resumo` through a clear back action.
 
 The header displays the current month and year. An `Adicionar conta` button opens a modal for creating an account item. The modal requires an existing category; if none exists, the button is disabled. New accounts created here set a value only for the current month; behavior in subsequent months follows the selected category's propagation rule.

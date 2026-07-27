@@ -29,6 +29,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
 - Supports adding the same adjustment amount across multiple consecutive months from the adjustment modal in Planejar.
+- Lets the user mark an account as reviewed for the current month in Planejar, shows that mark on each row of the Pagamentos screen, and clears every mark when the planning window advances.
 - Keeps category and account lists consistently ordered across planning and summary views.
 - Uses a Figma-inspired dark fintech layout with a fixed five-area bottom navigation: Resumo, Gráficos, Planejar, Cadastros, and Ajustes.
 - Keeps planning focused on monthly values, with category and account management available from the dedicated Cadastros tab.
