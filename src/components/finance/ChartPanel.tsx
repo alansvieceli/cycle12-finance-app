@@ -9,6 +9,9 @@ type ChartPanelProps = {
   children: ReactNode;
   emptyText: string;
   hasData: boolean;
+  secondaryTotalAmountStyle?: StyleProp<TextStyle>;
+  secondaryTotalLabel?: string;
+  secondaryTotalText?: string;
   title: string;
   totalAmountStyle?: StyleProp<TextStyle>;
   totalLabel: string;
@@ -19,6 +22,9 @@ export function ChartPanel({
   children,
   emptyText,
   hasData,
+  secondaryTotalAmountStyle,
+  secondaryTotalLabel,
+  secondaryTotalText,
   title,
   totalAmountStyle,
   totalLabel,
@@ -33,6 +39,14 @@ export function ChartPanel({
             <Text style={styles.totalLabel}>{totalLabel}</Text>
             <Text style={[styles.totalAmount, totalAmountStyle]}>{totalText}</Text>
           </View>
+          {secondaryTotalLabel && secondaryTotalText ? (
+            <View style={styles.totalBox}>
+              <Text style={styles.totalLabel}>{secondaryTotalLabel}</Text>
+              <Text style={[styles.totalAmount, secondaryTotalAmountStyle]}>
+                {secondaryTotalText}
+              </Text>
+            </View>
+          ) : null}
           {children}
         </>
       ) : (

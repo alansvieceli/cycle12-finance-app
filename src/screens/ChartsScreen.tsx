@@ -81,7 +81,7 @@ export function ChartsScreen({
         data={buildSurplusShortfallChartData(financeState, projectionMonths)}
         emptyText="Configure meses e valores para visualizar sobra ou falta."
         title="Saldo por mês"
-        totalLabel="Total negativo no período"
+        totalLabel="Total do período"
         valuesHidden={valuesHidden}
       />
     </>

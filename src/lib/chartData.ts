@@ -33,6 +33,10 @@ export type CommitmentChartPoint = {
   color: string;
 };
 
+export function calculateBalanceTotal(points: MonthlyChartPoint[]) {
+  return points.reduce((total, point) => total + point.value, 0);
+}
+
 export function calculateNegativeBalanceTotal(points: MonthlyChartPoint[]) {
   return points.reduce((total, point) => total + Math.min(point.value, 0), 0);
 }

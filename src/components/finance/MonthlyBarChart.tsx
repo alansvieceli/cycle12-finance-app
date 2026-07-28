@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-na
 import { BarChart } from 'react-native-gifted-charts';
 
 import {
+  calculateBalanceTotal,
   calculateNegativeBalanceTotal,
   type MonthlyChartPoint,
 } from '../../lib/chartData';
@@ -32,8 +33,8 @@ export function MonthlyBarChart({
   const chartWidth = Math.max(Math.min(width - 64, 360), 240);
   const maxPositiveValue = Math.max(...data.map((point) => point.value), 0);
   const minNegativeValue = Math.min(...data.map((point) => point.value), 0);
-  const total = calculateNegativeBalanceTotal(data);
-  const isNegativeTotal = total < 0;
+  const periodTotal = calculateBalanceTotal(data);
+  const negativeTotal = calculateNegativeBalanceTotal(data);
   const positiveChartMaxValue = Math.max(maxPositiveValue * 1.18, 1);
   const negativeChartMinValue = minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;
   const chartSpacing =
@@ -64,10 +65,15 @@ export function MonthlyBarChart({
     <ChartPanel
       emptyText={emptyText}
       hasData={data.length > 0}
+      secondaryTotalAmountStyle={
+        negativeTotal < 0 ? styles.negativeAmount : styles.positiveAmount
+      }
+      secondaryTotalLabel="Total negativo no período"
+      secondaryTotalText={maskCurrency(negativeTotal, valuesHidden)}
       title={title}
-      totalAmountStyle={isNegativeTotal ? styles.negativeAmount : styles.positiveAmount}
+      totalAmountStyle={periodTotal < 0 ? styles.negativeAmount : styles.positiveAmount}
       totalLabel={totalLabel}
-      totalText={maskCurrency(total, valuesHidden)}
+      totalText={maskCurrency(periodTotal, valuesHidden)}
     >
       <View style={styles.chartBox}>
         <BarChart

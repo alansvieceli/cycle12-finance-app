@@ -4,6 +4,7 @@ import {
   buildMonthlyCommitmentChartData,
   buildMonthlyExpenseChartData,
   buildSurplusShortfallChartData,
+  calculateBalanceTotal,
   calculateNegativeBalanceTotal,
 } from './chartData';
 import type { ProjectionMonth } from './financeCalculations';
@@ -119,6 +120,17 @@ describe('buildMonthlyCommitmentChartData', () => {
 });
 
 describe('chart data helpers', () => {
+  it('adds every monthly balance for the period total', () => {
+    expect(
+      calculateBalanceTotal([
+        { key: '2026-08', label: 'Ago', value: -10 },
+        { key: '2026-09', label: 'Set', value: -45 },
+        { key: '2026-10', label: 'Out', value: 40 },
+        { key: '2026-11', label: 'Nov', value: 60 },
+      ]),
+    ).toBe(45);
+  });
+
   it('adds only negative monthly balances', () => {
     expect(
       calculateNegativeBalanceTotal([

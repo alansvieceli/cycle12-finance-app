@@ -101,3 +101,73 @@ Mark every acceptance criterion in `docs/tasks/046-01-update-negative-balance-su
 git add src/lib/chartData.ts src/lib/chartData.test.ts src/components/finance/MonthlyBarChart.tsx src/screens/ChartsScreen.tsx README.md docs/app-context.md docs/plans/046-negative-balance-total-plan.md docs/tasks/046-01-update-negative-balance-summary.md
 git commit -m "feat: total negative monthly balances"
 ```
+
+### Task 2: Restore Period Total
+
+**Files:**
+- Modify: `src/lib/chartData.ts`
+- Test: `src/lib/chartData.test.ts`
+- Modify: `src/components/finance/ChartPanel.tsx`
+- Modify: `src/components/finance/MonthlyBarChart.tsx`
+- Modify: `README.md`
+- Modify: `docs/app-context.md`
+- Create: `docs/tasks/046-02-add-period-total.md`
+
+**Interfaces:**
+- Consumes: the same `MonthlyChartPoint[]` used by the balance chart.
+- Produces: `calculateBalanceTotal(points: MonthlyChartPoint[]): number`.
+- Extends: `ChartPanel` with an optional second total label, text, and amount style.
+
+- [x] **Step 1: Write the failing period-total test**
+
+```ts
+it('adds every monthly balance for the period total', () => {
+  expect(
+    calculateBalanceTotal([
+      { key: '2026-08', label: 'Ago', value: -10 },
+      { key: '2026-09', label: 'Set', value: -45 },
+      { key: '2026-10', label: 'Out', value: 40 },
+      { key: '2026-11', label: 'Nov', value: 60 },
+    ]),
+  ).toBe(45);
+});
+```
+
+- [x] **Step 2: Verify the test fails for the missing export**
+
+Run: `npm test -- src/lib/chartData.test.ts`
+
+Expected: FAIL because `calculateBalanceTotal` is not exported.
+
+- [x] **Step 3: Add the period-total reducer**
+
+```ts
+export function calculateBalanceTotal(points: MonthlyChartPoint[]) {
+  return points.reduce((total, point) => total + point.value, 0);
+}
+```
+
+- [x] **Step 4: Render both totals**
+
+Use `calculateBalanceTotal` for `Total do período`. Pass the existing
+negative-only total to the optional second summary in `ChartPanel` with the
+label `Total negativo no período`.
+
+- [x] **Step 5: Update documentation**
+
+Document both period totals in README and app context.
+
+- [x] **Step 6: Validate and commit**
+
+Run: `npm test -- src/lib/chartData.test.ts`
+
+Run: `npm run check`
+
+Run: `npm run dup`
+
+Expected: every command exits successfully.
+
+```bash
+git add src/lib/chartData.ts src/lib/chartData.test.ts src/components/finance/ChartPanel.tsx src/components/finance/MonthlyBarChart.tsx README.md docs/app-context.md docs/specs/046-negative-balance-total.md docs/plans/046-negative-balance-total-plan.md docs/tasks/046-02-add-period-total.md
+git commit -m "fix: restore period balance total"
+```

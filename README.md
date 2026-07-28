@@ -11,7 +11,7 @@ Cycle12 Finance helps one person plan recurring expenses over the next 12 months
 The main areas are:
 
 - `Resumo`: current month overview with projected balance, salary commitment, paid/pending information, an account balance indicator that turns red when negative, and access to payment tracking.
-- `Gráficos`: read-only charts for commitment, category distribution, and monthly balance trends, including the total negative balance for the visible period.
+- `Gráficos`: read-only charts for commitment, category distribution, and monthly balance trends, including the full balance and negative balance totals for the visible period.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
 - `Cadastros`: category and account management.
 - `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
