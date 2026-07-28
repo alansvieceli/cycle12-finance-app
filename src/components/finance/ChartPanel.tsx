@@ -30,23 +30,36 @@ export function ChartPanel({
   totalLabel,
   totalText,
 }: ChartPanelProps) {
+  const hasSecondaryTotal = Boolean(secondaryTotalLabel && secondaryTotalText);
+
   return (
     <View style={styles.panel}>
       <Text style={styles.sectionTitle}>{title}</Text>
       {hasData ? (
         <>
-          <View style={styles.totalBox}>
-            <Text style={styles.totalLabel}>{totalLabel}</Text>
-            <Text style={[styles.totalAmount, totalAmountStyle]}>{totalText}</Text>
-          </View>
-          {secondaryTotalLabel && secondaryTotalText ? (
+          <View style={[styles.totals, hasSecondaryTotal && styles.pairedTotals]}>
             <View style={styles.totalBox}>
-              <Text style={styles.totalLabel}>{secondaryTotalLabel}</Text>
-              <Text style={[styles.totalAmount, secondaryTotalAmountStyle]}>
-                {secondaryTotalText}
+              <Text
+                style={[
+                  styles.totalLabel,
+                  hasSecondaryTotal && styles.pairedTotalLabel,
+                ]}
+              >
+                {totalLabel}
               </Text>
+              <Text style={[styles.totalAmount, totalAmountStyle]}>{totalText}</Text>
             </View>
-          ) : null}
+            {hasSecondaryTotal ? (
+              <View style={styles.totalBox}>
+                <Text style={[styles.totalLabel, styles.pairedTotalLabel]}>
+                  {secondaryTotalLabel}
+                </Text>
+                <Text style={[styles.totalAmount, secondaryTotalAmountStyle]}>
+                  {secondaryTotalText}
+                </Text>
+              </View>
+            ) : null}
+          </View>
           {children}
         </>
       ) : (
@@ -58,9 +71,19 @@ export function ChartPanel({
 
 const styles = StyleSheet.create({
   ...panelStyles,
-  totalBox: {
+  totals: {
     marginTop: 14,
+  },
+  pairedTotals: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  totalBox: {
+    flex: 1,
     minHeight: 64,
+  },
+  pairedTotalLabel: {
+    minHeight: 36,
   },
   totalLabel: {
     color: colors.textSecondary,
