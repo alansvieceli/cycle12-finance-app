@@ -1,6 +1,6 @@
 # Task 045-01 - Parse the Monthly Value List
 
-Status: Ready
+Status: Done
 
 ## Spec
 
@@ -27,7 +27,7 @@ Add the strict pure parser that maps pasted lines to displayed projection months
 
 ## Steps
 
-- [ ] **Step 1: Write the failing parser tests**
+- [x] **Step 1: Write the failing parser tests**
 
 In `src/lib/inputParsers.test.ts`, add `parseMonthlyValueList` to the existing import and append this block inside `describe('input parsers', ...)`:
 
@@ -115,13 +115,13 @@ In `src/lib/inputParsers.test.ts`, add `parseMonthlyValueList` to the existing i
   });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx jest inputParsers`
 
 Expected: FAIL because `parseMonthlyValueList` is not exported.
 
-- [ ] **Step 3: Add the parser and its types**
+- [x] **Step 3: Add the parser and its types**
 
 At the top of `src/lib/inputParsers.ts`, add:
 
@@ -187,7 +187,7 @@ export function parseMonthlyValueList(
 
 Keep `ProjectionMonth` as a type-only import. Run `npm run lint` after the tests so Biome can enforce the repository's import order.
 
-- [ ] **Step 4: Reuse the shared maximum**
+- [x] **Step 4: Reuse the shared maximum**
 
 In `src/components/common/EditableAmountInput.tsx`, import the new constant:
 
@@ -209,19 +209,19 @@ with:
 
 No masked-input behavior changes.
 
-- [ ] **Step 5: Run the focused tests**
+- [x] **Step 5: Run the focused tests**
 
 Run: `npx jest inputParsers`
 
 Expected: PASS, including all existing parser cases.
 
-- [ ] **Step 6: Run typecheck and lint**
+- [x] **Step 6: Run typecheck and lint**
 
 Run: `npm run typecheck && npm run lint`
 
 Expected: both commands pass with no warnings.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/inputParsers.ts src/lib/inputParsers.test.ts src/components/common/EditableAmountInput.tsx

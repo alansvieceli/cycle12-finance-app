@@ -1,6 +1,6 @@
 # Task 045-04 - Update Docs and Validate
 
-Status: Ready
+Status: Done
 
 ## Spec
 
@@ -31,7 +31,7 @@ Document the completed Planejar import flow and run the full project gate.
 
 ## Steps
 
-- [ ] **Step 1: Update app context**
+- [x] **Step 1: Update app context**
 
 In the `### Planejar` bullet list in `docs/app-context.md`, add after direct inline editing:
 
@@ -41,7 +41,7 @@ In the `### Planejar` bullet list in `docs/app-context.md`, add after direct inl
 
 Keep the existing adjustment, total, and review bullets unchanged.
 
-- [ ] **Step 2: Update README**
+- [x] **Step 2: Update README**
 
 In the README's `Planejar` behavior summary, add one concise sentence:
 
@@ -51,7 +51,7 @@ For the selected account, a pasted value list can replace consecutive visible mo
 
 Do not describe parsing internals or add a new architecture section.
 
-- [ ] **Step 3: Run focused regression tests**
+- [x] **Step 3: Run focused regression tests**
 
 Run:
 
@@ -61,7 +61,7 @@ npx jest inputParsers useFinanceState ActionButton MonthlyValueEditor
 
 Expected: PASS.
 
-- [ ] **Step 4: Run the full gate**
+- [x] **Step 4: Run the full gate**
 
 Run:
 
@@ -71,7 +71,7 @@ npm run check
 
 Expected: Biome, TypeScript, coverage tests, Knip workspace validation, and strict production Knip validation all pass.
 
-- [ ] **Step 5: Mark documentation status**
+- [x] **Step 5: Mark documentation status**
 
 After the full gate passes:
 
@@ -79,7 +79,7 @@ After the full gate passes:
 - change each 045 task status from `Ready` to `Done`;
 - replace every task checkbox `- [ ]` with `- [x]` only for steps actually executed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add README.md docs/app-context.md docs/plans/045-monthly-value-list-import-plan.md docs/tasks/045-*.md

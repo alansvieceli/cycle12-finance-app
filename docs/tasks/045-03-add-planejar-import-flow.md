@@ -1,6 +1,6 @@
 # Task 045-03 - Add the Planejar Import Flow
 
-Status: Ready
+Status: Done
 
 ## Spec
 
@@ -29,7 +29,7 @@ Add the import icon beside the review button and the paste/preview confirmation 
 
 ## Steps
 
-- [ ] **Step 1: Write the failing disabled-button test**
+- [x] **Step 1: Write the failing disabled-button test**
 
 In `src/components/common/ActionButton.test.tsx`, import `fireEvent` and append:
 
@@ -44,7 +44,7 @@ In `src/components/common/ActionButton.test.tsx`, import `fireEvent` and append:
   });
 ```
 
-- [ ] **Step 2: Add the disabled state**
+- [x] **Step 2: Add the disabled state**
 
 In `ActionButtonProps`, add `disabled?: boolean`. Destructure it with
 `disabled = false`, then pass it to `Pressable` and append the disabled style:
@@ -79,7 +79,7 @@ Run: `npx jest ActionButton`
 
 Expected: PASS.
 
-- [ ] **Step 3: Add the editor prop and import-state handlers**
+- [x] **Step 3: Add the editor prop and import-state handlers**
 
 In `src/components/finance/MonthlyValueEditor.tsx`:
 
@@ -144,7 +144,7 @@ Inside the component, add:
 
 When `TextInput.onChangeText` runs, call `setImportText(value)` and clear only `importError`. `Voltar` sets `importPreview(null)` and preserves `importText`.
 
-- [ ] **Step 4: Add the icon beside review**
+- [x] **Step 4: Add the icon beside review**
 
 Rename the base `reviewButton` style to `accountActionButton` and keep `reviewButtonActive` unchanged. Use `accountActionButton` on the existing review `Pressable`.
 
@@ -166,7 +166,7 @@ Immediately after the review button, add:
 
 This preserves the chosen order: selector, review, import.
 
-- [ ] **Step 5: Add the two-step modal**
+- [x] **Step 5: Add the two-step modal**
 
 After the existing adjustment `ModalShell`, add:
 
@@ -308,7 +308,7 @@ Add these styles:
 
 Do not pass `valuesHidden` to preview formatting. The user is actively entering and confirming these values; the month rows outside the modal remain masked.
 
-- [ ] **Step 6: Wire PlanningScreen**
+- [x] **Step 6: Wire PlanningScreen**
 
 In `src/screens/PlanningScreen.tsx`, add:
 
@@ -318,7 +318,7 @@ In `src/screens/PlanningScreen.tsx`, add:
 
 Place it after `onChangeMonthlyValue`.
 
-- [ ] **Step 7: Write the component tests**
+- [x] **Step 7: Write the component tests**
 
 In `renderEditor`, add:
 
@@ -420,19 +420,19 @@ Append these tests:
   });
 ```
 
-- [ ] **Step 8: Run focused tests**
+- [x] **Step 8: Run focused tests**
 
 Run: `npx jest ActionButton MonthlyValueEditor`
 
 Expected: PASS, including all existing inline edit, adjustment, and review tests.
 
-- [ ] **Step 9: Run typecheck and lint**
+- [x] **Step 9: Run typecheck and lint**
 
 Run: `npm run typecheck && npm run lint`
 
 Expected: both commands pass with no warnings.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/components/common/ActionButton.tsx src/components/common/ActionButton.test.tsx src/screens/PlanningScreen.tsx src/components/finance/MonthlyValueEditor.tsx src/components/finance/MonthlyValueEditor.test.tsx

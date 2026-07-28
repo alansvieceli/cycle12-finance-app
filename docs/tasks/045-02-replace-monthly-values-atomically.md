@@ -1,6 +1,6 @@
 # Task 045-02 - Replace Monthly Values Atomically
 
-Status: Ready
+Status: Done
 
 ## Spec
 
@@ -26,7 +26,7 @@ Add one pure state transformation and one hook action that replace all parsed va
 
 ## Steps
 
-- [ ] **Step 1: Write the failing state tests**
+- [x] **Step 1: Write the failing state tests**
 
 In `src/hooks/useFinanceState.test.ts`, import `replaceMonthlyValuesForAccount` beside `buildAccountItemWithValueState`, then append:
 
@@ -106,13 +106,13 @@ describe('replaceMonthlyValuesForAccount', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx jest useFinanceState`
 
 Expected: FAIL because `replaceMonthlyValuesForAccount` is not exported.
 
-- [ ] **Step 3: Add the pure state transformation**
+- [x] **Step 3: Add the pure state transformation**
 
 In `src/hooks/useFinanceState.ts`, add:
 
@@ -150,7 +150,7 @@ export function replaceMonthlyValuesForAccount(
 
 Do not touch `paymentStatuses`; retaining the same array reference proves that import does not mark the account reviewed.
 
-- [ ] **Step 4: Add the hook action**
+- [x] **Step 4: Add the hook action**
 
 Inside `useFinanceState`, immediately after `updateMonthlyValue`, add:
 
@@ -167,19 +167,19 @@ Inside `useFinanceState`, immediately after `updateMonthlyValue`, add:
 
 Add `replaceMonthlyValues,` to the returned `actions` object immediately after `replaceFinanceState,`.
 
-- [ ] **Step 5: Run the focused tests**
+- [x] **Step 5: Run the focused tests**
 
 Run: `npx jest useFinanceState`
 
 Expected: PASS, including the existing account-creation cases.
 
-- [ ] **Step 6: Run typecheck and lint**
+- [x] **Step 6: Run typecheck and lint**
 
 Run: `npm run typecheck && npm run lint`
 
 Expected: both commands pass with no warnings.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/hooks/useFinanceState.ts src/hooks/useFinanceState.test.ts

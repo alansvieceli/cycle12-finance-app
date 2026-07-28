@@ -102,6 +102,7 @@ It focuses on:
 - selecting an account item.
 - viewing the 12-month planning window.
 - editing full monthly values directly via an inline masked currency input.
+- importing a pasted list of values for the selected account, starting at the current month, with an old-to-new preview before the supplied visible months are replaced.
 - applying partial monthly adjustments via the adjustment button (`Ajustar valor`) on each month row, which opens a modal with add or subtract modes.
 - applying addition adjustments across multiple consecutive months (installments) when the add mode is selected.
 - a `Total dos 12 meses` footer summing the selected account's values across the whole planning window.

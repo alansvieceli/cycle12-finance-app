@@ -16,6 +16,8 @@ The main areas are:
 - `Cadastros`: category and account management.
 - `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
 
+For the selected account, a pasted value list can replace consecutive visible months after an old-to-new confirmation preview.
+
 For deeper project and agent context, read `docs/app-context.md`.
 
 ## App Behavior
