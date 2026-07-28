@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     minHeight: 64,
   },
   pairedTotalLabel: {
-    minHeight: 36,
+    minHeight: 20,
   },
   totalLabel: {
     color: colors.textSecondary,
