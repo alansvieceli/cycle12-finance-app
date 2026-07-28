@@ -2,10 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { type StyleProp, TextInput, type TextStyle } from 'react-native';
 import CurrencyInput from 'react-native-currency-input';
 
+import { MAX_CURRENCY_AMOUNT } from '../../lib/inputParsers';
 import { colors } from '../../theme/colors';
 
 const CHANGE_DEBOUNCE_MS = 250;
-const MAX_AMOUNT = 999_999_999.99;
 
 type EditableAmountInputProps = {
   autoFocus?: boolean;
@@ -98,7 +98,7 @@ export function EditableAmountInput({
       autoFocus={autoFocus || (valuesHidden && isFocused)}
       delimiter="."
       keyboardType="number-pad"
-      maxValue={MAX_AMOUNT}
+      maxValue={MAX_CURRENCY_AMOUNT}
       minValue={0}
       onBlur={() => {
         setIsFocused(false);

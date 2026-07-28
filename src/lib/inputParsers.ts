@@ -1,3 +1,61 @@
+import type { MonthNumber } from '../types/finance';
+import type { ProjectionMonth } from './financeCalculations';
+
+export const MAX_CURRENCY_AMOUNT = 999_999_999.99;
+
+export type MonthlyValueImportEntry = {
+  amount: number;
+  month: MonthNumber;
+  year: number;
+};
+
+export type MonthlyValueListParseResult =
+  | { ok: true; entries: MonthlyValueImportEntry[] }
+  | { ok: false; invalidLine?: number };
+
+const monthlyValuePattern = /^\d+(?:,\d{1,2})?$/;
+
+export function parseMonthlyValueList(
+  value: string,
+  projectionMonths: readonly Pick<ProjectionMonth, 'month' | 'year'>[],
+): MonthlyValueListParseResult {
+  if (!value.trim()) {
+    return { ok: false };
+  }
+
+  const lines = value
+    .replace(/\r\n?/g, '\n')
+    .replace(/\n$/, '')
+    .split('\n')
+    .slice(0, projectionMonths.length);
+  const entries: MonthlyValueImportEntry[] = [];
+
+  for (const [index, projectionMonth] of projectionMonths
+    .slice(0, lines.length)
+    .entries()) {
+    const line = lines[index]?.trim() ?? '';
+
+    if (!line) {
+      entries.push({ ...projectionMonth, amount: 0 });
+      continue;
+    }
+
+    if (!monthlyValuePattern.test(line)) {
+      return { ok: false, invalidLine: index + 1 };
+    }
+
+    const amount = Number(line.replace(',', '.'));
+
+    if (amount > MAX_CURRENCY_AMOUNT) {
+      return { ok: false, invalidLine: index + 1 };
+    }
+
+    entries.push({ ...projectionMonth, amount });
+  }
+
+  return { ok: true, entries };
+}
+
 /** @internal */
 export function parseCurrencyInput(value: string) {
   const normalizedValue = value

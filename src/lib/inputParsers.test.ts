@@ -3,6 +3,7 @@ import {
   clampVisibleMonthCount,
   parseCurrencyInput,
   parseDueDay,
+  parseMonthlyValueList,
   parseSortOrder,
 } from './inputParsers';
 
@@ -36,5 +37,94 @@ describe('input parsers', () => {
 
   it('creates ids with the requested prefix', () => {
     expect(createId('category')).toMatch(/^category-\d+-\d+$/);
+  });
+
+  const importMonths = [
+    { month: 7 as const, year: 2026 },
+    { month: 8 as const, year: 2026 },
+    { month: 9 as const, year: 2026 },
+  ];
+
+  it('parses sequential monthly values with Brazilian decimals', () => {
+    expect(parseMonthlyValueList('123\n 456,7 \n789,45', importMonths)).toEqual({
+      ok: true,
+      entries: [
+        { amount: 123, month: 7, year: 2026 },
+        { amount: 456.7, month: 8, year: 2026 },
+        { amount: 789.45, month: 9, year: 2026 },
+      ],
+    });
+  });
+
+  it('maps internal empty lines to zero and ignores a terminal line break', () => {
+    expect(parseMonthlyValueList('123,21\n\n456,70\n', importMonths)).toEqual({
+      ok: true,
+      entries: [
+        { amount: 123.21, month: 7, year: 2026 },
+        { amount: 0, month: 8, year: 2026 },
+        { amount: 456.7, month: 9, year: 2026 },
+      ],
+    });
+    expect(parseMonthlyValueList('123,21\n\n', importMonths)).toEqual({
+      ok: true,
+      entries: [
+        { amount: 123.21, month: 7, year: 2026 },
+        { amount: 0, month: 8, year: 2026 },
+      ],
+    });
+  });
+
+  it('rejects empty input and reports the invalid considered line', () => {
+    expect(parseMonthlyValueList('   ', importMonths)).toEqual({ ok: false });
+    expect(parseMonthlyValueList('123,21\nR$ 10,00', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 2,
+    });
+    expect(parseMonthlyValueList('123.21', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 1,
+    });
+    expect(parseMonthlyValueList('-1', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 1,
+    });
+    expect(parseMonthlyValueList('1,2,3', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 1,
+    });
+    expect(parseMonthlyValueList('1,234', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 1,
+    });
+  });
+
+  it('accepts the currency maximum and rejects a value above it', () => {
+    expect(parseMonthlyValueList('999999999,99', importMonths)).toEqual({
+      ok: true,
+      entries: [{ amount: 999999999.99, month: 7, year: 2026 }],
+    });
+    expect(parseMonthlyValueList('1000000000,00', importMonths)).toEqual({
+      ok: false,
+      invalidLine: 1,
+    });
+  });
+
+  it('replaces only supplied months and ignores excess lines before validation', () => {
+    expect(parseMonthlyValueList('10\n20', importMonths)).toEqual({
+      ok: true,
+      entries: [
+        { amount: 10, month: 7, year: 2026 },
+        { amount: 20, month: 8, year: 2026 },
+      ],
+    });
+    expect(
+      parseMonthlyValueList('10\n20\ntexto ignorado', importMonths.slice(0, 2)),
+    ).toEqual({
+      ok: true,
+      entries: [
+        { amount: 10, month: 7, year: 2026 },
+        { amount: 20, month: 8, year: 2026 },
+      ],
+    });
   });
 });
