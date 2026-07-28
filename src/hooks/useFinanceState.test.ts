@@ -1,5 +1,8 @@
 import { emptyFinanceState } from '../types/finance';
-import { buildAccountItemWithValueState } from './useFinanceState';
+import {
+  buildAccountItemWithValueState,
+  replaceMonthlyValuesForAccount,
+} from './useFinanceState';
 
 const baseState = {
   ...emptyFinanceState,
@@ -103,5 +106,79 @@ describe('buildAccountItemWithValueState', () => {
     );
     expect(result.accountItems).toHaveLength(2);
     expect(result.monthlyValues).toHaveLength(2);
+  });
+});
+
+describe('replaceMonthlyValuesForAccount', () => {
+  const stateWithMonthlyValues = {
+    ...baseState,
+    accountItems: [
+      {
+        categoryId: 'cat-1',
+        dueDay: 5,
+        id: 'acc-1',
+        name: 'Aluguel',
+        sortOrder: 0,
+      },
+      {
+        categoryId: 'cat-1',
+        dueDay: 10,
+        id: 'acc-2',
+        name: 'Internet',
+        sortOrder: 1,
+      },
+    ],
+    monthlyValues: [
+      { accountItemId: 'acc-1', amount: 100, month: 6 as const, year: 2026 },
+      { accountItemId: 'acc-1', amount: 200, month: 7 as const, year: 2026 },
+      { accountItemId: 'acc-1', amount: 300, month: 8 as const, year: 2026 },
+      { accountItemId: 'acc-2', amount: 50, month: 6 as const, year: 2026 },
+    ],
+    paymentStatuses: [
+      {
+        accountItemId: 'acc-1',
+        isPaid: false,
+        isReviewed: true,
+        month: 6 as const,
+        year: 2026,
+      },
+    ],
+  };
+
+  it('replaces supplied months and creates missing values for one account', () => {
+    const result = replaceMonthlyValuesForAccount(stateWithMonthlyValues, 'acc-1', [
+      { amount: 125, month: 6, year: 2026 },
+      { amount: 0, month: 7, year: 2026 },
+      { amount: 450, month: 9, year: 2026 },
+    ]);
+
+    expect(result.monthlyValues).toEqual(
+      expect.arrayContaining([
+        { accountItemId: 'acc-1', amount: 125, month: 6, year: 2026 },
+        { accountItemId: 'acc-1', amount: 0, month: 7, year: 2026 },
+        { accountItemId: 'acc-1', amount: 300, month: 8, year: 2026 },
+        { accountItemId: 'acc-1', amount: 450, month: 9, year: 2026 },
+      ]),
+    );
+  });
+
+  it('leaves other accounts, unsupplied months, and review marks untouched', () => {
+    const result = replaceMonthlyValuesForAccount(stateWithMonthlyValues, 'acc-1', [
+      { amount: 125, month: 6, year: 2026 },
+    ]);
+
+    expect(result.monthlyValues).toContainEqual({
+      accountItemId: 'acc-1',
+      amount: 200,
+      month: 7,
+      year: 2026,
+    });
+    expect(result.monthlyValues).toContainEqual({
+      accountItemId: 'acc-2',
+      amount: 50,
+      month: 6,
+      year: 2026,
+    });
+    expect(result.paymentStatuses).toBe(stateWithMonthlyValues.paymentStatuses);
   });
 });

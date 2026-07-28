@@ -5,6 +5,7 @@ import { type ProjectionMonth, toggleAccountReview } from '../lib/financeCalcula
 import { createId } from '../lib/ids';
 import {
   clampVisibleMonthCount,
+  type MonthlyValueImportEntry,
   parseDueDay,
   parseSortOrder,
 } from '../lib/inputParsers';
@@ -464,6 +465,15 @@ export function useFinanceState() {
     setMonthlyValueAmount(accountItemId, projectionMonth, amount);
   }
 
+  function replaceMonthlyValues(
+    accountItemId: string,
+    entries: MonthlyValueImportEntry[],
+  ) {
+    setFinanceState((currentState) =>
+      replaceMonthlyValuesForAccount(currentState, accountItemId, entries),
+    );
+  }
+
   function adjustMonthlyValue(
     accountItemId: string,
     projectionMonth: Pick<ProjectionMonth, 'month' | 'year'>,
@@ -645,6 +655,7 @@ export function useFinanceState() {
       adjustMonthlyValue,
       advanceWindowMonth,
       replaceFinanceState,
+      replaceMonthlyValues,
       toggleMonthlyPaymentStatus,
       toggleMonthlyReviewStatus,
       updateAccountDueDay,
@@ -712,6 +723,30 @@ export function buildAccountItemWithValueState(
         month: projectionMonth.month,
         year: projectionMonth.year,
       },
+    ],
+  };
+}
+
+/** @internal */
+export function replaceMonthlyValuesForAccount(
+  currentState: FinanceState,
+  accountItemId: string,
+  entries: MonthlyValueImportEntry[],
+): FinanceState {
+  const replacedMonthKeys = new Set(
+    entries.map(({ month, year }) => `${year}-${month}`),
+  );
+  const retainedValues = currentState.monthlyValues.filter(
+    (monthlyValue) =>
+      monthlyValue.accountItemId !== accountItemId ||
+      !replacedMonthKeys.has(`${monthlyValue.year}-${monthlyValue.month}`),
+  );
+
+  return {
+    ...currentState,
+    monthlyValues: [
+      ...retainedValues,
+      ...entries.map((entry) => ({ ...entry, accountItemId })),
     ],
   };
 }
