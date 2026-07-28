@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
-import type { MonthlyChartPoint } from '../../lib/chartData';
+import {
+  calculateNegativeBalanceTotal,
+  type MonthlyChartPoint,
+} from '../../lib/chartData';
 import { maskCurrency } from '../../lib/formatters';
 import { toGiftedBalanceBarData } from '../../lib/giftedChartAdapters';
 import { colors } from '../../theme/colors';
@@ -29,7 +32,7 @@ export function MonthlyBarChart({
   const chartWidth = Math.max(Math.min(width - 64, 360), 240);
   const maxPositiveValue = Math.max(...data.map((point) => point.value), 0);
   const minNegativeValue = Math.min(...data.map((point) => point.value), 0);
-  const total = data.reduce((sum, point) => sum + point.value, 0);
+  const total = calculateNegativeBalanceTotal(data);
   const isNegativeTotal = total < 0;
   const positiveChartMaxValue = Math.max(maxPositiveValue * 1.18, 1);
   const negativeChartMinValue = minNegativeValue < 0 ? minNegativeValue * 1.18 : 0;

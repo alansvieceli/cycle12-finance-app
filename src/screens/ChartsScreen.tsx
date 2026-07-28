@@ -1,7 +1,6 @@
 import { CategoryBarChart } from '../components/finance/CategoryBarChart';
 import { MonthlyBarChart } from '../components/finance/MonthlyBarChart';
 import { MonthlyCommitmentList } from '../components/finance/MonthlyCommitmentList';
-import { PaymentSummaryPanel } from '../components/finance/PaymentSummaryPanel';
 import {
   buildCurrentMonthCategoryChartData,
   buildMonthlyCommitmentChartData,
@@ -11,9 +10,6 @@ import { resolveCommitmentColor } from '../lib/commitmentColor';
 import {
   calculateIncomeCommitmentPercentage,
   calculateMonthlyTotalExpenses,
-  calculatePaymentSummary,
-  getMonthlyValueAmount,
-  isAccountItemPaid,
   type ProjectionMonth,
 } from '../lib/financeCalculations';
 import { colors } from '../theme/colors';
@@ -58,36 +54,6 @@ export function ChartsScreen({
       financeState.settings.commitmentDangerThreshold,
     ) ?? colors.positive;
 
-  const paymentSummary = currentProjectionMonth
-    ? calculatePaymentSummary(
-        financeState.accountItems,
-        financeState.monthlyValues,
-        financeState.paymentStatuses,
-        currentProjectionMonth,
-      )
-    : { totalPaid: 0, totalPending: 0 };
-
-  const accountsWithValues = currentProjectionMonth
-    ? financeState.accountItems.filter(
-        (item) =>
-          getMonthlyValueAmount(
-            financeState.monthlyValues,
-            item.id,
-            currentProjectionMonth,
-          ) > 0,
-      )
-    : [];
-
-  const paidCount = currentProjectionMonth
-    ? accountsWithValues.filter((item) =>
-        isAccountItemPaid(
-          financeState.paymentStatuses,
-          item.id,
-          currentProjectionMonth,
-        ),
-      ).length
-    : 0;
-
   return (
     <>
       <MonthlyCommitmentList
@@ -95,16 +61,6 @@ export function ChartsScreen({
         emptyText="Configure salário e valores mensais para visualizar comprometimento."
         goal={financeState.settings.commitmentGoal}
         title="Comprometimento por mês"
-      />
-
-      <PaymentSummaryPanel
-        emptyText="Nenhuma conta com valor configurado para o mês atual."
-        paidCount={paidCount}
-        title="Pago vs Pendente — mês atual"
-        totalAccounts={accountsWithValues.length}
-        totalPaid={paymentSummary.totalPaid}
-        totalPending={paymentSummary.totalPending}
-        valuesHidden={valuesHidden}
       />
 
       {currentProjectionMonth ? (
@@ -125,7 +81,7 @@ export function ChartsScreen({
         data={buildSurplusShortfallChartData(financeState, projectionMonths)}
         emptyText="Configure meses e valores para visualizar sobra ou falta."
         title="Saldo por mês"
-        totalLabel="Total no período"
+        totalLabel="Total negativo no período"
         valuesHidden={valuesHidden}
       />
     </>

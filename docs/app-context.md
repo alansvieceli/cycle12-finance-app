@@ -87,9 +87,9 @@ It shows:
 It shows chart-based summaries such as:
 
 - per-month income commitment. When a commitment goal is configured, the "Comprometimento por mês" chart also shows a single vertical neutral meta line across each bar at the goal position, plus a bottom legend (`meta NN%`).
-- paid vs pending information for the current month.
 - current-month category distribution.
-- positive and negative monthly balance comparisons.
+- positive and negative monthly balance comparisons, with a summary that adds only
+  negative balances across the visible period.
 
 Charts are driven by existing finance calculation and chart data helpers.
 
