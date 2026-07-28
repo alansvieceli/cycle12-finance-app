@@ -5,6 +5,7 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
 type ActionButtonProps = {
+  disabled?: boolean;
   icon?: keyof typeof Ionicons.glyphMap;
   label: string;
   onPress: () => void;
@@ -12,6 +13,7 @@ type ActionButtonProps = {
 };
 
 export function ActionButton({
+  disabled = false,
   icon,
   label,
   onPress,
@@ -38,6 +40,7 @@ export function ActionButton({
 
   return (
     <Pressable
+      disabled={disabled}
       onPress={onPress}
       style={[
         styles.button,
@@ -48,6 +51,7 @@ export function ActionButton({
             : isGhostDanger
               ? styles.ghostDangerButton
               : styles.primaryButton,
+        disabled ? styles.disabledButton : null,
       ]}
     >
       {icon ? (
@@ -69,6 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: 12,
+  },
+  disabledButton: {
+    opacity: 0.45,
   },
   primaryButton: {
     backgroundColor: colors.accent,

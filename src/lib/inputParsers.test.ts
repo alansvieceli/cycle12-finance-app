@@ -1,3 +1,4 @@
+import type { ProjectionMonth } from './financeCalculations';
 import { createId } from './ids';
 import {
   clampVisibleMonthCount,
@@ -125,6 +126,20 @@ describe('input parsers', () => {
         { amount: 10, month: 7, year: 2026 },
         { amount: 20, month: 8, year: 2026 },
       ],
+    });
+  });
+
+  it('does not copy projection metadata into import entries', () => {
+    const projectionMonth: ProjectionMonth = {
+      isCurrentMonth: true,
+      key: '2026-07',
+      month: 7,
+      year: 2026,
+    };
+
+    expect(parseMonthlyValueList('10', [projectionMonth])).toEqual({
+      ok: true,
+      entries: [{ amount: 10, month: 7, year: 2026 }],
     });
   });
 });

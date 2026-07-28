@@ -42,6 +42,7 @@ function renderEditor(
     monthlyValues,
     onAdjustMonthlyValue: jest.fn(),
     onChangeMonthlyValue: jest.fn(),
+    onReplaceMonthlyValues: jest.fn(),
     onSelectAccountItem: jest.fn(),
     onToggleReview: jest.fn(),
     paymentStatuses: [],
@@ -158,5 +159,95 @@ describe('MonthlyValueEditor', () => {
     });
 
     expect(screen.getByLabelText('Desmarcar conta revisada')).toBeOnTheScreen();
+  });
+
+  it('blocks invalid import input and identifies its line', () => {
+    const { onReplaceMonthlyValues } = renderEditor();
+
+    fireEvent.press(screen.getByLabelText('Importar valores'));
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Um valor por linha'),
+      '123,21\ntexto',
+    );
+    fireEvent.press(screen.getByText('Continuar'));
+
+    expect(
+      screen.getByText(
+        'Linha 2: use apenas números com vírgula e até duas casas decimais.',
+      ),
+    ).toBeOnTheScreen();
+    expect(onReplaceMonthlyValues).not.toHaveBeenCalled();
+  });
+
+  it('previews and confirms one atomic import without marking review', () => {
+    const { onReplaceMonthlyValues, onToggleReview } = renderEditor();
+
+    fireEvent.press(screen.getByLabelText('Importar valores'));
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Um valor por linha'),
+      '123,21\n\n456,7',
+    );
+    fireEvent.press(screen.getByText('Continuar'));
+
+    expect(screen.getByText('Confirmar importação')).toBeOnTheScreen();
+    expect(
+      screen.getByText(
+        `${currencyFormatter.format(1200)} → ${currencyFormatter.format(123.21)}`,
+      ),
+    ).toBeOnTheScreen();
+    expect(
+      screen.getByText(
+        `${currencyFormatter.format(800)} → ${currencyFormatter.format(0)}`,
+      ),
+    ).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByText('Confirmar'));
+
+    expect(onReplaceMonthlyValues).toHaveBeenCalledTimes(1);
+    expect(onReplaceMonthlyValues).toHaveBeenCalledWith('account-rent', [
+      { amount: 123.21, month: 7, year: 2026 },
+      { amount: 0, month: 8, year: 2026 },
+      { amount: 456.7, month: 9, year: 2026 },
+    ]);
+    expect(onToggleReview).not.toHaveBeenCalled();
+  });
+
+  it('preserves pasted text when returning from preview and cancels safely', () => {
+    const { onReplaceMonthlyValues } = renderEditor();
+
+    fireEvent.press(screen.getByLabelText('Importar valores'));
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Um valor por linha'),
+      '123,21\n456,70',
+    );
+    fireEvent.press(screen.getByText('Continuar'));
+    fireEvent.press(screen.getByText('Voltar'));
+
+    expect(screen.getByPlaceholderText('Um valor por linha')).toHaveProp(
+      'value',
+      '123,21\n456,70',
+    );
+
+    fireEvent.press(screen.getByText('Cancelar'));
+    expect(onReplaceMonthlyValues).not.toHaveBeenCalled();
+  });
+
+  it('ignores values beyond the displayed month count', () => {
+    const { onReplaceMonthlyValues } = renderEditor({
+      projectionMonths: projectionMonths.slice(0, 2),
+    });
+
+    fireEvent.press(screen.getByLabelText('Importar valores'));
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Um valor por linha'),
+      '10\n20\ntexto ignorado',
+    );
+    fireEvent.press(screen.getByText('Continuar'));
+    fireEvent.press(screen.getByText('Confirmar'));
+
+    expect(onReplaceMonthlyValues).toHaveBeenCalledWith('account-rent', [
+      { amount: 10, month: 7, year: 2026 },
+      { amount: 20, month: 8, year: 2026 },
+    ]);
   });
 });

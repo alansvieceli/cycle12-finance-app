@@ -36,7 +36,11 @@ export function parseMonthlyValueList(
     const line = lines[index]?.trim() ?? '';
 
     if (!line) {
-      entries.push({ ...projectionMonth, amount: 0 });
+      entries.push({
+        amount: 0,
+        month: projectionMonth.month,
+        year: projectionMonth.year,
+      });
       continue;
     }
 
@@ -50,7 +54,11 @@ export function parseMonthlyValueList(
       return { ok: false, invalidLine: index + 1 };
     }
 
-    entries.push({ ...projectionMonth, amount });
+    entries.push({
+      amount,
+      month: projectionMonth.month,
+      year: projectionMonth.year,
+    });
   }
 
   return { ok: true, entries };

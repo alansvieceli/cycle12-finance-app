@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { getCategoryColor } from '../../lib/categoryColors';
 import {
@@ -14,6 +14,10 @@ import {
   formatMonthLabel,
   maskCurrency,
 } from '../../lib/formatters';
+import {
+  type MonthlyValueImportEntry,
+  parseMonthlyValueList,
+} from '../../lib/inputParsers';
 import { buildInstallmentMonths } from '../../lib/installmentMonths';
 import type { MonthlyValueAdjustmentOperation } from '../../lib/monthlyValueAdjustments';
 import { sortAccountItems } from '../../lib/sorting';
@@ -27,6 +31,7 @@ import type {
   MonthlyValue,
   MonthNumber,
 } from '../../types/finance';
+import { ActionButton } from '../common/ActionButton';
 import { EditableAmountInput } from '../common/EditableAmountInput';
 import { ModalShell } from '../common/ModalShell';
 import { SelectField } from '../common/SelectField';
@@ -52,6 +57,10 @@ type MonthlyValueEditorProps = {
     operation: MonthlyValueAdjustmentOperation,
     installments?: number,
   ) => void;
+  onReplaceMonthlyValues: (
+    accountItemId: string,
+    entries: MonthlyValueImportEntry[],
+  ) => void;
   onSelectAccountItem: (accountItemId: string) => void;
   onToggleReview: (
     accountItemId: string,
@@ -69,6 +78,7 @@ export function MonthlyValueEditor({
   monthlyValues,
   onAdjustMonthlyValue,
   onChangeMonthlyValue,
+  onReplaceMonthlyValues,
   onSelectAccountItem,
   onToggleReview,
   paymentStatuses,
@@ -83,6 +93,12 @@ export function MonthlyValueEditor({
   const [adjustmentMode, setAdjustmentMode] =
     useState<MonthlyValueAdjustmentOperation>('add');
   const [installments, setInstallments] = useState(1);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importText, setImportText] = useState('');
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importPreview, setImportPreview] = useState<MonthlyValueImportEntry[] | null>(
+    null,
+  );
 
   function openAdjustModal(projectionMonth: ProjectionMonth) {
     setActiveAdjustmentMonthKey(projectionMonth.key);
@@ -111,6 +127,43 @@ export function MonthlyValueEditor({
       adjustmentMode === 'add' ? installments : undefined,
     );
     closeAdjustModal();
+  }
+
+  function openImportModal() {
+    setImportText('');
+    setImportError(null);
+    setImportPreview(null);
+    setIsImportModalOpen(true);
+  }
+
+  function closeImportModal() {
+    setIsImportModalOpen(false);
+    setImportText('');
+    setImportError(null);
+    setImportPreview(null);
+  }
+
+  function buildImportPreview() {
+    const result = parseMonthlyValueList(importText, projectionMonths);
+
+    if (!result.ok) {
+      setImportError(
+        result.invalidLine
+          ? `Linha ${result.invalidLine}: use apenas números com vírgula e até duas casas decimais.`
+          : 'Cole ao menos um valor.',
+      );
+      return;
+    }
+
+    setImportError(null);
+    setImportPreview(result.entries);
+  }
+
+  function confirmImport() {
+    if (!selectedAccountItem || !importPreview) return;
+
+    onReplaceMonthlyValues(selectedAccountItem.id, importPreview);
+    closeImportModal();
   }
 
   const activeAdjustmentMonth = projectionMonths.find(
@@ -178,7 +231,7 @@ export function MonthlyValueEditor({
                   onToggleReview(selectedAccountItem.id, currentProjectionMonth)
                 }
                 style={[
-                  styles.reviewButton,
+                  styles.accountActionButton,
                   isSelectedAccountReviewed ? styles.reviewButtonActive : null,
                 ]}
               >
@@ -191,6 +244,17 @@ export function MonthlyValueEditor({
                 />
               </Pressable>
             ) : null}
+            <Pressable
+              accessibilityLabel="Importar valores"
+              onPress={openImportModal}
+              style={styles.accountActionButton}
+            >
+              <Ionicons
+                color={colors.textSecondary}
+                name="download-outline"
+                size={20}
+              />
+            </Pressable>
           </View>
 
           <View style={styles.monthValueList}>
@@ -291,6 +355,87 @@ export function MonthlyValueEditor({
                 valuesHidden={valuesHidden}
               />
             ) : null}
+          </ModalShell>
+
+          <ModalShell
+            onRequestClose={closeImportModal}
+            title={importPreview ? 'Confirmar importação' : 'Importar valores'}
+            visible={isImportModalOpen}
+          >
+            {importPreview ? (
+              <>
+                <Text style={styles.importAccountName}>{selectedAccountItem.name}</Text>
+                <ScrollView style={styles.importPreviewList}>
+                  {importPreview.map((entry) => (
+                    <View
+                      key={`${entry.year}-${entry.month}`}
+                      style={styles.importPreviewRow}
+                    >
+                      <Text style={styles.importPreviewMonth}>
+                        {formatMonthLabel(entry.year, entry.month)}
+                      </Text>
+                      <Text style={styles.importPreviewValue}>
+                        {`${currencyFormatter.format(
+                          getMonthlyValueAmount(
+                            monthlyValues,
+                            selectedAccountItem.id,
+                            entry,
+                          ),
+                        )} → ${currencyFormatter.format(entry.amount)}`}
+                      </Text>
+                    </View>
+                  ))}
+                </ScrollView>
+                <View style={modalFormStyles.actions}>
+                  <ActionButton
+                    label="Voltar"
+                    onPress={() => setImportPreview(null)}
+                    variant="secondary"
+                  />
+                  <ActionButton
+                    label="Cancelar"
+                    onPress={closeImportModal}
+                    variant="secondary"
+                  />
+                  <ActionButton label="Confirmar" onPress={confirmImport} />
+                </View>
+              </>
+            ) : (
+              <>
+                <Text style={styles.importAccountName}>{selectedAccountItem.name}</Text>
+                <Text style={styles.importHint}>
+                  Cole um valor por linha. A primeira linha corresponde ao mês atual.
+                </Text>
+                <TextInput
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  multiline
+                  onChangeText={(value) => {
+                    setImportText(value);
+                    setImportError(null);
+                  }}
+                  placeholder="Um valor por linha"
+                  placeholderTextColor={colors.textSecondary}
+                  style={styles.importInput}
+                  value={importText}
+                />
+                {importError ? (
+                  <Text style={styles.importError}>{importError}</Text>
+                ) : null}
+                <View style={modalFormStyles.actions}>
+                  <ActionButton
+                    label="Cancelar"
+                    onPress={closeImportModal}
+                    variant="secondary"
+                  />
+                  <ActionButton
+                    disabled={!importText.trim()}
+                    label="Continuar"
+                    onPress={buildImportPreview}
+                  />
+                </View>
+              </>
+            )}
           </ModalShell>
         </>
       ) : (
@@ -435,7 +580,7 @@ const styles = StyleSheet.create({
   accountSelect: {
     flex: 1,
   },
-  reviewButton: {
+  accountActionButton: {
     alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.borderStrong,
@@ -552,5 +697,44 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: 0,
     ...typography.bodySmall,
+  },
+  importAccountName: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.cardTitle,
+  },
+  importHint: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.bodySmall,
+  },
+  importInput: {
+    ...modalFormStyles.input,
+    minHeight: 160,
+    textAlignVertical: 'top',
+  },
+  importError: {
+    color: colors.negativeText,
+    letterSpacing: 0,
+    ...typography.bodySmall,
+  },
+  importPreviewList: {
+    maxHeight: 300,
+  },
+  importPreviewRow: {
+    borderBottomColor: colors.border,
+    borderBottomWidth: 1,
+    gap: 4,
+    paddingVertical: 8,
+  },
+  importPreviewMonth: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    ...typography.label,
+  },
+  importPreviewValue: {
+    color: colors.textPrimary,
+    letterSpacing: 0,
+    ...typography.body,
   },
 });
