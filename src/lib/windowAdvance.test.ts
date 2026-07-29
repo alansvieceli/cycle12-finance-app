@@ -69,6 +69,7 @@ const baseState: FinanceState = {
     windowStartMonth: 6,
     windowStartYear: 2026,
   },
+  subscriptions: [],
 };
 
 describe('windowAdvance', () => {

@@ -12,6 +12,13 @@ import {
   calculateMonthlyTotalExpenses,
   type ProjectionMonth,
 } from '../lib/financeCalculations';
+import { maskCurrency, percentageFormatter } from '../lib/formatters';
+import {
+  calculateSubscriptionsMonthlyTotal,
+  calculateSubscriptionsSalaryShare,
+  calculateSubscriptionsYearlyTotal,
+  toSubscriptionChartPoints,
+} from '../lib/subscriptions';
 import { colors } from '../theme/colors';
 import type { FinanceState } from '../types/finance';
 
@@ -54,6 +61,14 @@ export function ChartsScreen({
       financeState.settings.commitmentDangerThreshold,
     ) ?? colors.positive;
 
+  const subscriptionsMonthlyTotal = calculateSubscriptionsMonthlyTotal(
+    financeState.subscriptions,
+  );
+  const subscriptionsSalaryShare = calculateSubscriptionsSalaryShare(
+    subscriptionsMonthlyTotal,
+    financeState.settings.monthlySalary,
+  );
+
   return (
     <>
       <MonthlyCommitmentList
@@ -82,6 +97,24 @@ export function ChartsScreen({
         emptyText="Configure meses e valores para visualizar sobra ou falta."
         title="Saldo por mês"
         totalLabel="Total do período"
+        valuesHidden={valuesHidden}
+      />
+
+      <CategoryBarChart
+        data={toSubscriptionChartPoints(financeState.subscriptions)}
+        emptyText="Cadastre assinaturas em Cadastros para visualizar o gasto mensal."
+        footnote={
+          subscriptionsSalaryShare === null
+            ? 'Informe o salário em Ajustes para ver o quanto as assinaturas consomem.'
+            : `Consome ${percentageFormatter.format(subscriptionsSalaryShare)} do salário.`
+        }
+        secondaryTotalLabel="Total por ano"
+        secondaryTotalText={maskCurrency(
+          calculateSubscriptionsYearlyTotal(financeState.subscriptions),
+          valuesHidden,
+        )}
+        title="Assinaturas"
+        totalLabel="Total por mês"
         valuesHidden={valuesHidden}
       />
     </>

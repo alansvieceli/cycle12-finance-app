@@ -50,5 +50,6 @@ export function buildSampleFinanceState(
       windowStartYear: 2026,
       ...settingsOverrides,
     },
+    subscriptions: [],
   };
 }

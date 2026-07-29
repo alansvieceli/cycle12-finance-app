@@ -99,8 +99,12 @@ read-only nature of the tab:
 1. The monthly total in the main size, the yearly total below it, and the salary
    share as `consome N% do salário`. When the salary is zero, the share line
    shows a neutral placeholder instead of a percentage.
-2. The distribution chart, reusing `CategoryBarChart` unchanged. It already
-   renders the donut, the legend, the total, and honors `valuesHidden`.
+2. The distribution chart, reusing `CategoryBarChart`. It already renders the
+   donut, the legend, the total, and honors `valuesHidden`. It gains three
+   optional props so it can carry this panel: `secondaryTotalLabel` and
+   `secondaryTotalText`, forwarded to the paired totals `ChartPanel` already
+   supports, and `footnote` for the salary share line. Its existing use in
+   `Categorias no mês atual` passes none of them and is unaffected.
 
 The panel shows the existing empty state when no subscription is registered.
 

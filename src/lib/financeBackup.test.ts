@@ -70,6 +70,58 @@ describe('financeBackup', () => {
     expect(restoredState.paymentStatuses[0]?.isReviewed).toBeUndefined();
   });
 
+  it('preserves subscriptions across a backup round trip', async () => {
+    const stateWithSubscriptions: FinanceState = {
+      ...sampleState,
+      subscriptions: [
+        { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+        { amount: 3490, color: '#abcdef', id: 'sub-spotify', name: 'Spotify' },
+      ],
+    };
+    const envelope = await createBackupEnvelope(
+      stateWithSubscriptions,
+      testHash,
+      '2026-06-05T12:00:00.000Z',
+    );
+    const restoredState = await parseAndValidateBackupContent(
+      serializeBackupEnvelope(envelope),
+      testHash,
+    );
+
+    expect(restoredState.subscriptions).toEqual(stateWithSubscriptions.subscriptions);
+  });
+
+  it('restores a backup without subscriptions as an empty list', async () => {
+    const restoredState = await parseAndValidateBackupContent(
+      buildEnvelopeJson(buildDataWithAccount({})),
+      testHash,
+    );
+
+    expect(restoredState.subscriptions).toEqual([]);
+  });
+
+  it('rejects a non-array subscriptions field', async () => {
+    await expect(
+      parseAndValidateBackupContent(
+        buildEnvelopeJson(buildDataWithAccount({ subscriptions: 'nope' })),
+        testHash,
+      ),
+    ).rejects.toThrow('Assinaturas');
+  });
+
+  it('rejects a subscription without a valid amount', async () => {
+    await expect(
+      parseAndValidateBackupContent(
+        buildEnvelopeJson(
+          buildDataWithAccount({
+            subscriptions: [{ amount: -1, id: 's1', name: 'Netflix' }],
+          }),
+        ),
+        testHash,
+      ),
+    ).rejects.toThrow('Valor da assinatura inválido.');
+  });
+
   it('rejects invalid JSON content', async () => {
     await expect(parseAndValidateBackupContent('{bad-json', testHash)).rejects.toThrow(
       'JSON válido',
@@ -147,6 +199,7 @@ describe('financeBackup', () => {
         windowStartMonth: expect.any(Number),
         windowStartYear: expect.any(Number),
       },
+      subscriptions: [],
     });
   });
 });

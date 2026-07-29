@@ -8,6 +8,14 @@
 
 **Tech Stack:** React Native, Expo, TypeScript, Jest, react-native-gifted-charts, AsyncStorage.
 
+## Execution Note
+
+Tasks 1 and 3 were merged into a single commit during execution. `knip
+--production --strict` rejects `src/lib/subscriptions.ts` while only its test
+imports it, so Task 1 could not pass its own validation gate before the
+`Gráficos` panel existed to consume the module. The task boundary was wrong, not
+the check. Task 2 keeps its own commit and runs after both.
+
 ## Global Constraints
 
 - No new dependencies.
@@ -35,7 +43,7 @@
 - Produces: `calculateSubscriptionsMonthlyTotal`, `calculateSubscriptionsYearlyTotal`, `calculateSubscriptionsSalaryShare`, `toSubscriptionChartPoints`.
 - Consumes: `chartPalette` from `src/theme/colors`, and the `CategoryChartPoint` shape from `src/lib/chartData`.
 
-- [ ] **Step 1: Write the failing calculation tests**
+- [x] **Step 1: Write the failing calculation tests**
 
 ```ts
 const subscriptions: Subscription[] = [
@@ -79,13 +87,13 @@ it('keeps a subscription own color', () => {
 });
 ```
 
-- [ ] **Step 2: Verify the tests fail for the missing module**
+- [x] **Step 2: Verify the tests fail for the missing module**
 
 Run: `npm test -- --runTestsByPath src/lib/subscriptions.test.ts`
 
 Expected: FAIL because `src/lib/subscriptions.ts` does not exist.
 
-- [ ] **Step 3: Add the type and extend the state**
+- [x] **Step 3: Add the type and extend the state**
 
 In `src/types/finance.ts` add `Subscription`, add `subscriptions: Subscription[]` to `FinanceState`, add `subscriptions: []` to `emptyFinanceState`, and add the two optional fields to `MonthHistoryEntry`.
 
@@ -100,17 +108,17 @@ export type Subscription = {
 
 The two `MonthHistoryEntry` fields are optional on purpose, so the up to twelve entries already stored keep parsing.
 
-- [ ] **Step 4: Add the calculation module**
+- [x] **Step 4: Add the calculation module**
 
 Create `src/lib/subscriptions.ts` with the four functions. `calculateSubscriptionsSalaryShare` returns `null` when the salary is zero or negative. `toSubscriptionChartPoints` sorts by amount descending first, then assigns `chartPalette[index % chartPalette.length]` to any subscription without its own color, so the color follows the position in the chart legend.
 
-- [ ] **Step 5: Verify the calculation tests pass**
+- [x] **Step 5: Verify the calculation tests pass**
 
 Run: `npm test -- --runTestsByPath src/lib/subscriptions.test.ts`
 
 Expected: PASS.
 
-- [ ] **Step 6: Write the failing backup tests**
+- [x] **Step 6: Write the failing backup tests**
 
 ```ts
 it('preserves subscriptions through an export and restore', async () => {
@@ -122,17 +130,17 @@ it('restores a backup without subscriptions as an empty list', async () => {
 });
 ```
 
-- [ ] **Step 7: Carry subscriptions through the backup**
+- [x] **Step 7: Carry subscriptions through the backup**
 
 Include `subscriptions` in the exported payload beside `categories` and `accountItems`, and add a `validateSubscriptions` helper following the shape of the existing validators: reject a non-array, require `id` and `name` as non-empty strings and `amount` as a finite non-negative number, and default a missing field to `[]` so older backups stay valid.
 
-- [ ] **Step 8: Verify the backup tests pass**
+- [x] **Step 8: Verify the backup tests pass**
 
 Run: `npm test -- --runTestsByPath src/lib/financeBackup.test.ts`
 
 Expected: PASS.
 
-- [ ] **Step 9: Run project validation**
+- [x] **Step 9: Run project validation**
 
 Run: `npm run check`
 
@@ -140,7 +148,7 @@ Run: `npm run dup`
 
 Expected: both commands exit successfully.
 
-- [ ] **Step 10: Complete the task record and commit**
+- [x] **Step 10: Complete the task record and commit**
 
 Mark every acceptance criterion in `docs/tasks/048-01-add-subscription-data.md` complete.
 
@@ -211,21 +219,21 @@ git commit -m "feat: register subscriptions in cadastros"
 - Consumes: the four functions from `src/lib/subscriptions.ts`.
 - Reuses: `CategoryBarChart` unchanged.
 
-- [ ] **Step 1: Derive the panel values**
+- [x] **Step 1: Derive the panel values**
 
 In `ChartsScreen`, derive the monthly total, the yearly total, the salary share from `financeState.settings.monthlySalary`, and the chart points.
 
-- [ ] **Step 2: Render the panel**
+- [x] **Step 2: Render the panel**
 
 Add the `Assinaturas` panel below the existing ones: the monthly total in the main size, the yearly total below it, and `consome N% do salário`. When the share is `null`, show a neutral placeholder instead of a percentage. Pass the chart points to `CategoryBarChart` with the existing empty text, total label, and `valuesHidden` props.
 
-- [ ] **Step 3: Confirm nothing else moved**
+- [x] **Step 3: Confirm nothing else moved**
 
 Run: `npm test`
 
 Expected: PASS, with the existing chart, calculation, and reminder tests unchanged. A failure here means the panel touched a shared calculation, which the spec forbids.
 
-- [ ] **Step 4: Run project validation**
+- [x] **Step 4: Run project validation**
 
 Run: `npm run check`
 
@@ -233,7 +241,7 @@ Run: `npm run dup`
 
 Expected: both commands exit successfully.
 
-- [ ] **Step 5: Complete the task record and commit**
+- [x] **Step 5: Complete the task record and commit**
 
 Mark every acceptance criterion in `docs/tasks/048-03-add-subscriptions-panel.md` complete.
 

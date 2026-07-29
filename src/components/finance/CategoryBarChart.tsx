@@ -11,6 +11,9 @@ import { ChartPanel } from './ChartPanel';
 type CategoryBarChartProps = {
   data: CategoryChartPoint[];
   emptyText: string;
+  footnote?: string;
+  secondaryTotalLabel?: string;
+  secondaryTotalText?: string;
   title: string;
   totalAmountColor?: string;
   totalLabel: string;
@@ -20,6 +23,9 @@ type CategoryBarChartProps = {
 export function CategoryBarChart({
   data,
   emptyText,
+  footnote,
+  secondaryTotalLabel,
+  secondaryTotalText,
   title,
   totalAmountColor,
   totalLabel,
@@ -32,6 +38,8 @@ export function CategoryBarChart({
     <ChartPanel
       emptyText={emptyText}
       hasData={data.length > 0}
+      secondaryTotalLabel={secondaryTotalLabel}
+      secondaryTotalText={secondaryTotalText}
       title={title}
       totalAmountStyle={totalAmountColor ? { color: totalAmountColor } : undefined}
       totalLabel={totalLabel}
@@ -85,11 +93,19 @@ export function CategoryBarChart({
           );
         })}
       </View>
+
+      {footnote ? <Text style={styles.footnote}>{footnote}</Text> : null}
     </ChartPanel>
   );
 }
 
 const styles = StyleSheet.create({
+  footnote: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    marginTop: 12,
+    ...typography.bodySmall,
+  },
   donutBox: {
     alignItems: 'center',
     marginTop: 16,

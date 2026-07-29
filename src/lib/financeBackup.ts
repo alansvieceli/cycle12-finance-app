@@ -9,6 +9,7 @@ import {
   type MonthlyPaymentStatus,
   type MonthlyValue,
   type MonthNumber,
+  type Subscription,
 } from '../types/finance';
 import { clampVisibleMonthCount } from './inputParsers';
 
@@ -21,6 +22,9 @@ export function normalizeFinanceState(financeState: FinanceState): FinanceState 
       : [],
     paymentStatuses: financeState.paymentStatuses ?? [],
     settings: normalizeSettings(financeState.settings),
+    subscriptions: Array.isArray(financeState.subscriptions)
+      ? financeState.subscriptions
+      : [],
   };
 }
 
@@ -137,6 +141,7 @@ export function buildResetFinanceState(): FinanceState {
     monthlyValues: [],
     paymentStatuses: [],
     settings: defaultSettings,
+    subscriptions: [],
   };
 }
 
@@ -273,6 +278,7 @@ function validateFinanceState(value: unknown): FinanceState {
     accountItemIds,
   );
   const monthHistory = validateMonthHistory(value.monthHistory);
+  const subscriptions = validateSubscriptions(value.subscriptions);
 
   return normalizeFinanceState({
     accountItems,
@@ -281,6 +287,37 @@ function validateFinanceState(value: unknown): FinanceState {
     monthlyValues,
     paymentStatuses,
     settings,
+    subscriptions,
+  });
+}
+
+/** Missing means a backup created before subscriptions existed, so it is valid. */
+function validateSubscriptions(value: unknown): Subscription[] {
+  if (value === undefined || value === null) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    throw new BackupValidationError('Assinaturas do backup inválidas.');
+  }
+
+  return value.map((subscription) => {
+    if (!isRecord(subscription)) {
+      throw new BackupValidationError('Assinatura do backup inválida.');
+    }
+
+    const amount = validateNumber(subscription.amount, 'Valor da assinatura inválido.');
+
+    if (amount < 0) {
+      throw new BackupValidationError('Valor da assinatura inválido.');
+    }
+
+    return {
+      amount,
+      color: typeof subscription.color === 'string' ? subscription.color : undefined,
+      id: validateString(subscription.id, 'Assinatura sem identificador válido.'),
+      name: validateString(subscription.name, 'Assinatura sem nome válido.'),
+    };
   });
 }
 

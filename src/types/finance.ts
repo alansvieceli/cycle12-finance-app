@@ -30,6 +30,22 @@ export type AccountItem = {
   sortOrder: number;
 };
 
+/**
+ * A recurring subscription with a fixed monthly cost.
+ *
+ * It has no due day, no per-month value, and no payment status on purpose: that
+ * absence is what keeps subscriptions out of the payment, reminder, and
+ * projection flows. The money is already counted in the account the
+ * subscription is charged to, so this is an informational view, never a second
+ * source of expense.
+ */
+export type Subscription = {
+  id: string;
+  name: string;
+  amount: number;
+  color?: string;
+};
+
 export type MonthlyValue = {
   accountItemId: string;
   month: MonthNumber;
@@ -65,12 +81,16 @@ export type MonthHistoryEntry = {
     dueDay?: number;
     amount: number;
   }[];
+  /** Optional so entries recorded before subscriptions existed keep parsing. */
+  subscriptionsTotal?: number;
+  subscriptions?: { id: string; name: string; amount: number }[];
 };
 
 export type FinanceState = {
   settings: FinanceSettings;
   categories: Category[];
   accountItems: AccountItem[];
+  subscriptions: Subscription[];
   monthlyValues: MonthlyValue[];
   paymentStatuses: MonthlyPaymentStatus[];
   monthHistory: MonthHistoryEntry[];
@@ -95,6 +115,7 @@ export const emptyFinanceState: FinanceState = {
   },
   categories: [],
   accountItems: [],
+  subscriptions: [],
   monthlyValues: [],
   paymentStatuses: [],
   monthHistory: [],

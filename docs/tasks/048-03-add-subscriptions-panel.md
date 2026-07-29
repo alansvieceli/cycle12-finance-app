@@ -7,19 +7,22 @@ tab, reusing the existing donut component.
 
 ## Acceptance Criteria
 
-- [ ] `Gráficos` shows an `Assinaturas` panel below the existing ones.
-- [ ] The panel shows the monthly total, the yearly total, and
+- [x] `Gráficos` shows an `Assinaturas` panel below the existing ones.
+- [x] The panel shows the monthly total, the yearly total, and
       `consome N% do salário`.
-- [ ] The share uses the salary alone and ignores the current month extra
+- [x] The share uses the salary alone and ignores the current month extra
       balance.
-- [ ] A neutral placeholder replaces the percentage when the salary is zero.
-- [ ] The distribution chart reuses `CategoryBarChart` unchanged, with one slice
-      per subscription, its own color, and a legend naming each one.
-- [ ] The panel shows an empty state when no subscription is registered.
-- [ ] The eye toggle masks every monetary value in the panel.
+- [x] A neutral placeholder replaces the percentage when the salary is zero.
+- [x] The distribution chart reuses `CategoryBarChart`, with one slice per
+      subscription, its own color, and a legend naming each one. The component
+      gained three optional props (`footnote`, `secondaryTotalLabel`,
+      `secondaryTotalText`); its existing use in `Categorias no mês atual` is
+      untouched.
+- [x] The panel shows an empty state when no subscription is registered.
+- [x] The eye toggle masks every monetary value in the panel.
 - [ ] Adding, editing, or deleting a subscription in `Cadastros` updates the
-      panel immediately.
-- [ ] Every existing chart, calculation, and reminder test still passes
+      panel immediately. Pending task 048-02, which builds that section.
+- [x] Every existing chart, calculation, and reminder test still passes
       unchanged.
-- [ ] `npm run check` passes.
-- [ ] `npm run dup` passes.
+- [x] `npm run check` passes.
+- [x] `npm run dup` passes.
