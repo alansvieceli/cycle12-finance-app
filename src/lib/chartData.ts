@@ -13,6 +13,8 @@ import {
 import { formatMonthLabel } from './formatters';
 import { sortCategories } from './sorting';
 
+const MIN_BAR_RATIO = 0.02;
+
 export type MonthlyChartPoint = {
   key: string;
   label: string;
@@ -39,6 +41,15 @@ export function calculateBalanceTotal(points: MonthlyChartPoint[]) {
 
 export function calculateNegativeBalanceTotal(points: MonthlyChartPoint[]) {
   return points.reduce((total, point) => total + Math.min(point.value, 0), 0);
+}
+
+/** Bar length of one balance, as a 0..1 fraction of the period's largest absolute value. */
+export function calculateBalanceBarRatio(value: number, maxAbsoluteValue: number) {
+  if (value === 0 || maxAbsoluteValue <= 0) {
+    return 0;
+  }
+
+  return Math.max(Math.min(Math.abs(value) / maxAbsoluteValue, 1), MIN_BAR_RATIO);
 }
 
 /** @internal */

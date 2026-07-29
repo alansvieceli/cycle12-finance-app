@@ -1,32 +1,6 @@
-import { colors } from '../theme/colors';
-import {
-  toGiftedBalanceBarData,
-  toGiftedCategoryDonutData,
-} from './giftedChartAdapters';
+import { toGiftedCategoryDonutData } from './giftedChartAdapters';
 
 describe('gifted chart adapters', () => {
-  it('maps balance values to positive and negative bar colors', () => {
-    expect(
-      toGiftedBalanceBarData([
-        { key: '2026-06', label: 'Jun', value: 120 },
-        { key: '2026-07', label: 'Jul', value: -80 },
-      ]),
-    ).toEqual([
-      {
-        disablePress: true,
-        frontColor: colors.positive,
-        label: 'Jun',
-        value: 120,
-      },
-      {
-        disablePress: true,
-        frontColor: colors.negative,
-        label: 'Jul',
-        value: -80,
-      },
-    ]);
-  });
-
   it('maps category totals to non-zero donut data with stable colors', () => {
     expect(
       toGiftedCategoryDonutData([

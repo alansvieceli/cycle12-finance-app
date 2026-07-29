@@ -88,9 +88,13 @@ It shows chart-based summaries such as:
 
 - per-month income commitment. When a commitment goal is configured, the "Comprometimento por mês" chart also shows a single vertical neutral meta line across each bar at the goal position, plus a bottom legend (`meta NN%`).
 - current-month category distribution.
-- positive and negative monthly balance comparisons, with summaries for the
-  complete balance and the sum of only negative balances across the visible
-  period.
+- positive and negative monthly balance comparisons. "Saldo por mês" is a
+  diverging horizontal bar list: one row per visible month with its label, a bar
+  growing left from a center zero line for a shortfall and right for a surplus,
+  and its formatted balance at the end of the row. Bar length is proportional to
+  the largest absolute balance of the period. Above the list it shows summaries
+  for the complete balance and for the sum of only negative balances across the
+  visible period.
 
 Charts are driven by existing finance calculation and chart data helpers.
 

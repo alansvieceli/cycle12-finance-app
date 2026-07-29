@@ -4,6 +4,7 @@ import {
   buildMonthlyCommitmentChartData,
   buildMonthlyExpenseChartData,
   buildSurplusShortfallChartData,
+  calculateBalanceBarRatio,
   calculateBalanceTotal,
   calculateNegativeBalanceTotal,
 } from './chartData';
@@ -141,6 +142,17 @@ describe('chart data helpers', () => {
         { key: '2026-12', label: 'Dez', value: 0 },
       ]),
     ).toBe(-55);
+  });
+
+  it('scales balance bars against the largest absolute value of the period', () => {
+    expect(calculateBalanceBarRatio(-400, 400)).toBe(1);
+    expect(calculateBalanceBarRatio(200, 400)).toBe(0.5);
+    expect(calculateBalanceBarRatio(0, 400)).toBe(0);
+    expect(calculateBalanceBarRatio(120, 0)).toBe(0);
+  });
+
+  it('keeps a visible bar for a tiny non-zero balance', () => {
+    expect(calculateBalanceBarRatio(1, 100000)).toBe(0.02);
   });
 
   it('builds monthly expense chart data', () => {

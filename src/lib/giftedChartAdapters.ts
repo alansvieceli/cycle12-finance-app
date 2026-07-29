@@ -1,12 +1,4 @@
-import { colors } from '../theme/colors';
-import type { CategoryChartPoint, MonthlyChartPoint } from './chartData';
-
-export type GiftedBarPoint = {
-  disablePress: boolean;
-  frontColor: string;
-  label: string;
-  value: number;
-};
+import type { CategoryChartPoint } from './chartData';
 
 export type GiftedDonutPoint = {
   categoryId: string;
@@ -14,15 +6,6 @@ export type GiftedDonutPoint = {
   label: string;
   value: number;
 };
-
-export function toGiftedBalanceBarData(points: MonthlyChartPoint[]): GiftedBarPoint[] {
-  return points.map((point) => ({
-    disablePress: true,
-    frontColor: point.value < 0 ? colors.negative : colors.positive,
-    label: point.label,
-    value: point.value,
-  }));
-}
 
 export function toGiftedCategoryDonutData(
   points: CategoryChartPoint[],

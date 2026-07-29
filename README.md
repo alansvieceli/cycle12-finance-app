@@ -11,7 +11,7 @@ Cycle12 Finance helps one person plan recurring expenses over the next 12 months
 The main areas are:
 
 - `Resumo`: current month overview with projected balance, salary commitment, paid/pending information, an account balance indicator that turns red when negative, and access to payment tracking.
-- `Gráficos`: read-only charts for commitment, category distribution, and monthly balance trends, including the full balance and negative balance totals for the visible period.
+- `Gráficos`: read-only charts for commitment, category distribution, and monthly balance, the last one as a diverging horizontal bar per visible month, including the full balance and negative balance totals for the visible period.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
 - `Cadastros`: category and account management.
 - `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
@@ -26,7 +26,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Shows a rolling 12-month finance projection starting at the current month.
 - Advances the planning window automatically when the calendar month changes.
 - Lets the user choose how many months appear in the summary and charts, from 3 to 12.
-- Shows a read-only charts tab with a per-month income commitment progress list, a paid vs pending summary for the current month, a current-month category donut chart, and positive/negative monthly balance columns with expandable values.
+- Shows a read-only charts tab with a per-month income commitment progress list, a current-month category donut chart, and a monthly balance list where every visible month has its own row with the shortfall bar growing left and the surplus bar growing right from a shared zero line.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
