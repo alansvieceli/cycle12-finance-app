@@ -18,6 +18,7 @@ import {
   calculateSubscriptionsSalaryShare,
   calculateSubscriptionsYearlyTotal,
   toSubscriptionChartPoints,
+  toSubscriptionGroupChartPoints,
 } from '../lib/subscriptions';
 import { colors } from '../theme/colors';
 import type { FinanceState } from '../types/finance';
@@ -101,7 +102,7 @@ export function ChartsScreen({
       />
 
       <CategoryBarChart
-        data={toSubscriptionChartPoints(financeState.subscriptions)}
+        data={toSubscriptionGroupChartPoints(financeState.subscriptions)}
         emptyText="Cadastre assinaturas em Cadastros para visualizar o gasto mensal."
         footnote={
           subscriptionsSalaryShare === null
@@ -113,7 +114,15 @@ export function ChartsScreen({
           calculateSubscriptionsYearlyTotal(financeState.subscriptions),
           valuesHidden,
         )}
-        title="Assinaturas"
+        title="Assinaturas por grupo"
+        totalLabel="Total por mês"
+        valuesHidden={valuesHidden}
+      />
+
+      <CategoryBarChart
+        data={toSubscriptionChartPoints(financeState.subscriptions)}
+        emptyText="Cadastre assinaturas em Cadastros para visualizar o gasto mensal."
+        title="Assinaturas por assinatura"
         totalLabel="Total por mês"
         valuesHidden={valuesHidden}
       />
