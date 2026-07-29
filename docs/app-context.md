@@ -135,7 +135,7 @@ It contains three internal sections, selected by a segmented control:
 
 It supports creating and editing account items, assigning categories, setting due days, and keeping category/account organization separate from month-by-month planning.
 
-The `Assinaturas` section holds registration only: a collapsible `Nova assinatura` form with name and monthly amount, and the list sorted by amount descending, where tapping a row expands it for editing or deletion. `Adicionar` stays disabled until the name is filled and the amount is greater than zero, and deleting asks for confirmation. The totals and the distribution chart live in `Gráficos`.
+The `Assinaturas` section holds registration only: a collapsible `Nova assinatura` form with name and monthly amount, and the list sorted by amount descending, where tapping a row expands it into editable name and amount fields plus a delete action. `Adicionar` stays disabled until the name is filled and the amount is greater than zero, and deleting asks for confirmation. The list order is frozen while a row is expanded, so editing an amount does not move the row mid-edit, and settles back to amount descending when the row closes. The totals and the distribution chart live in `Gráficos`.
 
 ### Ajustes
 

@@ -97,6 +97,13 @@ rule apply without new code, and the section reuses `editorStyles` and
 than zero. Deleting requires confirmation through the same `Alert` the other
 editors use.
 
+The list is sorted by amount descending, but that order is frozen while a row is
+expanded. Without freezing it, editing an amount would re-sort the list and move
+the row away from under the user mid-edit, which is exactly the flow the
+expanded row exists for. The order settles back to amount descending when the
+row closes, and a subscription created while a row is open goes last rather than
+jumping to the top.
+
 #### Gráficos - analysis
 
 `Gráficos` gains an `Assinaturas` panel below the existing ones, matching the

@@ -36,16 +36,28 @@ export function SubscriptionEditor({
   valuesHidden,
 }: SubscriptionEditorProps) {
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string>();
+  const [openOrder, setOpenOrder] = useState<string[]>();
   const [isCreateOpen, setIsCreateOpen] = useState(subscriptions.length === 0);
 
   const canCreate = newSubscriptionName.trim().length > 0 && newSubscriptionAmount > 0;
   // sorted by amount so the most expensive subscription is the first thing read
-  const sortedSubscriptions = [...subscriptions].sort((a, b) => b.amount - a.amount);
+  const byAmount = [...subscriptions].sort((a, b) => b.amount - a.amount);
+  // while a row is open its order is frozen, otherwise editing an amount would
+  // re-sort the list and move the row away from under the user
+  const frozenIndex = (id: string) => {
+    const index = openOrder?.indexOf(id) ?? -1;
+    // anything added while a row is open goes last instead of jumping to the top
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+  const sortedSubscriptions = openOrder
+    ? [...subscriptions].sort((a, b) => frozenIndex(a.id) - frozenIndex(b.id))
+    : byAmount;
 
   function toggleExpand(subscriptionId: string) {
-    setExpandedSubscriptionId((previous) =>
-      previous === subscriptionId ? undefined : subscriptionId,
-    );
+    const isClosing = expandedSubscriptionId === subscriptionId;
+
+    setExpandedSubscriptionId(isClosing ? undefined : subscriptionId);
+    setOpenOrder(isClosing ? undefined : byAmount.map((s) => s.id));
   }
 
   function confirmDeleteSubscription(subscription: Subscription) {
