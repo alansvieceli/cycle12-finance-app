@@ -2,7 +2,7 @@
   "expo": {
     "name": "Cycle12 Finance",
     "slug": "cycle12-finance-app",
-    "version": "3.0.1",
+    "version": "4.0.3",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "dark",
@@ -16,7 +16,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "softwareKeyboardLayoutMode": "resize",
-      "versionCode": 205,
+      "versionCode": 206,
       "package": "br.com.cycle12.finance"
     },
     "web": {
