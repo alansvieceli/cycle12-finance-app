@@ -10,6 +10,7 @@ import {
   percentageFormatter,
 } from '../../lib/formatters';
 import { type CategoryAverage, categoryVariation } from '../../lib/spendingTrends';
+import { groupSubscriptionsByTag } from '../../lib/subscriptions';
 import { chartPalette, colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import type { Category, FinanceSettings, MonthHistoryEntry } from '../../types/finance';
@@ -275,16 +276,34 @@ function SubscriptionsTab({
     return <Text style={styles.emptyTabText}>Nenhuma assinatura neste mês.</Text>;
   }
 
-  const sortedSubscriptions = [...subscriptions].sort((a, b) => b.amount - a.amount);
+  const groups = groupSubscriptionsByTag(subscriptions);
 
   return (
     <>
-      {sortedSubscriptions.map((subscription) => (
-        <View key={subscription.id} style={styles.row}>
-          <Text style={styles.rowName}>{subscription.name}</Text>
-          <Text style={styles.rowAmount}>
-            {maskCurrency(subscription.amount, valuesHidden)}
-          </Text>
+      {groups.map((group, index) => (
+        <View key={group.tag}>
+          <View style={styles.subscriptionGroupHeader}>
+            <View style={styles.subscriptionGroupHeaderLeft}>
+              <View
+                style={[
+                  styles.categoryDot,
+                  { backgroundColor: chartPalette[index % chartPalette.length] },
+                ]}
+              />
+              <Text style={styles.groupHeader}>{group.tag}</Text>
+            </View>
+            <Text style={styles.subscriptionGroupHeaderTotal}>
+              {maskCurrency(group.total, valuesHidden)}
+            </Text>
+          </View>
+          {group.subscriptions.map((subscription) => (
+            <View key={subscription.id} style={styles.row}>
+              <Text style={styles.rowName}>{subscription.name}</Text>
+              <Text style={styles.rowAmount}>
+                {maskCurrency(subscription.amount, valuesHidden)}
+              </Text>
+            </View>
+          ))}
         </View>
       ))}
       <View style={[styles.row, styles.subscriptionsTotalRow]}>
@@ -440,6 +459,22 @@ const styles = StyleSheet.create({
   groupHeader: {
     color: colors.textSecondary,
     textTransform: 'uppercase',
+    ...typography.label,
+  },
+  subscriptionGroupHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  subscriptionGroupHeaderLeft: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  subscriptionGroupHeaderTotal: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
     ...typography.label,
   },
 });

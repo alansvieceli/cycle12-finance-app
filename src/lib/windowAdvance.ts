@@ -145,10 +145,11 @@ function buildHistoryEntry(
 
   // copied, not referenced, so editing or deleting a subscription later never
   // rewrites a month already recorded
-  const subscriptions = state.subscriptions.map(({ amount, id, name }) => ({
+  const subscriptions = state.subscriptions.map(({ amount, id, name, tag }) => ({
     amount,
     id,
     name,
+    tag,
   }));
 
   return {

@@ -309,7 +309,7 @@ describe('windowAdvance', () => {
     const stateWithSubscriptions: FinanceState = {
       ...baseState,
       subscriptions: [
-        { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+        { amount: 5590, id: 'sub-netflix', name: 'Netflix', tag: 'Streaming' },
         { amount: 3490, id: 'sub-spotify', name: 'Spotify' },
       ],
     };
@@ -318,7 +318,7 @@ describe('windowAdvance', () => {
 
     expect(historyEntry.subscriptionsTotal).toBe(9080);
     expect(historyEntry.subscriptions).toEqual([
-      { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+      { amount: 5590, id: 'sub-netflix', name: 'Netflix', tag: 'Streaming' },
       { amount: 3490, id: 'sub-spotify', name: 'Spotify' },
     ]);
   });
