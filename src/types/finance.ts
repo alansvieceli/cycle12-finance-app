@@ -43,6 +43,8 @@ export type Subscription = {
   id: string;
   name: string;
   amount: number;
+  /** Free-text group used to cluster subscriptions; blank/missing means "Outros". */
+  tag?: string;
   color?: string;
 };
 
@@ -83,7 +85,7 @@ export type MonthHistoryEntry = {
   }[];
   /** Optional so entries recorded before subscriptions existed keep parsing. */
   subscriptionsTotal?: number;
-  subscriptions?: { id: string; name: string; amount: number }[];
+  subscriptions?: { id: string; name: string; amount: number; tag?: string }[];
 };
 
 export type FinanceState = {

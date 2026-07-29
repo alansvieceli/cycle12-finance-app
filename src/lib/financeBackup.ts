@@ -317,6 +317,7 @@ function validateSubscriptions(value: unknown): Subscription[] {
       color: typeof subscription.color === 'string' ? subscription.color : undefined,
       id: validateString(subscription.id, 'Assinatura sem identificador válido.'),
       name: validateString(subscription.name, 'Assinatura sem nome válido.'),
+      tag: typeof subscription.tag === 'string' ? subscription.tag : undefined,
     };
   });
 }

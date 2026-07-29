@@ -74,7 +74,7 @@ describe('financeBackup', () => {
     const stateWithSubscriptions: FinanceState = {
       ...sampleState,
       subscriptions: [
-        { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+        { amount: 5590, id: 'sub-netflix', name: 'Netflix', tag: 'Streaming' },
         { amount: 3490, color: '#abcdef', id: 'sub-spotify', name: 'Spotify' },
       ],
     };
@@ -89,6 +89,19 @@ describe('financeBackup', () => {
     );
 
     expect(restoredState.subscriptions).toEqual(stateWithSubscriptions.subscriptions);
+  });
+
+  it('restores a subscription without a tag as untagged', async () => {
+    const restoredState = await parseAndValidateBackupContent(
+      buildEnvelopeJson(
+        buildDataWithAccount({
+          subscriptions: [{ amount: 5590, id: 'sub-netflix', name: 'Netflix' }],
+        }),
+      ),
+      testHash,
+    );
+
+    expect(restoredState.subscriptions[0]?.tag).toBeUndefined();
   });
 
   it('restores a backup without subscriptions as an empty list', async () => {
