@@ -3,22 +3,25 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AccountEditor } from '../components/finance/AccountEditor';
 import { CategoryEditor } from '../components/finance/CategoryEditor';
+import { SubscriptionEditor } from '../components/finance/SubscriptionEditor';
 import type { useFinanceState } from '../hooks/useFinanceState';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 
 type AccountsScreenProps = {
   finance: ReturnType<typeof useFinanceState>;
+  valuesHidden: boolean;
 };
 
-type AccountsSection = 'categories' | 'accounts';
+type AccountsSection = 'categories' | 'accounts' | 'subscriptions';
 
 const accountSections: { id: AccountsSection; label: string }[] = [
   { id: 'categories', label: 'Categorias' },
   { id: 'accounts', label: 'Contas' },
+  { id: 'subscriptions', label: 'Assinaturas' },
 ];
 
-export function AccountsScreen({ finance }: AccountsScreenProps) {
+export function AccountsScreen({ finance, valuesHidden }: AccountsScreenProps) {
   const { actions, financeState, formState } = finance;
   const [activeSection, setActiveSection] = useState<AccountsSection>('categories');
 
@@ -38,6 +41,7 @@ export function AccountsScreen({ finance }: AccountsScreenProps) {
               ]}
             >
               <Text
+                numberOfLines={1}
                 style={[
                   styles.segmentButtonText,
                   isActive ? styles.segmentButtonTextActive : null,
@@ -73,6 +77,19 @@ export function AccountsScreen({ finance }: AccountsScreenProps) {
           onCreateCategory={actions.createCategory}
           onDeleteCategory={actions.deleteCategory}
         />
+      ) : activeSection === 'subscriptions' ? (
+        <SubscriptionEditor
+          newSubscriptionAmount={formState.newSubscriptionAmount}
+          newSubscriptionName={formState.newSubscriptionName}
+          onChangeNewSubscriptionAmount={actions.setNewSubscriptionAmount}
+          onChangeNewSubscriptionName={actions.setNewSubscriptionName}
+          onChangeSubscriptionAmount={actions.updateSubscriptionAmount}
+          onChangeSubscriptionName={actions.updateSubscriptionName}
+          onCreateSubscription={actions.createSubscription}
+          onDeleteSubscription={actions.deleteSubscription}
+          subscriptions={financeState.subscriptions}
+          valuesHidden={valuesHidden}
+        />
       ) : (
         <AccountEditor
           accountItems={financeState.accountItems}
@@ -104,7 +121,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     minHeight: 44,
-    paddingHorizontal: 12,
+    // three segments leave little room; 6 keeps "Assinaturas" on one line
+    paddingHorizontal: 6,
   },
   segmentButtonActive: {
     backgroundColor: colors.accent,

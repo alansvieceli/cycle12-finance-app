@@ -170,27 +170,27 @@ git commit -m "feat: add subscription data and totals"
 - Produces: `createSubscription`, `updateSubscription`, and `removeSubscription` on the hook actions.
 - Consumes: `financeState.subscriptions`.
 
-- [ ] **Step 1: Add the state actions**
+- [x] **Step 1: Add the state actions**
 
 Add three actions to `useFinanceState`, following the shape the category and account actions already use: `createSubscription(name, amount)` ignoring an empty name or an amount of zero or less, `updateSubscription(id, changes)`, and `removeSubscription(id)`. Use `createId('subscription')` for the identifier.
 
-- [ ] **Step 2: Add the third section**
+- [x] **Step 2: Add the third section**
 
 Extend `accountSections` in `AccountsScreen` with `{ id: 'subscriptions', label: 'Assinaturas' }` and widen the `AccountsSection` union.
 
-- [ ] **Step 3: Fix the segmented control layout before adding content**
+- [x] **Step 3: Fix the segmented control layout before adding content**
 
 In `AccountsScreen`, add `numberOfLines={1}` to the segment label `Text` and change `segmentButton.paddingHorizontal` from `12` to `6`. Three items must fit on one line at the narrowest supported width.
 
-- [ ] **Step 4: Build the section body**
+- [x] **Step 4: Build the section body**
 
 Render an `Adicionar assinatura` button and the subscription list sorted by amount descending, each row showing the name, `maskCurrency(amount, valuesHidden)`, and edit and delete actions. Deleting asks for confirmation. Creating and editing use a modal with a name input and an `EditableAmountInput`, which already supplies the currency mask, the cap, and the non-negative rule. Save stays disabled until the name is non-empty and the amount is greater than zero.
 
-- [ ] **Step 5: Verify on the Android emulator**
+- [x] **Step 5: Verify on the Android emulator**
 
 Confirm the three labels render on a single line with no wrapping and no ellipsis. If `Assinaturas` still does not fit, apply the fallback recorded in the spec: shorten to `Assin.` in this control first, then in both controls for consistency.
 
-- [ ] **Step 6: Run project validation**
+- [x] **Step 6: Run project validation**
 
 Run: `npm run check`
 
@@ -198,7 +198,7 @@ Run: `npm run dup`
 
 Expected: both commands exit successfully.
 
-- [ ] **Step 7: Complete the task record and commit**
+- [x] **Step 7: Complete the task record and commit**
 
 Mark every acceptance criterion in `docs/tasks/048-02-register-subscriptions.md` complete.
 

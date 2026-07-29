@@ -85,11 +85,17 @@ There is no new navigation, no sixth bottom tab, and no new secondary view.
 2. The subscription list sorted by amount descending, each row with name,
    formatted amount, and edit and delete actions.
 
-Creating and editing use a modal with a name field and an amount field built on
-the existing `EditableAmountInput`, so the cash-register currency mask, the
-`999.999.999,99` cap, and the non-negative rule apply without new code. Saving
-requires a non-empty name and an amount greater than zero. Deleting requires
-confirmation.
+Creating and editing follow the pattern `CategoryEditor` and `AccountEditor`
+already use in this tab, rather than a modal: a collapsible `Nova assinatura`
+form at the top, and a list where tapping a row expands it into its editable
+fields. Both use a name `TextInput` and the existing `EditableAmountInput`, so
+the cash-register currency mask, the `999.999.999,99` cap, and the non-negative
+rule apply without new code, and the section reuses `editorStyles` and
+`panelStyles`.
+
+`Adicionar` stays disabled until the name is non-empty and the amount is greater
+than zero. Deleting requires confirmation through the same `Alert` the other
+editors use.
 
 #### Gráficos - analysis
 

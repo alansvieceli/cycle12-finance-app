@@ -169,7 +169,9 @@ export function FinanceApp() {
           />
         ) : null}
 
-        {activeTab === 'accounts' ? <AccountsScreen finance={finance} /> : null}
+        {activeTab === 'accounts' ? (
+          <AccountsScreen finance={finance} valuesHidden={valuesHidden} />
+        ) : null}
 
         {activeTab === 'adjustments' ? (
           <SettingsScreen

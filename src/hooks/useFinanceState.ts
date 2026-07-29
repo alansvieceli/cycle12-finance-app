@@ -44,6 +44,8 @@ export function useFinanceState() {
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountDueDay, setNewAccountDueDay] = useState('');
   const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
+  const [newSubscriptionName, setNewSubscriptionName] = useState('');
+  const [newSubscriptionAmount, setNewSubscriptionAmount] = useState(0);
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
   const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
   const sortedAccountItems = sortAccountItems(
@@ -378,6 +380,56 @@ export function useFinanceState() {
     }
   }
 
+  function createSubscription() {
+    const subscriptionName = newSubscriptionName.trim();
+
+    if (!subscriptionName || newSubscriptionAmount <= 0) {
+      return;
+    }
+
+    setFinanceState((currentState) => ({
+      ...currentState,
+      subscriptions: [
+        ...currentState.subscriptions,
+        {
+          amount: newSubscriptionAmount,
+          id: createId('subscription'),
+          name: subscriptionName,
+        },
+      ],
+    }));
+
+    setNewSubscriptionName('');
+    setNewSubscriptionAmount(0);
+  }
+
+  function updateSubscriptionName(subscriptionId: string, name: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      subscriptions: currentState.subscriptions.map((subscription) =>
+        subscription.id === subscriptionId ? { ...subscription, name } : subscription,
+      ),
+    }));
+  }
+
+  function updateSubscriptionAmount(subscriptionId: string, amount: number) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      subscriptions: currentState.subscriptions.map((subscription) =>
+        subscription.id === subscriptionId ? { ...subscription, amount } : subscription,
+      ),
+    }));
+  }
+
+  function deleteSubscription(subscriptionId: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      subscriptions: currentState.subscriptions.filter(
+        (subscription) => subscription.id !== subscriptionId,
+      ),
+    }));
+  }
+
   function createAccountItem() {
     const accountName = newAccountName.trim();
     const selectedCategory =
@@ -640,9 +692,13 @@ export function useFinanceState() {
       createAccountItem,
       createAccountItemAndSetValue,
       createCategory,
+      createSubscription,
       deleteAccountItem,
       deleteCategory,
+      deleteSubscription,
       setAccountCategory,
+      setNewSubscriptionAmount,
+      setNewSubscriptionName,
       setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,
@@ -671,6 +727,8 @@ export function useFinanceState() {
       updateCategorySortOrder,
       updateMonthlySalary,
       updateMonthlyValue,
+      updateSubscriptionAmount,
+      updateSubscriptionName,
       updateSummaryVisibleMonthCount,
     },
     financeState,
@@ -683,6 +741,8 @@ export function useFinanceState() {
       newCategoryName,
       newCategoryPropagation,
       newCategorySortOrder,
+      newSubscriptionAmount,
+      newSubscriptionName,
     },
     selectedAccountItem,
     selectedAccountItemId,
