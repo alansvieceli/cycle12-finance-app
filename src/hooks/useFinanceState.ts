@@ -46,6 +46,7 @@ export function useFinanceState() {
   const [newAccountCategoryId, setNewAccountCategoryId] = useState('');
   const [newSubscriptionName, setNewSubscriptionName] = useState('');
   const [newSubscriptionAmount, setNewSubscriptionAmount] = useState(0);
+  const [newSubscriptionTag, setNewSubscriptionTag] = useState('');
   const [hasLoadedStoredState, setHasLoadedStoredState] = useState(false);
   const [selectedAccountItemId, setSelectedAccountItemId] = useState('');
   const sortedAccountItems = sortAccountItems(
@@ -395,12 +396,14 @@ export function useFinanceState() {
           amount: newSubscriptionAmount,
           id: createId('subscription'),
           name: subscriptionName,
+          tag: newSubscriptionTag.trim() || undefined,
         },
       ],
     }));
 
     setNewSubscriptionName('');
     setNewSubscriptionAmount(0);
+    setNewSubscriptionTag('');
   }
 
   function updateSubscriptionName(subscriptionId: string, name: string) {
@@ -417,6 +420,17 @@ export function useFinanceState() {
       ...currentState,
       subscriptions: currentState.subscriptions.map((subscription) =>
         subscription.id === subscriptionId ? { ...subscription, amount } : subscription,
+      ),
+    }));
+  }
+
+  function updateSubscriptionTag(subscriptionId: string, tag: string) {
+    setFinanceState((currentState) => ({
+      ...currentState,
+      subscriptions: currentState.subscriptions.map((subscription) =>
+        subscription.id === subscriptionId
+          ? { ...subscription, tag: tag.trim() || undefined }
+          : subscription,
       ),
     }));
   }
@@ -699,6 +713,7 @@ export function useFinanceState() {
       setAccountCategory,
       setNewSubscriptionAmount,
       setNewSubscriptionName,
+      setNewSubscriptionTag,
       setNewAccountCategoryId,
       setNewAccountDueDay,
       setNewAccountName,
@@ -729,6 +744,7 @@ export function useFinanceState() {
       updateMonthlyValue,
       updateSubscriptionAmount,
       updateSubscriptionName,
+      updateSubscriptionTag,
       updateSummaryVisibleMonthCount,
     },
     financeState,
@@ -743,6 +759,7 @@ export function useFinanceState() {
       newCategorySortOrder,
       newSubscriptionAmount,
       newSubscriptionName,
+      newSubscriptionTag,
     },
     selectedAccountItem,
     selectedAccountItemId,

@@ -81,10 +81,13 @@ export function AccountsScreen({ finance, valuesHidden }: AccountsScreenProps) {
         <SubscriptionEditor
           newSubscriptionAmount={formState.newSubscriptionAmount}
           newSubscriptionName={formState.newSubscriptionName}
+          newSubscriptionTag={formState.newSubscriptionTag}
           onChangeNewSubscriptionAmount={actions.setNewSubscriptionAmount}
           onChangeNewSubscriptionName={actions.setNewSubscriptionName}
+          onChangeNewSubscriptionTag={actions.setNewSubscriptionTag}
           onChangeSubscriptionAmount={actions.updateSubscriptionAmount}
           onChangeSubscriptionName={actions.updateSubscriptionName}
+          onChangeSubscriptionTag={actions.updateSubscriptionTag}
           onCreateSubscription={actions.createSubscription}
           onDeleteSubscription={actions.deleteSubscription}
           subscriptions={financeState.subscriptions}
