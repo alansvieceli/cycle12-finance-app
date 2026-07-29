@@ -11,7 +11,7 @@ Cycle12 Finance helps one person plan recurring expenses over the next 12 months
 The main areas are:
 
 - `Resumo`: current month overview with projected balance, salary commitment, paid/pending information, an account balance indicator that turns red when negative, and access to payment tracking.
-- `Gráficos`: read-only charts for commitment, category distribution, monthly balance as a diverging horizontal bar per visible month including the full balance and negative balance totals for the visible period, and a subscriptions panel with the monthly and yearly totals, the share of the salary, and a donut per subscription.
+- `Gráficos`: read-only charts for commitment, category distribution, monthly balance as a diverging horizontal bar per visible month including the full balance and negative balance totals for the visible period, and two subscriptions panels — one donut per subscription group and one per subscription — with the monthly and yearly totals and the share of the salary.
 - `Planejar`: monthly value planning for existing accounts across the 12-month window.
 - `Cadastros`: category, account, and subscription management.
 - `Ajustes`: salary, extra balance, visible month count, thresholds, security, window advance, backup, restore, reset, and app version.
@@ -30,6 +30,7 @@ For deeper project and agent context, read `docs/app-context.md`.
 - Tracks fixed monthly salary and an extra balance for the current month.
 - Supports categories, account items, due days, editable monthly values, and category-level value propagation rules.
 - Tracks recurring subscriptions with a fixed monthly cost, showing the monthly total, the yearly total, how much of the salary they take, and which one costs the most. Subscriptions are informational and never enter monthly expenses, commitment, or projected balance, because that money is already counted in the account they are charged to.
+- Groups subscriptions by an optional free-text tag (e.g. `Streaming`, `IA`), shown as headers in Cadastros, as two donut charts in Gráficos (by group and by subscription), and as grouped tabs in Histórico; untagged subscriptions fall into a fixed `Outros` group.
 - Lets the user add or subtract partial adjustments from a monthly account value without replacing the full total manually.
 - Supports adding the same adjustment amount across multiple consecutive months from the adjustment modal in Planejar.
 - Lets the user mark an account as reviewed for the current month in Planejar, shows that mark on each row of the Pagamentos screen, and clears every mark when the planning window advances.
