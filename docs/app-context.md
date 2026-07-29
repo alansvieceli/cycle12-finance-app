@@ -42,7 +42,8 @@ The app is for a user who wants to:
 - Salary: the fixed monthly income used for commitment and balance calculations.
 - Current month extra balance: an extra amount that affects the current month projection. Added quickly via the "+" button in the Resumo balance panel or edited directly in Ajustes. Resets to zero automatically when the planning window advances.
 - Payment status: the monthly status of an account item, holding its manual paid/unpaid state and whether its value was reviewed. Both are scoped to a single month and are discarded when that month leaves the planning window.
-- Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, and per-category/per-account breakdowns. Up to 12 entries are kept.
+- Subscription: a recurring service with a single fixed monthly cost, such as a streaming plan. It has no due day, no per-month value, and no payment status, and it is deliberately kept out of every expense, payment, and balance calculation: that money is already counted in the account it is charged to, usually the credit card bill, so counting it again would inflate the month. It exists to answer how much the subscriptions cost per month, per year, how much of the salary they take, and which one costs the most.
+- Month history: a snapshot of each past month captured when the planning window advances, storing income, total expenses, per-category/per-account breakdowns, and the subscriptions total with its per-subscription breakdown. Up to 12 entries are kept. The subscription fields are optional, so months recorded before the feature existed keep loading and show an empty state.
 - Visible month count: how many projection months appear in summary and charts, from 3 to 12 (values loaded from storage or a backup are clamped to 1-12).
 - Rolling window: the app stores and displays 12 projected months starting from the saved current window month.
 - Category propagation rule: defines how values are filled when the 12-month window advances.
@@ -76,7 +77,7 @@ It shows:
 - a "Alocação do salário" panel showing how the current month's available income is distributed across categories, with a leftover/over-budget indicator and an expandable per-category breakdown.
 - a trend line comparing the current month's total expenses to the historical average (from the saved month history), with a direction arrow, percentage, and amount delta in a neutral informational color; shows an insufficient-data message when fewer than 2 history entries exist.
 - a commitment goal indicator: when a `Meta de comprometimento` is configured (0-100%, default 70%, 0 = disabled), the current-month commitment bar shows a thin neutral vertical marker at the goal position, and a fixed-width colored status tag (`dentro da meta` / `quase na meta` / `acima da meta`) appears below the trend line, based on how the month's commitment ratio compares to the goal. This is separate from the existing alert-threshold color semaphore, which is unchanged.
-- past month history accessible through the Histórico pill, showing income vs expenses cards with category and account breakdown. When 2+ history entries exist, an overall average monthly spend summary is shown, and each expanded card's "Categorias" tab shows each category's variation versus its own historical average. Each card also shows the commitment goal status tag for that month (when a goal is configured).
+- past month history accessible through the Histórico pill, showing income vs expenses cards with category, account, and subscription breakdown. Each expanded card offers `Categorias | Contas | Assinaturas`; the subscriptions tab lists that month's subscriptions with the recorded total in a footer row. That total is kept inside its own tab and never sits beside `RECEBIDO` and `PAGO`, because `PAGO` already includes the account the subscriptions are charged to and the two side by side would invite an incorrect sum. When 2+ history entries exist, an overall average monthly spend summary is shown, and each expanded card's "Categorias" tab shows each category's variation versus its own historical average. Each card also shows the commitment goal status tag for that month (when a goal is configured).
 
 `Resumo` should stay mostly read-only. It can open secondary views, but it should not become the main place for editing categories, accounts, or monthly values.
 
@@ -95,6 +96,13 @@ It shows chart-based summaries such as:
   the largest absolute balance of the period. Above the list it shows summaries
   for the complete balance and for the sum of only negative balances across the
   visible period.
+- an `Assinaturas` panel showing the registered subscriptions: the monthly
+  total, the yearly total (monthly times twelve), a footnote with how much of
+  the salary they consume, and a donut with one slice per subscription plus a
+  legend. The salary share uses the salary alone and ignores the current month
+  extra balance, since that amount is a one-off and would distort a recurring
+  cost; when no salary is set the footnote points to `Ajustes` instead of a
+  percentage. Subscriptions are registered in `Cadastros`, not here.
 
 Charts are driven by existing finance calculation and chart data helpers.
 
@@ -119,12 +127,15 @@ Account and category management do not belong in this tab; they live in `Cadastr
 
 `Cadastros` is the management area for finance structure.
 
-It contains two internal sections, selected by a segmented control:
+It contains three internal sections, selected by a segmented control:
 
 - `Categorias`.
 - `Contas` (account items).
+- `Assinaturas` (subscriptions).
 
 It supports creating and editing account items, assigning categories, setting due days, and keeping category/account organization separate from month-by-month planning.
+
+The `Assinaturas` section holds registration only: a collapsible `Nova assinatura` form with name and monthly amount, and the list sorted by amount descending, where tapping a row expands it for editing or deletion. `Adicionar` stays disabled until the name is filled and the amount is greater than zero, and deleting asks for confirmation. The totals and the distribution chart live in `Gráficos`.
 
 ### Ajustes
 
@@ -193,6 +204,7 @@ Backup and restore behavior:
 - export creates a portable `.c12f` file.
 - restore validates file format, version, SHA-256 integrity hash, data shape, and internal references.
 - corrupted or manually changed backup content is rejected.
+- subscriptions are part of the payload; a backup created before the feature restores them as an empty list.
 - reset clears local data and recreates only the default category and settings.
 
 ## App Lock

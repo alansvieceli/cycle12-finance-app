@@ -329,15 +329,15 @@ git commit -m "feat: record subscriptions in month history"
 - Modify: `docs/app-context.md`
 - Create: `docs/tasks/048-05-update-docs-and-validate.md`
 
-- [ ] **Step 1: Update the app context**
+- [x] **Step 1: Update the app context**
 
 Add `Assinatura` to `Core Data Concepts`, describing it as a fixed monthly recurring cost kept deliberately outside every expense, payment, and balance calculation because that money is already counted in the account it is charged to. Document the `Cadastros` third section, the `Gráficos` panel, the third tab in the history card, and the inclusion of subscriptions in the `.c12f` backup.
 
-- [ ] **Step 2: Update the README**
+- [x] **Step 2: Update the README**
 
 Describe the subscriptions section and panel in the tab list and the feature list.
 
-- [ ] **Step 3: Run the full validation**
+- [x] **Step 3: Run the full validation**
 
 Run: `npm test`
 
@@ -347,11 +347,11 @@ Run: `npm run dup`
 
 Expected: every command exits successfully.
 
-- [ ] **Step 4: Verify the acceptance criteria on the emulator**
+- [x] **Step 4: Verify the acceptance criteria on the emulator**
 
 Register a subscription, confirm the `Gráficos` panel totals and chart update, and confirm the projected balance, monthly expenses, income commitment, and paid/pending totals are unchanged. Export and restore a backup and confirm the subscriptions survive.
 
-- [ ] **Step 5: Complete the task record and commit**
+- [x] **Step 5: Complete the task record and commit**
 
 Mark every acceptance criterion in `docs/tasks/048-05-update-docs-and-validate.md` complete.
 
