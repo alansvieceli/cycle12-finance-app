@@ -7,18 +7,18 @@ in the history card.
 
 ## Acceptance Criteria
 
-- [ ] `buildHistoryEntry` records `subscriptionsTotal` and one entry per
+- [x] `buildHistoryEntry` records `subscriptionsTotal` and one entry per
       subscription for the month leaving the window.
-- [ ] An empty subscription list records a zero total.
-- [ ] Editing or deleting a subscription never alters a month already recorded.
-- [ ] Each expanded history card offers `Categorias | Contas | Assinaturas`.
-- [ ] The new tab lists that month's subscriptions sorted by amount descending
+- [x] An empty subscription list records a zero total.
+- [x] Editing or deleting a subscription never alters a month already recorded.
+- [x] Each expanded history card offers `Categorias | Contas | Assinaturas`.
+- [x] The new tab lists that month's subscriptions sorted by amount descending
       with the recorded total in a footer row.
-- [ ] The tab shows an empty state for months recorded before this feature.
-- [ ] `RECEBIDO` and `PAGO` remain the only headline figures on the card.
+- [x] The tab shows an empty state for months recorded before this feature.
+- [x] `RECEBIDO` and `PAGO` remain the only headline figures on the card.
 - [ ] Every label in the control renders on a single line, legible, at the
       narrowest supported width, verified on the Android emulator.
-- [ ] The eye toggle masks every monetary value in the tab.
-- [ ] Focused tests pass.
-- [ ] `npm run check` passes.
-- [ ] `npm run dup` passes.
+- [x] The eye toggle masks every monetary value in the tab.
+- [x] Focused tests pass.
+- [x] `npm run check` passes.
+- [x] `npm run dup` passes.

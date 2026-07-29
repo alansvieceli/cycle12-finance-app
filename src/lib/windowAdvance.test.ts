@@ -304,4 +304,40 @@ describe('windowAdvance', () => {
 
     expect(advancedState.settings.currentMonthExtraBalance).toBe(0);
   });
+
+  it('records the subscriptions total and breakdown in the history entry', () => {
+    const stateWithSubscriptions: FinanceState = {
+      ...baseState,
+      subscriptions: [
+        { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+        { amount: 3490, id: 'sub-spotify', name: 'Spotify' },
+      ],
+    };
+
+    const [historyEntry] = advanceWindow(stateWithSubscriptions, 2026, 7).monthHistory;
+
+    expect(historyEntry.subscriptionsTotal).toBe(9080);
+    expect(historyEntry.subscriptions).toEqual([
+      { amount: 5590, id: 'sub-netflix', name: 'Netflix' },
+      { amount: 3490, id: 'sub-spotify', name: 'Spotify' },
+    ]);
+  });
+
+  it('records a zero subscriptions total when none is registered', () => {
+    const [historyEntry] = advanceWindow(baseState, 2026, 7).monthHistory;
+
+    expect(historyEntry.subscriptionsTotal).toBe(0);
+    expect(historyEntry.subscriptions).toEqual([]);
+  });
+
+  it('keeps a recorded month untouched when a subscription changes later', () => {
+    const stateWithSubscriptions: FinanceState = {
+      ...baseState,
+      subscriptions: [{ amount: 5590, id: 'sub-netflix', name: 'Netflix' }],
+    };
+    const advancedState = advanceWindow(stateWithSubscriptions, 2026, 7);
+    const stateAfterDeletion: FinanceState = { ...advancedState, subscriptions: [] };
+
+    expect(stateAfterDeletion.monthHistory[0].subscriptionsTotal).toBe(5590);
+  });
 });

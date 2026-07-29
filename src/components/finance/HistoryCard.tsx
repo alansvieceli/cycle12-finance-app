@@ -44,7 +44,13 @@ function formatVariationText(
   return `${sign}${percentageFormatter.format(Math.abs(ratio ?? 0))}`;
 }
 
-type DetailTab = 'categories' | 'accounts';
+type DetailTab = 'categories' | 'accounts' | 'subscriptions';
+
+const detailTabs: { id: DetailTab; label: string }[] = [
+  { id: 'categories', label: 'Categorias' },
+  { id: 'accounts', label: 'Contas' },
+  { id: 'subscriptions', label: 'Assinaturas' },
+];
 
 export function HistoryCard({
   categories,
@@ -139,122 +145,171 @@ export function HistoryCard({
       {isExpanded ? (
         <View style={styles.detail}>
           <View style={styles.segmentedControl}>
-            <Pressable
-              onPress={() => setActiveTab('categories')}
-              style={[
-                styles.segmentButton,
-                activeTab === 'categories' ? styles.segmentButtonActive : null,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.segmentButtonText,
-                  activeTab === 'categories' ? styles.segmentButtonTextActive : null,
-                ]}
-              >
-                Categorias
-              </Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setActiveTab('accounts')}
-              style={[
-                styles.segmentButton,
-                activeTab === 'accounts' ? styles.segmentButtonActive : null,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.segmentButtonText,
-                  activeTab === 'accounts' ? styles.segmentButtonTextActive : null,
-                ]}
-              >
-                Contas
-              </Text>
-            </Pressable>
+            {detailTabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+
+              return (
+                <Pressable
+                  key={tab.id}
+                  onPress={() => setActiveTab(tab.id)}
+                  style={[
+                    styles.segmentButton,
+                    isActive ? styles.segmentButtonActive : null,
+                  ]}
+                >
+                  <Text
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                    style={[
+                      styles.segmentButtonText,
+                      isActive ? styles.segmentButtonTextActive : null,
+                    ]}
+                  >
+                    {tab.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
 
-          {activeTab === 'categories'
-            ? sortedCategories.map((category, index) => {
-                const average = categoryAverages.find(
-                  (a) => a.categoryId === category.id,
-                );
-                const variation =
-                  hasEnoughHistory && average
-                    ? categoryVariation(category.total, average.average)
-                    : null;
+          {activeTab === 'categories' ? (
+            sortedCategories.map((category, index) => {
+              const average = categoryAverages.find(
+                (a) => a.categoryId === category.id,
+              );
+              const variation =
+                hasEnoughHistory && average
+                  ? categoryVariation(category.total, average.average)
+                  : null;
 
-                return (
-                  <View key={category.id} style={styles.row}>
-                    <View
+              return (
+                <View key={category.id} style={styles.row}>
+                  <View
+                    style={[
+                      styles.categoryDot,
+                      {
+                        backgroundColor:
+                          category.color ?? chartPalette[index % chartPalette.length],
+                      },
+                    ]}
+                  />
+                  <Text style={styles.rowName}>{category.name}</Text>
+                  {variation ? (
+                    <Text
                       style={[
-                        styles.categoryDot,
-                        {
-                          backgroundColor:
-                            category.color ?? chartPalette[index % chartPalette.length],
-                        },
+                        styles.rowVariation,
+                        { color: variationColor(variation.direction) },
                       ]}
-                    />
-                    <Text style={styles.rowName}>{category.name}</Text>
-                    {variation ? (
-                      <Text
-                        style={[
-                          styles.rowVariation,
-                          { color: variationColor(variation.direction) },
-                        ]}
-                      >
-                        {formatVariationText(variation.direction, variation.ratio)}
-                      </Text>
-                    ) : null}
-                    <Text style={styles.rowAmount}>
-                      {maskCurrency(category.total, valuesHidden)}
+                    >
+                      {formatVariationText(variation.direction, variation.ratio)}
                     </Text>
-                  </View>
-                );
-              })
-            : (() => {
-                const categoryMap = new Map(entry.categories.map((c) => [c.id, c]));
-                const categoryIndexMap = new Map(
-                  sortedCategories.map((c, i) => [c.id, i]),
-                );
-                const grouped = new Map<string, typeof sortedAccounts>();
-                for (const account of sortedAccounts) {
-                  const existing = grouped.get(account.categoryId) ?? [];
-                  grouped.set(account.categoryId, [...existing, account]);
-                }
-                return Array.from(grouped.entries()).map(([categoryId, accounts]) => {
-                  const cat = categoryMap.get(categoryId);
-                  const catIndex = categoryIndexMap.get(categoryId) ?? 0;
-                  const dotColor =
-                    cat?.color ?? chartPalette[catIndex % chartPalette.length];
-                  return (
-                    <View key={categoryId}>
-                      <View style={styles.groupHeaderRow}>
-                        <View
-                          style={[styles.categoryDot, { backgroundColor: dotColor }]}
-                        />
-                        <Text style={styles.groupHeader}>
-                          {cat?.name ?? categoryId}
+                  ) : null}
+                  <Text style={styles.rowAmount}>
+                    {maskCurrency(category.total, valuesHidden)}
+                  </Text>
+                </View>
+              );
+            })
+          ) : activeTab === 'subscriptions' ? (
+            <SubscriptionsTab entry={entry} valuesHidden={valuesHidden} />
+          ) : (
+            (() => {
+              const categoryMap = new Map(entry.categories.map((c) => [c.id, c]));
+              const categoryIndexMap = new Map(
+                sortedCategories.map((c, i) => [c.id, i]),
+              );
+              const grouped = new Map<string, typeof sortedAccounts>();
+              for (const account of sortedAccounts) {
+                const existing = grouped.get(account.categoryId) ?? [];
+                grouped.set(account.categoryId, [...existing, account]);
+              }
+              return Array.from(grouped.entries()).map(([categoryId, accounts]) => {
+                const cat = categoryMap.get(categoryId);
+                const catIndex = categoryIndexMap.get(categoryId) ?? 0;
+                const dotColor =
+                  cat?.color ?? chartPalette[catIndex % chartPalette.length];
+                return (
+                  <View key={categoryId}>
+                    <View style={styles.groupHeaderRow}>
+                      <View
+                        style={[styles.categoryDot, { backgroundColor: dotColor }]}
+                      />
+                      <Text style={styles.groupHeader}>{cat?.name ?? categoryId}</Text>
+                    </View>
+                    {accounts.map((account) => (
+                      <View key={account.id} style={styles.row}>
+                        <Text style={styles.rowName}>{account.name}</Text>
+                        <Text style={styles.rowAmount}>
+                          {maskCurrency(account.amount, valuesHidden)}
                         </Text>
                       </View>
-                      {accounts.map((account) => (
-                        <View key={account.id} style={styles.row}>
-                          <Text style={styles.rowName}>{account.name}</Text>
-                          <Text style={styles.rowAmount}>
-                            {maskCurrency(account.amount, valuesHidden)}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                  );
-                });
-              })()}
+                    ))}
+                  </View>
+                );
+              });
+            })()
+          )}
         </View>
       ) : null}
     </View>
   );
 }
 
+/**
+ * Subscriptions recorded for that month.
+ *
+ * The total stays inside this tab and never joins RECEBIDO and PAGO: PAGO
+ * already includes the account the subscriptions are charged to, so the two
+ * side by side would invite an incorrect sum.
+ */
+function SubscriptionsTab({
+  entry,
+  valuesHidden,
+}: {
+  entry: MonthHistoryEntry;
+  valuesHidden: boolean;
+}) {
+  const subscriptions = entry.subscriptions ?? [];
+
+  if (subscriptions.length === 0) {
+    return <Text style={styles.emptyTabText}>Nenhuma assinatura neste mês.</Text>;
+  }
+
+  const sortedSubscriptions = [...subscriptions].sort((a, b) => b.amount - a.amount);
+
+  return (
+    <>
+      {sortedSubscriptions.map((subscription) => (
+        <View key={subscription.id} style={styles.row}>
+          <Text style={styles.rowName}>{subscription.name}</Text>
+          <Text style={styles.rowAmount}>
+            {maskCurrency(subscription.amount, valuesHidden)}
+          </Text>
+        </View>
+      ))}
+      <View style={[styles.row, styles.subscriptionsTotalRow]}>
+        <Text style={styles.rowName}>Total</Text>
+        <Text style={styles.rowAmount}>
+          {maskCurrency(entry.subscriptionsTotal ?? 0, valuesHidden)}
+        </Text>
+      </View>
+    </>
+  );
+}
+
 const styles = StyleSheet.create({
+  emptyTabText: {
+    color: colors.textSecondary,
+    letterSpacing: 0,
+    paddingVertical: 8,
+    ...typography.bodySmall,
+  },
+  subscriptionsTotalRow: {
+    borderTopColor: colors.border,
+    borderTopWidth: 1,
+    marginTop: 4,
+    paddingTop: 8,
+  },
   card: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
@@ -338,7 +393,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     minHeight: 36,
-    paddingHorizontal: 12,
+    // nested inside a card, so three segments are tighter here than in Cadastros
+    paddingHorizontal: 6,
   },
   segmentButtonActive: {
     backgroundColor: colors.accent,

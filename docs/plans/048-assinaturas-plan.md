@@ -264,7 +264,7 @@ git commit -m "feat: show subscriptions panel in charts"
 - Extends: `buildHistoryEntry` with the subscriptions snapshot.
 - Extends: `HistoryCard`'s `DetailTab` union with `'subscriptions'`.
 
-- [ ] **Step 1: Write the failing history tests**
+- [x] **Step 1: Write the failing history tests**
 
 ```ts
 it('records the subscriptions total and breakdown when the window advances', () => {
@@ -277,33 +277,33 @@ it('records a zero total when there is no subscription', () => {
 });
 ```
 
-- [ ] **Step 2: Verify the tests fail**
+- [x] **Step 2: Verify the tests fail**
 
 Run: `npm test -- --runTestsByPath src/lib/windowAdvance.test.ts`
 
 Expected: FAIL because the entry carries no subscription data.
 
-- [ ] **Step 3: Snapshot the subscriptions**
+- [x] **Step 3: Snapshot the subscriptions**
 
 In `buildHistoryEntry`, record `subscriptionsTotal` and one `{ id, name, amount }` per subscription, following the pattern already used for categories and accounts. The snapshot is a copy, so editing or deleting a subscription afterwards never alters a month already recorded.
 
-- [ ] **Step 4: Verify the history tests pass**
+- [x] **Step 4: Verify the history tests pass**
 
 Run: `npm test -- --runTestsByPath src/lib/windowAdvance.test.ts`
 
 Expected: PASS.
 
-- [ ] **Step 5: Add the third tab to the history card**
+- [x] **Step 5: Add the third tab to the history card**
 
 Widen `DetailTab` to `'categories' | 'accounts' | 'subscriptions'`, add the `Assinaturas` segment, and render that month's subscriptions sorted by amount descending with the recorded total in a footer row. Show an empty state when the entry has no subscription data, which is the case for every month recorded before this feature.
 
 Keep `RECEBIDO` and `PAGO` as the only headline figures. The subscriptions total must not sit beside them: `PAGO` already includes the credit card bill, which already includes the subscriptions, so the two side by side would invite an incorrect sum.
 
-- [ ] **Step 6: Fix the history card segmented control layout**
+- [x] **Step 6: Fix the history card segmented control layout**
 
 Add `numberOfLines={1}` and `adjustsFontSizeToFit` to the segment labels and change `segmentButton.paddingHorizontal` from `12` to `6`. This control is nested inside a card and is the tighter of the two, so verify it on the Android emulator at the narrowest supported width.
 
-- [ ] **Step 7: Run project validation**
+- [x] **Step 7: Run project validation**
 
 Run: `npm run check`
 
@@ -311,7 +311,7 @@ Run: `npm run dup`
 
 Expected: both commands exit successfully.
 
-- [ ] **Step 8: Complete the task record and commit**
+- [x] **Step 8: Complete the task record and commit**
 
 Mark every acceptance criterion in `docs/tasks/048-04-record-subscriptions-history.md` complete.
 

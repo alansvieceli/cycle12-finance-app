@@ -6,6 +6,7 @@ import type {
   MonthlyValue,
   MonthNumber,
 } from '../types/finance';
+import { calculateSubscriptionsMonthlyTotal } from './subscriptions';
 
 type MonthReference = {
   year: number;
@@ -142,6 +143,14 @@ function buildHistoryEntry(
 
   const totalExpenses = accountAmounts.reduce((sum, { amount }) => sum + amount, 0);
 
+  // copied, not referenced, so editing or deleting a subscription later never
+  // rewrites a month already recorded
+  const subscriptions = state.subscriptions.map(({ amount, id, name }) => ({
+    amount,
+    id,
+    name,
+  }));
+
   return {
     month: oldestMonth.month,
     year: oldestMonth.year,
@@ -149,6 +158,8 @@ function buildHistoryEntry(
     totalExpenses,
     categories,
     accounts,
+    subscriptions,
+    subscriptionsTotal: calculateSubscriptionsMonthlyTotal(state.subscriptions),
   };
 }
 
