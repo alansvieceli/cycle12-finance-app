@@ -265,6 +265,14 @@ android/app/build/outputs/apk/release/app-release.apk
 
 Transfer it to the device via cable or cloud storage and install it. You may need to enable **Install from unknown sources** in Android settings.
 
+The `android/` folder is generated and gitignored. If you build it directly with Gradle (`assembleRelease`), first regenerate it after any `app.json` change (package, version, plugins):
+
+```bash
+npx expo prebuild --platform android --clean --no-install
+```
+
+A stale `android/` folder produces an APK with the wrong package id (`com.anonymous.*`) and `versionCode 1`, which Google Play Protect may block on install. Local release builds are signed with the debug keystore, so they cannot update a copy installed from an EAS build: uninstall it first (export a backup before).
+
 ---
 
 ### iOS
